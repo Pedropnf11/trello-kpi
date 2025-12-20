@@ -43,6 +43,14 @@ const UI = {
                                 placeholder="https://hook.us1.make.com/..."
                                 class="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-transparent transition bg-gray-50">
                         </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Groq API Key (Opcional - Para IA)</label>
+                            <input type="text" id="groqApiKey" value="${state.groqApiKey || ''}"
+                                placeholder="gsk_..."
+                                class="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-transparent transition bg-gray-50">
+                            <p class="text-[10px] text-gray-400 mt-1">Necessário para gerar sugestões automáticas.</p>
+                        </div>
                     </div>
 
                     <button id="conectarBtn" ${state.loading ? 'disabled' : ''}
@@ -132,6 +140,23 @@ const UI = {
                         <p class="text-gray-500 mt-1 font-light">Dashboard de Performance</p>
                     </div>
                     <div class="flex gap-3 items-center">
+                        <div class="flex items-center gap-2 bg-gray-50 border-2 border-gray-200 rounded-xl px-3 py-1.5">
+                            <div class="flex flex-col">
+                                <label class="text-[9px] text-gray-400 font-bold uppercase tracking-wider">Início</label>
+                                <input type="date" id="startDate" value="${state.startDate || ''}" 
+                                    class="bg-transparent text-gray-700 focus:outline-none font-semibold text-sm w-28">
+                            </div>
+                            <div class="w-px h-8 bg-gray-200"></div>
+                            <div class="flex flex-col">
+                                <label class="text-[9px] text-gray-400 font-bold uppercase tracking-wider">Fim</label>
+                                <input type="date" id="endDate" value="${state.endDate || ''}" 
+                                    class="bg-transparent text-gray-700 focus:outline-none font-semibold text-sm w-28">
+                            </div>
+                            ${(!state.startDate && !state.endDate) ?
+                '<span class="text-[10px] text-green-600 font-bold bg-green-100 px-2 py-0.5 rounded-full ml-1">Auto (7 dias)</span>' :
+                '<button id="clearDates" class="text-xs text-red-500 hover:text-red-700 ml-1 font-bold">✕</button>'}
+                        </div>
+
                         <select id="memberFilter" class="bg-white border-2 border-gray-200 text-gray-700 py-2.5 px-4 rounded-xl hover:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 font-medium">
                             <option value="">Todos os Membros</option>
                             ${kpis.geral.consultores.map(c => `
@@ -151,6 +176,9 @@ const UI = {
                         </button>
                         <button id="enviarWebhookBtn" class="bg-purple-600 text-white px-5 py-2.5 rounded-xl hover:bg-purple-700 shadow-sm transition font-medium">
                             Enviar Webhook
+                        </button>
+                        <button id="toggleChatBtn" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl hover:bg-blue-700 shadow-sm transition font-medium flex items-center gap-2">
+                             <span>🤖</span> Mentor IA
                         </button>
                         <button id="configBtn" class="bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl hover:bg-gray-300 shadow-sm transition font-medium">
                             ⚙️

@@ -1,6 +1,6 @@
 // Business Logic for KPIs
 const KPILogic = {
-    processarKPIs(cards, listas) {
+    processarKPIs(cards, listas, customStartDate = null, customEndDate = null) {
         // Ordenar listas pela posição no Trello
         const listasOrdenadas = listas.sort((a, b) => a.pos - b.pos);
 
@@ -10,7 +10,17 @@ const KPILogic = {
             name: l.name
         }));
 
-        const inicioSemana = Utils.getStartOfWeek();
+        let inicioPeriodo, fimPeriodo;
+
+        if (customStartDate && customEndDate) {
+            inicioPeriodo = new Date(customStartDate);
+            // Ajustar fim do periodo para o final do dia (23:59:59)
+            fimPeriodo = new Date(customEndDate);
+            fimPeriodo.setHours(23, 59, 59, 999);
+        } else {
+            inicioPeriodo = Utils.getStartOfWeek();
+            fimPeriodo = new Date(); // Agora
+        }
 
         // Verificação de segurança
         if (!Array.isArray(cards)) {
@@ -38,17 +48,24 @@ const KPILogic = {
         const dadosGeral = criarEstruturaDados();
         const dadosSemanal = criarEstruturaDados();
 
-        const processarCard = (card, dados, filterDate = null) => {
+        const processarCard = (card, dados, filterStart = null, filterEnd = null) => {
             const listId = card.idList;
             // Ignorar cards em listas arquivadas ou não mapeadas
             if (dados.listCounts[listId] === undefined) return;
+
+            // Função auxiliar filtro de data
+            const checkDate = (dateStr) => {
+                if (!filterStart || !filterEnd) return true; // Se não tem filtro, passa
+                const d = new Date(dateStr);
+                return d >= filterStart && d <= filterEnd;
+            };
 
             // Processar Comentários - buscar quem fez cada comentário
             if (card.actions && Array.isArray(card.actions)) {
                 card.actions.forEach(action => {
                     // Verificar se é um comentário e se está no período filtrado (se aplicável)
                     if (action.type === 'commentCard') {
-                        if (!filterDate || new Date(action.date) >= filterDate) {
+                        if (checkDate(action.date)) {
                             const autor = action.memberCreator;
                             if (autor) {
                                 // Inicializar consultor se não existir
@@ -58,7 +75,11 @@ const KPILogic = {
                                         nome: autor.fullName,
                                         comentarios: 0,
                                         leads: 0,
-                                        listCounts: initListCounts()
+                                        listCounts: initListCounts(),
+                                        duesCriados: 0,
+                                        duesATempo: 0,
+                                        duesAtrasados: 0,
+                                        duesPendentes: 0
                                     };
                                 }
                                 // Incrementar comentários para o autor
@@ -75,7 +96,7 @@ const KPILogic = {
             const dataCriacao = Utils.getCardDate(card.id);
 
             // Verificar se o card foi criado no período (ou sem filtro para geral)
-            if (!filterDate || dataCriacao >= filterDate) {
+            if (checkDate(dataCriacao)) {
                 isNovoLead = true;
 
                 // Buscar quem criou o card nas actions
@@ -140,7 +161,7 @@ const KPILogic = {
                 const agora = new Date();
 
                 // Due foi criado neste período?
-                if (!filterDate || dataCriacao >= filterDate) {
+                if (checkDate(dataCriacao)) {
                     if (criadorDoCard && dados.consultores[criadorDoCard.id]) {
                         dados.consultores[criadorDoCard.id].duesCriados++;
                     }
@@ -160,7 +181,7 @@ const KPILogic = {
                             const membroId = completeAction.memberCreator.id;
 
                             // Foi completado neste período?
-                            if (!filterDate || dataComplete >= filterDate) {
+                            if (checkDate(dataComplete)) {
                                 if (!dados.consultores[membroId]) {
                                     dados.consultores[membroId] = {
                                         id: membroId,
@@ -197,12 +218,12 @@ const KPILogic = {
         };
 
         cards.forEach(card => {
-            processarCard(card, dadosGeral, null);
+            processarCard(card, dadosGeral, null, null);
 
             // Usar Data da Última Atividade para filtrar se o card APARECE na tabela semanal
             const dataAtividade = new Date(card.dateLastActivity);
-            if (dataAtividade >= inicioSemana) {
-                processarCard(card, dadosSemanal, inicioSemana);
+            if (dataAtividade >= inicioPeriodo && dataAtividade <= fimPeriodo) {
+                processarCard(card, dadosSemanal, inicioPeriodo, fimPeriodo);
             }
         });
 
@@ -235,8 +256,18 @@ const KPILogic = {
         };
     },
 
-    calcularAtividade(cards, membros) {
-        const inicioSemana = Utils.getStartOfWeek();
+    calcularAtividade(cards, membros, customStartDate = null, customEndDate = null) {
+        let inicioPeriodo, fimPeriodo;
+        if (customStartDate && customEndDate) {
+            inicioPeriodo = new Date(customStartDate);
+            fimPeriodo = new Date(customEndDate);
+            fimPeriodo.setHours(23, 59, 59, 999);
+        } else {
+            inicioPeriodo = Utils.getStartOfWeek();
+            fimPeriodo = new Date();
+        }
+
+        const checkDate = (date) => date >= inicioPeriodo && date <= fimPeriodo;
         const atividadePorUsuario = {};
 
         if (!Array.isArray(cards)) {
@@ -265,7 +296,7 @@ const KPILogic = {
                 const dataCriacao = Utils.getCardDate(card.id);
 
                 // Se o card foi criado esta semana e tem due date
-                if (dataCriacao >= inicioSemana) {
+                if (checkDate(dataCriacao)) {
                     // Buscar quem criou o card
                     if (card.actions && Array.isArray(card.actions)) {
                         const createAction = card.actions.find(a => a.type === 'createCard');
@@ -292,7 +323,7 @@ const KPILogic = {
                             const membroId = completeAction.memberCreator.id;
 
                             // Verificar se foi completado esta semana
-                            if (dataComplete >= inicioSemana && atividadePorUsuario[membroId]) {
+                            if (checkDate(dataComplete) && atividadePorUsuario[membroId]) {
                                 // Verificar se foi a tempo ou atrasado
                                 if (dataComplete <= dueDate) {
                                     atividadePorUsuario[membroId].duesATempo++;
@@ -310,7 +341,7 @@ const KPILogic = {
 
             card.actions.forEach(action => {
                 const dataAction = new Date(action.date);
-                if (dataAction >= inicioSemana && action.memberCreator) {
+                if (checkDate(dataAction) && action.memberCreator) {
                     const userId = action.memberCreator.id;
                     const userName = action.memberCreator.fullName;
 
@@ -347,7 +378,7 @@ const KPILogic = {
         };
     },
 
-    calcularTemposListas(cards, listas) {
+    calcularTemposListas(cards, listas, customStartDate = null, customEndDate = null) {
         // Encontrar as listas "LEADS" ou "Leads" e "Não atendeu"
         const listaLeads = listas.find(l => l.name.toLowerCase() === 'leads');
         const listaNaoAtendeu = listas.find(l => l.name.toLowerCase().includes('não atendeu') || l.name.toLowerCase().includes('nao atendeu'));
@@ -374,7 +405,15 @@ const KPILogic = {
         }
 
         const agora = new Date();
-        const inicioSemana = Utils.getStartOfWeek();
+        let inicioPeriodo, fimPeriodo;
+        if (customStartDate && customEndDate) {
+            inicioPeriodo = new Date(customStartDate);
+            fimPeriodo = new Date(customEndDate);
+            fimPeriodo.setHours(23, 59, 59, 999);
+        } else {
+            inicioPeriodo = Utils.getStartOfWeek();
+            fimPeriodo = new Date();
+        }
 
         if (!Array.isArray(cards)) {
             console.error('Dados de cards inválidos em calcularTemposListas');
@@ -386,14 +425,14 @@ const KPILogic = {
 
             // Verificar se o card teve atividade na última semana
             const dataAtividade = new Date(card.dateLastActivity);
-            if (dataAtividade < inicioSemana) return; // Ignorar cards sem atividade esta semana
+            if (dataAtividade < inicioPeriodo) return; // Ignorar cards sem atividade esta semana
 
             // Ordenar ações por data (mais antiga primeiro)
             const actions = card.actions.sort((a, b) => new Date(a.date) - new Date(b.date));
 
             // Processar tempo na lista LEADS
             if (listaLeads) {
-                const resultado = this._calcularTempoPermanenciaComCard(card, actions, listaLeads.id, agora, inicioSemana);
+                const resultado = this._calcularTempoPermanenciaComCard(card, actions, listaLeads.id, agora, inicioPeriodo, fimPeriodo);
                 if (resultado.tempo > 0) {
                     tempos.leads.tempos.push(resultado);
                 }
@@ -401,7 +440,7 @@ const KPILogic = {
 
             // Processar tempo na lista Não atendeu
             if (listaNaoAtendeu) {
-                const resultado = this._calcularTempoPermanenciaComCard(card, actions, listaNaoAtendeu.id, agora, inicioSemana);
+                const resultado = this._calcularTempoPermanenciaComCard(card, actions, listaNaoAtendeu.id, agora, inicioPeriodo, fimPeriodo);
                 if (resultado.tempo > 0) {
                     tempos.naoAtendeu.tempos.push(resultado);
                 }
@@ -433,7 +472,7 @@ const KPILogic = {
         return tempos;
     },
 
-    _calcularTempoPermanenciaComCard(card, actions, listaId, agora, inicioSemana) {
+    _calcularTempoPermanenciaComCard(card, actions, listaId, agora, inicioPeriodo, fimPeriodo) {
         let tempoTotal = 0;
         let entradaNaLista = null;
         let saidaDaLista = null;
@@ -457,10 +496,16 @@ const KPILogic = {
 
             if (entradaNaLista) {
                 // Se entrou antes da semana, considerar início da semana
-                if (entradaNaLista < inicioSemana) {
-                    entradaNaLista = inicioSemana;
+                if (entradaNaLista < inicioPeriodo) {
+                    entradaNaLista = inicioPeriodo;
                 }
-                tempoTotal = (agora - entradaNaLista) / (1000 * 60 * 60); // em horas
+
+                // Se ainda está lá, conta até agora ou até o fim do periodo?
+                const fimContagem = (agora > fimPeriodo) ? fimPeriodo : agora;
+
+                if (fimContagem > entradaNaLista) {
+                    tempoTotal = (fimContagem - entradaNaLista) / (1000 * 60 * 60); // em horas
+                }
             }
         } else {
             // Card já saiu da lista, calcular tempo que ficou
@@ -486,10 +531,16 @@ const KPILogic = {
                     saidaDaLista = dataAction;
 
                     // Calcular tempo apenas se a atividade foi na última semana
-                    if (saidaDaLista >= inicioSemana || entradaNaLista >= inicioSemana) {
+                    if (saidaDaLista >= inicioPeriodo || entradaNaLista >= inicioPeriodo) {
                         // Ajustar entrada se foi antes da semana
-                        const entradaAjustada = entradaNaLista < inicioSemana ? inicioSemana : entradaNaLista;
-                        tempoTotal += (saidaDaLista - entradaAjustada) / (1000 * 60 * 60); // em horas
+                        const entradaAjustada = entradaNaLista < inicioPeriodo ? inicioPeriodo : entradaNaLista;
+
+                        // Ajustar saida se foi depois do periodo
+                        const saidaAjustada = saidaDaLista > fimPeriodo ? fimPeriodo : saidaDaLista;
+
+                        if (saidaAjustada > entradaAjustada) {
+                            tempoTotal += (saidaAjustada - entradaAjustada) / (1000 * 60 * 60); // em horas
+                        }
                     }
 
                     entradaNaLista = null;
@@ -502,11 +553,5 @@ const KPILogic = {
             cardNome: card.name,
             cardId: card.id
         };
-    },
-
-    _calcularTempoPermanencia(card, actions, listaId, agora) {
-        // Manter função antiga para compatibilidade, mas não é mais usada
-        const resultado = this._calcularTempoPermanenciaComCard(card, actions, listaId, agora, new Date(0));
-        return resultado.tempo;
     }
 };
