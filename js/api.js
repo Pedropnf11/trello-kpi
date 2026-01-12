@@ -23,5 +23,17 @@ const TrelloAPI = {
             `https://api.trello.com/1/boards/${boardId}/members?key=${apiKey}&token=${token}`
         );
         return await res.json();
+    },
+
+    async createCard(apiKey, token, listId, name, desc) {
+        const url = `https://api.trello.com/1/cards?idList=${listId}&name=${encodeURIComponent(name)}&desc=${encodeURIComponent(desc)}&key=${apiKey}&token=${token}`;
+        const res = await fetch(url, { method: 'POST' });
+        return await res.json();
+    },
+
+    async addComment(apiKey, token, cardId, text) {
+        const url = `https://api.trello.com/1/cards/${cardId}/actions/comments?text=${encodeURIComponent(text)}&key=${apiKey}&token=${token}`;
+        const res = await fetch(url, { method: 'POST' });
+        return await res.json();
     }
 };

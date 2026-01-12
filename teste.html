@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casafari Mini-Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+    <nav class="bg-indigo-700 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold"><i class="fas fa-home mr-2"></i> Casafari Explorer</h1>
+            <div id="authStatus" class="text-sm">Não ligado</div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-6">
+        <div id="loginSection" class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-md">
+            <h2 class="text-2xl font-bold mb-6 text-center">Entrar no Casafari</h2>
+            <button onclick="login()" id="loginBtn"
+                class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">
+                Fazer Login Automático
+            </button>
+            <p class="text-xs text-gray-500 mt-4 text-center">As tuas credenciais estão configuradas no script.</p>
+        </div>
+
+        <div id="searchSection" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-md grid grid-cols-1 md:grid-cols-4 gap-4">
+                <input type="number" id="priceMax" placeholder="Preço Máximo (€)" class="border p-2 rounded w-full">
+                <input type="number" id="rooms" placeholder="Quartos (T1, T2...)" class="border p-2 rounded w-full">
+                <select id="operation" class="border p-2 rounded w-full">
+                    <option value="sale">Venda</option>
+                    <option value="rent">Arrendamento</option>
+                </select>
+                <button onclick="search()" class="bg-indigo-600 text-white py-2 rounded font-bold hover:bg-indigo-700">
+                    <i class="fas fa-search mr-2"></i> Pesquisar
+                </button>
+            </div>
+
+            <div id="results" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let authToken = null;
+        const API_BASE = 'https://api.casafari.com';
+
+        async function login() {
+            const btn = document.getElementById('loginBtn');
+            btn.innerText = "A entrar...";
+
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'pedronevespnf@gmail.com', // Lembra-te de gerir isto com segurança depois!
+                        password: 'Pedropnf11##'
+                    })
+                });
+
+                const data = await response.json();
+                if (data.access_token) {
+                    authToken = data.access_token;
+                    document.getElementById('loginSection').classList.add('hidden');
+                    document.getElementById('searchSection').classList.remove('hidden');
+                    document.getElementById('authStatus').innerText = "Ligado como Pedro";
+                }
+            } catch (err) {
+                alert("Erro ao fazer login. Verifica a consola.");
+                console.error(err);
+            }
+        }
+
+        async function search() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = "<p class='col-span-full text-center'>A carregar imóveis...</p>";
+
+            const priceMax = document.getElementById('priceMax').value;
+            const rooms = document.getElementById('rooms').value;
+            const op = document.getElementById('operation').value;
+
+            const body = {
+                search_operations: [op],
+                location_ids: [499] // Portugal
+            };
+
+            if (priceMax) body.price_to = parseInt(priceMax);
+            if (rooms) {
+                body.bedrooms_from = parseInt(rooms);
+                body.bedrooms_to = parseInt(rooms);
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/properties/search?limit=12`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(body)
+                });
+
+                const data = await response.json();
+                displayResults(data.results);
+            } catch (err) {
+                resultsDiv.innerHTML = "Erro na pesquisa.";
+            }
+        }
+
+        function displayResults(properties) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = "";
+
+            if (!properties || properties.length === 0) {
+                resultsDiv.innerHTML = "<p class='col-span-full text-center'>Nenhum imóvel encontrado.</p>";
+                return;
+            }
+
+            properties.forEach(prop => {
+                const price = prop.sale_price || prop.rent_price;
+                const card = `
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
+                        <div class="p-4">
+                            <h3 class="font-bold text-lg mb-1 truncate">${prop.title || prop.type}</h3>
+                            <p class="text-gray-500 text-sm mb-3"><i class="fas fa-map-marker-alt"></i> ${prop.location?.name || 'Portugal'}</p>
+                            <div class="text-indigo-600 font-bold text-xl mb-3">${new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(price)}</div>
+                            <div class="flex gap-4 text-sm text-gray-600">
+                                <span><i class="fas fa-bed"></i> ${prop.bedrooms || 0}</span>
+                                <span><i class="fas fa-expand"></i> ${prop.total_area || 0}m²</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 p-3 border-t">
+                            <a href="${prop.property_url}" target="_blank" class="text-indigo-600 font-semibold text-sm">Ver Detalhes →</a>
+                        </div>
+                    </div>
+                `;
+                resultsDiv.innerHTML += card;
+            });
+        }
+    </script>
+</body>
+
+</html>
