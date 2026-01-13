@@ -1,3 +1,40 @@
+App.listarBoards = async function () {
+    this.updateState({ loading: true, error: '' });
+
+    try {
+        const boards = await TrelloAPI.fetchBoards(this.state.apiKey, this.state.token);
+        this.updateState({
+            loading: false,
+            availableBoards: boards,
+            boardId: '' // Forçar seleção
+        });
+    } catch (err) {
+        if (err.status === 401) {
+            this.logout(); // Token expirou
+        } else {
+            this.updateState({ loading: false, error: 'Erro ao buscar quadros: ' + err.message });
+        }
+    }
+};
+
+App.selecionarBoard = function (boardId) {
+    this.state.boardId = boardId;
+    localStorage.setItem('trello_board_id', boardId);
+    this.conectarTrello();
+};
+
+App.logout = function () {
+    localStorage.removeItem('trello_token');
+    // localStorage.removeItem('trello_board_id'); // Opcional: manter board preferido
+    this.updateState({
+        token: '',
+        kpis: null,
+        availableBoards: [],
+        showConfig: true
+    });
+    window.location.hash = '';
+};
+
 App.conectarTrello = async function () {
     const { apiKey, token, boardId } = this.state;
 
@@ -40,9 +77,13 @@ App.conectarTrello = async function () {
         });
 
     } catch (err) {
-        this.updateState({
-            loading: false,
-            error: err.message || 'Erro ao conectar ao Trello'
-        });
+        if (err.status === 401) {
+            this.logout();
+        } else {
+            this.updateState({
+                loading: false,
+                error: err.message || 'Erro ao conectar ao Trello'
+            });
+        }
     }
 };
