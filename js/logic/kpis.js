@@ -253,3 +253,181 @@ KPILogic.filtrarDados = function (dadosOriginais, filterId) {
         }
     };
 };
+
+KPILogic.calcularFunil = function (listas, listCounts) {
+    if (!listCounts || !listas) return [];
+
+    const definicaoEstagios = [
+        { id: 'leads', nome: 'Leads', keywords: ['lead', 'entrada', 'novos', 'chegada'] },
+        { id: 'contactado', nome: 'Contactado', keywords: ['contact', 'qualifica', 'agendamento', 'reunião', 'visita'] },
+        { id: 'proposta', nome: 'Proposta', keywords: ['proposta', 'negocia', 'envia', 'follow'] },
+        { id: 'fechado', nome: 'Fechado', keywords: ['fechado', 'vendido', 'ganho', 'contrato', 'pago', 'sucesso'] }
+    ];
+
+    let funilMap = { leads: 0, contactado: 0, proposta: 0, fechado: 0 };
+
+    listas.forEach(lista => {
+        const nomeNormalizado = lista.name.toLowerCase();
+        const count = listCounts[lista.id] || 0;
+        const estagio = definicaoEstagios.find(e => e.keywords.some(k => nomeNormalizado.includes(k)));
+
+        if (estagio) {
+            funilMap[estagio.id] += count;
+        }
+    });
+
+    const dadosFinais = [
+        { stage: 'Leads', count: funilMap.leads + funilMap.contactado + funilMap.proposta + funilMap.fechado, color: '#60A5FA' }, // Blue
+        { stage: 'Contactado', count: funilMap.contactado + funilMap.proposta + funilMap.fechado, color: '#818CF8' }, // Indigo
+        { stage: 'Proposta', count: funilMap.proposta + funilMap.fechado, color: '#A78BFA' }, // Purple
+        { stage: 'Fechado', count: funilMap.fechado, color: '#34D399' } // Emerald
+    ];
+
+    for (let i = 0; i < dadosFinais.length; i++) {
+        const atual = dadosFinais[i];
+        const proximo = dadosFinais[i + 1];
+
+        if (proximo) {
+            const taxa = atual.count > 0 ? ((proximo.count / atual.count) * 100).toFixed(1) : 0;
+            dadosFinais[i].conversionRate = taxa + '%';
+            dadosFinais[i].dropOff = (100 - parseFloat(taxa)).toFixed(1) + '%';
+        } else {
+            dadosFinais[i].conversionRate = 'Final';
+        }
+    }
+
+    return dadosFinais;
+};
+
+KPILogic.calcularFunilV2 = function (listas, listCounts, config = null) {
+    if (!listCounts || !listas) return [];
+
+    let funilMap = { leads: 0, contactado: 0, proposta: 0, fechado: 0 };
+
+    if (config) {
+        const etapas = ['leads', 'contactado', 'proposta', 'fechado'];
+        etapas.forEach(etapa => {
+            if (config[etapa] && Array.isArray(config[etapa])) {
+                config[etapa].forEach(id => {
+                    if (listCounts[id]) funilMap[etapa] += listCounts[id];
+                });
+            }
+        });
+    } else {
+        const definicaoEstagios = [
+            { id: 'leads', nome: 'Leads', keywords: ['lead', 'entrada', 'novos', 'chegada'] },
+            { id: 'contactado', nome: 'Contactado', keywords: ['contact', 'qualifica', 'agendamento', 'reunião', 'visita'] },
+            { id: 'proposta', nome: 'Proposta', keywords: ['proposta', 'negocia', 'envia', 'follow'] },
+            { id: 'fechado', nome: 'Fechado', keywords: ['fechado', 'vendido', 'ganho', 'contrato', 'pago', 'sucesso'] }
+        ];
+
+        listas.forEach(lista => {
+            const nomeNormalizado = lista.name.toLowerCase();
+            const count = listCounts[lista.id] || 0;
+            const estagio = definicaoEstagios.find(e => e.keywords.some(k => nomeNormalizado.includes(k)));
+
+            if (estagio) {
+                funilMap[estagio.id] += count;
+            }
+        });
+    }
+
+    const dadosFinais = [
+        { stage: 'Leads', count: funilMap.leads + funilMap.contactado + funilMap.proposta + funilMap.fechado, color: '#60A5FA' }, // Blue
+        { stage: 'Contactado', count: funilMap.contactado + funilMap.proposta + funilMap.fechado, color: '#818CF8' }, // Indigo
+        { stage: 'Proposta', count: funilMap.proposta + funilMap.fechado, color: '#A78BFA' }, // Purple
+        { stage: 'Fechado', count: funilMap.fechado, color: '#34D399' } // Emerald
+    ];
+
+    for (let i = 0; i < dadosFinais.length; i++) {
+        const atual = dadosFinais[i];
+        const proximo = dadosFinais[i + 1];
+
+        if (proximo) {
+            const taxa = atual.count > 0 ? ((proximo.count / atual.count) * 100).toFixed(1) : 0;
+            dadosFinais[i].conversionRate = taxa + '%';
+            dadosFinais[i].dropOff = (100 - parseFloat(taxa)).toFixed(1) + '%';
+        } else {
+            dadosFinais[i].conversionRate = 'Final';
+        }
+    }
+
+    return dadosFinais;
+};
+
+KPILogic.calcularFunilTodasListas = function (listas, listCounts, hiddenLists = []) {
+    if (!listCounts || !listas) return [];
+
+    // 1. Filtrar listas ocultas e manter ORDEM (usando listas que já vêm ordenadas da API)
+    const listasVisiveis = listas.filter(l => !hiddenLists.includes(l.id));
+
+    // 2. Mapear para Formato do Funil (Usando Contagem REAL/STOCK)
+    const colors = ['#60A5FA', '#818CF8', '#A78BFA', '#34D399', '#FBBF24', '#F472B6', '#6EE7B7'];
+
+    const dados = listasVisiveis.map((lista, index) => {
+        const cnt = listCounts[lista.id] || 0;
+        return {
+            id: lista.id,
+            stage: lista.name,
+            count: cnt, // Stock Real
+            realCount: cnt,
+            color: colors[index % colors.length]
+        };
+    });
+
+    // 3. Métricas (% do total) em vez de conversão cumulativa
+    const totalCount = dados.reduce((sum, d) => sum + d.count, 0);
+
+    for (let i = 0; i < dados.length; i++) {
+        const atual = dados[i];
+        if (totalCount > 0) {
+            // Mostra % do total do que está visível
+            const share = ((atual.count / totalCount) * 100).toFixed(1);
+            atual.conversionRate = `${share}%`;
+            atual.dropOff = '';
+        } else {
+            atual.conversionRate = '0%';
+            atual.dropOff = '';
+        }
+    }
+
+    return dados;
+};
+
+
+KPILogic.calcularTemposListas = function (cards, listas, startDate, endDate) {
+    const tempos = {};
+    const now = new Date();
+
+    listas.forEach(l => {
+        tempos[l.id] = {
+            id: l.id,
+            nome: l.name,
+            totalDias: 0,
+            count: 0,
+            tempoMedio: 0
+        };
+    });
+
+    cards.forEach(card => {
+        if (card.closed) return;
+
+        // Calcular duração na lista (aprox by last activity)
+        const lastActivity = new Date(card.dateLastActivity);
+        const dias = Math.floor((now - lastActivity) / (1000 * 60 * 60 * 24));
+
+        if (tempos[card.idList]) {
+            tempos[card.idList].totalDias += dias;
+            tempos[card.idList].count++;
+        }
+    });
+
+    Object.keys(tempos).forEach(id => {
+        const t = tempos[id];
+        if (t.count > 0) {
+            t.tempoMedio = (t.totalDias / t.count).toFixed(1);
+        }
+    });
+
+    return tempos;
+};

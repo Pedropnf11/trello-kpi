@@ -66,9 +66,12 @@ App.conectarTrello = async function () {
         const temposListas = KPILogic.calcularTemposListas(cards, listas, this.state.startDate, this.state.endDate);
         const atividade = KPILogic.calcularAtividade(cards, membros, this.state.startDate, this.state.endDate);
 
+        // Calcular funil com todas as listas (respeitando ocultas)
+        const funil = KPILogic.calcularFunilTodasListas(listas, kpis.geral.listCounts, this.state.hiddenFunnelLists);
+
         // Guardar dados brutos para o Chatbot
-        this.state.rawData = { cards, listas, membros };
-        this.state.kpis = { ...kpis, temposListas, atividade };
+        this.state.rawData = { cards, listas, membros, userRole: this.state.userRole };
+        this.state.kpis = { ...kpis, temposListas, atividade, funil };
 
         this.updateState({
             loading: false,
@@ -77,7 +80,8 @@ App.conectarTrello = async function () {
         });
 
     } catch (err) {
-        if (err.status === 401) {
+        console.error('Erro Trello:', err);
+        if (err.status === 401 || err.status === 403) {
             this.logout();
         } else {
             this.updateState({

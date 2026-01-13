@@ -65,3 +65,66 @@ UI.renderActivity = function (atividade) {
         </div>
     `;
 };
+
+UI.renderActionList = function (atividade, role = 'manager') {
+    if (!atividade || !atividade.todos) return '';
+
+    // Se for 'sales', mostrar apenas as ações do próprio usuário (simulado pelo seletor ou todos se manager)
+    // Mas o pedido foi "quero lista de ações por utilizadores... tanto na versão de vendedor como gestor"
+    // Então vamos mostrar a lista. Talvez simplificada para vendedor? 
+    // Vamos assumir lista completa para ambos, mas o vendedor foca na sua.
+
+    // Lista ordenada por atividade
+    const users = atividade.todos;
+
+    return `
+        <div class="bg-white rounded-2xl shadow-sm p-8 border border-gray-100">
+            <div class="mb-6 flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                        <span>📋</span> Ranking de Ações
+                    </h2>
+                    <p class="text-sm text-gray-500 mt-1 font-light">Total de interações na semana</p>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="p-3 border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-wider">Membro</th>
+                            <th class="p-3 border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">Ações</th>
+                            <th class="p-3 border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">Deadline</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm text-gray-700">
+                        ${users.map((u, index) => `
+                            <tr class="hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0">
+                                <td class="p-4 font-medium flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-blue-700 font-bold text-xs ring-2 ring-white shadow-sm">
+                                        ${u.nome.charAt(0)}
+                                    </div>
+                                    <span>${u.nome}</span>
+                                    ${index === 0 ? '<span class="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-bold ml-auto">🏆 MVP</span>' : ''}
+                                </td>
+                                <td class="p-4 text-right font-bold text-gray-900">
+                                    ${u.acoes}
+                                </td>
+                                <td class="p-4 text-right space-y-1">
+                                    <div class="text-[10px] text-green-600 font-bold bg-green-50 px-2 py-0.5 rounded inline-block">
+                                        ${u.duesATempo} pontuais
+                                    </div>
+                                    <div class="text-[10px] text-red-500 font-bold bg-red-50 px-2 py-0.5 rounded inline-block ml-1">
+                                        ${u.duesAtrasadas} atrasos
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+            
+            ${users.length === 0 ? '<p class="text-center text-gray-400 py-8">Sem atividade registrada no período.</p>' : ''}
+        </div>
+    `;
+};

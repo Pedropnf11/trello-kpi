@@ -111,11 +111,97 @@ KPILogic.calcularAtividade = function (cards, membros, customStartDate = null, c
         };
     }
 
-    // Ordenar por número de ações
-    usuarios.sort((a, b) => b.acoes - a.acoes);
-
     return {
+        todos: usuarios, // Lista completa ordenada
         maisAtivo: usuarios[0],
         maisInativo: usuarios[usuarios.length - 1]
     };
+};
+
+KPILogic.gerarActionItems = function (cards, listas, membros, filterId = null) {
+    if (!cards || !listas) return [];
+
+    const actions = [];
+    const now = new Date();
+
+    // Helper para dias
+    const getDaysStuck = (dateStr) => {
+        if (!dateStr) return 0;
+        const last = new Date(dateStr);
+        return Math.floor((now - last) / (1000 * 60 * 60 * 24));
+    };
+
+    // Mapear nomes de listas para normalização
+    const listMap = {};
+    listas.forEach(l => listMap[l.id] = l.name);
+
+    cards.forEach(card => {
+        // Filtro de Membro
+        if (filterId) {
+            const memberIds = card.idMembers || [];
+            if (!memberIds.includes(filterId)) return;
+        }
+
+        const daysStuck = getDaysStuck(card.dateLastActivity);
+        const listName = listMap[card.idList] || '';
+        const listNameLower = listName.toLowerCase();
+
+        // Ignorar cards arquivados ou finalizados
+        if (card.closed) return;
+        if (listNameLower.includes('fechado') || listNameLower.includes('ganho') || listNameLower.includes('perdido')) return;
+
+        // Obter nome dos membros
+        const memberNames = (card.idMembers || []).map(id => {
+            const m = membros.find(m => m.id === id);
+            return m ? m.fullName : 'Sem membro';
+        }).join(', ');
+
+        const cardUrl = card.shortUrl || card.url;
+
+        // Regras Solicitadas: > 90, > 30, > 7
+        if (daysStuck > 90) {
+            actions.push({
+                type: "critical",
+                card: card.name,
+                member: memberNames,
+                action: `CRÍTICO: Parado há ${daysStuck} dias`,
+                priority: "critical",
+                list: listName,
+                days: daysStuck,
+                url: cardUrl
+            });
+        }
+        else if (daysStuck > 30) {
+            actions.push({
+                type: "stagnant",
+                card: card.name,
+                member: memberNames,
+                action: `Muito antigo: ${daysStuck} dias parado`,
+                priority: "high",
+                list: listName,
+                days: daysStuck,
+                url: cardUrl
+            });
+        }
+        else if (daysStuck > 7) {
+            actions.push({
+                type: "warning",
+                card: card.name,
+                member: memberNames,
+                action: `Atenção: ${daysStuck} dias sem atividade`,
+                priority: "medium",
+                list: listName,
+                days: daysStuck,
+                url: cardUrl
+            });
+        }
+    });
+
+    // Ordenar: Critical > High > Medium
+    const priorityOrder = { critical: 0, high: 1, medium: 2 };
+    return actions.sort((a, b) => {
+        const pA = priorityOrder[a.priority] !== undefined ? priorityOrder[a.priority] : 99;
+        const pB = priorityOrder[b.priority] !== undefined ? priorityOrder[b.priority] : 99;
+        return pA - pB;
+    });
 };

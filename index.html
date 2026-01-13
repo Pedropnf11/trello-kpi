@@ -16,11 +16,40 @@
         * {
             font-family: 'Inter', sans-serif;
         }
+
+        /* Custom Scrollbar for Dark Mode */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* Utility for hiding scrollbar but keeping functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-gray-50 to-slate-100 min-h-screen p-8">
-    <div id="app" class="max-w-7xl mx-auto"></div>
+<body class="bg-gradient-to-br from-gray-50 to-slate-100 ">
+    <div id="app"></div>
 
     <!-- Scripts -->
     <script type="module" src="/main.js"></script>

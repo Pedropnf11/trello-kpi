@@ -142,3 +142,51 @@ UI.renderManualConfig = function (state) {
         </div>
     `;
 };
+
+UI.renderRoleSelectionModal = function (boardId, boardName) {
+    return `
+        <div id="roleSelectionModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
+            <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all scale-100 border border-white/20">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-blue-600 shadow-sm">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900">Quem és tu?</h3>
+                    <p class="text-gray-500 mt-2">Escolhe como queres visualizar o quadro <span class="font-semibold text-gray-700">"${boardName}"</span></p>
+                </div>
+
+                <div class="grid gap-4">
+                    <button onclick="App.confirmRole('${boardId}', 'manager')" class="group relative flex items-center p-4 bg-white border-2 border-slate-100 rounded-2xl hover:border-blue-500 hover:shadow-lg transition-all text-left w-full">
+                        <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 mr-4 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-900 group-hover:text-blue-600 transition-colors">Sou Gestor</div>
+                            <div class="text-xs text-gray-500">Acesso total a todas as métricas e equipa.</div>
+                        </div>
+                        <div class="absolute right-4 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </div>
+                    </button>
+
+                    <button onclick="App.confirmRole('${boardId}', 'sales')" class="group relative flex items-center p-4 bg-white border-2 border-slate-100 rounded-2xl hover:border-green-500 hover:shadow-lg transition-all text-left w-full">
+                        <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center text-green-600 mr-4 group-hover:bg-green-100 transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-900 group-hover:text-green-600 transition-colors">Sou Vendedor</div>
+                            <div class="text-xs text-gray-500">Foco na minha performance e tarefas.</div>
+                        </div>
+                        <div class="absolute right-4 text-green-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <button onclick="document.getElementById('roleSelectionModal').remove()" class="text-sm text-gray-400 hover:text-gray-600 font-medium transition-colors">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    `;
+};
