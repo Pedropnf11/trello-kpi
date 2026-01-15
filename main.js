@@ -29,7 +29,6 @@ import './js/app/core.js';
 import './js/app/trello.js';
 import './js/app/export.js';
 import './js/app/import.js';
-import './js/app/chat.js';
 
 // CSS handled via CDN in index.html
 

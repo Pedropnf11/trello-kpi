@@ -136,8 +136,11 @@ UI.renderManualConfig = function (state) {
                         <a href="https://trello.com/1/authorize?expiration=never&scope=read&response_type=token&key=${state.apiKey}" target="_blank" class="text-xs text-blue-600 hover:underline mt-1 inline-block">Gerar Token Manualmente</a>
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Board ID</label>
                         <input type="text" id="boardId" value="${state.boardId}" placeholder="ID do Quadro" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Webhook URL (Opcional - Para Exportar Email)</label>
+                        <input type="text" id="webhookUrl" value="${state.webhookUrl || ''}" placeholder="https://hook.make.com/..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow text-xs">
                     </div>
                      <button id="conectarManualBtn" class="w-full bg-gray-900 text-white py-3 rounded-lg font-bold hover:bg-gray-800 mt-6 shadow-lg transition-transform transform hover:-translate-y-0.5">
                         Conectar Manualmente

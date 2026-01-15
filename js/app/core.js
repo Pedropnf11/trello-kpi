@@ -13,8 +13,8 @@ App.state = {
     apiKey: TrelloConfig.apiKey,
     token: localStorage.getItem('trello_token') || '',
     boardId: localStorage.getItem('trello_board_id') || '',
-    webhookUrl: localStorage.getItem('trello_webhook_url') || 'https://hook.eu1.make.com/d7bsp420w5lt67xg8cq2ha1hege2rn01',
-    groqApiKey: localStorage.getItem('trello_groq_key') || '',
+    webhookUrl: localStorage.getItem('trello_webhook_url') || '',
+    groqApiKey: import.meta.env.VITE_API_GROQ1,
     showConfig: true,
     loading: false,
     kpis: null,
@@ -222,11 +222,17 @@ App.attachManualEvents = function () {
         const apiKey = document.getElementById('apiKey').value;
         const token = document.getElementById('token').value;
         const boardId = document.getElementById('boardId').value;
+        const webhookUrl = document.getElementById('webhookUrl').value;
 
         if (apiKey && token && boardId) {
             this.state.apiKey = apiKey;
             this.state.token = token;
             this.state.boardId = boardId;
+            this.state.webhookUrl = webhookUrl;
+
+            // Persistir configuração
+            localStorage.setItem('trello_webhook_url', webhookUrl);
+
             this.conectarTrello();
         }
     });
@@ -254,6 +260,160 @@ App.attachDashboardEvents = function () {
     // 1. Sidebar - Logout e Filtros
     const configBtn = document.getElementById('configBtn');
     if (configBtn) configBtn.addEventListener('click', () => this.logout());
+
+    // 1.0 Settings Modal
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsModal = document.getElementById('settingsModal');
+    const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+    const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+    const dashboardWebhookUrl = document.getElementById('dashboardWebhookUrl');
+
+    if (settingsBtn && settingsModal) {
+        settingsBtn.addEventListener('click', () => {
+            settingsModal.classList.remove('hidden');
+        });
+    }
+
+    if (closeSettingsBtn && settingsModal) {
+        closeSettingsBtn.addEventListener('click', () => {
+            settingsModal.classList.add('hidden');
+        });
+    }
+
+    if (settingsModal) {
+        settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) {
+                settingsModal.classList.add('hidden');
+            }
+        });
+    }
+
+    if (saveSettingsBtn && dashboardWebhookUrl) {
+        saveSettingsBtn.addEventListener('click', () => {
+            const newUrl = dashboardWebhookUrl.value.trim();
+            this.state.webhookUrl = newUrl;
+            localStorage.setItem('trello_webhook_url', newUrl);
+
+            // Feedback Visual
+            const originalText = saveSettingsBtn.innerHTML;
+            saveSettingsBtn.innerHTML = '✔ Guardado!';
+            saveSettingsBtn.classList.remove('bg-blue-600', 'hover:bg-blue-500');
+            saveSettingsBtn.classList.add('bg-green-600', 'hover:bg-green-500');
+
+            setTimeout(() => {
+                saveSettingsBtn.innerHTML = originalText;
+                saveSettingsBtn.classList.add('bg-blue-600', 'hover:bg-blue-500');
+                saveSettingsBtn.classList.remove('bg-green-600', 'hover:bg-green-500');
+                settingsModal.classList.add('hidden');
+            }, 1000);
+        });
+    }
+
+    // 1.1 Tutorial Modal
+    const tutorialBtn = document.getElementById('tutorialBtn');
+    const tutorialModal = document.getElementById('tutorialModal');
+    const closeTutorialBtn = document.getElementById('closeTutorialBtn');
+
+    if (tutorialBtn && tutorialModal) {
+        tutorialBtn.addEventListener('click', () => {
+            tutorialModal.classList.remove('hidden');
+        });
+    }
+
+    if (closeTutorialBtn && tutorialModal) {
+        closeTutorialBtn.addEventListener('click', () => {
+            tutorialModal.classList.add('hidden');
+        });
+    }
+
+    if (tutorialModal) {
+        // Fecha se clicar fora do modal
+        tutorialModal.addEventListener('click', (e) => {
+            if (e.target === tutorialModal) {
+                tutorialModal.classList.add('hidden');
+            }
+        });
+
+        // Tabs Logic
+        const tabs = tutorialModal.querySelectorAll('.tutorial-tab-btn');
+        const contents = tutorialModal.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Reset styles
+                tabs.forEach(t => {
+                    t.classList.remove('text-blue-500', 'border-b-2', 'border-blue-500');
+                    t.classList.add('text-gray-400');
+                });
+                // Activate current
+                tab.classList.remove('text-gray-400');
+                tab.classList.add('text-blue-500', 'border-b-2', 'border-blue-500');
+
+                // Switch content
+                const target = tab.dataset.tab;
+                contents.forEach(content => {
+                    if (content.id === `tab-content-${target}`) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    }
+
+    // 1.2 Docs Modal
+    const docsBtn = document.getElementById('docsBtn');
+    const docsModal = document.getElementById('docsModal');
+    const closeDocsBtn = document.getElementById('closeDocsBtn');
+
+    if (docsBtn && docsModal) {
+        docsBtn.addEventListener('click', () => {
+            docsModal.classList.remove('hidden');
+        });
+    }
+
+    if (closeDocsBtn && docsModal) {
+        closeDocsBtn.addEventListener('click', () => {
+            docsModal.classList.add('hidden');
+        });
+    }
+
+    if (docsModal) {
+        // Tabs Logic
+        const tabs = docsModal.querySelectorAll('.docs-tab-btn');
+        const lists = docsModal.querySelectorAll('.docs-list-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Reset styles
+                tabs.forEach(t => {
+                    t.classList.remove('text-green-500', 'border-b-2', 'border-green-500');
+                    t.classList.add('text-gray-400', 'border-transparent');
+                });
+                // Activate current
+                tab.classList.remove('text-gray-400', 'border-transparent');
+                tab.classList.add('text-green-500', 'border-b-2', 'border-green-500');
+
+                // Switch list content
+                const target = tab.dataset.tab;
+                lists.forEach(list => {
+                    if (list.id === `docs-list-${target}`) {
+                        list.classList.remove('hidden');
+                    } else {
+                        list.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+        // Fecha se clicar fora do modal
+        docsModal.addEventListener('click', (e) => {
+            if (e.target === docsModal) {
+                docsModal.classList.add('hidden');
+            }
+        });
+    }
 
     const memberFilter = document.getElementById('memberFilter');
     if (memberFilter) {
@@ -311,52 +471,6 @@ App.attachDashboardEvents = function () {
     const enviarWebhookBtn = document.getElementById('enviarWebhookBtn');
     if (enviarWebhookBtn && this.enviarWebhook) {
         enviarWebhookBtn.addEventListener('click', () => this.enviarWebhook());
-    }
-
-    // 4. Chatbot
-    const toggleChatBtn = document.getElementById('toggleChatBtn');
-    const closeChatBtn = document.getElementById('closeChatBtn');
-    const chatModal = document.getElementById('chatModal');
-
-    // Restaurar estado do chat
-    if (this.state.chatOpen && chatModal) {
-        chatModal.classList.remove('hidden');
-        this.renderChatHistory();
-    }
-
-    if (toggleChatBtn) {
-        toggleChatBtn.addEventListener('click', () => {
-            this.state.chatOpen = !this.state.chatOpen;
-            this.render(); // Re-render para mostrar/esconder (ou podia só fazer toggle class)
-            // Optamos por re-render para manter consistência, mas neste caso específico:
-            // Se já renderizámos, basta toggle class para ser mais fluido
-            // Mas o renderChatHistory precisa de correr.
-        });
-    }
-
-    if (closeChatBtn) {
-        closeChatBtn.addEventListener('click', () => {
-            this.state.chatOpen = false;
-            if (chatModal) chatModal.classList.add('hidden');
-        });
-    }
-
-    const sendChatBtn = document.getElementById('sendChatBtn');
-    const chatInput = document.getElementById('chatInput');
-
-    const sendMessage = () => {
-        const text = chatInput.value.trim();
-        if (text) {
-            this.handleChatMessage(text);
-            chatInput.value = '';
-        }
-    };
-
-    if (sendChatBtn) sendChatBtn.addEventListener('click', sendMessage);
-    if (chatInput) {
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
     }
 };
 
