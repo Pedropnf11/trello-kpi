@@ -1,15 +1,15 @@
 UI.renderActivity = function (atividade) {
     if (!atividade) return '';
     return `
-        <div class="bg-white rounded-2xl shadow-sm p-8 border border-gray-100">
+        <div class="bg-[#1e293b] rounded-1x1 shadow-sm p-8">
             <div class="mb-6">
-                <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
                     <span></span> Atividade dos utilizadores
                 </h2>
                 <p class="text-sm text-gray-500 mt-1 font-light">Última semana</p>
             </div>
             
-            <div class="grid grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 gap-6">
                 <!-- Mais Ativo -->
                 <div class="border-2 border-green-200 bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6">
                     <h3 class="text-lg font-bold text-green-900 mb-4 flex items-center gap-2">
@@ -37,7 +37,7 @@ UI.renderActivity = function (atividade) {
                 </div>
 
                 <!-- Mais Inativo -->
-                <div class="border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6">
+                <div class="border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-6">
                     <h3 class="text-lg font-bold text-yellow-900 mb-4 flex items-center gap-2">
                             Utilizador Mais Inativo
                     </h3>
@@ -55,7 +55,7 @@ UI.renderActivity = function (atividade) {
                                 </div>
                                 
                             </div>
-                            <p class="text-xs text-yellow-900 bg-yellow-50 p-3 rounded-lg">
+                            <p class="text-xs text-red-900 bg-red-50 p-3 rounded-lg">
                                 Utilizador menos ativo
                             </p>
                         </div>
@@ -78,10 +78,10 @@ UI.renderActionList = function (atividade, role = 'manager') {
     const users = atividade.todos;
 
     return `
-        <div class="bg-white rounded-2xl shadow-sm p-8 border border-gray-100">
+        <div class="bg-[#1e293b] rounded-2xl shadow-sm p-8 border border-gray-100">
             <div class="mb-6 flex items-center justify-between">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                    <h2 class="text-2xl font-bold text-white-900 flex items-center gap-2">
                         <span>📋</span> Ranking de Ações
                     </h2>
                     <p class="text-sm text-gray-500 mt-1 font-light">Total de interações na semana</p>

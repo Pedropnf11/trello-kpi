@@ -11,8 +11,12 @@ const TrelloAPI = {
     },
 
     async fetchBoards(apiKey, token) {
-        // Fetch open boards for the user
-        return this._fetch(`https://api.trello.com/1/members/me/boards?filter=open&fields=id,name,dateLastActivity&key=${apiKey}&token=${token}`);
+        // Fetch open boards for the user with memberships to check admin status
+        return this._fetch(`https://api.trello.com/1/members/me/boards?filter=open&fields=id,name,dateLastActivity,memberships&key=${apiKey}&token=${token}`);
+    },
+
+    async fetchUserInfo(apiKey, token) {
+        return this._fetch(`https://api.trello.com/1/members/me?key=${apiKey}&token=${token}`);
     },
 
     async fetchLists(apiKey, token, boardId) {

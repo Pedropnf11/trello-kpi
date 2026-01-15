@@ -76,9 +76,14 @@ UI.renderBoardSelector = function (state) {
                         <h2 class="text-3xl font-bold text-gray-900 mb-2">Os teus Quadros</h2>
                         <p class="text-gray-500">Seleciona o quadro que queres analisar.</p>
                     </div>
-                     <button id="logoutBtn" class="text-sm text-red-500 hover:text-red-700 font-bold px-4 py-2 rounded-lg hover:bg-red-50 transition border border-transparent hover:border-red-100">
-                        Sair
-                    </button>
+                    <div class="flex gap-2">
+                        <button onclick="App.setRole(null)" class="text-sm text-gray-500 hover:text-gray-700 font-bold px-4 py-2 rounded-lg hover:bg-gray-100 transition border border-transparent">
+                            Trocar Função
+                        </button>
+                        <button id="logoutBtn" class="text-sm text-red-500 hover:text-red-700 font-bold px-4 py-2 rounded-lg hover:bg-red-50 transition border border-transparent hover:border-red-100">
+                            Sair
+                        </button>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 overflow-y-auto pr-2 custom-scrollbar flex-1 pb-4">
@@ -115,7 +120,7 @@ UI.renderManualConfig = function (state) {
         <div class="min-h-screen flex items-center justify-center bg-gray-100">
             <div class="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-900">Configuração Manual</h2>
+                    <h2 class="text-2xl font-bold text-white-900">Configuração Manual</h2>
                     <button id="backToLogin" class="text-sm text-gray-500 hover:text-gray-900 font-medium">Voltar</button>
                 </div>
                 
@@ -138,6 +143,54 @@ UI.renderManualConfig = function (state) {
                         Conectar Manualmente
                     </button>
                 </div>
+            </div>
+        </div>
+    `;
+};
+
+UI.renderRoleSelectorScreen = function () {
+    return `
+        <div class="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+             <div class="bg-white rounded-3xl shadow-xl p-10 max-w-2xl w-full border border-gray-100 flex flex-col items-center text-center">
+                <div class="mb-10">
+                     <div class="w-20 h-20 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6 text-blue-600 shadow-sm transform -rotate-3">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    </div>
+                    <h2 class="text-3xl font-black text-gray-900 mb-4">Bem-vindo!</h2>
+                    <p class="text-gray-500 text-lg max-w-md mx-auto">Para personalizar a tua experiência, diz-nos qual é a tua função na equipa.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-8">
+                     <!-- Card Gestor -->
+                     <button onclick="App.setRole('manager')" class="group relative flex flex-col items-center p-8 bg-white border-2 border-slate-100 rounded-[2rem] hover:border-blue-500 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 w-full text-center">
+                        <div class="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-600 mb-6 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-600 mb-2">Sou Gestor</h3>
+                        <p class="text-sm text-gray-400 group-hover:text-gray-500">Quero ver a performance geral da equipa e gerir os funis.</p>
+                        
+                        <div class="mt-6 px-4 py-2 bg-gray-50 rounded-full text-xs font-bold text-gray-400 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors">
+                            Acesso Completo
+                        </div>
+                    </button>
+
+                    <!-- Card Vendedor -->
+                    <button onclick="App.setRole('sales')" class="group relative flex flex-col items-center p-8 bg-white border-2 border-slate-100 rounded-[2rem] hover:border-green-500 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 w-full text-center">
+                        <div class="w-16 h-16 rounded-2xl bg-green-50 flex items-center justify-center text-green-600 mb-6 group-hover:bg-green-100 transition-colors">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-green-600 mb-2">Sou Vendedor</h3>
+                        <p class="text-sm text-gray-400 group-hover:text-gray-500">Quero focar-me nos meus números e nas minhas tarefas.</p>
+                        
+                        <div class="mt-6 px-4 py-2 bg-gray-50 rounded-full text-xs font-bold text-gray-400 group-hover:bg-green-100 group-hover:text-green-600 transition-colors">
+                            Foco Individual
+                        </div>
+                    </button>
+                </div>
+
+                <button onclick="App.logout()" class="text-sm text-gray-400 hover:text-red-500 hover:underline transition-colors mt-4">
+                    Não sou eu (Sair)
+                </button>
             </div>
         </div>
     `;

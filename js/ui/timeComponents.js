@@ -1,18 +1,18 @@
 UI.renderTimeTracking = function (temposListas) {
     return `
-        <div class="bg-gradient-to-br from-slate-50 to-gray-100 rounded-3xl shadow-lg p-8 border border-gray-200">
+        <div>
             <div class="mb-8">
-                <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+                <h2 class="text-3xl font-bold text-white flex items-center gap-3">
                     <span class="text-4xl"></span> Tempo médio de espera
                 </h2>
-                <p class="text-sm text-gray-500 mt-2 font-light">Análise de performance da última semana</p>
+                <p class="text-sm text-white-500 mt-2 font-light">Análise de performance da última semana</p>
             </div>
             
             <div class="grid grid-cols-2 gap-8">
                 <!-- LEADS -->
-                <div class="bg-white rounded-2xl shadow-xl p-8 border-2 border-blue-100 hover:border-blue-300 transition-all duration-300 hover:shadow-2xl">
+                <div class="rounded-2xl shadow-xl p-8  transition-all duration-300 hover:shadow-2xl">
                     <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                        <h3 class="text-xl font-bold text-white-900 flex items-center gap-2">
                             <span class="text-2xl"></span> ${temposListas.leads.nomeList || 'LEADS'}
                         </h3>
                         <span class="bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-xs font-bold">
@@ -21,8 +21,8 @@ UI.renderTimeTracking = function (temposListas) {
                     </div>
                     
                     <!-- Tempo Médio Destacado -->
-                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl mb-6 shadow-lg">
-                        <div class="text-blue-100 text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
+                    <div class="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl mb-6 shadow-lg">
+                        <div class="text-green-100 text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
@@ -67,9 +67,9 @@ UI.renderTimeTracking = function (temposListas) {
                 </div>
 
                 <!-- Não Atendeu -->
-                <div class="bg-white rounded-2xl shadow-xl p-8 border-2 border-orange-100 hover:border-orange-300 transition-all duration-300 hover:shadow-2xl">
+                <div class="rounded-2xl shadow-xl p-8 transition-all duration-300 hover:shadow-2xl">
                     <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                        <h3 class="text-xl font-bold text-white-900 flex items-center gap-2">
                             <span class="text-2xl"></span> ${temposListas.naoAtendeu.nomeList || 'Não atendeu'}
                         </h3>
                         <span class="bg-orange-100 text-orange-700 px-4 py-1.5 rounded-full text-xs font-bold">
@@ -78,8 +78,8 @@ UI.renderTimeTracking = function (temposListas) {
                     </div>
                     
                     <!-- Tempo Médio Destacado -->
-                    <div class="bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-2xl mb-6 shadow-lg">
-                        <div class="text-orange-100 text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
+                    <div class="bg-gradient-to-br from-red-500 to-red-600 p-6 rounded-2xl mb-6 shadow-lg">
+                        <div class="text-red-100 text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>

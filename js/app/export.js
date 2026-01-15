@@ -83,24 +83,55 @@ App.exportarPDF = async function () {
                     if (bg) bar.style.backgroundColor = bg;
                 });
 
-                // 4. Ocultar Lixo UI
+                const style = doc.createElement('style');
+                style.innerHTML = `
+                    .gap-4 { gap: 2rem !important; }
+                    .mb-1 { margin-bottom: 0.5rem !important; }
+                    .text-white { color: #f8fafc !important; }
+                    .bg-\\[\\#1e293b\\] { background-color: #1e293b !important; }
+                    
+                    /* Tabela Headers */
+                    th { 
+                        background-color: #0f172a !important; 
+                        color: #94a3b8 !important;   
+                        padding: 16px !important;
+                    }
+
+                    /* Scrollbar */
+                    .custom-scrollbar-dark::-webkit-scrollbar { width: 6px; }
+                    .custom-scrollbar-dark::-webkit-scrollbar-thumb { background-color: #475569; border-radius: 10px; }
+
+                    .group .opacity-0 { opacity: 1 !important; }
+
+                    /* CRITICAL: Espaçamento Pós-Pipeline */
+                    #section-pipeline {
+                        margin-bottom: 80px !important; /* Espaço extra forçado */
+                        page-break-inside: avoid;
+                    }
+
+                    /* CRITICAL: Layout Clean */
+                    .grid { height: auto !important; } /* Remover alturas fixas dos grids */
+                `;
+                doc.head.appendChild(style);
+
+                // 4. Ocultar Lixo UI e Focus Zone
                 const elementsToHide = [
                     'aside',
-                    'header', // O header original do app, não o nosso novo
-                    '#section-actions',
+                    'header',
+                    '#section-actions', // OCULTAR COMPLETO (Focus Zone)
                     '#chatModal',
-                    '.action-filter-btn',
                     '#resetHiddenListsBtn',
                     '#atualizarBtn',
-                    '#toggleChatBtn'
+                    '#toggleChatBtn',
+                    '.remove-funnel-list-btn'
                 ];
                 elementsToHide.forEach(sel => {
                     const el = doc.querySelector(sel);
                     if (el) el.style.display = 'none';
                 });
 
-                // 5. Destruir Limites de Layout (Scroll Infinito)
-                const elsToUnlock = doc.querySelectorAll('.h-screen, .overflow-hidden, .overflow-y-auto, .fixed, .absolute, .max-h-full');
+                // 5. Destruir Limites de Layout
+                const elsToUnlock = doc.querySelectorAll('.h-screen, .overflow-hidden, .overflow-y-auto, .fixed, .absolute, .max-h-full, .custom-scrollbar-dark');
                 elsToUnlock.forEach(el => {
                     el.classList.remove('h-screen', 'overflow-hidden', 'overflow-y-auto', 'fixed', 'absolute', 'max-h-screen');
                     el.style.height = 'auto';
@@ -119,7 +150,7 @@ App.exportarPDF = async function () {
                     appDiv.style.width = '1400px';
                     appDiv.style.height = 'auto';
                     appDiv.style.display = 'block';
-                    appDiv.style.backgroundColor = '#0f172a'; // Fundo geral
+                    appDiv.style.backgroundColor = '#0f172a';
                 }
 
                 // 7. Layout Vertical
@@ -127,14 +158,21 @@ App.exportarPDF = async function () {
                 grids.forEach(g => {
                     g.style.display = 'flex';
                     g.style.flexDirection = 'column';
-                    g.style.gap = '30px';
+                    g.style.gap = '40px';
                 });
 
-                // 8. Tabela Follow-ups e Outras
+                // Aumentar espaçamento nos items do Pipeline
+                const pipelineItems = doc.querySelectorAll('#section-pipeline > div > div');
+                if (pipelineItems) {
+                    pipelineItems.forEach(item => item.style.marginBottom = '20px');
+                }
+
+                // 8. Tabela Layout
                 const tables = doc.querySelectorAll('.overflow-x-auto');
                 tables.forEach(t => {
                     t.style.overflow = 'visible';
                     t.style.display = 'block';
+                    t.parentElement.style.marginBottom = '40px';
                 });
             }
         });

@@ -26,7 +26,7 @@ App.state = {
     chatOpen: false,
     chatHistory: [],
     availableBoards: [],
-    userRole: 'manager',
+    userRole: localStorage.getItem('trello_user_role') || null, // Guardar role no storage
     funnelConfig: JSON.parse(localStorage.getItem('trello_funnel_config') || 'null'),
     hiddenFunnelLists: JSON.parse(localStorage.getItem('trello_hidden_funnel_lists') || '[]'),
     timeTrackingLists: JSON.parse(localStorage.getItem('trello_time_tracking_lists') || '{"left": null, "right": null}')
@@ -46,7 +46,15 @@ App.init = function () {
     }
 
     if (this.state.token) {
-        this.listarBoards();
+        // Se já temos token, verificamos se temos role
+        if (!this.state.userRole) {
+            this.render(); // Vai renderizar o seletor de role
+        } else if (this.state.boardId) {
+            // Se já temos boardId guardado, tentamos conectar direto
+            this.selecionarBoard(this.state.boardId);
+        } else {
+            this.listarBoards();
+        }
     } else {
         this.render();
     }
@@ -71,8 +79,14 @@ App.render = function () {
         return;
     }
 
+    // NOVA LÓGICA: Se tem token mas não tem role, mostra seleção de ROLE
+    if (this.state.token && !this.state.userRole) {
+        app.innerHTML = UI.renderRoleSelectorScreen(); // Novo ecrã a criar
+        return;
+    }
+
     if (!this.state.boardId || (this.state.availableBoards && this.state.availableBoards.length > 0 && !this.state.kpis)) {
-        app.innerHTML = UI.renderConfig(this.state);
+        app.innerHTML = UI.renderConfig(this.state); // Renderiza selector de boards
         this.attachBoardEvents();
         return;
     }
@@ -223,11 +237,8 @@ App.attachBoardEvents = function () {
     boardCards.forEach(card => {
         card.addEventListener('click', () => {
             const boardId = card.getAttribute('data-id');
-            const boardName = card.querySelector('h3')?.innerText || 'Quadro';
-
-            // Render and append modal
-            const modalHtml = UI.renderRoleSelectionModal(boardId, boardName);
-            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            // AGORA JA SABEMOS O ROLE, ENTRA DIRETO
+            this.selecionarBoard(boardId);
         });
     });
 
@@ -240,92 +251,122 @@ App.attachBoardEvents = function () {
 };
 
 App.attachDashboardEvents = function () {
-    const bind = (id, event, handler) => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener(event, handler);
+    // 1. Sidebar - Logout e Filtros
+    const configBtn = document.getElementById('configBtn');
+    if (configBtn) configBtn.addEventListener('click', () => this.logout());
+
+    const memberFilter = document.getElementById('memberFilter');
+    if (memberFilter) {
+        memberFilter.addEventListener('change', (e) => {
+            this.state.selectedMemberId = e.target.value;
+            this.render();
+        });
+    }
+
+    // 2. Date Pickers
+    const startDate = document.getElementById('startDate');
+    const endDate = document.getElementById('endDate');
+    const clearDates = document.getElementById('clearDates');
+
+    if (startDate) {
+        startDate.addEventListener('change', (e) => {
+            this.state.startDate = e.target.value;
+            this.conectarTrello(); // Recarregar dados com novas datas
+        });
+    }
+
+    if (endDate) {
+        endDate.addEventListener('change', (e) => {
+            this.state.endDate = e.target.value;
+            this.conectarTrello(); // Recarregar dados com novas datas
+        });
+    }
+
+    if (clearDates) {
+        clearDates.addEventListener('click', () => {
+            this.state.startDate = '';
+            this.state.endDate = '';
+            this.conectarTrello();
+        });
+    }
+
+    // 3. Header Actions
+    const atualizarBtn = document.getElementById('atualizarBtn');
+    if (atualizarBtn) {
+        atualizarBtn.addEventListener('click', () => {
+            this.conectarTrello();
+        });
+    }
+
+    const exportarBtn = document.getElementById('exportarBtn');
+    if (exportarBtn && this.exportarCSV) {
+        exportarBtn.addEventListener('click', () => this.exportarCSV());
+    }
+
+    const exportarPdfBtn = document.getElementById('exportarPdfBtn');
+    if (exportarPdfBtn && this.exportarPDF) {
+        exportarPdfBtn.addEventListener('click', () => this.exportarPDF());
+    }
+
+    const enviarWebhookBtn = document.getElementById('enviarWebhookBtn');
+    if (enviarWebhookBtn && this.enviarWebhook) {
+        enviarWebhookBtn.addEventListener('click', () => this.enviarWebhook());
+    }
+
+    // 4. Chatbot
+    const toggleChatBtn = document.getElementById('toggleChatBtn');
+    const closeChatBtn = document.getElementById('closeChatBtn');
+    const chatModal = document.getElementById('chatModal');
+
+    // Restaurar estado do chat
+    if (this.state.chatOpen && chatModal) {
+        chatModal.classList.remove('hidden');
+        this.renderChatHistory();
+    }
+
+    if (toggleChatBtn) {
+        toggleChatBtn.addEventListener('click', () => {
+            this.state.chatOpen = !this.state.chatOpen;
+            this.render(); // Re-render para mostrar/esconder (ou podia só fazer toggle class)
+            // Optamos por re-render para manter consistência, mas neste caso específico:
+            // Se já renderizámos, basta toggle class para ser mais fluido
+            // Mas o renderChatHistory precisa de correr.
+        });
+    }
+
+    if (closeChatBtn) {
+        closeChatBtn.addEventListener('click', () => {
+            this.state.chatOpen = false;
+            if (chatModal) chatModal.classList.add('hidden');
+        });
+    }
+
+    const sendChatBtn = document.getElementById('sendChatBtn');
+    const chatInput = document.getElementById('chatInput');
+
+    const sendMessage = () => {
+        const text = chatInput.value.trim();
+        if (text) {
+            this.handleChatMessage(text);
+            chatInput.value = '';
+        }
     };
 
-    bind('atualizarBtn', 'click', () => this.conectarTrello());
-    bind('exportarBtn', 'click', () => this.exportarExcel());
-    bind('exportarPdfBtn', 'click', () => window.exportarPDFMelhorado ? window.exportarPDFMelhorado() : this.exportarPDF());
-    bind('importarBtn', 'click', () => this.importarCSV());
-    bind('csvInput', 'change', (e) => this.processarImportacao(e.target.files[0]));
-    bind('enviarWebhookBtn', 'click', () => this.enviarWebhook());
-    bind('configBtn', 'click', () => this.logout());
-
-    bind('memberFilter', 'change', (e) => {
-        this.state.selectedMemberId = e.target.value;
-        this.render();
-    });
-
-    bind('startDate', 'change', (e) => {
-        this.state.startDate = e.target.value;
-        this.conectarTrello();
-    });
-
-    bind('endDate', 'change', (e) => {
-        this.state.endDate = e.target.value;
-        this.conectarTrello();
-    });
-
-    bind('clearDates', 'click', () => {
-        this.state.startDate = '';
-        this.state.endDate = '';
-        this.conectarTrello();
-    });
-
-    // Chat Events
-    bind('toggleChatBtn', 'click', () => this.toggleChat());
-    bind('closeChatBtn', 'click', () => this.toggleChat());
-    bind('sendChatBtn', 'click', () => this.enviarMensagemChat());
-    bind('chatInput', 'keypress', (e) => {
-        if (e.key === 'Enter') this.enviarMensagemChat();
-    });
-
-    // Funnel Config Events (Mantido apenas por compatibilidade ou acesso rápido)
-    bind('configFunnelBtn', 'click', () => {
-        if (!this.state.rawData || !this.state.rawData.listas) return;
-
-        const modalHtml = UI.renderFunnelConfigModal(this.state.rawData.listas, this.state.funnelConfig);
-        document.body.insertAdjacentHTML('beforeend', modalHtml);
-
-        const saveBtn = document.getElementById('saveFunnelConfigBtn');
-        const resetBtn = document.getElementById('resetFunnelConfigBtn');
-
-        if (saveBtn) {
-            saveBtn.addEventListener('click', () => {
-                const config = {};
-                ['leads', 'contactado', 'proposta', 'fechado'].forEach(id => {
-                    const select = document.getElementById('funnel_select_' + id);
-                    if (select) {
-                        config[id] = Array.from(select.selectedOptions).map(opt => opt.value);
-                    }
-                });
-
-                this.state.funnelConfig = config;
-                localStorage.setItem('trello_funnel_config', JSON.stringify(config));
-
-                document.getElementById('funnelConfigModal').remove();
-                this.conectarTrello();
-            });
-        }
-
-        if (resetBtn) {
-            resetBtn.addEventListener('click', () => {
-                this.state.funnelConfig = null;
-                localStorage.removeItem('trello_funnel_config');
-
-                document.getElementById('funnelConfigModal').remove();
-                this.conectarTrello();
-            });
-        }
-    });
-
+    if (sendChatBtn) sendChatBtn.addEventListener('click', sendMessage);
+    if (chatInput) {
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    }
 };
 
-App.confirmRole = function (boardId, role) {
+App.setRole = function (role) {
     this.state.userRole = role;
-    const modal = document.getElementById('roleSelectionModal');
-    if (modal) modal.remove();
+    localStorage.setItem('trello_user_role', role);
+    this.listarBoards(); // Agora que temos role, vamos buscar os boards
+};
+
+// Função legacy para compatibilidade, caso algum modal antigo chame
+App.confirmRole = function (boardId, role) {
     this.selecionarBoard(boardId);
 };

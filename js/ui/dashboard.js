@@ -49,18 +49,18 @@ UI.renderDashboard = function (state) {
                         </button>
                         <div class="h-6 w-px bg-gray-800 mx-2"></div>
                         <button id="toggleChatBtn" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg shadow-blue-900/20 active:translate-y-0.5 transition-all">
-                             <span>🤖</span> Mentor IA
+                             <span></span> Fala com a IA
                         </button>
                           <div class="relative group z-50 ml-2">
                             <button class="bg-[#1e293b] border border-gray-700 text-gray-200 px-3 py-2 rounded-lg hover:bg-gray-800 text-sm font-bold flex items-center gap-2">
-                                <span>📥</span>
+                                <span>Exportar</span>
                             </button>
                             <!-- Dropdown com ponte invisível (pt-2) para não fechar no hover -->
                             <div class="absolute right-0 top-full w-56 pt-2 hidden group-hover:block">
                                 <div class="bg-[#1e293b] rounded-xl shadow-2xl border border-gray-700 p-1">
-                                    <button id="exportarPdfBtn" class="w-full text-left px-4 py-3 hover:bg-gray-800 text-sm font-bold text-gray-300 rounded-lg transition-colors flex items-center gap-2">📄 PDF Relatório</button>
-                                    <button id="exportarBtn" class="w-full text-left px-4 py-3 hover:bg-gray-800 text-sm font-bold text-gray-300 rounded-lg transition-colors flex items-center gap-2">📊 CSV Dados</button>
-                                    <button id="enviarWebhookBtn" class="w-full text-left px-4 py-3 hover:bg-gray-800 text-sm font-bold text-gray-300 rounded-lg transition-colors flex items-center gap-2">🔗 Webhook</button>
+                                    <button id="exportarPdfBtn" class="w-full text-left px-4 py-3 hover:bg-gray-800 text-sm font-bold text-gray-300 rounded-lg transition-colors flex items-center gap-2">PDF</button>
+                                    <button id="exportarBtn" class="w-full text-left px-4 py-3 hover:bg-gray-800 text-sm font-bold text-gray-300 rounded-lg transition-colors flex items-center gap-2">CSV</button>
+                                    <button id="enviarWebhookBtn" class="w-full text-left px-4 py-3 hover:bg-gray-800 text-sm font-bold text-gray-300 rounded-lg transition-colors flex items-center gap-2">Exportar e enviar com email</button>
                                 </div>
                             </div>
                         </div>
@@ -86,10 +86,7 @@ UI.renderDashboard = function (state) {
                             
                             <!-- Wrapper Tempo Médio -->
                             <div class="bg-[#1e293b] rounded-2xl p-6 border border-gray-800 flex flex-col h-full">
-                                <div class="mb-6">
-                                    <h2 class="text-xl font-bold text-white">Tempo médio de espera</h2>
-                                    <p class="text-xs text-gray-500 font-medium">Análise de performance</p>
-                                </div>
+                               
                                 <div class="grid grid-cols-1 md:grid-cols-1 gap-1 flex-1">
                                      ${UI.renderTimeTracking(temposListas, rawData.listas, state.timeTrackingLists)}
                                 </div>
@@ -103,7 +100,7 @@ UI.renderDashboard = function (state) {
 
                         <!-- ROW 3: FOLLOW-UPS (Agora tem largura total) -->
                         <div class="grid grid-cols-1 gap-6 w-full">
-                             <div class="bg-[#1e293b] rounded-2xl p-6 border border-gray-800 w-full overflow-hidden">
+                             <div class="bg-[#1e293b] rounded-2xl p-6 w-full overflow-hidden">
                                  ${UI.renderDueDatesTable(dadosPeriodo)}
                             </div>
                         </div>
@@ -154,29 +151,29 @@ UI.renderTimeTracking = function (temposListas, allLists, selectedConfig) {
 
     const card = (id, htmlId, colorClass) => {
         const item = temposListas[id] || {};
-        // Definir cores baseadas no card (azul ou laranja/padrão)
-        const isBlue = htmlId.includes('Left');
-        const bgHeader = isBlue ? 'bg-blue-600' : 'bg-orange-500';
-        const textColor = isBlue ? 'text-blue-500' : 'text-orange-500';
+        // Definir cores: Esquerda (Verde), Direita (Vermelho)
+        const isLeft = htmlId.includes('Left');
+        const bgHeader = isLeft ? 'bg-emerald-600' : 'bg-red-600';
 
         return `
-            <div class="bg-[#0f172a] rounded-xl p-6 border border-gray-800 w-full relative group">
-                 <div class="flex justify-between items-start mb-4 w-full relative z-20">
-                     <div class="w-full flex items-center gap-2">
+            <div class="bg-[#0f172a] rounded-xl p-6 border border-gray-800 w-full relative group shadow-sm">
+                 <div class="flex justify-between items-start mb-6 w-full relative z-20">
+                     <div class="w-full flex items-center gap-2 border-b border-gray-800 pb-2">
                         <select id="${htmlId}" class="w-full bg-transparent text-sm font-bold text-gray-200 border-none p-0 focus:ring-0 cursor-pointer hover:text-white uppercase tracking-wider appearance-none z-10 transition-colors">
                             ${allLists.map(l => `<option class="bg-gray-900 text-gray-300" value="${l.id}" ${l.id === id ? 'selected' : ''}>${l.name}</option>`).join('')}
                         </select>
-                        <svg class="w-4 h-4 text-gray-500 pointer-events-none absolute right-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        <svg class="w-4 h-4 text-gray-500 pointer-events-none absolute right-0 top-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                      </div>
-                     <span class="bg-gray-800 text-gray-400 text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ml-2">${item.count || 0} cards</span>
+                     <span class="bg-gray-800 text-gray-400 text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ml-2 mt-0.5">${item.count || 0} cards</span>
                 </div>
 
-                <div class="${bgHeader} rounded-xl p-4 mb-4 text-center shadow-lg">
-                    <div class="text-[10px] font-bold text-white/80 uppercase mb-1 flex items-center justify-center gap-1">
+                <!-- Header sem bordas, apenas cor sólida vibrante -->
+                <div class="${bgHeader} rounded-2xl p-6 mb-6 text-center shadow-lg transform transition hover:scale-[1.02] duration-300">
+                    <div class="text-[10px] font-bold text-white/90 uppercase mb-1 flex items-center justify-center gap-2 opacity-80">
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         Tempo Médio
                     </div>
-                     <span class="text-3xl font-black text-white block">${item.tempoMedio || '-'}</span>
+                     <span class="text-4xl font-black text-white block tracking-tight shadow-sm">${item.tempoMedio || '-'}</span>
                 </div>
 
                 <div class="space-y-3">
@@ -210,7 +207,10 @@ UI.renderTimeTracking = function (temposListas, allLists, selectedConfig) {
 
 // ... Resto das funções mantidas ...
 UI.renderSidebar = function (state, kpis, filterId) {
-    return UI.renderSidebar.original ? UI.renderSidebar.original(state, kpis, filterId) : `
+    const isSales = state.userRole === 'sales';
+    const currentUser = state.currentUser || { fullName: 'Vendedor', username: 'Me' };
+
+    return `
         <aside class="w-[260px] bg-[#0b0f19] text-gray-400 flex-shrink-0 flex flex-col h-full z-40 border-r border-gray-800">
             <div class="h-16 flex items-center px-5 border-b border-gray-800">
                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg mr-3">K</div>
@@ -218,6 +218,7 @@ UI.renderSidebar = function (state, kpis, filterId) {
             </div>
 
             <div class="flex-1 overflow-y-auto py-6 px-4 space-y-8 custom-scrollbar-dark">
+                ${!isSales ? `
                 <div>
                      <label class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-3 block pl-2">Equipa</label>
                      <div class="space-y-1">
@@ -236,6 +237,20 @@ UI.renderSidebar = function (state, kpis, filterId) {
                      </div>
                      <select id="memberFilter" class="hidden"><option value="">Todos</option>${kpis.geral.consultores.map(c => `<option value="${c.id}" ${c.id === filterId ? 'selected' : ''}>${c.nome}</option>`).join('')}</select>
                 </div>
+                ` : `
+                <div>
+                    <label class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-3 block pl-2">O Meu Perfil</label>
+                     <div class="p-3 bg-gray-800/50 rounded-lg border border-gray-700 flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold text-white">
+                            ${currentUser.username ? currentUser.username.substring(0, 2).toUpperCase() : 'ME'}
+                        </div>
+                        <div class="overflow-hidden">
+                            <div class="text-sm font-bold text-white truncate" title="${currentUser.fullName}">${currentUser.fullName}</div>
+                            <div class="text-[10px] text-green-500 font-bold uppercase">Conectado</div>
+                        </div>
+                     </div>
+                </div>
+                `}
 
                 <div>
                     <label class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-3 block pl-2">Período</label>
@@ -248,7 +263,10 @@ UI.renderSidebar = function (state, kpis, filterId) {
             </div>
             
             <div class="p-4 border-t border-gray-800">
-                 <button id="configBtn" class="w-full py-2 text-sm text-gray-500 hover:text-white">Logout</button>
+                 <button id="configBtn" class="group w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-gray-900 border border-gray-800 text-gray-400 hover:text-red-400 hover:border-red-500/30 hover:bg-red-500/5 transition-all duration-300 font-bold text-sm shadow-sm hover:shadow-red-900/10 active:scale-95">
+                    <svg class="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                    <span>Terminar Sessão</span>
+                </button>
             </div>
         </aside>
     `;
@@ -259,23 +277,24 @@ UI.renderFunnel = function (funilData) {
 
     return `
         <div class="bg-[#1e293b] rounded-2xl p-8 shadow-xl border border-gray-800 h-full flex flex-col w-full">
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex justify-between items-center mb-6 flex-shrink-0">
                 <h2 class="text-xl font-bold text-white">Pipeline</h2>
                 <button id="resetHiddenListsBtn" class="text-xs font-bold text-blue-500 hover:text-blue-400">Restaurar</button>
             </div>
-            <div class="flex-1 flex flex-col justify-center gap-4">
+            <div class="flex-1 flex flex-col gap-4 overflow-y-auto custom-scrollbar-dark pr-2">
                 ${funilData.map((step) => {
         const widthPercent = maxCount > 0 ? (step.count / maxCount) * 100 : 0;
         return `
-                        <div class="w-full group">
+                        <div class="w-full group flex-shrink-0">
                             <div class="flex justify-between mb-1">
                                 <span class="text-sm font-bold text-gray-300 uppercase flex items-center gap-2">
-                                     ${step.stage} <button class="remove-funnel-list-btn text-gray-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition" data-id="${step.id}">×</button>
+                                     ${step.stage} 
+                                     <button class="remove-funnel-list-btn w-5 h-5 flex items-center justify-center rounded bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white opacity-0 group-hover:opacity-100 transition-all font-bold text-xs" data-id="${step.id}">✕</button>
                                 </span>
                                 <span class="text-white font-bold">${step.count}</span>
                             </div>
-                            <div class="h-6 w-full bg-gray-900 rounded-md overflow-hidden relative">
-                                <div class="h-full rounded-md transition-all duration-1000" style="width: ${Math.max(widthPercent, 1)}%; background-color: ${step.color}"></div>
+                            <div class="h-6 w-full bg-gray-900 rounded-md overflow-hidden relative shadow-inner border border-gray-800">
+                                <div class="h-full rounded-md transition-all duration-1000 shadow-lg shadow-blue-500/30" style="width: ${Math.max(widthPercent, 1)}%; background-color: #2563eb"></div>
                             </div>
                             <div class="text-right mt-0.5"><span class="text-[10px] text-gray-500 font-bold">${step.conversionRate}</span></div>
                         </div>
@@ -294,16 +313,16 @@ UI.renderActionItems = function (actions) {
                  <h2 class="text-xl font-bold text-white flex items-center gap-2">Focus Zone <span class="bg-red-500/10 text-red-500 text-xs px-2 py-0.5 rounded">${actions.length}</span></h2>
                  <div class="flex bg-gray-900 rounded-md p-1">
                     <button class="action-filter-btn px-3 py-1 rounded text-[10px] font-bold bg-white text-gray-800 shadow" data-filter="all">ALL</button>
-                    <button class="action-filter-btn px-3 py-1 rounded text-[10px] font-bold text-gray-500 hover:text-purple-400" data-filter="critical">90d</button>
-                    <button class="action-filter-btn px-3 py-1 rounded text-[10px] font-bold text-gray-500 hover:text-red-400" data-filter="high">30d</button>
+                    <button class="action-filter-btn px-3 py-1 rounded text-[10px] font-bold text-gray-500 hover:text-rose-500" data-filter="critical">90d</button>
+                    <button class="action-filter-btn px-3 py-1 rounded text-[10px] font-bold text-gray-500 hover:text-orange-500" data-filter="high">30d</button>
                  </div>
             </div>
 
             <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar-dark space-y-3" id="actionItemsList">
                 ${actions.map(item => {
-        let borderClass = item.priority === 'critical' ? 'border-purple-500' : (item.priority === 'high' ? 'border-red-500' : 'border-yellow-500');
+        let borderClass = item.priority === 'critical' ? 'border-rose-600' : (item.priority === 'high' ? 'border-orange-500' : 'border-yellow-500');
         let label = item.priority === 'critical' ? 'CRÍTICO' : (item.priority === 'high' ? 'URGENTE' : 'ATENÇÃO');
-        let labelColor = item.priority === 'critical' ? 'text-purple-400' : (item.priority === 'high' ? 'text-red-400' : 'text-yellow-400');
+        let labelColor = item.priority === 'critical' ? 'text-rose-500' : (item.priority === 'high' ? 'text-orange-400' : 'text-yellow-400');
         return `
                         <div class="action-item relative bg-[#0f172a] p-4 rounded-xl border-l-4 ${borderClass} border-t border-r border-b border-gray-800 hover:border-r-gray-600 transition group" data-priority="${item.priority}">
                              <div class="flex justify-between mb-1">
@@ -354,9 +373,9 @@ UI.renderActivity = function (atividade) {
                 </div>
 
                 <!-- Mais Inativo -->
-                <div class="border border-yellow-900/30 bg-yellow-900/10 rounded-xl p-5 flex flex-col justify-between">
+                <div class="border border-rose-900/30 bg-rose-900/10 rounded-xl p-5 flex flex-col justify-between">
                     <div>
-                        <h3 class="text-sm font-bold text-yellow-500 mb-4 flex items-center gap-2 uppercase tracking-wider">
+                        <h3 class="text-sm font-bold text-rose-500 mb-4 flex items-center gap-2 uppercase tracking-wider">
                             Menos Ativo
                         </h3>
                         ${atividade.maisInativo ? `
@@ -364,7 +383,7 @@ UI.renderActivity = function (atividade) {
                                 ${atividade.maisInativo.nome}
                             </div>
                              <div class="flex items-baseline gap-2">
-                                <span class="text-4xl font-bold text-yellow-600">
+                                <span class="text-4xl font-bold text-rose-600">
                                     ${atividade.maisInativo.acoes}
                                 </span>
                                 <span class="text-xs text-gray-400 font-bold uppercase">ações</span>

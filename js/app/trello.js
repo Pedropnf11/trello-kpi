@@ -2,11 +2,37 @@ App.listarBoards = async function () {
     this.updateState({ loading: true, error: '' });
 
     try {
+        const userInfo = await TrelloAPI.fetchUserInfo(this.state.apiKey, this.state.token);
         const boards = await TrelloAPI.fetchBoards(this.state.apiKey, this.state.token);
+
+        // FILTRO DE PERMISSÕES
+        let filteredBoards = boards;
+
+        if (this.state.userRole === 'manager') {
+            // GESTOR: Ver apenas quadros onde sou ADMIN
+            filteredBoards = boards.filter(b => {
+                const myMembership = b.memberships?.find(m => m.idMember === userInfo.id);
+                return myMembership && myMembership.memberType === 'admin';
+            });
+        } else if (this.state.userRole === 'sales') {
+            // VENDEDOR: Ver apenas quadros onde NÃO sou ADMIN (ou seja, normal ou observer)
+            filteredBoards = boards.filter(b => {
+                const myMembership = b.memberships?.find(m => m.idMember === userInfo.id);
+                return myMembership && myMembership.memberType !== 'admin';
+            });
+        }
+
+        // Se não sobrar nenhum, mostra aviso ou todos (fallback)
+        if (filteredBoards.length === 0 && boards.length > 0) {
+            console.warn('Filtro de permissões removeu todos os quadros. Mostrando todos por segurança.');
+            // filteredBoards = boards; // Opcional: descomentar se quiser fallback
+        }
+
         this.updateState({
             loading: false,
-            availableBoards: boards,
-            boardId: '' // Forçar seleção
+            availableBoards: filteredBoards,
+            boardId: '', // Forçar seleção
+            currentUser: userInfo
         });
     } catch (err) {
         if (err.status === 401) {
@@ -55,12 +81,42 @@ App.conectarTrello = async function () {
         localStorage.setItem('trello_groq_key', this.state.groqApiKey);
     }
 
-    this.updateState({ loading: true, error: '' });
+    // Se já temos KPIs (dashboard carregado), NÃO mostramos loading screen
+    const isRefresh = (this.state.kpis !== null && this.state.kpis !== undefined);
+
+    // Forçar loading a false se for refresh, garantindo que UI não pisca
+    this.updateState({
+        loading: isRefresh ? false : true,
+        refreshing: isRefresh,
+        error: ''
+    });
+
+    // Feedback visual imediato se for refresh (para não parecer que travou)
+    if (isRefresh) {
+        // Tentar encontrar o botão mesmo que o DOM vá ser limpo logo a seguir
+        // Nota: Como o App.render é chamado no updateState, este botão perde-se
+        // A solução ideal seria o App.render lidar com o estado 'refreshing' sem limpar tudo
+        // Mas por agora, garantimos que 'loading' é false para evitar o Ecrã de Login
+    }
 
     try {
         const listas = await TrelloAPI.fetchLists(apiKey, token, boardId);
         const cards = await TrelloAPI.fetchCards(apiKey, token, boardId);
         const membros = await TrelloAPI.fetchMembers(apiKey, token, boardId);
+
+        // Identificar Utilizador Atual
+        const userInfo = await TrelloAPI.fetchUserInfo(apiKey, token);
+        this.state.currentUser = userInfo;
+
+        // Lógica de Permissão: Se for Vendedor, forçar filtro para ele mesmo
+        if (this.state.userRole === 'sales') {
+            const myMember = membros.find(m => m.id === userInfo.id || m.username === userInfo.username);
+            if (myMember) {
+                this.state.selectedMemberId = myMember.id;
+            } else {
+                console.warn('Utilizador atual não encontrado na lista de membros deste quadro.');
+            }
+        }
 
         const kpis = KPILogic.processarKPIs(cards, listas, this.state.startDate, this.state.endDate);
         const temposListas = KPILogic.calcularTemposListas(cards, listas, this.state.startDate, this.state.endDate);
@@ -75,9 +131,13 @@ App.conectarTrello = async function () {
 
         this.updateState({
             loading: false,
+            refreshing: false,
             showConfig: false,
             error: ''
         });
+
+        const btn = document.getElementById('atualizarBtn');
+        if (btn) btn.classList.remove('animate-spin');
 
     } catch (err) {
         console.error('Erro Trello:', err);
