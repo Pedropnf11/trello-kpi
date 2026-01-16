@@ -123,7 +123,7 @@ UI.renderTimeTracking = function (temposListas, allLists, selectedConfig) {
             <div class="mb-6 flex items-center justify-between">
                 <div>
                      <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                        <span class="text-2xl">⏱️</span> Performance de Listas
+                     Tempo de espera médio
                     </h2>
                     <p class="text-sm text-gray-500 mt-1">Tempo médio de permanência dos cards</p>
                 </div>
@@ -198,7 +198,7 @@ UI.renderTempoPermanenciaWidget = function (macroTempos) {
             <div class="mb-8 flex justify-between items-center">
                 <div>
                     <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                        <span class="text-4xl">⏱️</span> Análise de Tempos de Saída
+                     Tempo médio de espera 
                     </h2>
                     <p class="text-sm text-gray-500 mt-2 font-light">Selecione a lista para ver a tempo médio de permanência</p>
                 </div>

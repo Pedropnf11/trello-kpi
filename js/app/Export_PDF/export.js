@@ -35,17 +35,39 @@ App.exportarPDF = async function () {
     document.body.appendChild(loadingMsg);
 
     try {
-        // Capturar o elemento como imagem
+        // Capturar o elemento como imagem - Otimizado para evitar crash
         const canvas = await html2canvas(appElement, {
-            scale: 2,
+            scale: 1, // Reduzido para estabilidade
             useCORS: true,
-            allowTaint: true,
-            backgroundColor: '#0f172a', // Fundo base escuro
-            logging: false,
+            allowTaint: false, // CRÍTICO: Deve ser false para permitir toDataURL()
+            backgroundColor: '#0f172a',
+            logging: true, // Log para debug se necessário
             width: 1400,
             windowWidth: 1400,
             onclone: (clonedDoc) => {
                 const doc = clonedDoc;
+
+                // REMOVER EFEITOS COMPLEXOS QUE QUEBRAM O HTML2CANVAS
+                const allElements = doc.querySelectorAll('*');
+                allElements.forEach(el => {
+                    const style = window.getComputedStyle(el);
+
+                    // 1. Remover Backdrop Filter
+                    if (style.backdropFilter !== 'none') {
+                        el.style.backdropFilter = 'none';
+                        el.style.webkitBackdropFilter = 'none';
+                    }
+
+                    // 2. Remover Gradientes Complexos (Causa do erro addColorStop)
+                    // Se tiver gradient, mete cor sólida segura
+                    if (style.backgroundImage && style.backgroundImage.includes('gradient')) {
+                        el.style.backgroundImage = 'none';
+                        // Se não tiver cor de fundo definida (era só gradient), mete um fundo escuro padrão
+                        if (style.backgroundColor === 'rgba(0, 0, 0, 0)' || style.backgroundColor === 'transparent') {
+                            el.style.backgroundColor = '#1e293b'; // Slate-800 safe fallback
+                        }
+                    }
+                });
 
                 // 1. INJETAR CABEÇALHO DO RELATÓRIO
                 const main = doc.querySelector('main');
@@ -153,13 +175,19 @@ App.exportarPDF = async function () {
                     appDiv.style.backgroundColor = '#0f172a';
                 }
 
-                // 7. Layout Vertical
-                const grids = doc.querySelectorAll('.grid');
-                grids.forEach(g => {
-                    g.style.display = 'flex';
-                    g.style.flexDirection = 'column';
-                    g.style.gap = '40px';
-                });
+                // 7. Layout Vertical - Apenas no container principal se necessário, mas EVITAR partir componentes internos
+                // const grids = doc.querySelectorAll('.grid');
+                // grids.forEach(g => {
+                //    // g.style.display = 'flex';
+                //    // g.style.flexDirection = 'column';
+                //    // g.style.gap = '40px';
+                // });
+
+                // Em vez disso, garantir apenas que o App expanda verticalmente
+                if (appDiv) {
+                    appDiv.style.height = 'auto';
+                    appDiv.style.overflow = 'visible';
+                }
 
                 // Aumentar espaçamento nos items do Pipeline
                 const pipelineItems = doc.querySelectorAll('#section-pipeline > div > div');

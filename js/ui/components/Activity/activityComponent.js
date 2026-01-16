@@ -88,7 +88,7 @@ UI.renderActionList = function (atividade, role = 'manager') {
         <div class="bg-[#1e293b] rounded-3xl shadow-xl p-8 border border-gray-800">
             <div class="mb-8">
                 <h2 class="text-2xl font-bold text-white flex items-center gap-3">
-                    <span class="text-2xl">📊</span> Ranking Detalhado
+                    <span class="text-2xl"></span> Ranking Detalhado
                 </h2>
             </div>
 
