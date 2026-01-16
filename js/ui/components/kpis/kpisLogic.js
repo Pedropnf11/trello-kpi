@@ -1,3 +1,6 @@
+// Initialize KPILogic namespace
+window.KPILogic = window.KPILogic || {};
+
 KPILogic.processarKPIs = function (cards, listas, customStartDate = null, customEndDate = null) {
     // Ordenar listas pela posição no Trello
     const listasOrdenadas = listas.sort((a, b) => a.pos - b.pos);

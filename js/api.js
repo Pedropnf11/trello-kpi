@@ -31,8 +31,9 @@ const TrelloAPI = {
 
     async fetchCards(apiKey, token, boardId) {
         // Limit increased to 1000 actions to get better history
+        // Corrected actions parameter: 'updateCard:idList' -> 'updateCard' to avoid 403 errors
         return this._fetch(
-            `https://api.trello.com/1/boards/${boardId}/cards?members=true&actions=commentCard,createCard,updateCard:idList&actions_limit=1000&actions_memberCreator=true&key=${apiKey}&token=${token}`
+            `https://api.trello.com/1/boards/${boardId}/cards?members=true&actions=commentCard,createCard,updateCard&actions_limit=1000&actions_memberCreator=true&key=${apiKey}&token=${token}`
         );
     },
 

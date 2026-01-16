@@ -1,27 +1,8 @@
 KPILogic.calcularTemposListas = function (cards, listas, customStartDate = null, customEndDate = null) {
-    // Encontrar as listas "LEADS" ou "Leads" e "Não atendeu"
-    const listaLeads = listas.find(l => l.name.toLowerCase() === 'leads');
-    const listaNaoAtendeu = listas.find(l => l.name.toLowerCase().includes('não atendeu') || l.name.toLowerCase().includes('nao atendeu'));
+    const tempos = {};
 
-    const tempos = {
-        leads: {
-            tempos: [],
-            media: 0,
-            maisRapido: null,
-            maisLento: null,
-            nomeList: listaLeads?.name || 'LEADS'
-        },
-        naoAtendeu: {
-            tempos: [],
-            media: 0,
-            maisRapido: null,
-            maisLento: null,
-            nomeList: listaNaoAtendeu?.name || 'Não atendeu'
-        }
-    };
-
-    if (!listaLeads && !listaNaoAtendeu) {
-        return tempos; // Retorna vazio se não encontrar as listas
+    if (!listas || listas.length === 0) {
+        return tempos;
     }
 
     const agora = new Date();
@@ -40,54 +21,52 @@ KPILogic.calcularTemposListas = function (cards, listas, customStartDate = null,
         return tempos;
     }
 
+    // Inicializar estrutura para TODAS as listas
+    listas.forEach(lista => {
+        tempos[lista.id] = {
+            id: lista.id,
+            nome: lista.name,
+            tempos: [],
+            media: 0,
+            maisRapido: null,
+            maisLento: null
+        };
+    });
+
+    // Processar cada card
     cards.forEach(card => {
         if (!card.actions || !Array.isArray(card.actions)) return;
 
-        // Verificar se o card teve atividade na última semana
+        // Verificar se o card teve atividade no período
         const dataAtividade = new Date(card.dateLastActivity);
-        if (dataAtividade < inicioPeriodo) return; // Ignorar cards sem atividade esta semana
+        if (dataAtividade < inicioPeriodo) return;
 
         // Ordenar ações por data (mais antiga primeiro)
         const actions = card.actions.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-        // Processar tempo na lista LEADS
-        if (listaLeads) {
-            const resultado = this._calcularTempoPermanenciaComCard(card, actions, listaLeads.id, agora, inicioPeriodo, fimPeriodo);
+        // Processar tempo em CADA lista
+        listas.forEach(lista => {
+            const resultado = this._calcularTempoPermanenciaComCard(card, actions, lista.id, agora, inicioPeriodo, fimPeriodo);
             if (resultado.tempo > 0) {
-                tempos.leads.tempos.push(resultado);
+                tempos[lista.id].tempos.push(resultado);
             }
-        }
-
-        // Processar tempo na lista Não atendeu
-        if (listaNaoAtendeu) {
-            const resultado = this._calcularTempoPermanenciaComCard(card, actions, listaNaoAtendeu.id, agora, inicioPeriodo, fimPeriodo);
-            if (resultado.tempo > 0) {
-                tempos.naoAtendeu.tempos.push(resultado);
-            }
-        }
+        });
     });
 
-    // Calcular médias, mais rápido e mais lento para LEADS
-    if (tempos.leads.tempos.length > 0) {
-        const somaTempos = tempos.leads.tempos.reduce((a, b) => a + b.tempo, 0);
-        tempos.leads.media = somaTempos / tempos.leads.tempos.length;
+    // Calcular médias, mais rápido e mais lento para CADA lista
+    Object.keys(tempos).forEach(listaId => {
+        const lista = tempos[listaId];
 
-        // Ordenar por tempo
-        const ordenados = [...tempos.leads.tempos].sort((a, b) => a.tempo - b.tempo);
-        tempos.leads.maisRapido = ordenados[0];
-        tempos.leads.maisLento = ordenados[ordenados.length - 1];
-    }
+        if (lista.tempos.length > 0) {
+            const somaTempos = lista.tempos.reduce((a, b) => a + b.tempo, 0);
+            lista.media = somaTempos / lista.tempos.length;
 
-    // Calcular médias, mais rápido e mais lento para Não Atendeu
-    if (tempos.naoAtendeu.tempos.length > 0) {
-        const somaTempos = tempos.naoAtendeu.tempos.reduce((a, b) => a + b.tempo, 0);
-        tempos.naoAtendeu.media = somaTempos / tempos.naoAtendeu.tempos.length;
-
-        // Ordenar por tempo
-        const ordenados = [...tempos.naoAtendeu.tempos].sort((a, b) => a.tempo - b.tempo);
-        tempos.naoAtendeu.maisRapido = ordenados[0];
-        tempos.naoAtendeu.maisLento = ordenados[ordenados.length - 1];
-    }
+            // Ordenar por tempo
+            const ordenados = [...lista.tempos].sort((a, b) => a.tempo - b.tempo);
+            lista.maisRapido = ordenados[0];
+            lista.maisLento = ordenados[ordenados.length - 1];
+        }
+    });
 
     return tempos;
 };

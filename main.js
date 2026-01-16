@@ -2,19 +2,26 @@ import './js/api.js';
 import './js/utils.js';
 import './js/pdf-export.js';
 
-// Logic
-import './js/logic/core.js';
-import './js/logic/kpis.js';
-import './js/logic/activity.js';
-import './js/logic/time.js';
+// Logic (agora dentro de components)
+import './js/ui/components/kpis/kpisLogic.js';
+import './js/ui/components/Activity/activityLogic.js';
+import './js/ui/components/TimeComponents/timeLogic.js';
 
-// UI
+// UI Core
 import './js/ui/core.js';
 import './js/ui/auth.js';
-import './js/ui/dashboard.js';
-import './js/ui/tables.js';
-import './js/ui/timeComponents.js';
-import './js/ui/activityComponent.js';
+
+// UI Components
+import './js/ui/components/Dashboard/manager/sidebar.js';  // Manager Sidebar
+import './js/ui/components/Dashboard/sales/sidebarSales.js';  // Sales Sidebar
+import './js/ui/components/kpis/tables.js';
+import './js/ui/components/TimeComponents/timeComponents.js';
+import './js/ui/components/Activity/activityComponent.js';
+
+// Dashboards
+import './js/ui/components/Dashboard/manager/dashboardManager.js';
+import './js/ui/components/Dashboard/sales/dashboard.js';
+import './js/ui/components/Dashboard/dashboardRouter.js';
 
 // Charts
 import './js/charts/core.js';
@@ -27,7 +34,7 @@ import './js/charts/manager.js';
 // App
 import './js/app/core.js';
 import './js/app/trello.js';
-import './js/app/export.js';
+import './js/app/Export_PDF/export.js';
 import './js/app/import.js';
 
 // CSS handled via CDN in index.html

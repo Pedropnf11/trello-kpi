@@ -52,13 +52,9 @@ App.selecionarBoard = function (boardId) {
 App.logout = function () {
     localStorage.removeItem('trello_token');
     // localStorage.removeItem('trello_board_id'); // Opcional: manter board preferido
-    this.updateState({
-        token: '',
-        kpis: null,
-        availableBoards: [],
-        showConfig: true
-    });
-    window.location.hash = '';
+
+    // Forçar recarregamento para limpar totalmente o estado da aplicação
+    window.location.reload();
 };
 
 App.conectarTrello = async function () {

@@ -78,7 +78,7 @@ KPILogic.calcularAtividade = function (cards, membros, customStartDate = null, c
             }
         }
 
-        // Contar ações gerais
+        // Contar ações detalhadas
         if (!card.actions || !Array.isArray(card.actions)) return;
 
         card.actions.forEach(action => {
@@ -92,17 +92,31 @@ KPILogic.calcularAtividade = function (cards, membros, customStartDate = null, c
                         id: userId,
                         nome: userName,
                         acoes: 0,
+                        moves: 0,
+                        comments: 0,
                         duesCriadas: 0,
                         duesATempo: 0,
                         duesAtrasadas: 0
                     };
                 }
+
+                // Identificar tipo de ação
+                if (action.type === 'updateCard' && action.data.listAfter) {
+                    atividadePorUsuario[userId].moves++;
+                } else if (action.type === 'commentCard') {
+                    atividadePorUsuario[userId].comments++;
+                }
+
+                // Total Geral (inclui tudo: moves, comments, create, updates diversos)
                 atividadePorUsuario[userId].acoes++;
             }
         });
     });
 
     const usuarios = Object.values(atividadePorUsuario);
+
+    // Ordenar por total de ações (Decrescente: Maior -> Menor)
+    usuarios.sort((a, b) => b.acoes - a.acoes);
 
     if (usuarios.length === 0) {
         return {
