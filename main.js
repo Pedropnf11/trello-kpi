@@ -20,6 +20,7 @@ import './js/ui/components/Activity/activityComponent.js';
 
 // Dashboards
 import './js/ui/components/Dashboard/manager/dashboardManager.js';
+import './js/ui/components/Dashboard/manager/graphsDashboard.js'; // NEW
 import './js/ui/components/Dashboard/sales/dashboard.js';
 import './js/ui/components/Dashboard/dashboardRouter.js';
 

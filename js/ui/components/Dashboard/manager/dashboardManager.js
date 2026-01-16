@@ -47,12 +47,18 @@ UI.renderManagerDashboard = function (state) {
                         </h1>
                     </div>
                     
-                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-3">
                         <button id="atualizarBtn" class="p-2 rounded-lg text-gray-400 hover:text-white transition-all" title="Atualizar Dados">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                         </button>
                         
-                          <div class="relative group z-50 ml-2">
+                        <!-- BOTÃO GRÁFICOS -->
+                        <button id="goToGraphsBtn" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all border border-blue-400/20">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+                            <span>Analytics</span>
+                        </button>
+
+                          <div class="relative group z-50">
                             <button class="bg-[#1e293b] border border-gray-700 text-gray-200 px-3 py-2 rounded-lg hover:bg-gray-800 text-sm font-bold flex items-center gap-2">
                                 <span>Exportar</span>
                             </button>

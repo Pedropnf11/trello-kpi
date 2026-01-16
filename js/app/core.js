@@ -29,7 +29,8 @@ App.state = {
     userRole: localStorage.getItem('trello_user_role') || null, // Guardar role no storage
     funnelConfig: JSON.parse(localStorage.getItem('trello_funnel_config') || 'null'),
     hiddenFunnelLists: JSON.parse(localStorage.getItem('trello_hidden_funnel_lists') || '[]'),
-    timeTrackingLists: JSON.parse(localStorage.getItem('trello_time_tracking_lists') || '{"left": null, "right": null}')
+    timeTrackingLists: JSON.parse(localStorage.getItem('trello_time_tracking_lists') || '{"left": null, "right": null}'),
+    viewMode: 'dashboard' // 'dashboard' or 'graphs'
 };
 
 App.init = function () {
@@ -92,9 +93,13 @@ App.render = function () {
     }
 
     if (this.state.kpis) {
-        app.innerHTML = UI.renderDashboard(this.state);
+        if (this.state.viewMode === 'graphs') {
+            app.innerHTML = UI.renderGraphsDashboard(this.state);
+        } else {
+            app.innerHTML = UI.renderDashboard(this.state);
+        }
         this.attachDashboardEvents();
-        this.attachDynamicEvents(); // Attach new events
+        this.attachDynamicEvents();
     } else {
         app.innerHTML = UI.renderConfig(this.state);
         if (!this.state.token) this.attachLoginEvents();
@@ -471,6 +476,23 @@ App.attachDashboardEvents = function () {
     const enviarWebhookBtn = document.getElementById('enviarWebhookBtn');
     if (enviarWebhookBtn && this.enviarWebhook) {
         enviarWebhookBtn.addEventListener('click', () => this.enviarWebhook());
+    }
+
+    // 4. Navigation (Graphs)
+    const goToGraphsBtn = document.getElementById('goToGraphsBtn');
+    if (goToGraphsBtn) {
+        goToGraphsBtn.addEventListener('click', () => {
+            this.state.viewMode = 'graphs';
+            this.render();
+        });
+    }
+
+    const backToDashBtn = document.getElementById('backToDashBtn');
+    if (backToDashBtn) {
+        backToDashBtn.addEventListener('click', () => {
+            this.state.viewMode = 'dashboard';
+            this.render();
+        });
     }
 };
 
