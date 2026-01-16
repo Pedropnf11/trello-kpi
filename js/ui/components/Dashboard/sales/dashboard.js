@@ -81,15 +81,12 @@ UI.renderSalesDashboard = function (state) {
                             </div>
                         </div>
 
-                        <!-- ROW 2: TEMPO & ATIVIDADE -->
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+                        <!-- ROW 2: TEMPO (FULL WIDTH) -->
+                        <div class="grid grid-cols-1 gap-6 w-full">
                             <div class="bg-[#1e293b] rounded-2xl p-6 border border-gray-800 flex flex-col h-full">
                                 <div class="grid grid-cols-1 md:grid-cols-1 gap-1 flex-1">
                                      ${UI.renderTimeTracking(temposListas, rawData.listas, state.timeTrackingLists)}
                                 </div>
-                            </div>
-                            <div class="h-full">
-                                ${UI.renderActivity(kpis.atividade)}
                             </div>
                         </div>
 
