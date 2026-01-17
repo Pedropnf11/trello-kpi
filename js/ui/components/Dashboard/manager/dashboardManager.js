@@ -42,25 +42,31 @@ UI.renderManagerDashboard = function (state) {
                 <header class="h-16 bg-[#0f172a]/95 border-b border-gray-800 flex items-center justify-between px-6 z-30 flex-shrink-0">
                     <div>
                         <h1 class="text-xl font-black text-white tracking-tight flex items-center gap-2">
-                           Dashboard Gestor
-                           <span class="text-xs font-normal text-blue-400 bg-blue-500/10 px-2 py-1 rounded">Manager</span>
+                           <!-- HAMBURGER BUTTON (Mobile Only) -->
+                           <button class="md:hidden p-2 text-gray-400 hover:text-white mr-2" onclick="document.getElementById('managerSidebar').classList.remove('-translate-x-full'); document.getElementById('managerSidebarOverlay').classList.remove('hidden');">
+                               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                           </button>
+
+                           <span class="hidden md:inline">Dashboard Gestor</span>
+                           <span class="text-xs font-normal text-blue-400 bg-blue-500/10 px-2 py-1 rounded hidden md:inline">Manager</span>
                         </h1>
                     </div>
                     
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2 md:gap-3">
                         <button id="atualizarBtn" class="p-2 rounded-lg text-gray-400 hover:text-white transition-all" title="Atualizar Dados">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                         </button>
                         
                         <!-- BOTÃO GRÁFICOS -->
-                        <button id="goToGraphsBtn" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all border border-blue-400/20">
+                        <button id="goToGraphsBtn" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 md:px-4 md:py-2 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all border border-blue-400/20">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
-                            <span>Analytics</span>
+                            <span class="hidden md:inline">Analytics</span>
                         </button>
 
                           <div class="relative group z-50">
                             <button class="bg-[#1e293b] border border-gray-700 text-gray-200 px-3 py-2 rounded-lg hover:bg-gray-800 text-sm font-bold flex items-center gap-2">
-                                <span>Exportar</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                <span class="hidden md:inline">Exportar</span>
                             </button>
                             <!-- Dropdown com ponte invisível (pt-2) para não fechar no hover -->
                             <div class="absolute right-0 top-full w-56 pt-2 hidden group-hover:block">
@@ -174,10 +180,18 @@ UI.renderActionItems = function (actions) {
     if (!actions) return '';
 
     return `
-        <div class="bg-[#1e293b] rounded-2xl p-6 shadow-xl border border-gray-800 h-full flex flex-col w-full">
-            <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-6 gap-3">
-                 <h2 class="text-xl font-bold text-white flex items-center gap-2">Focus Zone <span class="bg-red-500/10 text-red-500 text-xs px-2 py-0.5 rounded">${actions.length}</span></h2>
-                 <div class="flex bg-gray-900 rounded-md p-1">
+        <div class="bg-[#1e293b] rounded-2xl p-6 shadow-xl border border-gray-800 h-full flex flex-col w-full transition-all duration-300" id="focusZoneCard">
+            <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-6 gap-3 cursor-pointer xl:cursor-default" onclick="if(window.innerWidth < 1280) { document.getElementById('actionItemsList').classList.toggle('hidden'); document.getElementById('focusZoneArrow').classList.toggle('rotate-180'); }">
+                 <div class="flex items-center justify-between w-full xl:w-auto">
+                     <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        Focus Zone 
+                        <span class="bg-red-500/10 text-red-500 text-xs px-2 py-0.5 rounded">${actions.length}</span>
+                     </h2>
+                     <!-- MOBILE TOGGLE ARROW -->
+                     <svg id="focusZoneArrow" class="w-6 h-6 text-gray-400 transform transition-transform xl:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+                 </div>
+                 
+                 <div class="flex bg-gray-900 rounded-md p-1 xl:block hidden" id="focusZoneFilters">
                     <button class="action-filter-btn px-3 py-1 rounded text-[10px] font-bold bg-white text-gray-800 shadow" data-filter="all">ALL</button>
                     <button class="action-filter-btn px-3 py-1 rounded text-[10px] font-bold text-gray-500 hover:text-rose-500" data-filter="critical">90d</button>
                     <button class="action-filter-btn px-3 py-1 rounded text-[10px] font-bold text-gray-500 hover:text-orange-500" data-filter="high">30d</button>

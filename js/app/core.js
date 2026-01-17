@@ -264,7 +264,41 @@ App.attachBoardEvents = function () {
 App.attachDashboardEvents = function () {
     // 1. Sidebar - Logout e Filtros
     const configBtn = document.getElementById('configBtn');
-    if (configBtn) configBtn.addEventListener('click', () => this.logout());
+    const logoutModal = document.getElementById('logoutModal');
+
+    if (configBtn && logoutModal) {
+        configBtn.addEventListener('click', () => {
+            logoutModal.classList.remove('hidden');
+        });
+    }
+
+    // Logout Modal Actions
+    const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+    const changeBoardBtn = document.getElementById('changeBoardBtn');
+    const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
+
+    if (confirmLogoutBtn) {
+        confirmLogoutBtn.addEventListener('click', () => this.logout());
+    }
+
+    if (changeBoardBtn) {
+        changeBoardBtn.addEventListener('click', () => {
+            this.resetBoardAndRole();
+        });
+    }
+
+    if (cancelLogoutBtn && logoutModal) {
+        cancelLogoutBtn.addEventListener('click', () => {
+            logoutModal.classList.add('hidden');
+        });
+
+        // Close on click outside
+        logoutModal.addEventListener('click', (e) => {
+            if (e.target === logoutModal) {
+                logoutModal.classList.add('hidden');
+            }
+        });
+    }
 
     // 1.0 Settings Modal
     const settingsBtn = document.getElementById('settingsBtn');
@@ -420,6 +454,18 @@ App.attachDashboardEvents = function () {
         });
     }
 
+    // Graph Dashboard Filter
+    const activityPeriodFilter = document.getElementById('activityPeriodFilter');
+    if (activityPeriodFilter) {
+        activityPeriodFilter.addEventListener('change', (e) => {
+            const days = e.target.value;
+            const container = document.getElementById('teamPerformanceChartContainer');
+            if (container && this.state.rawData) {
+                container.innerHTML = UI.renderTeamPerformanceChart(this.state.kpis?.geral, this.state.rawData, days);
+            }
+        });
+    }
+
     const memberFilter = document.getElementById('memberFilter');
     if (memberFilter) {
         memberFilter.addEventListener('change', (e) => {
@@ -505,4 +551,13 @@ App.setRole = function (role) {
 // Função legacy para compatibilidade, caso algum modal antigo chame
 App.confirmRole = function (boardId, role) {
     this.selecionarBoard(boardId);
+};
+
+App.resetBoardAndRole = function () {
+    localStorage.removeItem('trello_board_id');
+    localStorage.removeItem('trello_user_role');
+    this.state.boardId = '';
+    this.state.userRole = null;
+    this.state.kpis = null;
+    this.render();
 };

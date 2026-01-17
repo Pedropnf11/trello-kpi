@@ -43,8 +43,13 @@ UI.renderSalesDashboard = function (state) {
                 <header class="h-16 bg-[#0f172a]/95 border-b border-gray-800 flex items-center justify-between px-6 z-30 flex-shrink-0">
                     <div>
                         <h1 class="text-xl font-black text-white tracking-tight flex items-center gap-2">
-                           O Meu Dashboard
-                           <span class="text-xs font-normal text-green-400 bg-green-500/10 px-2 py-1 rounded">Vendedor</span>
+                           <!-- HAMBURGER BUTTON (Mobile Only) -->
+                           <button class="md:hidden p-2 text-gray-400 hover:text-white mr-2" onclick="document.getElementById('salesSidebar').classList.remove('-translate-x-full'); document.getElementById('sidebarOverlay').classList.remove('hidden');">
+                               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                           </button>
+
+                           <span class="hidden md:inline">O Meu Dashboard</span>
+                           <span class="text-xs font-normal text-green-400 bg-green-500/10 px-2 py-1 rounded hidden md:inline">Vendedor</span>
                         </h1>
                     </div>
                     
@@ -55,7 +60,8 @@ UI.renderSalesDashboard = function (state) {
                         
                           <div class="relative group z-50 ml-2">
                             <button class="bg-[#1e293b] border border-gray-700 text-gray-200 px-3 py-2 rounded-lg hover:bg-gray-800 text-sm font-bold flex items-center gap-2">
-                                <span>Exportar</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                <span class="hidden md:inline">Exportar</span>
                             </button>
                             <div class="absolute right-0 top-full w-56 pt-2 hidden group-hover:block">
                                 <div class="bg-[#1e293b] rounded-xl shadow-2xl border border-gray-700 p-1">

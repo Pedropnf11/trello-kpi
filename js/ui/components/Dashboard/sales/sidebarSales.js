@@ -5,10 +5,19 @@ UI.renderSidebarSales = function (state, kpis, filterId) {
     const currentUser = state.currentUser || { fullName: 'Vendedor', username: 'Me' };
 
     return `
-        <aside class="w-[260px] bg-[#0b0f19] text-gray-400 flex-shrink-0 flex flex-col h-full z-40 border-r border-gray-800">
-            <div class="h-16 flex items-center px-5 border-b border-gray-800">
-               <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg mr-3">K</div>
-               <span class="font-bold text-white tracking-wide">KPI Master</span>
+        <!-- OVERLAY MOBILE -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden md:hidden glass-effect" onclick="document.getElementById('salesSidebar').classList.add('-translate-x-full'); document.getElementById('sidebarOverlay').classList.add('hidden');"></div>
+
+        <aside id="salesSidebar" class="fixed inset-y-0 left-0 w-[280px] bg-[#0b0f19] text-gray-400 flex flex-col h-full z-50 border-r border-gray-800 transition-transform duration-300 transform -translate-x-full md:translate-x-0 md:relative md:flex shadow-2xl md:shadow-none">
+            <div class="h-16 flex items-center justify-between px-5 border-b border-gray-800">
+               <div class="flex items-center">
+                   <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg mr-3">K</div>
+                   <span class="font-bold text-white tracking-wide">KPI Master</span>
+               </div>
+               <!-- MOBILE CLOSE BUTTON -->
+               <button class="md:hidden text-gray-400 hover:text-white" onclick="document.getElementById('salesSidebar').classList.add('-translate-x-full'); document.getElementById('sidebarOverlay').classList.add('hidden');">
+                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+               </button>
             </div>
 
             <div class="flex-1 overflow-y-auto py-6 px-4 space-y-8 custom-scrollbar-dark">
@@ -94,9 +103,9 @@ UI.renderSidebarSales = function (state, kpis, filterId) {
                 </div>
 
                 <!-- Content Area -->
-                <div class="flex-1 overflow-hidden flex bg-[#0f172a]">
+                <div class="flex-1 overflow-hidden flex flex-col md:flex-row bg-[#0f172a]">
                     <!-- Sidebar List (Mock Files) -->
-                    <div class="w-1/3 border-r border-gray-800 overflow-y-auto p-4 space-y-2">
+                    <div class="w-full md:w-1/3 h-1/3 md:h-full border-b md:border-b-0 md:border-r border-gray-800 overflow-y-auto p-4 space-y-2">
                         <!-- Content for Vendas -->
                         <div id="docs-list-vendas" class="docs-list-content space-y-2">
                             <label class="text-[10px] uppercase font-bold text-gray-500 tracking-widest pl-2 mb-2 block">Guiões de Venda</label>
@@ -144,7 +153,7 @@ UI.renderSidebarSales = function (state, kpis, filterId) {
                     </div>
 
                     <!-- Preview Area (Right Side) -->
-                    <div class="flex-1 bg-[#2e3b4e] flex flex-col relative">
+                    <div class="flex-1 h-2/3 md:h-full bg-[#2e3b4e] flex flex-col relative">
                         <iframe id="doc-preview-frame" src="/js/docs/Vendas_Scripts/GUIAO para 1 contacto.pdf" class="w-full h-full border-none" title="Pré-visualização"></iframe>
                         
                          <!-- Empty State (Hidden by default now) -->
@@ -222,6 +231,17 @@ UI.renderSidebarSales = function (state, kpis, filterId) {
                                     <p class="text-sm text-gray-400">Clica em "Limpar" para voltar à vista padrão (última semana)</p>
                                 </div>
                             </div>
+                            
+                            <!-- WEBHOOK INFO FOR SALES -->
+                            <div class="mt-6 pt-6 border-t border-gray-700">
+                                 <h4 class="font-bold text-white mb-2">Configurar Email Automático</h4>
+                                 <p class="text-sm text-gray-400 mb-3">Usa estes templates para criar a tua automação no Make.com:</p>
+                                 <div class="bg-gray-800 p-3 rounded border border-gray-700">
+                                    <a href="https://eu1.make.com/public/shared-scenario/sYmeIcy6C7x/integration-webhooks-gmail-corrected" target="_blank" class="block w-full text-left text-xs text-blue-400 hover:text-blue-300 hover:underline truncate mb-1">
+                                        🔗 Template: Webhook -> Gmail
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -235,6 +255,49 @@ UI.renderSidebarSales = function (state, kpis, filterId) {
                     </div>
 
                 </div>
+            </div>
+        </div>
+        <!-- SETTINGS MODAL -->
+        <div id="settingsModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div class="bg-[#1e293b] w-full max-w-md rounded-2xl shadow-2xl border border-gray-700 overflow-hidden animate-fadeIn">
+                <div class="flex justify-between items-center p-6 border-b border-gray-700 bg-[#0f172a]">
+                    <h2 class="text-xl font-bold text-white">Configurações</h2>
+                    <button id="closeSettingsBtn" class="text-gray-400 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-1">Webhook URL (Relatórios)</label>
+                        <input type="text" id="dashboardWebhookUrl" value="${state.webhookUrl || ''}" placeholder="https://hook.make.com/..." class="w-full bg-[#0f172a] border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all">
+                        <p class="text-xs text-gray-500 mt-2">Cola aqui o teu Webhook do Make/Zapier para receberes os relatórios por email.</p>
+                    </div>
+                </div>
+                <div class="p-6 border-t border-gray-700 bg-[#0f172a] flex justify-end">
+                    <button id="saveSettingsBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-lg transition-all shadow-lg shadow-blue-900/20 active:scale-95">
+                        Guardar Alterações
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- LOGOUT MODAL -->
+        <div id="logoutModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div class="bg-[#1e293b] w-full max-w-sm rounded-2xl shadow-2xl border border-gray-700 p-6 flex flex-col gap-4 animate-fadeIn">
+                <h3 class="text-xl font-bold text-white text-center">O que pretendes fazer?</h3>
+                
+                <button id="changeBoardBtn" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-500 rounded-xl text-white font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-blue-900/20 active:scale-95">
+                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                     Trocar de Quadro / Função
+                </button>
+
+                <button id="confirmLogoutBtn" class="w-full py-3 px-4 bg-red-500/10 hover:bg-red-500/20 border border-red-500/50 text-red-500 rounded-xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
+                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                     Terminar Sessão
+                </button>
+
+                <button id="cancelLogoutBtn" class="w-full py-2 text-gray-400 hover:text-white font-medium text-sm transition-colors">
+                    Cancelar
+                </button>
             </div>
         </div>
     `;

@@ -50,10 +50,8 @@ App.selecionarBoard = function (boardId) {
 };
 
 App.logout = function () {
-    localStorage.removeItem('trello_token');
-    // localStorage.removeItem('trello_board_id'); // Opcional: manter board preferido
-
-    // Forçar recarregamento para limpar totalmente o estado da aplicação
+    localStorage.clear(); // Limpar tudo para garantir segurança máxima
+    window.location.hash = ''; // Limpar token da URL se existir
     window.location.reload();
 };
 

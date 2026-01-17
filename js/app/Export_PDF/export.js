@@ -22,7 +22,7 @@ App.exportarExcel = function () {
     );
 };
 
-App.exportarPDF = async function () {
+App.exportarPDF = async function (returnContent = false) {
     if (!this.state.kpis) return;
 
     const appElement = document.getElementById('app');
@@ -227,25 +227,131 @@ App.exportarPDF = async function () {
         // Adicionar imagem
         pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, imgHeight);
 
-        // Salvar
         const dataAtual = new Date().toISOString().split('T')[0];
         const nomeArquivo = `Relatorio_${(boardName || 'Trello').replace(/\s+/g, '_')}_${dataAtual}.pdf`;
+
+        if (returnContent) {
+            document.body.removeChild(loadingMsg);
+            return {
+                dataUri: pdf.output('datauristring'),
+                fileName: nomeArquivo
+            };
+        }
+
+        // Salvar
         pdf.save(nomeArquivo);
 
         document.body.removeChild(loadingMsg);
 
     } catch (error) {
         console.error('Erro ao gerar PDF:', error);
-        document.body.removeChild(loadingMsg);
+        if (loadingMsg && loadingMsg.parentNode) document.body.removeChild(loadingMsg);
         alert('Erro ao gerar PDF. Tente novamente.');
+        return null;
     }
 };
 
 App.enviarWebhook = async function () {
     if (!this.state.kpis) return;
     const webhookUrl = this.state.webhookUrl;
-    if (!webhookUrl) return alert('Configure URL do Webhook.');
 
-    // Mock simples para não quebrar
-    alert("Funcionalidade em manutenção.");
+    // Check if URL is configured
+    if (!webhookUrl) return alert('Por favor, configure o URL do Webhook nas definições primeiro.');
+
+    // Basic URL validation
+    try {
+        new URL(webhookUrl);
+    } catch (_) {
+        return alert('URL do Webhook inválido.');
+    }
+
+    const confirmSend = confirm(`Pretende gerar o PDF e enviar o relatório completo (Dados + PDF) para o Webhook?\n\nURL: ${webhookUrl}`);
+    if (!confirmSend) return;
+
+    // 1. Gerar PDF
+    const pdfResult = await this.exportarPDF(true);
+    if (!pdfResult || !pdfResult.dataUri) {
+        alert('Erro: O PDF não foi gerado corretamente.');
+        return;
+    }
+
+    const { dataUri, fileName } = pdfResult;
+
+    // 2. Mostrar Loading
+    const sendingMsg = document.createElement('div');
+    sendingMsg.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg z-50 font-bold flex items-center gap-2';
+    sendingMsg.innerHTML = '<span class="animate-spin">🚀</span> Enviando Relatório...';
+    document.body.appendChild(sendingMsg);
+
+    // 3. Preparar Dados Estruturados (Restaurado)
+    const boardName = this.state.availableBoards?.find(b => b.id === this.state.boardId)?.name || 'Quadro Trello';
+    const timestamp = new Date().toISOString();
+
+    // Dados Gerais (Acumulado)
+    const dadosGeral = this.state.kpis.geral.consultores.map(c => ({
+        nome: c.nome,
+        leads: c.leads,
+        comentarios: c.comentarios,
+        listas: c.listCounts
+    }));
+
+    // Dados Semanais (ou período selecionado)
+    const dadosPeriodo = this.state.kpis.semanal.consultores.map(c => ({
+        nome: c.nome,
+        leads: c.leads,
+        comentarios: c.comentarios,
+        listas: c.listCounts
+    }));
+
+    // 4. Construir Payload Completo (Dados + Arquivo)
+    const payload = {
+        meta: {
+            boardName: boardName,
+            timestamp: timestamp,
+            user: this.state.currentUser?.fullName || 'Desconhecido',
+            startDate: this.state.startDate || 'Início',
+            endDate: this.state.endDate || 'Agora',
+            message: 'Segue em anexo o relatório de performance PDF e os dados estruturados JSON.'
+        },
+        // Dados brutos de KPIs (Útil para automações que leem números)
+        data: {
+            geral: dadosGeral,
+            periodo: dadosPeriodo,
+            totais: {
+                leadsGeral: this.state.kpis.geral.totalLeads,
+                leadsPeriodo: this.state.kpis.semanal.totalLeads
+            }
+        },
+        // Arquivo PDF codificado
+        file: {
+            name: fileName,
+            contentType: 'application/pdf',
+            content: dataUri // Base64 string "data:application/pdf;base64,..."
+        }
+    };
+
+    // 5. Enviar Request
+    try {
+        const response = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        document.body.removeChild(sendingMsg);
+
+        if (response.ok) {
+            alert('✅ Relatório enviado com sucesso!\n(PDF e Dados JSON enviados para o Webhook)');
+        } else {
+            throw new Error(`Erro ${response.status}: ${response.statusText}`);
+        }
+
+    } catch (error) {
+        console.error('Erro ao enviar Webhook:', error);
+        if (sendingMsg && sendingMsg.parentNode) document.body.removeChild(sendingMsg);
+        alert('❌ Falha ao enviar relatório. Verifique se o Webhook aceita o tamanho do payload (PDF).\n\nErro: ' + error.message);
+    }
 };
+
