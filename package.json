@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Pedropnf11/trello-kpi#readme",
   "dependencies": {
+    "@vercel/analytics": "^1.6.1",
     "vite": "^7.3.1"
   }
 }

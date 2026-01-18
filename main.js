@@ -1,3 +1,7 @@
+import { inject } from '@vercel/analytics';
+
+inject();
+
 import './js/api.js';
 import './js/utils.js';
 import './js/pdf-export.js';
