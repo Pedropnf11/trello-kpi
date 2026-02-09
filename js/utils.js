@@ -1,4 +1,53 @@
 const Utils = {
+    /**
+     * @param {string} text 
+     * @returns {string}
+     * @example
+    
+     */
+    escapeHtml(text) {
+        if (text === null || text === undefined) return '';
+
+        const div = document.createElement('div');
+        div.textContent = String(text);
+        return div.innerHTML;
+    },
+
+    /**
+    
+     * @param {string} text 
+     * @returns {string} 
+     * @example
+    
+ 
+     */
+    escapeHtmlAttribute(text) {
+        if (text === null || text === undefined) return '';
+
+        return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/'/g, '&#x27;')
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    },
+
+    /**
+     * @param {string|Date} date 
+     * @returns {string} 
+     */
+    formatDateSafe(date) {
+        if (!date) return '';
+
+        try {
+            const d = new Date(date);
+            if (isNaN(d.getTime())) return '';
+            return d.toLocaleDateString('pt-PT');
+        } catch {
+            return '';
+        }
+    },
+
     getCardDate(cardId) {
         if (!cardId) return new Date();
         return new Date(1000 * parseInt(cardId.substring(0, 8), 16));
@@ -13,34 +62,30 @@ const Utils = {
         return d;
     },
 
-    /**
-     * Gera e inicia o download de um ficheiro CSV
-     * Suporta a chamada simples: (headers, rows, filename) -> usado no export.js
-     * Ou chamada de dados brutos para processar se necessário.
-     */
+
     generateCSV(headersOrData, rows, filename) {
         let csvContent = "";
 
         if (Array.isArray(headersOrData) && Array.isArray(rows)) {
-            // Formato Headers + Rows
+
             const headers = headersOrData.join(',');
             const body = rows.map(row => row.map(val => {
-                // Escapar aspas e envolver em aspas se necessário
+
                 const stringVal = String(val).replace(/"/g, '""');
                 return `"${stringVal}"`;
             }).join(',')).join('\n');
             csvContent = headers + '\n' + body;
         } else {
-            // Formato array de objetos (fallback)
+
             const data = headersOrData;
             if (!data || !data.length) return;
             const headers = Object.keys(data[0]).join(',');
             const body = data.map(obj => Object.values(obj).map(val => `"${val}"`).join(',')).join('\n');
             csvContent = headers + '\n' + body;
-            filename = rows; // 2º argumento seria filename neste caso
+            filename = rows;
         }
 
-        // Criar o download
+
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
         if (link.download !== undefined) {

@@ -118,7 +118,7 @@ UI.renderBoardSelector = function (state) {
                         <div class="board-card group cursor-pointer bg-white border-2 border-gray-100 p-6 rounded-2xl hover:border-blue-500 hover:shadow-lg transition-all relative overflow-hidden flex flex-col justify-between h-40"
                              data-id="${board.id}">
                             <div>
-                                <h3 class="font-bold text-lg text-gray-800 group-hover:text-blue-600 mb-2 line-clamp-2 transition-colors">${board.name}</h3>
+                                <h3 class="font-bold text-lg text-gray-800 group-hover:text-blue-600 mb-2 line-clamp-2 transition-colors">${Utils.escapeHtml(board.name)}</h3>
                                 <div class="w-8 h-1 bg-blue-500 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
                             </div>
                             <p class="text-xs font-medium text-gray-400 flex items-center gap-1">
@@ -235,7 +235,7 @@ UI.renderRoleSelectionModal = function (boardId, boardName) {
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                     </div>
                     <h3 class="text-2xl font-bold text-gray-900">Quem és tu?</h3>
-                    <p class="text-gray-500 mt-2">Escolhe como queres visualizar o quadro <span class="font-semibold text-gray-700">"${boardName}"</span></p>
+                    <p class="text-gray-500 mt-2">Escolhe como queres visualizar o quadro <span class="font-semibold text-gray-700">"${Utils.escapeHtml(boardName)}"</span></p>
                 </div>
 
                 <div class="grid gap-4">
