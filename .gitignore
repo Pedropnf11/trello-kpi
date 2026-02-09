@@ -1,6 +1,26 @@
+# Environment variables
 .env
 .env.*
+
+
+# Dependencies
 node_modules/
+
+# Build output
 dist/
+.vite/
+
+# OS files
 .DS_Store
+
+# Logs
 *.log
+
+# Vercel
+.vercel
+.vercel/*
+
+
+# Documentação sensível de vendas
+js/docs/
+*.pdf
