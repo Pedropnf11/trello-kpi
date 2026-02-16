@@ -1,6 +1,43 @@
 // Trello API Interactions
 const TrelloAPI = {
+    // Rate limiting
+    _requestCount: 0,
+    _lastReset: Date.now(),
+    _MAX_REQUESTS_PER_MINUTE: 100,
+
+    _checkRateLimit() {
+        const now = Date.now();
+
+        // Reset counter every minute
+        if (now - this._lastReset > 60000) {
+            this._requestCount = 0;
+            this._lastReset = now;
+        }
+
+        if (this._requestCount >= this._MAX_REQUESTS_PER_MINUTE) {
+            throw new Error('Rate limit exceeded. Please wait a moment and try again.');
+        }
+
+        this._requestCount++;
+    },
+
+    // Input validation
+    _validateId(id, type = 'ID') {
+        if (!id || typeof id !== 'string') {
+            throw new Error(`Invalid ${type}: must be a string`);
+        }
+
+        // Trello IDs are 24 character alphanumeric
+        if (!/^[a-zA-Z0-9]{24}$/.test(id)) {
+            throw new Error(`Invalid ${type} format`);
+        }
+
+        return id;
+    },
+
     async _fetch(url) {
+        this._checkRateLimit();
+
         const res = await fetch(url);
         if (!res.ok) {
             const error = new Error(`Request failed with status ${res.status}`);
@@ -20,8 +57,10 @@ const TrelloAPI = {
     },
 
     async fetchLists(apiKey, token, boardId) {
+        const validBoardId = this._validateId(boardId, 'Board ID');
+
         const data = await this._fetch(
-            `https://api.trello.com/1/boards/${boardId}/lists?key=${apiKey}&token=${token}`
+            `https://api.trello.com/1/boards/${validBoardId}/lists?key=${apiKey}&token=${token}`
         );
         if (data.error || !Array.isArray(data)) {
             throw new Error('Erro ao conectar. Verifique suas credenciais.');
@@ -30,28 +69,40 @@ const TrelloAPI = {
     },
 
     async fetchCards(apiKey, token, boardId) {
+        const validBoardId = this._validateId(boardId, 'Board ID');
+
         // Limit increased to 1000 actions to get better history
         // Corrected actions parameter: 'updateCard:idList' -> 'updateCard' to avoid 403 errors
         return this._fetch(
-            `https://api.trello.com/1/boards/${boardId}/cards?members=true&actions=commentCard,createCard,updateCard&actions_limit=1000&actions_memberCreator=true&key=${apiKey}&token=${token}`
+            `https://api.trello.com/1/boards/${validBoardId}/cards?members=true&actions=commentCard,createCard,updateCard&actions_limit=1000&actions_memberCreator=true&key=${apiKey}&token=${token}`
         );
     },
 
     async fetchMembers(apiKey, token, boardId) {
+        const validBoardId = this._validateId(boardId, 'Board ID');
+
         return this._fetch(
-            `https://api.trello.com/1/boards/${boardId}/members?key=${apiKey}&token=${token}`
+            `https://api.trello.com/1/boards/${validBoardId}/members?key=${apiKey}&token=${token}`
         );
     },
 
     async createCard(apiKey, token, listId, name, desc) {
-        const url = `https://api.trello.com/1/cards?idList=${listId}&name=${encodeURIComponent(name)}&desc=${encodeURIComponent(desc)}&key=${apiKey}&token=${token}`;
+        const validListId = this._validateId(listId, 'List ID');
+
+        this._checkRateLimit();
+
+        const url = `https://api.trello.com/1/cards?idList=${validListId}&name=${encodeURIComponent(name)}&desc=${encodeURIComponent(desc)}&key=${apiKey}&token=${token}`;
         const res = await fetch(url, { method: 'POST' });
         if (!res.ok) throw new Error('Failed to create card');
         return await res.json();
     },
 
     async addComment(apiKey, token, cardId, text) {
-        const url = `https://api.trello.com/1/cards/${cardId}/actions/comments?text=${encodeURIComponent(text)}&key=${apiKey}&token=${token}`;
+        const validCardId = this._validateId(cardId, 'Card ID');
+
+        this._checkRateLimit();
+
+        const url = `https://api.trello.com/1/cards/${validCardId}/actions/comments?text=${encodeURIComponent(text)}&key=${apiKey}&token=${token}`;
         const res = await fetch(url, { method: 'POST' });
         if (!res.ok) throw new Error('Failed to add comment');
         return await res.json();

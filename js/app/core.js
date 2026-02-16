@@ -9,12 +9,47 @@ const TrelloConfig = {
     expiration: 'never'
 };
 
+// Helper para prevenir crashes por localStorage corrompido
+function safeJSONParse(key, defaultValue) {
+    try {
+        const item = localStorage.getItem(key);
+        return item ? JSON.parse(item) : defaultValue;
+    } catch (error) {
+        console.warn(`localStorage corrompido para ${key}, usando valor padrão`);
+        return defaultValue;
+    }
+}
+
+// Validação de webhooks - apenas Make e Zapier
+function isValidWebhookUrl(url) {
+    if (!url || url.trim() === '') return true; // Permite vazio (webhook opcional)
+
+    try {
+        const parsed = new URL(url);
+
+        // Whitelist de domínios permitidos
+        const allowedDomains = [
+            'hook.make.com',
+            'hooks.zapier.com'
+        ];
+
+        // Verifica se o hostname é ou termina com um dos domínios permitidos
+        const isAllowed = allowedDomains.some(domain =>
+            parsed.hostname === domain || parsed.hostname.endsWith('.' + domain)
+        );
+
+        // Deve ser HTTPS e domínio permitido
+        return isAllowed && parsed.protocol === 'https:';
+    } catch {
+        return false; // URL inválido
+    }
+}
+
 App.state = {
     apiKey: TrelloConfig.apiKey,
     token: localStorage.getItem('trello_token') || '',
     boardId: localStorage.getItem('trello_board_id') || '',
     webhookUrl: localStorage.getItem('trello_webhook_url') || '',
-    groqApiKey: import.meta.env.VITE_API_GROQ1,
     showConfig: true,
     loading: false,
     kpis: null,
@@ -27,22 +62,21 @@ App.state = {
     chatHistory: [],
     availableBoards: [],
     userRole: localStorage.getItem('trello_user_role') || null, // Guardar role no storage
-    funnelConfig: JSON.parse(localStorage.getItem('trello_funnel_config') || 'null'),
-    hiddenFunnelLists: JSON.parse(localStorage.getItem('trello_hidden_funnel_lists') || '[]'),
-    timeTrackingLists: JSON.parse(localStorage.getItem('trello_time_tracking_lists') || '{"left": null, "right": null}'),
+    funnelConfig: safeJSONParse('trello_funnel_config', null),
+    hiddenFunnelLists: safeJSONParse('trello_hidden_funnel_lists', []),
+    timeTrackingLists: safeJSONParse('trello_time_tracking_lists', { left: null, right: null }),
     viewMode: 'dashboard' // 'dashboard' or 'graphs'
 };
 
 App.init = function () {
-    console.log('App initialized with API Key:', this.state.apiKey ? 'PRESENT' : 'MISSING');
-
     const hash = window.location.hash;
     if (hash && hash.includes('token=')) {
         const token = hash.split('token=')[1].split('&')[0];
         if (token) {
             this.state.token = token;
             localStorage.setItem('trello_token', token);
-            window.location.hash = '';
+            // Limpar hash de forma segura sem deixar no histórico
+            window.history.replaceState(null, '', window.location.pathname);
         }
     }
 
@@ -330,6 +364,13 @@ App.attachDashboardEvents = function () {
     if (saveSettingsBtn && dashboardWebhookUrl) {
         saveSettingsBtn.addEventListener('click', () => {
             const newUrl = dashboardWebhookUrl.value.trim();
+
+            // Validar webhook URL antes de guardar
+            if (newUrl && !isValidWebhookUrl(newUrl)) {
+                alert('❌ URL de webhook inválido!\n\nApenas são permitidos webhooks de:\n• Make.com (https://hook.make.com/...)\n• Zapier (https://hooks.zapier.com/...)');
+                return;
+            }
+
             this.state.webhookUrl = newUrl;
             localStorage.setItem('trello_webhook_url', newUrl);
 
@@ -474,22 +515,86 @@ App.attachDashboardEvents = function () {
         });
     }
 
-    // 2. Date Pickers
+    // 2. Date Pickers (COM VALIDAÇÃO)
     const startDate = document.getElementById('startDate');
     const endDate = document.getElementById('endDate');
     const clearDates = document.getElementById('clearDates');
 
+    let dateChangeTimeout = null;
+
+    // Helper: Validar datas
+    const validateDates = (start, end) => {
+        if (!start || !end) return { valid: true };
+
+        const startD = new Date(start);
+        const endD = new Date(end);
+
+        if (startD > endD) {
+            return {
+                valid: false,
+                message: '⚠️ A data inicial não pode ser depois da data final!'
+            };
+        }
+
+        const diffDays = (endD - startD) / (1000 * 60 * 60 * 24);
+        if (diffDays > 365) {
+            return {
+                valid: false,
+                message: '⚠️ O período não pode ser superior a 1 ano!'
+            };
+        }
+
+        return { valid: true };
+    };
+
+    // Helper: Recarregar com debounce e feedback visual
+    const reloadWithDebounce = () => {
+        if (dateChangeTimeout) {
+            clearTimeout(dateChangeTimeout);
+        }
+
+        // Feedback visual durante loading
+        if (startDate) startDate.classList.add('opacity-50', 'cursor-wait');
+        if (endDate) endDate.classList.add('opacity-50', 'cursor-wait');
+
+        // Debounce de 500ms
+        dateChangeTimeout = setTimeout(() => {
+            this.conectarTrello().finally(() => {
+                if (startDate) startDate.classList.remove('opacity-50', 'cursor-wait');
+                if (endDate) endDate.classList.remove('opacity-50', 'cursor-wait');
+            });
+        }, 500);
+    };
+
     if (startDate) {
         startDate.addEventListener('change', (e) => {
-            this.state.startDate = e.target.value;
-            this.conectarTrello(); // Recarregar dados com novas datas
+            const newStart = e.target.value;
+            const validation = validateDates(newStart, this.state.endDate);
+
+            if (!validation.valid) {
+                alert(validation.message);
+                startDate.value = this.state.startDate; // Reverter
+                return;
+            }
+
+            this.state.startDate = newStart;
+            reloadWithDebounce();
         });
     }
 
     if (endDate) {
         endDate.addEventListener('change', (e) => {
-            this.state.endDate = e.target.value;
-            this.conectarTrello(); // Recarregar dados com novas datas
+            const newEnd = e.target.value;
+            const validation = validateDates(this.state.startDate, newEnd);
+
+            if (!validation.valid) {
+                alert(validation.message);
+                endDate.value = this.state.endDate; // Reverter
+                return;
+            }
+
+            this.state.endDate = newEnd;
+            reloadWithDebounce();
         });
     }
 
@@ -497,6 +602,8 @@ App.attachDashboardEvents = function () {
         clearDates.addEventListener('click', () => {
             this.state.startDate = '';
             this.state.endDate = '';
+            if (startDate) startDate.value = '';
+            if (endDate) endDate.value = '';
             this.conectarTrello();
         });
     }
