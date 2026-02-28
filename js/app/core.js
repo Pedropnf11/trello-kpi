@@ -109,7 +109,7 @@ App.render = function () {
     }
 
     if (!this.state.token) {
-        app.innerHTML = UI.renderConfig(this.state);
+        app.innerHTML = UI.renderLandingPage(this.state);
         this.attachLoginEvents();
         return;
     }
@@ -226,18 +226,28 @@ App.attachDynamicEvents = function () {
 };
 
 App.attachLoginEvents = function () {
+    const loginHandler = () => {
+        if (!this.state.apiKey) {
+            alert('Erro: API Key não encontrada no .env!');
+            return;
+        }
+        const returnUrl = window.location.href;
+        const authUrl = `https://trello.com/1/authorize?expiration=${TrelloConfig.expiration}&name=${encodeURIComponent(TrelloConfig.appName)}&scope=${TrelloConfig.scope}&response_type=token&key=${this.state.apiKey}&return_url=${encodeURIComponent(returnUrl)}`;
+        window.location.href = authUrl;
+    };
+
     const loginBtn = document.getElementById('loginTrelloBtn');
-    if (loginBtn) {
-        loginBtn.addEventListener('click', () => {
-            if (!this.state.apiKey) {
-                alert('Erro: API Key não encontrada no .env!');
-                return;
-            }
-            const returnUrl = window.location.href;
-            const authUrl = `https://trello.com/1/authorize?expiration=${TrelloConfig.expiration}&name=${encodeURIComponent(TrelloConfig.appName)}&scope=${TrelloConfig.scope}&response_type=token&key=${this.state.apiKey}&return_url=${encodeURIComponent(returnUrl)}`;
-            window.location.href = authUrl;
-        });
-    }
+    if (loginBtn) loginBtn.addEventListener('click', loginHandler);
+
+    // Landing Page Buttons
+    const heroBtn = document.getElementById('heroStartBtn');
+    if (heroBtn) heroBtn.addEventListener('click', loginHandler);
+
+    const navBtn = document.getElementById('navLoginBtn');
+    if (navBtn) navBtn.addEventListener('click', loginHandler);
+
+    const ctaBtn = document.getElementById('ctaStartBtn');
+    if (ctaBtn) ctaBtn.addEventListener('click', loginHandler);
 
     const manualBtn = document.getElementById('showManualConfig');
     if (manualBtn) {

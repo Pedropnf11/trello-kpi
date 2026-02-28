@@ -84,11 +84,13 @@ App.exportarPDF = async function (returnContent = false) {
                 if (main) main.insertBefore(headerDiv, main.firstChild);
 
                 // 2. FORÇAR CORES ESCURAS (Correção do fundo branco)
-                // Reaplica a cor de fundo #1e293b em todos os cartões que a perderam
-                const cards = doc.querySelectorAll('.bg-\\[\\#1e293b\\], .bg-gray-800, .bg-slate-800');
+                // Reaplica a cor de fundo nos cartões que a perderam
+                const cards = doc.querySelectorAll('[class*="bg-[#0f172a]"], [class*="bg-[#111827]"], [class*="bg-[#0d1117]"], [class*="bg-[#080c14]"], .bg-gray-800, .bg-slate-800');
                 cards.forEach(c => {
-                    c.style.backgroundColor = '#1e293b'; // Slate-800
-                    c.style.borderColor = '#334155'; // Slate-700
+                    const cls = c.className || '';
+                    if (cls.includes('#111827')) c.style.backgroundColor = '#111827';
+                    else if (cls.includes('#0f172a')) c.style.backgroundColor = '#0f172a';
+                    else c.style.backgroundColor = '#111827';
                     c.style.color = 'white';
                 });
 
@@ -110,7 +112,9 @@ App.exportarPDF = async function (returnContent = false) {
                     .gap-4 { gap: 2rem !important; }
                     .mb-1 { margin-bottom: 0.5rem !important; }
                     .text-white { color: #f8fafc !important; }
-                    .bg-\\[\\#1e293b\\] { background-color: #1e293b !important; }
+                    [class*="bg-\\[#0f172a\\]"] { background-color: #0f172a !important; }
+                    [class*="bg-\\[#111827\\]"] { background-color: #111827 !important; }
+                    [class*="bg-\\[#0d1117\\]"] { background-color: #0d1117 !important; }
                     
                     /* Tabela Headers */
                     th { 
@@ -127,12 +131,12 @@ App.exportarPDF = async function (returnContent = false) {
 
                     /* CRITICAL: Espaçamento Pós-Pipeline */
                     #section-pipeline {
-                        margin-bottom: 80px !important; /* Espaço extra forçado */
+                        margin-bottom: 80px !important;
                         page-break-inside: avoid;
                     }
 
                     /* CRITICAL: Layout Clean */
-                    .grid { height: auto !important; } /* Remover alturas fixas dos grids */
+                    .grid { height: auto !important; }
                 `;
                 doc.head.appendChild(style);
 

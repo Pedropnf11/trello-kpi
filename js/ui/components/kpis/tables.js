@@ -1,75 +1,69 @@
 UI.renderTable = function (titulo, dados, listsDef, colorTheme = 'slate') {
-    // Tema dark neutro
-    const borderColor = 'border-gray-800';
-    const bgColor = 'bg-[#1e293b]';
+    const accentMap = {
+        blue: { dot: 'bg-blue-500', text: 'text-blue-400', badge: 'bg-blue-500/10 border-blue-500/20 text-blue-400' },
+        gray: { dot: 'bg-gray-500', text: 'text-gray-400', badge: 'bg-gray-500/10 border-gray-500/20 text-gray-400' },
+        slate: { dot: 'bg-slate-500', text: 'text-slate-400', badge: 'bg-slate-500/10 border-slate-500/20 text-slate-400' },
+    };
+    const accent = accentMap[colorTheme] || accentMap.slate;
 
     return `
-        <div class="${bgColor} rounded-3xl shadow-xl p-8 border ${borderColor}">
-            <div class="flex items-center gap-3 mb-8">
-              
-                <div>
-                     <h2 class="text-2xl font-bold text-white">${titulo}</h2>
-                     <p class="text-sm text-gray-500 font-light mt-1">Análise detalhada por lista</p>
+        <div class="flex flex-col gap-5">
+            <!-- Header -->
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-1.5 h-4 rounded-full ${accent.dot}"></span>
+                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.12em]">${titulo}</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] text-gray-600 uppercase tracking-wider font-semibold">Leads</span>
+                        <span class="text-[13px] font-bold text-white tabular-nums">${dados.totais.leads}</span>
+                    </div>
+                    <div class="w-px h-3 bg-white/[0.06]"></div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] text-gray-600 uppercase tracking-wider font-semibold">Consultores</span>
+                        <span class="text-[13px] font-bold text-white tabular-nums">${dados.totais.consultores}</span>
+                    </div>
+                    <div class="w-px h-3 bg-white/[0.06]"></div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] text-gray-600 uppercase tracking-wider font-semibold">Follow-ups</span>
+                        <span class="text-[13px] font-bold text-white tabular-nums">${dados.totais.comentarios}</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <!-- LEADS -->
-                <div class="bg-[#0f172a] p-6 rounded-2xl border border-gray-800 shadow-lg relative overflow-hidden group">
-                     <div class="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition duration-500"></div>
-                     <div class="relative z-10">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Total de Leads</p>
-                        <p class="text-4xl font-black text-white tracking-tight">${dados.totais.leads}</p>
-                     </div>
-                </div>
-
-                <!-- CONSULTORES -->
-                <div class="bg-[#0f172a] p-6 rounded-2xl border border-gray-800 shadow-lg relative overflow-hidden group">
-                     <div class="absolute inset-0 bg-purple-500/5 opacity-0 group-hover:opacity-100 transition duration-500"></div>
-                     <div class="relative z-10">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Consultores</p>
-                        <p class="text-4xl font-black text-white tracking-tight">${dados.totais.consultores}</p>
-                     </div>
-                </div>
-
-                <!-- COMENTÁRIOS -->
-                <div class="bg-[#0f172a] p-6 rounded-2xl border border-gray-800 shadow-lg relative overflow-hidden group">
-                     <div class="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition duration-500"></div>
-                     <div class="relative z-10">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Comentários</p>
-                        <p class="text-4xl font-black text-white tracking-tight">${dados.totais.comentarios}</p>
-                     </div>
-                </div>
-            </div>
-
-            <div class="overflow-x-auto rounded-xl border border-gray-800">
+            <!-- Table -->
+            <div class="overflow-x-auto rounded-xl border border-white/[0.04]">
                 <table class="w-full">
                     <thead>
-                        <tr class="bg-slate-800/50 border-b border-gray-800">
-                            <th class="text-left p-4 min-w-[200px] text-xs font-bold text-gray-400 uppercase tracking-wide">Consultor</th>
-                            ${listsDef.map(l => `<th class="text-center p-4 text-xs font-bold text-gray-400 uppercase tracking-wide">${l.name}</th>`).join('')}
+                        <tr class="border-b border-white/[0.04]">
+                            <th class="text-left px-4 py-3 min-w-[180px] text-[10px] font-bold text-gray-600 uppercase tracking-[0.12em]">Consultor</th>
+                            ${listsDef.map(l => `<th class="text-center px-4 py-3 text-[10px] font-bold text-gray-600 uppercase tracking-[0.1em] whitespace-nowrap">${l.name}</th>`).join('')}
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-800 text-sm">
-                        ${dados.consultores.length ? dados.consultores.map(c => `
-                            <tr class="hover:bg-slate-800/30 transition-colors">
-                                <td class="p-4 font-semibold text-gray-200 flex items-center gap-2">
-                                    <div class="w-8 h-8 rounded-lg bg-slate-700 flex items-center justify-center text-xs font-bold text-gray-300">
-                                        ${c.nome.charAt(0)}
+                    <tbody>
+                        ${dados.consultores.length ? dados.consultores.map((c, idx) => `
+                            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors group">
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-7 h-7 rounded-lg bg-[#1e293b] flex items-center justify-center text-[11px] font-bold text-gray-300 border border-white/[0.04] flex-shrink-0">
+                                            ${c.nome.charAt(0).toUpperCase()}
+                                        </div>
+                                        <span class="text-[13px] font-semibold text-gray-300 group-hover:text-white transition-colors truncate">${c.nome}</span>
+                                        ${c.comentarios > 0 ? `<span class="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded ${accent.badge} border flex-shrink-0">💬 ${c.comentarios}</span>` : ''}
                                     </div>
-                                    <span>${c.nome}</span>
-                                    ${c.comentarios > 0 ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-blue-900/30 text-blue-400 border border-blue-500/20 font-bold ml-auto"><span class="text-[9px]">💬</span> ${c.comentarios}</span>` : ''}
                                 </td>
                                 ${listsDef.map(l => `
-                                    <td class="p-4 text-center">
-                                        ${c.listCounts[l.id] > 0 ?
-            `<span class="inline-flex items-center justify-center min-w-[2.5rem] h-8 px-2 rounded-lg bg-[#0f172a] text-white font-bold border border-gray-700 shadow-sm">${c.listCounts[l.id]}</span>`
-            : '<span class="text-gray-600 font-light">-</span>'}
+                                    <td class="px-4 py-3 text-center">
+                                        ${c.listCounts[l.id] > 0
+            ? `<span class="inline-flex items-center justify-center min-w-[2rem] h-6 px-2 rounded-md bg-[#0f172a] text-white text-[12px] font-bold border border-white/[0.06]">${c.listCounts[l.id]}</span>`
+            : '<span class="text-gray-700 text-[12px]">—</span>'
+        }
                                     </td>
                                 `).join('')}
                             </tr>
                         `).join('') : `
-                            <tr><td colspan="${1 + listsDef.length}" class="p-8 text-center text-gray-500 italic">Nenhum dado encontrado</td></tr>
+                            <tr><td colspan="${1 + listsDef.length}" class="px-4 py-10 text-center text-[12px] text-gray-600 font-medium">Nenhum dado encontrado</td></tr>
                         `}
                     </tbody>
                 </table>
@@ -79,61 +73,65 @@ UI.renderTable = function (titulo, dados, listsDef, colorTheme = 'slate') {
 };
 
 UI.renderDueDatesTable = function (dadosSemanal) {
+    const consultoresComDados = dadosSemanal.consultores.filter(
+        c => (c.duesCriados || 0) + (c.duesATempo || 0) + (c.duesAtrasados || 0) + (c.duesPendentes || 0) > 0
+    );
+
     return `
-        <div class="bg-[#1e293b] rounded-3xl shadow-xl p-8 border border-gray-800 mt-8">
-            <div class="flex items-center gap-3 mb-8">
-              
-                <div>
-                    <h2 class="text-2xl font-bold text-white">Follow-ups Marcados</h2>
-                     <p class="text-sm text-gray-500 font-light mt-1">Cumprimento de datas e prazos</p>
+        <div class="flex flex-col gap-5">
+            <!-- Header -->
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-1.5 h-4 rounded-full bg-violet-500"></span>
+                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.12em]">Follow-ups Marcados</p>
                 </div>
+                <p class="text-[11px] text-gray-600">Cumprimento de datas e prazos</p>
             </div>
 
-            <div class="overflow-x-auto rounded-xl border border-gray-800">
+            <!-- Table -->
+            <div class="overflow-x-auto rounded-xl border border-white/[0.04]">
                 <table class="w-full">
                     <thead>
-                        <tr class="bg-slate-800/50 border-b border-gray-800">
-                            <th class="text-left p-4 min-w-[200px] text-xs font-bold text-gray-400 uppercase tracking-wide">Consultor</th>
-                            <th class="text-center p-4 text-xs font-bold text-gray-400 uppercase tracking-wide">Agendados</th>
-                            <th class="text-center p-4 text-xs font-bold text-green-400 uppercase tracking-wide">A Tempo</th>
-                            <th class="text-center p-4 text-xs font-bold text-red-400 uppercase tracking-wide">Atrasados</th>
-                            <th class="text-center p-4 text-xs font-bold text-yellow-400 uppercase tracking-wide">Pendentes</th>
+                        <tr class="border-b border-white/[0.04]">
+                            <th class="text-left px-4 py-3 min-w-[180px] text-[10px] font-bold text-gray-600 uppercase tracking-[0.12em]">Consultor</th>
+                            <th class="text-center px-4 py-3 text-[10px] font-bold text-gray-600 uppercase tracking-[0.1em]">Agendados</th>
+                            <th class="text-center px-4 py-3 text-[10px] font-bold text-emerald-600 uppercase tracking-[0.1em]">A Tempo</th>
+                            <th class="text-center px-4 py-3 text-[10px] font-bold text-rose-600 uppercase tracking-[0.1em]">Atrasados</th>
+                            <th class="text-center px-4 py-3 text-[10px] font-bold text-amber-600 uppercase tracking-[0.1em]">Pendentes</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-800 text-sm">
-                        ${dadosSemanal.consultores.length ? dadosSemanal.consultores
-            .filter(c => (c.duesCriados || 0) + (c.duesATempo || 0) + (c.duesAtrasados || 0) + (c.duesPendentes || 0) > 0)
-            .map(c => `
-                                <tr class="hover:bg-slate-800/30 transition-colors">
-                                    <td class="p-4 font-semibold text-gray-200">
-                                         <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-lg bg-slate-700 flex items-center justify-center text-xs font-bold text-gray-300">
-                                                ${c.nome.charAt(0)}
-                                            </div>
-                                            ${c.nome}
+                    <tbody>
+                        ${consultoresComDados.length ? consultoresComDados.map(c => `
+                            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors group">
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-7 h-7 rounded-lg bg-[#1e293b] flex items-center justify-center text-[11px] font-bold text-gray-300 border border-white/[0.04] flex-shrink-0">
+                                            ${c.nome.charAt(0).toUpperCase()}
                                         </div>
-                                    </td>
-                                    <td class="p-4 text-center">
-                                        <span class="inline-block min-w-[3ch] py-1 bg-[#0f172a] text-white font-bold rounded border border-gray-700 text-sm">${c.duesCriados || 0}</span>
-                                    </td>
-                                    <td class="p-4 text-center">
-                                        ${(c.duesATempo || 0) > 0 ?
-                    `<span class="inline-block min-w-[3ch] py-1 bg-green-900/20 text-green-400 font-bold rounded border border-green-500/20 text-sm">${c.duesATempo}</span>`
-                    : '<span class="text-gray-600">-</span>'}
-                                    </td>
-                                    <td class="p-4 text-center">
-                                        ${(c.duesAtrasados || 0) > 0 ?
-                    `<span class="inline-block min-w-[3ch] py-1 bg-red-900/20 text-red-400 font-bold rounded border border-red-500/20 text-sm">${c.duesAtrasados}</span>`
-                    : '<span class="text-gray-600">-</span>'}
-                                    </td>
-                                    <td class="p-4 text-center">
-                                        ${(c.duesPendentes || 0) > 0 ?
-                    `<span class="inline-block min-w-[3ch] py-1 bg-yellow-900/20 text-yellow-500 font-bold rounded border border-yellow-500/20 text-sm">${c.duesPendentes}</span>`
-                    : '<span class="text-gray-600">-</span>'}
-                                    </td>
-                                </tr>
-                            `).join('') : `
-                            <tr><td colspan="5" class="p-8 text-center text-gray-500 italic">Sem dados de datas para esta semana</td></tr>
+                                        <span class="text-[13px] font-semibold text-gray-300 group-hover:text-white transition-colors">${c.nome}</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="inline-flex items-center justify-center min-w-[2rem] h-6 px-2 rounded-md bg-[#0f172a] text-gray-300 text-[12px] font-bold border border-white/[0.06]">${c.duesCriados || 0}</span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    ${(c.duesATempo || 0) > 0
+            ? `<span class="inline-flex items-center justify-center min-w-[2rem] h-6 px-2 rounded-md bg-emerald-500/10 text-emerald-400 text-[12px] font-bold border border-emerald-500/20">${c.duesATempo}</span>`
+            : '<span class="text-gray-700 text-[12px]">—</span>'}
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    ${(c.duesAtrasados || 0) > 0
+            ? `<span class="inline-flex items-center justify-center min-w-[2rem] h-6 px-2 rounded-md bg-rose-500/10 text-rose-400 text-[12px] font-bold border border-rose-500/20">${c.duesAtrasados}</span>`
+            : '<span class="text-gray-700 text-[12px]">—</span>'}
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    ${(c.duesPendentes || 0) > 0
+            ? `<span class="inline-flex items-center justify-center min-w-[2rem] h-6 px-2 rounded-md bg-amber-500/10 text-amber-400 text-[12px] font-bold border border-amber-500/20">${c.duesPendentes}</span>`
+            : '<span class="text-gray-700 text-[12px]">—</span>'}
+                                </td>
+                            </tr>
+                        `).join('') : `
+                            <tr><td colspan="5" class="px-4 py-10 text-center text-[12px] text-gray-600 font-medium">Sem dados de datas para este período</td></tr>
                         `}
                     </tbody>
                 </table>

@@ -47,6 +47,58 @@
 
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        border: "rgba(255, 255, 255, 0.1)",
+                        input: "rgba(255, 255, 255, 0.1)",
+                        ring: "#2563eb",
+                        background: "#05070a",
+                        foreground: "#f8fafc",
+                        primary: {
+                            DEFAULT: "#2563eb",
+                            foreground: "#ffffff",
+                        },
+                        secondary: {
+                            DEFAULT: "#1e293b",
+                            foreground: "#f8fafc",
+                        },
+                        destructive: {
+                            DEFAULT: "#ef4444",
+                            foreground: "#f8fafc",
+                        },
+                        muted: {
+                            DEFAULT: "#1e293b",
+                            foreground: "#94a3b8",
+                        },
+                        accent: {
+                            DEFAULT: "#1e293b",
+                            foreground: "#f8fafc",
+                        },
+                        popover: {
+                            DEFAULT: "#05070a",
+                            foreground: "#f8fafc",
+                        },
+                        card: {
+                            DEFAULT: "#05070a",
+                            foreground: "#f8fafc",
+                        },
+                        success: "#10b981",
+                        warning: "#f59e0b",
+                        indigo: "#6366f1",
+                        purple: "#a855f7",
+                    },
+                    borderRadius: {
+                        lg: "1rem",
+                        md: "0.75rem",
+                        sm: "0.5rem",
+                    },
+                },
+            },
+        }
+    </script>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
@@ -61,6 +113,7 @@
     <style>
         * {
             font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
         }
 
         /* Custom Scrollbar for Dark Mode */
@@ -70,16 +123,16 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: #0f172a;
+            background: #05070a;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #334155;
+            background: #1e293b;
             border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
+            background: #334155;
         }
 
         /* Utility for hiding scrollbar but keeping functionality */
@@ -90,6 +143,55 @@
         .no-scrollbar {
             -ms-overflow-style: none;
             scrollbar-width: none;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .animate-in {
+            animation-duration: 0.7s;
+            animation-fill-mode: both;
+        }
+
+        .fade-in {
+            animation-name: fadeIn;
+        }
+
+        .slide-in-from-bottom-8 {
+            animation-name: slideInUp;
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #60a5fa, #818cf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
     </style>
 </head>

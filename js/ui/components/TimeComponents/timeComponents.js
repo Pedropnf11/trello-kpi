@@ -17,121 +17,151 @@ UI.renderTimeTracking = function (temposListas, allLists, selectedConfig) {
         return `${horas}h <span class="text-sm opacity-60 font-normal ml-0.5">${minutos}m</span>`;
     };
 
-    const card = (id, htmlId) => {
-        const item = temposListas[id] || {};
-        const options = listIds.map(listId =>
-            `<option value="${listId}" ${listId === id ? 'selected' : ''} class="bg-[#0f172a] text-gray-300">
-                ${temposListas[listId].nome}
-            </option>`
-        ).join('');
+    const leftItem = temposListas[leftId] || {};
+    const rightItem = temposListas[rightId] || {};
 
-        // TEMA ÚNICO PROFISSIONAL (AZUL/SLATE)
-        const theme = {
-            border: 'border-blue-500/20 hover:border-blue-500/40', // Borda Visível e Azulada
-            glow: 'shadow-blue-900/5',
-            gradient: 'from-blue-600/5 to-transparent',
-            iconBg: 'bg-blue-500/10 text-blue-400', // Emoji Azul
-            selectText: 'text-gray-100 placeholder-gray-400',
-            statLabel: 'text-blue-400/80',
-            subStatBg: 'bg-[#0f172a]/40',
-        };
+    const leftOptions = listIds.map(listId =>
+        `<option value="${listId}" ${listId === leftId ? 'selected' : ''} class="bg-[#0f172a] text-gray-300">${temposListas[listId].nome}</option>`
+    ).join('');
 
-        return `
-            <div class="relative group bg-[#1e293b]/50 backdrop-blur-sm rounded-3xl p-6 border ${theme.border} transition-all duration-500 hover:shadow-2xl hover:${theme.glow} flex flex-col h-full overflow-hidden">
-                <!-- Background Gradient Effect -->
-                <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl ${theme.gradient} rounded-bl-[100px] -mr-8 -mt-8 opacity-60 pointer-events-none"></div>
+    const rightOptions = listIds.map(listId =>
+        `<option value="${listId}" ${listId === rightId ? 'selected' : ''} class="bg-[#0f172a] text-gray-300">${temposListas[listId].nome}</option>`
+    ).join('');
 
-                <!-- Header: Icon & Select -->
-                <div class="flex justify-between items-center mb-8 relative z-10">
-                    <div class="flex items-center gap-3 flex-1 min-w-0">
-                        <div class="w-10 h-10 rounded-xl ${theme.iconBg} flex items-center justify-center shadow-lg border border-white/5 flex-shrink-0">
-                            <!-- Ícone Padronizado Azul -->
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </div>
-                        <div class="relative flex-1 group/select min-w-0">
-                            <select id="${htmlId}" class="w-full bg-transparent text-lg font-bold ${theme.selectText} border-0 p-0 pr-8 focus:ring-0 cursor-pointer appearance-none truncate transition-colors hover:text-white">
-                                ${options}
-                            </select>
-                            <svg class="w-4 h-4 text-gray-500 absolute right-0 top-1.5 pointer-events-none transition-transform group-hover/select:translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                        </div>
-                    </div>
-                    <span class="text-[10px] font-bold text-gray-400 bg-[#0f172a] px-3 py-1 rounded-full border border-gray-800 shadow-inner flex-shrink-0 ml-2">
-                        ${item.count || 0} CARDS
-                    </span>
-                </div>
+    // All lists sorted by avg time desc for the mini-ranking
+    const allSorted = listIds
+        .map(id => ({ id, ...temposListas[id] }))
+        .sort((a, b) => parseFloat(b.tempoMedio || b.media || 0) - parseFloat(a.tempoMedio || a.media || 0));
 
-                <!-- Main Stat: Tempo Médio -->
-                <div class="text-center mb-8 relative z-10">
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 flex justify-center items-center gap-2">
-                        <span class="w-1 h-1 rounded-full bg-gray-600"></span>
-                        Tempo Médio
-                        <span class="w-1 h-1 rounded-full bg-gray-600"></span>
-                    </p>
-                    <div class="text-5xl lg:text-6xl font-medium text-white tracking-tight flex items-baseline justify-center gap-1 drop-shadow-lg" id="${htmlId}-media">
-                        ${item.media ? formatTime(item.media) : '0h<span class="text-sm opacity-60 ml-0.5 font-normal">0m</span>'}
-                    </div>
-                </div>
-
-                <!-- Stats Grid -->
-                <div class="grid grid-cols-2 gap-3 mt-auto relative z-10">
-                    <!-- Mais Rápido -->
-                    <div class="${theme.subStatBg} backdrop-blur rounded-2xl p-4 border border-gray-800/50 hover:border-green-500/20 transition-colors group/stat">
-                        <div class="flex items-center gap-2 mb-2">
-                            <div class="p-1.5 rounded-lg bg-green-500/10 text-green-400 border border-green-500/10">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                            </div>
-                            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider group-hover/stat:text-green-500/70 transition-colors">Rápido</span>
-                        </div>
-                        <div id="${htmlId}-rapido">
-                            ${item.maisRapido ? `
-                                <div class="text-lg font-bold text-white mb-0.5">
-                                    ${formatTime(item.maisRapido.tempo)}
-                                </div>
-                                <div class="text-[10px] text-gray-500 truncate font-mono opacity-70" title="${item.maisRapido.cardNome}">
-                                    ${item.maisRapido.cardNome}
-                                </div>
-                            ` : '<span class="text-sm text-gray-600">-</span>'}
-                        </div>
-                    </div>
-
-                    <!-- Mais Lento -->
-                    <div class="${theme.subStatBg} backdrop-blur rounded-2xl p-4 border border-gray-800/50 hover:border-red-500/20 transition-colors group/stat">
-                        <div class="flex items-center gap-2 mb-2">
-                            <div class="p-1.5 rounded-lg bg-red-500/10 text-red-400 border border-red-500/10">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
-                            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider group-hover/stat:text-red-500/70 transition-colors">Lento</span>
-                        </div>
-                        <div id="${htmlId}-lento">
-                            ${item.maisLento ? `
-                                <div class="text-lg font-bold text-white mb-0.5">
-                                    ${formatTime(item.maisLento.tempo)}
-                                </div>
-                                <div class="text-[10px] text-gray-500 truncate font-mono opacity-70" title="${item.maisLento.cardNome}">
-                                    ${item.maisLento.cardNome}
-                                </div>
-                            ` : '<span class="text-sm text-gray-600">-</span>'}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    };
+    const maxTempo = Math.max(...allSorted.map(l => parseFloat(l.tempoMedio || l.media || 0)), 1);
 
     return `
-        <div class="h-full flex flex-col">
-            <div class="mb-6 flex items-center justify-between">
-                <div>
-                     <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                     Tempo de espera médio
-                    </h2>
-                    <p class="text-sm text-gray-500 mt-1">Tempo médio de permanência dos cards</p>
+        <div class="h-full flex flex-col gap-4">
+            <!-- Section label -->
+            <div class="flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-1.5 h-4 rounded-full bg-blue-500"></span>
+                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.12em]">TEMPO MÉDIO DE ESPERA</p>
                 </div>
+                <p class="text-[11px] text-gray-600">Permanência por lista</p>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
-                ${card(leftId, 'timeTrackingSelectLeft')}
-                ${card(rightId, 'timeTrackingSelectRight')}
+
+            <!-- Hero layout: 60/40 split -->
+            <div class="flex gap-4 flex-1 min-h-0">
+
+                <!-- LEFT: Hero Card (primary list) -->
+                <div class="flex-[3] bg-[#111827] rounded-xl p-6 border border-white/[0.04] hover:border-blue-500/10 transition-colors flex flex-col overflow-hidden relative">
+                    <div class="absolute -top-10 -left-10 w-40 h-40 bg-blue-600/5 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <!-- Dropdown header -->
+                    <div class="flex items-center justify-between mb-6 relative z-10">
+                        <div class="flex items-center gap-2.5 flex-1 min-w-0">
+                            <div class="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/10 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div class="relative flex-1 min-w-0">
+                                <select id="timeTrackingSelectLeft" class="w-full bg-transparent text-[13px] font-bold text-gray-200 border-0 p-0 pr-5 focus:ring-0 cursor-pointer appearance-none truncate hover:text-white transition-colors">
+                                    ${leftOptions}
+                                </select>
+                                <svg class="w-3 h-3 text-gray-600 absolute right-0 top-0.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-bold text-gray-600 tabular-nums ml-3 flex-shrink-0">${leftItem.count || 0} cards</span>
+                    </div>
+
+                    <!-- Big hero number -->
+                    <div class="flex-1 flex flex-col items-center justify-center relative z-10">
+                        <p class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em] mb-3">TEMPO MÉDIO</p>
+                        <div class="text-[4rem] font-bold text-white leading-none tracking-tight flex items-baseline gap-1" id="timeTrackingSelectLeft-media">
+                            ${leftItem.media ? formatTime(leftItem.media) : '0h<span class="text-xl opacity-30 ml-1.5 font-normal">0m</span>'}
+                        </div>
+                    </div>
+
+                    <!-- Rápido / Lento row -->
+                    <div class="grid grid-cols-2 gap-2 relative z-10 mt-6">
+                        <div class="bg-[#0a0f1a] rounded-lg p-3 border border-white/[0.03] hover:border-emerald-500/10 transition-colors">
+                            <div class="flex items-center gap-1.5 mb-2">
+                                <svg class="w-3 h-3 text-emerald-500 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                <span class="text-[9px] font-bold text-gray-600 uppercase tracking-wider">Rápido</span>
+                            </div>
+                            <div id="timeTrackingSelectLeft-rapido">
+                                ${leftItem.maisRapido ? `
+                                    <div class="text-[13px] font-bold text-white">${formatTime(leftItem.maisRapido.tempo)}</div>
+                                    <div class="text-[10px] text-gray-600 truncate mt-0.5" title="${leftItem.maisRapido.cardNome}">${leftItem.maisRapido.cardNome}</div>
+                                ` : '<span class="text-[13px] text-gray-700">—</span>'}
+                            </div>
+                        </div>
+                        <div class="bg-[#0a0f1a] rounded-lg p-3 border border-white/[0.03] hover:border-rose-500/10 transition-colors">
+                            <div class="flex items-center gap-1.5 mb-2">
+                                <svg class="w-3 h-3 text-rose-500 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span class="text-[9px] font-bold text-gray-600 uppercase tracking-wider">Lento</span>
+                            </div>
+                            <div id="timeTrackingSelectLeft-lento">
+                                ${leftItem.maisLento ? `
+                                    <div class="text-[13px] font-bold text-white">${formatTime(leftItem.maisLento.tempo)}</div>
+                                    <div class="text-[10px] text-gray-600 truncate mt-0.5" title="${leftItem.maisLento.cardNome}">${leftItem.maisLento.cardNome}</div>
+                                ` : '<span class="text-[13px] text-gray-700">—</span>'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Compact secondary + all-list ranking -->
+                <div class="flex-[2] flex flex-col gap-3 min-w-0">
+
+                    <!-- Secondary selector card -->
+                    <div class="bg-[#111827] rounded-xl p-4 border border-white/[0.04] hover:border-blue-500/10 transition-colors flex-shrink-0">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2 flex-1 min-w-0">
+                                <svg class="w-3.5 h-3.5 text-blue-400/60 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <div class="relative flex-1 min-w-0">
+                                    <select id="timeTrackingSelectRight" class="w-full bg-transparent text-[12px] font-bold text-gray-300 border-0 p-0 pr-5 focus:ring-0 cursor-pointer appearance-none truncate hover:text-white transition-colors">
+                                        ${rightOptions}
+                                    </select>
+                                    <svg class="w-3 h-3 text-gray-600 absolute right-0 top-0.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                </div>
+                            </div>
+                            <span class="text-[10px] text-gray-600 tabular-nums ml-2 flex-shrink-0">${rightItem.count || 0}</span>
+                        </div>
+                        <div class="text-[2rem] font-bold text-white leading-none flex items-baseline gap-1" id="timeTrackingSelectRight-media">
+                            ${rightItem.media ? formatTime(rightItem.media) : '0h<span class="text-sm opacity-30 ml-1 font-normal">0m</span>'}
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mt-3">
+                            <div id="timeTrackingSelectRight-rapido" class="text-[11px]">
+                                <span class="text-[9px] text-gray-600 uppercase font-bold block mb-0.5">Rápido</span>
+                                ${rightItem.maisRapido ? `<span class="text-emerald-400 font-bold">${formatTime(rightItem.maisRapido.tempo)}</span>` : '<span class="text-gray-700">—</span>'}
+                            </div>
+                            <div id="timeTrackingSelectRight-lento" class="text-[11px]">
+                                <span class="text-[9px] text-gray-600 uppercase font-bold block mb-0.5">Lento</span>
+                                ${rightItem.maisLento ? `<span class="text-rose-400 font-bold">${formatTime(rightItem.maisLento.tempo)}</span>` : '<span class="text-gray-700">—</span>'}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- All-lists mini ranking -->
+                    <div class="bg-[#111827] rounded-xl p-4 border border-white/[0.04] flex-1 overflow-y-auto custom-scrollbar-dark">
+                        <p class="text-[9px] font-bold text-gray-600 uppercase tracking-[0.15em] mb-3">Todas as listas</p>
+                        <div class="flex flex-col gap-2.5">
+                            ${allSorted.map((lista, idx) => {
+        const t = parseFloat(lista.tempoMedio || lista.media || 0);
+        const barW = Math.max((t / maxTempo) * 100, 2);
+        const horas = Math.floor(t);
+        const label = t < 1 ? `${Math.round(t * 24)}h` : `${horas}d`;
+        const barColor = idx === 0 ? 'bg-rose-500/60' : idx === allSorted.length - 1 ? 'bg-emerald-500/60' : 'bg-blue-500/40';
+        return `
+                                    <div class="flex items-center gap-2 group">
+                                        <span class="text-[9px] text-gray-700 w-3 text-right flex-shrink-0">${idx + 1}</span>
+                                        <span class="text-[11px] text-gray-500 w-20 truncate flex-shrink-0 group-hover:text-gray-300 transition-colors" title="${lista.nome}">${lista.nome}</span>
+                                        <div class="flex-1 h-1 bg-[#1a2235] rounded-full overflow-hidden">
+                                            <div class="${barColor} h-full rounded-full" style="width:${barW}%;"></div>
+                                        </div>
+                                        <span class="text-[11px] font-bold text-gray-500 w-8 text-right flex-shrink-0 tabular-nums">${label}</span>
+                                    </div>
+                                `;
+    }).join('')}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     `;

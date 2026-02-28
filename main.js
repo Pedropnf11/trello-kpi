@@ -14,6 +14,7 @@ import './js/ui/components/TimeComponents/timeLogic.js';
 // UI Core
 import './js/ui/core.js';
 import './js/ui/auth.js';
+import './js/ui/landing.js';
 
 // UI Components
 import './js/ui/components/Dashboard/manager/sidebar.js';  // Manager Sidebar
