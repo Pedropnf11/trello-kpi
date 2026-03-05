@@ -42,6 +42,9 @@ App.processarImportacao = async function (file) {
         let importados = 0;
         let erros = 0;
 
+        const confirmImport = confirm(`Vai importar ${rows.length - 1} cards para o Trello.\nEsta acção é irreversível. Continuar?`);
+        if (!confirmImport) return;
+
         const btn = document.getElementById('importarBtn');
         const originalText = btn.textContent;
         btn.textContent = 'Importando...';
@@ -109,7 +112,7 @@ App.processarImportacao = async function (file) {
         btn.textContent = originalText;
         btn.disabled = false;
 
-        alert(`Importação concluída!\nSucesso: ${importados}\nErros: ${erros}`);
+        alert(`${(UI._lpLang || 'pt') === 'en' ? 'Import completed!' : 'Importação concluída!'}\n${(UI._lpLang || 'pt') === 'en' ? 'Success:' : 'Sucesso:'} ${importados}\n${(UI._lpLang || 'pt') === 'en' ? 'Errors:' : 'Erros:'} ${erros}`);
         this.conectarTrello();
     };
     reader.readAsText(file);

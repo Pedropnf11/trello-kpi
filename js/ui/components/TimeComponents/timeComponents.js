@@ -41,9 +41,9 @@ UI.renderTimeTracking = function (temposListas, allLists, selectedConfig) {
             <div class="flex items-center justify-between flex-shrink-0">
                 <div class="flex items-center gap-2.5">
                     <span class="w-1.5 h-4 rounded-full bg-blue-500"></span>
-                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.12em]">TEMPO MÉDIO DE ESPERA</p>
+                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.12em]">${(UI._lpLang||'pt')==='en'?'AVG. WAIT TIME':'TEMPO MÉDIO DE ESPERA'}</p>
                 </div>
-                <p class="text-[11px] text-gray-600">Permanência por lista</p>
+                <p class="text-[11px] text-gray-600">${(UI._lpLang||'pt')==='en'?'Duration per list':'Permanência por lista'}</p>
             </div>
 
             <!-- Hero layout: 60/40 split -->
@@ -71,7 +71,7 @@ UI.renderTimeTracking = function (temposListas, allLists, selectedConfig) {
 
                     <!-- Big hero number -->
                     <div class="flex-1 flex flex-col items-center justify-center relative z-10">
-                        <p class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em] mb-3">TEMPO MÉDIO</p>
+                        <p class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em] mb-3">${(UI._lpLang||'pt')==='en'?'AVG. TIME':'TEMPO MÉDIO'}</p>
                         <div class="text-[4rem] font-bold text-white leading-none tracking-tight flex items-baseline gap-1" id="timeTrackingSelectLeft-media">
                             ${leftItem.media ? formatTime(leftItem.media) : '0h<span class="text-xl opacity-30 ml-1.5 font-normal">0m</span>'}
                         </div>
@@ -82,7 +82,7 @@ UI.renderTimeTracking = function (temposListas, allLists, selectedConfig) {
                         <div class="bg-[#0a0f1a] rounded-lg p-3 border border-white/[0.03] hover:border-emerald-500/10 transition-colors">
                             <div class="flex items-center gap-1.5 mb-2">
                                 <svg class="w-3 h-3 text-emerald-500 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                                <span class="text-[9px] font-bold text-gray-600 uppercase tracking-wider">Rápido</span>
+                                <span class="text-[9px] font-bold text-gray-600 uppercase tracking-wider">${(UI._lpLang||'pt')==='en'?'Fastest':'Rápido'}</span>
                             </div>
                             <div id="timeTrackingSelectLeft-rapido">
                                 ${leftItem.maisRapido ? `
@@ -94,7 +94,7 @@ UI.renderTimeTracking = function (temposListas, allLists, selectedConfig) {
                         <div class="bg-[#0a0f1a] rounded-lg p-3 border border-white/[0.03] hover:border-rose-500/10 transition-colors">
                             <div class="flex items-center gap-1.5 mb-2">
                                 <svg class="w-3 h-3 text-rose-500 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                <span class="text-[9px] font-bold text-gray-600 uppercase tracking-wider">Lento</span>
+                                <span class="text-[9px] font-bold text-gray-600 uppercase tracking-wider">${(UI._lpLang||'pt')==='en'?'Slowest':'Lento'}</span>
                             </div>
                             <div id="timeTrackingSelectLeft-lento">
                                 ${leftItem.maisLento ? `
@@ -128,11 +128,11 @@ UI.renderTimeTracking = function (temposListas, allLists, selectedConfig) {
                         </div>
                         <div class="grid grid-cols-2 gap-2 mt-3">
                             <div id="timeTrackingSelectRight-rapido" class="text-[11px]">
-                                <span class="text-[9px] text-gray-600 uppercase font-bold block mb-0.5">Rápido</span>
+                                <span class="text-[9px] text-gray-600 uppercase font-bold block mb-0.5">${(UI._lpLang||'pt')==='en'?'Fastest':'Rápido'}</span>
                                 ${rightItem.maisRapido ? `<span class="text-emerald-400 font-bold">${formatTime(rightItem.maisRapido.tempo)}</span>` : '<span class="text-gray-700">—</span>'}
                             </div>
                             <div id="timeTrackingSelectRight-lento" class="text-[11px]">
-                                <span class="text-[9px] text-gray-600 uppercase font-bold block mb-0.5">Lento</span>
+                                <span class="text-[9px] text-gray-600 uppercase font-bold block mb-0.5">${(UI._lpLang||'pt')==='en'?'Slowest':'Lento'}</span>
                                 ${rightItem.maisLento ? `<span class="text-rose-400 font-bold">${formatTime(rightItem.maisLento.tempo)}</span>` : '<span class="text-gray-700">—</span>'}
                             </div>
                         </div>
@@ -140,7 +140,7 @@ UI.renderTimeTracking = function (temposListas, allLists, selectedConfig) {
 
                     <!-- All-lists mini ranking -->
                     <div class="bg-[#111827] rounded-xl p-4 border border-white/[0.04] flex-1 overflow-y-auto custom-scrollbar-dark">
-                        <p class="text-[9px] font-bold text-gray-600 uppercase tracking-[0.15em] mb-3">Todas as listas</p>
+                        <p class="text-[9px] font-bold text-gray-600 uppercase tracking-[0.15em] mb-3">${(UI._lpLang||'pt')==='en'?'All lists':'Todas as listas'}</p>
                         <div class="flex flex-col gap-2.5">
                             ${allSorted.map((lista, idx) => {
         const t = parseFloat(lista.tempoMedio || lista.media || 0);

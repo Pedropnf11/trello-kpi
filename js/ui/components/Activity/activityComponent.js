@@ -10,9 +10,9 @@ UI.renderActivity = function (atividade) {
             <div class="flex items-center justify-between flex-shrink-0">
                 <div class="flex items-center gap-2.5">
                     <span class="w-1.5 h-4 rounded-full bg-amber-500"></span>
-                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.12em]">ATIVIDADE DA EQUIPA</p>
+                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.12em]">${(UI._lpLang || 'pt') === 'en' ? 'TEAM ACTIVITY' : 'ATIVIDADE DA EQUIPA'}</p>
                 </div>
-                <span class="text-[11px] text-gray-600">Esta semana</span>
+                <span class="text-[11px] text-gray-600">${(UI._lpLang || 'pt') === 'en' ? 'This week' : 'Esta semana'}</span>
             </div>
 
             <!-- Top Performer highlight -->
@@ -25,13 +25,13 @@ UI.renderActivity = function (atividade) {
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-2 mb-0.5">
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Mais Activo</span>
+                            <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">${(UI._lpLang || 'pt') === 'en' ? 'Most Active' : 'Mais Activo'}</span>
                         </div>
-                        <p class="text-[14px] font-bold text-white truncate">${atividade.maisAtivo.nome}</p>
+                        <p class="text-[14px] font-bold text-white truncate">${Utils.escapeHtml(atividade.maisAtivo.nome)}</p>
                     </div>
                     <div class="text-right flex-shrink-0">
                         <p class="text-[22px] font-bold text-white tabular-nums leading-none">${atividade.maisAtivo.acoes}</p>
-                        <p class="text-[10px] text-gray-600 font-semibold uppercase tracking-wider mt-0.5">ações</p>
+                        <p class="text-[10px] text-gray-600 font-semibold uppercase tracking-wider mt-0.5">${(UI._lpLang || 'pt') === 'en' ? 'actions' : 'ações'}</p>
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@ UI.renderActivity = function (atividade) {
                             <div class="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold flex-shrink-0 ${isTop ? 'bg-amber-500/15 text-amber-400 border border-amber-500/20' : 'bg-[#1e293b] text-gray-400 border border-white/[0.04]'}">
                                 ${u.nome.charAt(0).toUpperCase()}
                             </div>
-                            <span class="text-[12px] font-semibold text-gray-400 w-24 truncate flex-shrink-0 group-hover:text-gray-200 transition-colors ${isLast ? 'text-rose-400/70' : ''}" title="${u.nome}">${u.nome}</span>
+                            <span class="text-[12px] font-semibold text-gray-400 w-24 truncate flex-shrink-0 group-hover:text-gray-200 transition-colors ${isLast ? 'text-rose-400/70' : ''}" title="${Utils.escapeHtmlAttribute(u.nome)}">${Utils.escapeHtml(u.nome)}</span>
                             <div class="flex-1 h-1.5 bg-[#1a2235] rounded-full overflow-hidden">
                                 <div class="h-full rounded-full transition-all duration-700 ${isTop ? 'bg-amber-500/60' : isLast ? 'bg-rose-500/40' : 'bg-blue-500/40'}" style="width:${barW}%;"></div>
                             </div>
@@ -73,7 +73,7 @@ UI.renderActionList = function (atividade, role = 'manager') {
             <!-- Header -->
             <div class="flex items-center gap-2.5">
                 <span class="w-1.5 h-4 rounded-full bg-indigo-500"></span>
-                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.12em]">RANKING DETALHADO</p>
+                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.12em]">${(UI._lpLang || 'pt') === 'en' ? 'DETAILED RANKING' : 'RANKING DETALHADO'}</p>
             </div>
 
             <!-- Table -->
@@ -81,8 +81,8 @@ UI.renderActionList = function (atividade, role = 'manager') {
                 <table class="w-full">
                     <thead>
                         <tr class="border-b border-white/[0.04]">
-                            <th class="text-left px-4 py-3 text-[10px] font-bold text-gray-600 uppercase tracking-[0.12em]">Membro</th>
-                            <th class="text-center px-4 py-3 text-[10px] font-bold text-gray-600 uppercase tracking-[0.1em]">Ações</th>
+                            <th class="text-left px-4 py-3 text-[10px] font-bold text-gray-600 uppercase tracking-[0.12em]">${(UI._lpLang || 'pt') === 'en' ? 'Member' : 'Membro'}</th>
+                            <th class="text-center px-4 py-3 text-[10px] font-bold text-gray-600 uppercase tracking-[0.1em]">${(UI._lpLang || 'pt') === 'en' ? 'Actions' : 'Ações'}</th>
                             <th class="text-center px-4 py-3 text-[10px] font-bold text-gray-600 uppercase tracking-[0.1em] hidden sm:table-cell">Moves</th>
                             <th class="text-center px-4 py-3 text-[10px] font-bold text-gray-600 uppercase tracking-[0.1em] hidden sm:table-cell">Coment.</th>
                         </tr>
@@ -96,7 +96,7 @@ UI.renderActionList = function (atividade, role = 'manager') {
                                         <div class="w-7 h-7 rounded-lg bg-[#1e293b] flex items-center justify-center text-[11px] font-bold text-gray-300 border border-white/[0.04]">
                                             ${u.nome.charAt(0).toUpperCase()}
                                         </div>
-                                        <span class="text-[13px] font-semibold text-gray-300 group-hover:text-white transition-colors">${u.nome}</span>
+                                        <span class="text-[13px] font-semibold text-gray-300 group-hover:text-white transition-colors">${Utils.escapeHtml(u.nome)}</span>
                                         ${idx === 0 ? '<span class="ml-1 text-[10px] text-amber-500">👑</span>' : ''}
                                     </div>
                                 </td>
@@ -111,7 +111,7 @@ UI.renderActionList = function (atividade, role = 'manager') {
                                 </td>
                             </tr>
                         `).join('')}
-                        ${users.length === 0 ? '<tr><td colspan="4" class="px-4 py-10 text-center text-[12px] text-gray-600">Sem dados de atividade</td></tr>' : ''}
+                        ${users.length === 0 ? `<tr><td colspan="4" class="px-4 py-10 text-center text-[12px] text-gray-600">${(UI._lpLang || 'pt') === 'en' ? 'No activity data' : 'Sem dados de atividade'}</td></tr>` : ''}
                     </tbody>
                 </table>
             </div>

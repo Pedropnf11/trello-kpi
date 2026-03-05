@@ -1,4 +1,135 @@
 // Landing Page UI Templates — Premium Dark (KPI Master · Real Estate Edition)
+
+// ─────────────────────────────────────────────
+// TRANSLATION ENGINE
+// ─────────────────────────────────────────────
+UI._lpLang = localStorage.getItem('kpi_lp_lang') || 'pt';
+
+UI.landingTranslations = {
+    // Navbar
+    'nav-features': { pt: 'Funcionalidades', en: 'Features' },
+    'nav-docs': { pt: 'Documentos', en: 'Documents' },
+    'nav-profiles': { pt: 'Perfis', en: 'Profiles' },
+    'nav-login-btn': { pt: 'Entrar na plataforma →', en: 'Enter platform →' },
+    'nav-badge': { pt: 'Imobiliário', en: 'Real Estate' },
+    // Hero
+    'hero-urgency': { pt: 'Consultores imobiliários estão a perder leads todos os dias — sem saber.', en: 'Real estate agents are losing leads every day — without knowing it.' },
+    'hero-h1-1': { pt: 'Os teus leads estão no', en: 'Your leads are in' },
+    'hero-h1-2': { pt: 'Trello. Os teus resultados', en: 'Trello. Your results' },
+    'hero-h1-3': { pt: 'estão a escapar-te.', en: 'are slipping away.' },
+    'hero-desc': { pt: 'O KPI Master liga-se ao teu Trello e mostra-te em tempo real quais os leads a perder tração, quem da equipa está a produzir e o que tens de fazer agora.', en: 'KPI Master connects to your Trello and shows you in real time which leads are losing traction, who on the team is producing, and what you need to do right now.' },
+    'hero-cta-main': { pt: 'Ligar o meu Trello — é grátis', en: 'Connect my Trello — it\'s free' },
+    'hero-cta-secondary': { pt: 'Ver como funciona →', en: 'See how it works →' },
+    // Pain Points
+    'pain-eyebrow': { pt: 'Reconheces algum destes cenários?', en: 'Do any of these sound familiar?' },
+    'pain-h2': { pt: 'Os problemas que custam negócios todos os meses', en: 'The problems costing you deals every month' },
+    'pain-desc': { pt: 'Cada lead parado é dinheiro parado. O KPI Master é a ferramenta que faz o aviso antes de ser tarde.', en: 'Every stalled lead is stalled money. KPI Master is the tool that warns you before it\'s too late.' },
+    'pain-0-pain': { pt: 'Leads parados há semanas que nunca chegaste a reativar', en: 'Leads stalled for weeks that you never managed to reactivate' },
+    'pain-0-fix': { pt: 'A Focus Zone alerta-te automaticamente com prioridade por dias sem contacto', en: 'Focus Zone alerts you automatically, prioritised by days without contact' },
+    'pain-1-pain': { pt: 'Não sabes qual consultor está a produzir e qual está estagnado', en: "You don't know which agent is producing and which is stagnant" },
+    'pain-1-fix': { pt: 'Rankings automáticos com leads, visitas, propostas e contratos por membro', en: 'Automatic rankings with leads, visits, proposals and contracts per member' },
+    'pain-2-pain': { pt: 'Perdes horas a preparar relatórios para reuniões semanais', en: 'You waste hours preparing reports for weekly meetings' },
+    'pain-2-fix': { pt: 'PDF/CSV/Email gerado automaticamente com um clique — em segundos', en: 'PDF/CSV/Email generated automatically with one click — in seconds' },
+    'pain-3-pain': { pt: 'Propostas enviadas que ficam sem follow-up e morrem', en: 'Sent proposals that go without follow-up and die' },
+    'pain-3-fix': { pt: 'Time Tracking mostra quanto tempo cada lead está parado em "Proposta Enviada"', en: 'Time Tracking shows how long each lead has been stuck in "Proposal Sent"' },
+    // Features
+    'feat-eyebrow': { pt: 'O que inclui', en: 'What\'s included' },
+    'feat-h2-1': { pt: 'Construído para imobiliário.', en: 'Built for real estate.' },
+    'feat-h2-2': { pt: 'Ligado ao teu Trello.', en: 'Connected to your Trello.' },
+    'feat-desc': { pt: 'Todas as funcionalidades que uma agência ou consultor independente precisa para não perder leads — sem mudar o que já usa.', en: 'Every feature an agency or independent agent needs to stop losing leads — without changing what they already use.' },
+    'feat-0-title': { pt: 'Pipeline Imobiliário em Tempo Real', en: 'Real-Time Real Estate Pipeline' },
+    'feat-0-desc': { pt: 'Vê quantos leads estão em cada fase — Contacto, Visita, Proposta, Fecho — e onde estão a perder-se. Atualizado cada vez que mexes no Trello.', en: 'See how many leads are in each stage — Contact, Visit, Proposal, Close — and where they\'re being lost. Updated every time you touch Trello.' },
+    'feat-0-tag': { pt: 'Base', en: 'Base' },
+    'feat-1-title': { pt: 'Alertas de Leads a Arrefecer', en: 'Cooling Lead Alerts' },
+    'feat-1-desc': { pt: 'Quando um lead fica X dias sem movimento, a Focus Zone avisa-te automaticamente. Nunca mais perdes um cliente por falta de follow-up.', en: 'When a lead goes X days without activity, Focus Zone alerts you automatically. Never lose a client to lack of follow-up again.' },
+    'feat-1-tag': { pt: 'Mais Usado', en: 'Most Used' },
+    'feat-2-title': { pt: 'Tempo por Fase do Pipeline', en: 'Time per Pipeline Stage' },
+    'feat-2-desc': { pt: 'Quanto tempo em média fica um lead parado em "Visita Marcada"? O Time Tracking responde. Identifica o gargalo e trata-o antes de perder o cliente.', en: 'How long does a lead sit in "Visit Scheduled" on average? Time Tracking answers that. Spot the bottleneck and fix it before losing the client.' },
+    'feat-3-title': { pt: 'Ranking da Equipa Automático', en: 'Automatic Team Ranking' },
+    'feat-3-desc': { pt: 'Leads, visitas, propostas e contratos por consultor — numa tabela que se atualiza sozinha. Sem perguntar, sem reuniões de acompanhamento.', en: 'Leads, visits, proposals and contracts per agent — in a self-updating table. No asking, no check-in meetings.' },
+    'feat-4-title': { pt: 'Scripts e Documentos de Reativação', en: 'Reactivation Scripts & Documents' },
+    'feat-4-desc': { pt: 'Acesso a guias de reativação de leads frios, scripts de follow-up por fase e templates de email — criados especificamente para o imobiliário.', en: 'Access to cold lead reactivation guides, stage-specific follow-up scripts and email templates — built specifically for real estate.' },
+    'feat-4-tag': { pt: 'Exclusivo', en: 'Exclusive' },
+    'feat-5-title': { pt: 'Relatórios com Um Clique', en: 'One-Click Reports' },
+    'feat-5-desc': { pt: 'PDF para apresentar ao diretor, CSV para análise própria, ou email automático toda a segunda-feira. O fim das tardes de domingo a preparar relatórios.', en: 'PDF for the director, CSV for your own analysis, or auto email every Monday. The end of Sunday afternoons preparing reports.' },
+    'feat-6-title': { pt: 'Login em 30 Segundos', en: 'Login in 30 Seconds' },
+    'feat-6-desc': { pt: 'Ligação direta com a tua conta Trello via OAuth. Sem registos, sem passwords novas, sem IT. Ligas e está pronto.', en: 'Direct connection to your Trello account via OAuth. No sign-ups, no new passwords, no IT. Connect and you\'re ready.' },
+    'feat-7-title': { pt: 'Vista do Consultor Individual', en: 'Individual Agent View' },
+    'feat-7-desc': { pt: 'Cada membro da equipa tem a sua própria vista: só o seu pipeline, os seus leads críticos e as suas métricas. Sem ver o que não é seu.', en: "Each team member has their own view: just their pipeline, their critical leads and their metrics. Without seeing what isn't theirs." },
+    'feat-8-title': { pt: 'Analytics Completo', en: 'Full Analytics' },
+    'feat-8-desc': { pt: 'Taxa de conversão real por fase, evolução semanal e dispersão por consultor. Dados que antes demoravam horas a calcular, agora a um olhar.', en: 'Real conversion rate per stage, weekly evolution and dispersion by agent. Data that used to take hours to calculate, now at a glance.' },
+    // Audience
+    'aud-eyebrow': { pt: 'Para quem é', en: 'Who it\'s for' },
+    'aud-h2': { pt: 'Ideal para qualquer equipa que use Trello como CRM', en: 'Ideal for any team using Trello as a CRM' },
+    'aud-desc': { pt: 'O KPI Master não substitui o teu Trello — amplifica-o. Se já organizas leads em quadros Trello, estás a um clique de ter os dados a trabalhar para ti.', en: "KPI Master doesn't replace your Trello — it amplifies it. If you already organise leads in Trello boards, you're one click away from your data working for you." },
+    'aud-0-label': { pt: 'Agências Imobiliárias', en: 'Real Estate Agencies' },
+    'aud-0-desc': { pt: 'Equipas de 3 a 20 consultores que gerem leads no Trello e precisam de visibilidade sobre o pipeline sem Excel ou reuniões de acompanhamento.', en: 'Teams of 3 to 20 agents who manage leads in Trello and need pipeline visibility without Excel or check-in meetings.' },
+    'aud-1-label': { pt: 'Consultores Independentes', en: 'Independent Agents' },
+    'aud-1-desc': { pt: 'Mediadores a trabalhar sozinhos que querem saber quais os leads a contactar hoje, quais as propostas paradas e como está a correr o mês.', en: 'Solo brokers who want to know which leads to contact today, which proposals are stalled and how the month is going.' },
+    'aud-2-label': { pt: 'Equipas Comerciais B2B', en: 'B2B Sales Teams' },
+    'aud-2-desc': { pt: 'Startups e PMEs com pipeline de vendas no Trello que precisam de saber qual o lead mais quente, quem está a produzir e qual a taxa de conversão real.', en: 'Startups and SMBs with a Trello sales pipeline who need to know the hottest lead, who\'s producing and the real conversion rate.' },
+    'aud-3-label': { pt: 'Account Managers', en: 'Account Managers' },
+    'aud-3-desc': { pt: 'Profissionais que gerem um portefólio de clientes no Trello e perdem horas a compilar relatórios semanais manualmente para apresentar à chefia.', en: 'Professionals who manage a client portfolio in Trello and waste hours manually compiling weekly reports to present to management.' },
+    'aud-note': { pt: 'Se a tua equipa usa o Trello como CRM informal — listas como "Lead", "Visita Marcada", "Proposta", "Fecho" — o KPI Master lê esses dados e transforma-os num dashboard de performance em tempo real. Sem configurações, sem integrações, sem IT.', en: 'If your team uses Trello as an informal CRM — lists like "Lead", "Visit Scheduled", "Proposal", "Close" — KPI Master reads that data and turns it into a real-time performance dashboard. No setup, no integrations, no IT.' },
+    // Profiles
+    'prof-eyebrow': { pt: 'Para quem é', en: 'Who it\'s for' },
+    'prof-h2-1': { pt: 'Feito para o imobiliário.', en: 'Built for real estate.' },
+    'prof-h2-2': { pt: 'Para todos os papéis.', en: 'For every role.' },
+    'prof-desc': { pt: 'O teu cargo define o que vês. Sem informação a mais, sem confusão. Só o que precisas para agir.', en: 'Your role defines what you see. No clutter, no confusion. Just what you need to act.' },
+    'prof-mgr-title': { pt: 'Diretor / Gestor', en: 'Director / Manager' },
+    'prof-mgr-badge': { pt: 'Visão completa da agência', en: 'Full agency overview' },
+    'prof-mgr-desc': { pt: 'Chega de perguntar à equipa como estão os números. Abre o dashboard de manhã e já sabes quem precisa de suporte, qual o lead mais crítico e qual o consultor do mês.', en: "Stop asking the team how the numbers look. Open the dashboard in the morning and you already know who needs support, the most critical lead and the agent of the month." },
+    'prof-mgr-li-0': { pt: 'Pipeline completo da agência por fase e por consultor', en: 'Full agency pipeline by stage and by agent' },
+    'prof-mgr-li-1': { pt: 'Ranking automático — sem Excel, sem cálculos manuais', en: 'Automatic ranking — no Excel, no manual calculations' },
+    'prof-mgr-li-2': { pt: 'Alertas de leads críticos antes de se perderem definitivamente', en: 'Critical lead alerts before they\'re lost for good' },
+    'prof-mgr-li-3': { pt: 'Relatório semanal PDF automático para reuniões', en: 'Automatic weekly PDF report for meetings' },
+    'prof-mgr-li-4': { pt: 'Taxa de conversão real por fase e por elemento da equipa', en: 'Real conversion rate per stage and per team member' },
+    'prof-cons-title': { pt: 'Consultor Imobiliário', en: 'Real Estate Agent' },
+    'prof-cons-badge': { pt: 'Foco nos teus próprios números', en: 'Focus on your own numbers' },
+    'prof-cons-desc': { pt: 'Entras e sabes o que fazer hoje. Quais os leads a contactar, quais as propostas sem resposta e como estás a correr este mês — sem perguntar ao diretor.', en: 'You log in and know what to do today. Which leads to contact, which proposals have no reply and how your month is going — without asking the director.' },
+    'prof-cons-li-0': { pt: 'O teu pipeline pessoal — fase a fase, lead a lead', en: 'Your personal pipeline — stage by stage, lead by lead' },
+    'prof-cons-li-1': { pt: 'Focus Zone: o sistema diz-te quem contactar hoje', en: 'Focus Zone: the system tells you who to contact today' },
+    'prof-cons-li-2': { pt: 'Os teus contratos e taxa de conversão vs. mês anterior', en: 'Your contracts and conversion rate vs. previous month' },
+    'prof-cons-li-3': { pt: 'Alertas para leads que arrefecem dentro do teu portefólio', en: 'Alerts for leads cooling within your portfolio' },
+    'prof-cons-li-4': { pt: 'Acesso direto aos scripts de reativação quando precisas', en: 'Direct access to reactivation scripts when you need them' },
+    // CTA
+    'cta-eyebrow': { pt: 'Começa hoje · É grátis', en: 'Start today · It\'s free' },
+    'cta-h2-1': { pt: 'O teu Trello já tem os dados.', en: 'Your Trello already has the data.' },
+    'cta-h2-2': { pt: 'O que falta são os alertas.', en: 'What\'s missing are the alerts.' },
+    'cta-desc': { pt: 'Conecta o teu quadro Trello agora — em menos de 2 minutos tens o pipeline ativo, os leads críticos identificados e os scripts de reativação disponíveis.', en: 'Connect your Trello board now — in under 2 minutes you have an active pipeline, critical leads identified and reactivation scripts available.' },
+    'cta-note': { pt: 'Sem Excel. Sem configurações. Sem IT. Só o teu Trello, transformado numa máquina de não perder leads.', en: 'No Excel. No setup. No IT. Just your Trello, turned into a lead-keeping machine.' },
+    'cta-btn': { pt: 'Ligar o meu Trello — é grátis', en: 'Connect my Trello — it\'s free' },
+    'cta-trust-0': { pt: '100% gratuito', en: '100% free' },
+    'cta-trust-1': { pt: 'Sem cartão de crédito', en: 'No credit card' },
+    'cta-trust-2': { pt: 'Liga em 2 minutos', en: 'Ready in 2 minutes' },
+    'cta-trust-3': { pt: 'Scripts de reativação incluídos', en: 'Reactivation scripts included' },
+    // Footer
+    'footer-badge': { pt: 'Imobiliário', en: 'Real Estate' },
+    'footer-copy': { pt: `© ${new Date().getFullYear()} KPI Master. Feito para consultores imobiliários que usam Trello.`, en: `© ${new Date().getFullYear()} KPI Master. Built for real estate agents who use Trello.` },
+    'footer-privacy': { pt: 'Privacidade', en: 'Privacy' },
+    'footer-terms': { pt: 'Termos', en: 'Terms' },
+    'footer-contact': { pt: 'Contacto', en: 'Contact' },
+};
+
+UI.applyLandingTranslation = function (lang) {
+    UI._lpLang = lang;
+    localStorage.setItem('kpi_lp_lang', lang);
+    document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.dataset.translate;
+        const map = UI.landingTranslations[key];
+        if (map && map[lang] !== undefined) {
+            el.innerHTML = map[lang];
+        }
+    });
+    // Update toggle button label
+    const btn = document.getElementById('lpLangToggleBtn');
+    if (btn) {
+        btn.innerHTML = lang === 'pt'
+            ? `<span class="opacity-50">PT</span> <span class="opacity-20">|</span> EN`
+            : `PT <span class="opacity-20">|</span> <span class="opacity-50">EN</span>`;
+    }
+};
+
 UI.renderLandingPage = function (state) {
     return `
         <div class="min-h-screen bg-[#080c14] text-gray-300 overflow-x-hidden" style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;">
@@ -16,40 +147,22 @@ UI.renderLandingPage = function (state) {
 };
 
 UI.renderLandingAudience = function () {
+    const lang = UI._lpLang || 'pt';
+    const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
     const profiles = [
-        {
-            label: 'Agências Imobiliárias',
-            desc: 'Equipas de 3 a 20 consultores que gerem leads no Trello e precisam de visibilidade sobre o pipeline sem Excel ou reuniões de acompanhamento.',
-            icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4',
-            color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20'
-        },
-        {
-            label: 'Consultores Independentes',
-            desc: 'Mediadores a trabalhar sozinhos que querem saber quais os leads a contactar hoje, quais as propostas paradas e como está a correr o mês.',
-            icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
-            color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20'
-        },
-        {
-            label: 'Equipas Comerciais B2B',
-            desc: 'Startups e PMEs com pipeline de vendas no Trello que precisam de saber qual o lead mais quente, quem está a produzir e qual a taxa de conversão real.',
-            icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z',
-            color: 'text-indigo-400', bg: 'bg-indigo-500/10 border-indigo-500/20'
-        },
-        {
-            label: 'Account Managers',
-            desc: 'Profissionais que gerem um portefólio de clientes no Trello e perdem horas a compilar relatórios semanais manualmente para apresentar à chefia.',
-            icon: 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
-            color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20'
-        },
+        { key: 'aud-0', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
+        { key: 'aud-1', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
+        { key: 'aud-2', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', color: 'text-indigo-400', bg: 'bg-indigo-500/10 border-indigo-500/20' },
+        { key: 'aud-3', icon: 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
     ];
 
     return `
         <section id="audiencia" class="py-20 px-4 bg-[#0b0f19] border-y border-white/[0.04]">
             <div class="max-w-5xl mx-auto">
                 <div class="text-center mb-12">
-                    <p class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.2em] mb-3">Para quem é</p>
-                    <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight mb-4">Ideal para qualquer equipa<br>que use Trello como CRM</h2>
-                    <p class="text-gray-500 text-[15px] max-w-xl mx-auto">O KPI Master não substitui o teu Trello — amplifica-o. Se já organizas leads em quadros Trello, estás a um clique de ter os dados a trabalhar para ti.</p>
+                    <p data-translate="aud-eyebrow" class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.2em] mb-3">${_t('aud-eyebrow')}</p>
+                    <h2 data-translate="aud-h2" class="text-3xl sm:text-4xl font-black text-white tracking-tight mb-4">${_t('aud-h2')}</h2>
+                    <p data-translate="aud-desc" class="text-gray-500 text-[15px] max-w-xl mx-auto">${_t('aud-desc')}</p>
                 </div>
 
                 <div class="grid sm:grid-cols-2 gap-4 mb-6">
@@ -59,8 +172,8 @@ UI.renderLandingAudience = function () {
                                 <svg class="w-5 h-5 ${p.color}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${p.icon}"/></svg>
                             </div>
                             <div>
-                                <h3 class="text-[14px] font-bold text-white mb-1">${p.label}</h3>
-                                <p class="text-[12px] text-gray-500 leading-relaxed">${p.desc}</p>
+                                <h3 data-translate="${p.key}-label" class="text-[14px] font-bold text-white mb-1">${_t(p.key + '-label')}</h3>
+                                <p data-translate="${p.key}-desc" class="text-[12px] text-gray-500 leading-relaxed">${_t(p.key + '-desc')}</p>
                             </div>
                         </div>
                     `).join('')}
@@ -70,7 +183,7 @@ UI.renderLandingAudience = function () {
                     <div class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center flex-shrink-0 mt-0.5">
                         <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
-                    <p class="text-[13px] text-gray-500 leading-relaxed">Se a tua equipa usa o Trello como <span class="text-white font-semibold">CRM informal</span> — listas como "Lead", "Visita Marcada", "Proposta", "Fecho" — o KPI Master lê esses dados e transforma-os num dashboard de performance em tempo real. <span class="text-gray-400 font-medium">Sem configurações, sem integrações, sem IT.</span></p>
+                    <p data-translate="aud-note" class="text-[13px] text-gray-500 leading-relaxed">${_t('aud-note')}</p>
                 </div>
             </div>
         </section>
@@ -78,6 +191,12 @@ UI.renderLandingAudience = function () {
 };
 
 UI.renderLandingNavbar = function () {
+    const lang = UI._lpLang || 'pt';
+    const t = UI.landingTranslations;
+    const _t = (key) => (t[key] && t[key][lang]) || '';
+    const langLabel = lang === 'pt'
+        ? `<span class="opacity-50">PT</span> <span class="opacity-20">|</span> EN`
+        : `PT <span class="opacity-20">|</span> <span class="opacity-50">EN</span>`;
     return `
         <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.04] bg-[#080c14]/95 backdrop-blur-xl">
             <div class="max-w-6xl mx-auto flex items-center justify-between px-5 h-14">
@@ -85,23 +204,26 @@ UI.renderLandingNavbar = function () {
                     <div class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center text-white text-[12px] font-black shadow-lg shadow-blue-900/40 ring-1 ring-blue-500/30">K</div>
                     <div>
                         <span class="font-black text-[14px] text-white tracking-wide">KPI Master</span>
-                        <span class="text-[10px] text-blue-400 font-bold ml-2 bg-blue-500/10 px-1.5 py-0.5 rounded">Imobiliário</span>
+                        <span data-translate="nav-badge" class="text-[10px] text-blue-400 font-bold ml-2 bg-blue-500/10 px-1.5 py-0.5 rounded">${_t('nav-badge')}</span>
                     </div>
                 </div>
                 <div class="hidden sm:flex items-center gap-8 text-[13px]">
-                    <a href="#features" class="text-gray-500 hover:text-white transition-colors font-medium">Funcionalidades</a>
-                    <a href="#docs" class="text-gray-500 hover:text-white transition-colors font-medium">Documentos</a>
-                    <a href="#perfis" class="text-gray-500 hover:text-white transition-colors font-medium">Perfis</a>
+                    <a href="#features" data-translate="nav-features" class="text-gray-500 hover:text-white transition-colors font-medium">${_t('nav-features')}</a>
+                    <a href="#docs" data-translate="nav-docs" class="text-gray-500 hover:text-white transition-colors font-medium">${_t('nav-docs')}</a>
+                    <a href="#perfis" data-translate="nav-profiles" class="text-gray-500 hover:text-white transition-colors font-medium">${_t('nav-profiles')}</a>
                 </div>
-                <button id="navLoginBtn" class="bg-blue-600 hover:bg-blue-500 text-white text-[12px] font-bold px-4 py-2 rounded-lg transition-all shadow-md shadow-blue-900/30 active:scale-95">
-                    Entrar na plataforma →
-                </button>
+                <div class="flex items-center gap-2">
+                    <button id="lpLangToggleBtn" class="text-[11px] font-bold text-gray-400 hover:text-white transition-colors px-2.5 py-1.5 rounded-lg border border-white/[0.06] hover:border-white/[0.12] bg-white/[0.02] hover:bg-white/[0.05] active:scale-95 tracking-widest">${langLabel}</button>
+                    <button id="navLoginBtn" data-translate="nav-login-btn" class="bg-blue-600 hover:bg-blue-500 text-white text-[12px] font-bold px-4 py-2 rounded-lg transition-all shadow-md shadow-blue-900/30 active:scale-95">${_t('nav-login-btn')}</button>
+                </div>
             </div>
         </nav>
     `;
 };
 
 UI.renderLandingHero = function () {
+    const lang = UI._lpLang || 'pt';
+    const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
     return `
         <section class="relative min-h-screen flex items-center justify-center overflow-hidden px-4 pt-14">
             <!-- Ambient glows -->
@@ -113,29 +235,25 @@ UI.renderLandingHero = function () {
                 <!-- Urgency badge -->
                 <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-amber-500/[0.08] border border-amber-500/20 mb-8 text-[12px] text-amber-400 font-semibold backdrop-blur-md">
                     <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                    Consultores imobiliários estão a perder leads todos os dias — sem saber.
+                    <span data-translate="hero-urgency">${_t('hero-urgency')}</span>
                 </div>
 
                 <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.06] mb-7 text-white">
-                    Os teus leads estão no<br>
-                    Trello. Os teus resultados<br>
-                    <span class="bg-gradient-to-r from-blue-400 via-blue-300 to-indigo-400 bg-clip-text text-transparent">estão a escapar-te.</span>
+                    <span data-translate="hero-h1-1">${_t('hero-h1-1')}</span><br>
+                    <span data-translate="hero-h1-2">${_t('hero-h1-2')}</span><br>
+                    <span data-translate="hero-h1-3" class="bg-gradient-to-r from-blue-400 via-blue-300 to-indigo-400 bg-clip-text text-transparent">${_t('hero-h1-3')}</span>
                 </h1>
 
-                <p class="text-[17px] sm:text-xl text-gray-500 max-w-2xl mx-auto mb-5 leading-relaxed font-light">
-                    O KPI Master liga-se ao teu Trello e mostra-te em tempo real quais os leads a perder tração, quem da equipa está a produzir e o que tens de fazer agora.
-                </p>
+                <p data-translate="hero-desc" class="text-[17px] sm:text-xl text-gray-500 max-w-2xl mx-auto mb-5 leading-relaxed font-light">${_t('hero-desc')}</p>
 
 
                 <!-- CTAs -->
                 <div class="flex flex-col sm:flex-row gap-3 justify-center mb-16">
                     <button id="heroStartBtn" class="bg-blue-600 text-white rounded-xl px-9 py-4 text-[15px] font-bold hover:bg-blue-500 transition-all shadow-xl shadow-blue-500/25 flex items-center justify-center gap-2 group active:scale-95">
-                        Ligar o meu Trello — é grátis
+                        <span data-translate="hero-cta-main">${_t('hero-cta-main')}</span>
                         <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                     </button>
-                    <button class="bg-white/[0.04] border border-white/[0.06] text-gray-300 rounded-xl px-9 py-4 text-[15px] font-medium hover:bg-white/[0.07] transition-all">
-                        Ver como funciona →
-                    </button>
+                    <button data-translate="hero-cta-secondary" class="bg-white/[0.04] border border-white/[0.06] text-gray-300 rounded-xl px-9 py-4 text-[15px] font-medium hover:bg-white/[0.07] transition-all">${_t('hero-cta-secondary')}</button>
                 </div>
 
                 <!-- DASHBOARD MOCKUP -->
@@ -297,44 +415,22 @@ UI.renderLandingHero = function () {
 };
 
 UI.renderLandingPainPoints = function () {
+    const lang = UI._lpLang || 'pt';
+    const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
     const pains = [
-        {
-            iconPath: 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
-            iconColor: 'text-rose-400',
-            iconBg: 'bg-rose-500/[0.08] border-rose-500/15',
-            pain: 'Leads parados há semanas que nunca chegaste a reativar',
-            fix: 'A Focus Zone alerta-te automaticamente com prioridade por dias sem contacto',
-        },
-        {
-            iconPath: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
-            iconColor: 'text-amber-400',
-            iconBg: 'bg-amber-500/[0.08] border-amber-500/15',
-            pain: 'Não sabes qual consultor está a produzir e qual está estagnado',
-            fix: 'Rankings automáticos com leads, visitas, propostas e contratos por membro',
-        },
-        {
-            iconPath: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
-            iconColor: 'text-blue-400',
-            iconBg: 'bg-blue-500/[0.08] border-blue-500/15',
-            pain: 'Perdes horas a preparar relatórios para reuniões semanais',
-            fix: 'PDF/CSV/Email gerado automaticamente com um clique — em segundos',
-        },
-        {
-            iconPath: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
-            iconColor: 'text-purple-400',
-            iconBg: 'bg-purple-500/[0.08] border-purple-500/15',
-            pain: 'Propostas enviadas que ficam sem follow-up e morrem',
-            fix: 'Time Tracking mostra quanto tempo cada lead está parado em "Proposta Enviada"',
-        },
+        { key: 'pain-0', iconPath: 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z', iconColor: 'text-rose-400', iconBg: 'bg-rose-500/[0.08] border-rose-500/15' },
+        { key: 'pain-1', iconPath: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', iconColor: 'text-amber-400', iconBg: 'bg-amber-500/[0.08] border-amber-500/15' },
+        { key: 'pain-2', iconPath: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', iconColor: 'text-blue-400', iconBg: 'bg-blue-500/[0.08] border-blue-500/15' },
+        { key: 'pain-3', iconPath: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', iconColor: 'text-purple-400', iconBg: 'bg-purple-500/[0.08] border-purple-500/15' },
     ];
 
     return `
         <section class="py-20 px-4 bg-[#080c14]">
             <div class="max-w-5xl mx-auto">
                 <div class="text-center mb-12">
-                    <p class="text-[10px] text-rose-400 font-bold uppercase tracking-[0.2em] mb-3">Reconheces algum destes cenários?</p>
-                    <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight mb-4">Os problemas que custam<br>negócios todos os meses</h2>
-                    <p class="text-gray-500 text-[15px] max-w-xl mx-auto">Cada lead parado é dinheiro parado. O KPI Master é a ferramenta que faz o aviso antes de ser tarde.</p>
+                    <p data-translate="pain-eyebrow" class="text-[10px] text-rose-400 font-bold uppercase tracking-[0.2em] mb-3">${_t('pain-eyebrow')}</p>
+                    <h2 data-translate="pain-h2" class="text-3xl sm:text-4xl font-black text-white tracking-tight mb-4">${_t('pain-h2')}</h2>
+                    <p data-translate="pain-desc" class="text-gray-500 text-[15px] max-w-xl mx-auto">${_t('pain-desc')}</p>
                 </div>
                 <div class="grid sm:grid-cols-2 gap-4">
                     ${pains.map(p => `
@@ -344,10 +440,10 @@ UI.renderLandingPainPoints = function () {
                                     <svg class="w-5 h-5 ${p.iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${p.iconPath}"/></svg>
                                 </div>
                                 <div>
-                                    <p class="text-[13px] font-bold text-gray-300 mb-2 leading-snug">${p.pain}</p>
+                                    <p data-translate="${p.key}-pain" class="text-[13px] font-bold text-gray-300 mb-2 leading-snug">${_t(p.key + '-pain')}</p>
                                     <div class="flex items-start gap-2 mt-3">
                                         <svg class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-                                        <p class="text-[12px] text-emerald-400/80 leading-relaxed">${p.fix}</p>
+                                        <p data-translate="${p.key}-fix" class="text-[12px] text-emerald-400/80 leading-relaxed">${_t(p.key + '-fix')}</p>
                                     </div>
                                 </div>
                             </div>
@@ -360,36 +456,38 @@ UI.renderLandingPainPoints = function () {
 };
 
 UI.renderLandingFeatures = function () {
+    const lang = UI._lpLang || 'pt';
+    const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
     const features = [
-        { title: 'Pipeline Imobiliário em Tempo Real', desc: 'Vê quantos leads estão em cada fase — Contacto, Visita, Proposta, Fecho — e onde estão a perder-se. Atualizado cada vez que mexes no Trello.', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20', tag: 'Base' },
-        { title: 'Alertas de Leads a Arrefecer', desc: 'Quando um lead fica X dias sem movimento, a Focus Zone avisa-te automaticamente. Nunca mais perdes um cliente por falta de follow-up.', icon: 'M13 10V3L4 14h7v7l9-11h-7z', color: 'text-rose-400', bg: 'bg-rose-500/10 border-rose-500/20', tag: 'Mais Usado' },
-        { title: 'Tempo por Fase do Pipeline', desc: 'Quanto tempo em média fica um lead parado em "Visita Marcada"? O Time Tracking responde. Identifica o gargalo e trata-o antes de perder o cliente.', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20', tag: '' },
-        { title: 'Ranking da Equipa Automático', desc: 'Leads, visitas, propostas e contratos por consultor — numa tabela que se atualiza sozinha. Sem perguntar, sem reuniões de acompanhamento.', icon: 'M3 10h18M3 6h18M3 14h18M3 18h18', color: 'text-indigo-400', bg: 'bg-indigo-500/10 border-indigo-500/20', tag: '' },
-        { title: 'Scripts e Documentos de Reativação', desc: 'Acesso a guias de reativação de leads frios, scripts de follow-up por fase e templates de email — criados especificamente para o imobiliário.', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20', tag: 'Exclusivo' },
-        { title: 'Relatórios com Um Clique', desc: 'PDF para apresentar ao diretor, CSV para análise própria, ou email automático toda a segunda-feira. O fim das tardes de domingo a preparar relatórios.', icon: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4', color: 'text-purple-400', bg: 'bg-purple-500/10 border-purple-500/20', tag: '' },
-        { title: 'Login em 30 Segundos', desc: 'Ligação direta com a tua conta Trello via OAuth. Sem registos, sem passwords novas, sem IT. Ligas e está pronto.', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', color: 'text-gray-400', bg: 'bg-white/[0.04] border-white/[0.06]', tag: '' },
-        { title: 'Vista do Consultor Individual', desc: 'Cada membro da equipa tem a sua própria vista: só o seu pipeline, os seus leads críticos e as suas métricas. Sem ver o que não é seu.', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20', tag: '' },
-        { title: 'Analytics Completo', desc: 'Taxa de conversão real por fase, evolução semanal e dispersão por consultor. Dados que antes demoravam horas a calcular, agora a um olhar.', icon: 'M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z', color: 'text-indigo-400', bg: 'bg-indigo-500/10 border-indigo-500/20', tag: '' },
+        { key: 'feat-0', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
+        { key: 'feat-1', icon: 'M13 10V3L4 14h7v7l9-11h-7z', color: 'text-rose-400', bg: 'bg-rose-500/10 border-rose-500/20' },
+        { key: 'feat-2', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
+        { key: 'feat-3', icon: 'M3 10h18M3 6h18M3 14h18M3 18h18', color: 'text-indigo-400', bg: 'bg-indigo-500/10 border-indigo-500/20' },
+        { key: 'feat-4', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
+        { key: 'feat-5', icon: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4', color: 'text-purple-400', bg: 'bg-purple-500/10 border-purple-500/20' },
+        { key: 'feat-6', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', color: 'text-gray-400', bg: 'bg-white/[0.04] border-white/[0.06]' },
+        { key: 'feat-7', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
+        { key: 'feat-8', icon: 'M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z', color: 'text-indigo-400', bg: 'bg-indigo-500/10 border-indigo-500/20' },
     ];
 
     return `
         <section id="features" class="py-24 px-4 bg-[#0b0f19] border-y border-white/[0.04]">
             <div class="max-w-6xl mx-auto">
                 <div class="text-center mb-14">
-                    <p class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.2em] mb-3">O que inclui</p>
-                    <h2 class="text-3xl sm:text-4xl font-black mb-4 text-white tracking-tight">Construído para imobiliário.<br>Ligado ao teu Trello.</h2>
-                    <p class="text-gray-500 text-[15px] max-w-2xl mx-auto">Todas as funcionalidades que uma agência ou consultor independente precisa para não perder leads — sem mudar o que já usa.</p>
+                    <p data-translate="feat-eyebrow" class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.2em] mb-3">${_t('feat-eyebrow')}</p>
+                    <h2 class="text-3xl sm:text-4xl font-black mb-4 text-white tracking-tight"><span data-translate="feat-h2-1">${_t('feat-h2-1')}</span><br><span data-translate="feat-h2-2">${_t('feat-h2-2')}</span></h2>
+                    <p data-translate="feat-desc" class="text-gray-500 text-[15px] max-w-2xl mx-auto">${_t('feat-desc')}</p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     ${features.map(f => `
                         <div class="bg-[#111827] border border-white/[0.04] p-6 rounded-2xl hover:border-white/[0.08] transition-all group relative">
-                            ${f.tag ? `<span class="absolute top-4 right-4 text-[8px] font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-full">${f.tag}</span>` : ''}
+                            ${_t(f.key + '-tag') ? `<span data-translate="${f.key}-tag" class="absolute top-4 right-4 text-[8px] font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-full">${_t(f.key + '-tag')}</span>` : ''}
                             <div class="w-9 h-9 rounded-xl ${f.bg} border flex items-center justify-center ${f.color} mb-4 transition-transform group-hover:scale-105">
                                 <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${f.icon}"/></svg>
                             </div>
-                            <h3 class="font-bold text-[14px] text-white mb-2 leading-snug">${f.title}</h3>
-                            <p class="text-[12px] text-gray-500 leading-relaxed">${f.desc}</p>
+                            <h3 data-translate="${f.key}-title" class="font-bold text-[14px] text-white mb-2 leading-snug">${_t(f.key + '-title')}</h3>
+                            <p data-translate="${f.key}-desc" class="text-[12px] text-gray-500 leading-relaxed">${_t(f.key + '-desc')}</p>
                         </div>
                     `).join('')}
                 </div>
@@ -483,13 +581,17 @@ UI.renderLandingDocs = function () {
 };
 
 UI.renderLandingProfiles = function () {
+    const lang = UI._lpLang || 'pt';
+    const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
+    const mgrItems = ['prof-mgr-li-0', 'prof-mgr-li-1', 'prof-mgr-li-2', 'prof-mgr-li-3', 'prof-mgr-li-4'];
+    const consItems = ['prof-cons-li-0', 'prof-cons-li-1', 'prof-cons-li-2', 'prof-cons-li-3', 'prof-cons-li-4'];
     return `
         <section id="perfis" class="py-24 px-4 bg-[#0b0f19] border-y border-white/[0.04]">
             <div class="max-w-5xl mx-auto">
                 <div class="text-center mb-14">
-                    <p class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.2em] mb-3">Para quem é</p>
-                    <h2 class="text-3xl sm:text-4xl font-black mb-4 text-white tracking-tight">Feito para o imobiliário.<br>Para todos os papéis.</h2>
-                    <p class="text-gray-500 text-[15px] max-w-xl mx-auto">O teu cargo define o que vês. Sem informação a mais, sem confusão. Só o que precisas para agir.</p>
+                    <p data-translate="prof-eyebrow" class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.2em] mb-3">${_t('prof-eyebrow')}</p>
+                    <h2 class="text-3xl sm:text-4xl font-black mb-4 text-white tracking-tight"><span data-translate="prof-h2-1">${_t('prof-h2-1')}</span><br><span data-translate="prof-h2-2">${_t('prof-h2-2')}</span></h2>
+                    <p data-translate="prof-desc" class="text-gray-500 text-[15px] max-w-xl mx-auto">${_t('prof-desc')}</p>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-6">
@@ -503,19 +605,13 @@ UI.renderLandingProfiles = function () {
                                 <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                             </div>
                             <div>
-                                <h3 class="text-xl font-black text-white">Diretor / Gestor</h3>
-                                <span class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">Visão completa da agência</span>
+                                <h3 data-translate="prof-mgr-title" class="text-xl font-black text-white">${_t('prof-mgr-title')}</h3>
+                                <span data-translate="prof-mgr-badge" class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">${_t('prof-mgr-badge')}</span>
                             </div>
                         </div>
-                        <p class="text-[13px] text-gray-500 mb-6 leading-relaxed">Chega de perguntar à equipa como estão os números. Abre o dashboard de manhã e já sabes quem precisa de suporte, qual o lead mais crítico e qual o consultor do mês.</p>
+                        <p data-translate="prof-mgr-desc" class="text-[13px] text-gray-500 mb-6 leading-relaxed">${_t('prof-mgr-desc')}</p>
                         <ul class="space-y-3">
-                            ${[
-            'Pipeline completo da agência por fase e por consultor',
-            'Ranking automático — sem Excel, sem cálculos manuais',
-            'Alertas de leads críticos antes de se perderem definitivamente',
-            'Relatório semanal PDF automático para reuniões',
-            'Taxa de conversão real por fase e por elemento da equipa',
-        ].map(f => `<li class="flex items-start gap-2.5 text-[13px] text-gray-400"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0 mt-1.5"></span>${f}</li>`).join('')}
+                            ${mgrItems.map(k => `<li class="flex items-start gap-2.5 text-[13px] text-gray-400"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0 mt-1.5"></span><span data-translate="${k}">${_t(k)}</span></li>`).join('')}
                         </ul>
                     </div>
 
@@ -529,19 +625,13 @@ UI.renderLandingProfiles = function () {
                                 <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                             </div>
                             <div>
-                                <h3 class="text-xl font-black text-white">Consultor Imobiliário</h3>
-                                <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Foco nos teus próprios números</span>
+                                <h3 data-translate="prof-cons-title" class="text-xl font-black text-white">${_t('prof-cons-title')}</h3>
+                                <span data-translate="prof-cons-badge" class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">${_t('prof-cons-badge')}</span>
                             </div>
                         </div>
-                        <p class="text-[13px] text-gray-500 mb-6 leading-relaxed">Entras e sabes o que fazer hoje. Quais os leads a contactar, quais as propostas sem resposta e como estás a correr este mês — sem perguntar ao diretor.</p>
+                        <p data-translate="prof-cons-desc" class="text-[13px] text-gray-500 mb-6 leading-relaxed">${_t('prof-cons-desc')}</p>
                         <ul class="space-y-3">
-                            ${[
-            'O teu pipeline pessoal — fase a fase, lead a lead',
-            'Focus Zone: o sistema diz-te quem contactar hoje',
-            'Os teus contratos e taxa de conversão vs. mês anterior',
-            'Alertas para leads que arrefecem dentro do teu portefólio',
-            'Acesso direto aos scripts de reativação quando precisas',
-        ].map(f => `<li class="flex items-start gap-2.5 text-[13px] text-gray-400"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0 mt-1.5"></span>${f}</li>`).join('')}
+                            ${consItems.map(k => `<li class="flex items-start gap-2.5 text-[13px] text-gray-400"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0 mt-1.5"></span><span data-translate="${k}">${_t(k)}</span></li>`).join('')}
                         </ul>
                     </div>
                 </div>
@@ -550,55 +640,59 @@ UI.renderLandingProfiles = function () {
     `;
 };
 
+
+
+
 UI.renderLandingCTA = function () {
+    const lang = UI._lpLang || 'pt';
+    const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
     return `
-        <section id="cta" class="py-24 px-4 bg-[#080c14]">
-            <div class="max-w-3xl mx-auto relative">
-                <div class="absolute inset-0 bg-blue-600/[0.05] rounded-3xl blur-2xl pointer-events-none"></div>
-                <div class="relative bg-[#0b0f19] border border-white/[0.06] p-10 sm:p-16 rounded-3xl text-center overflow-hidden">
-                    <!-- Top glow accent -->
-                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+    <section id="cta" class="py-24 px-4 bg-[#080c14]">
+        <div class="max-w-3xl mx-auto relative">
+            <div class="absolute inset-0 bg-blue-600/[0.05] rounded-3xl blur-2xl pointer-events-none"></div>
+            <div class="relative bg-[#0b0f19] border border-white/[0.06] p-10 sm:p-16 rounded-3xl text-center overflow-hidden">
+                <!-- Top glow accent -->
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
 
-                    <p class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.2em] mb-4">Começa hoje · É grátis</p>
-                    <h2 class="text-3xl sm:text-4xl font-black mb-4 text-white tracking-tight leading-tight">O teu Trello já tem os dados.<br>O que falta são os alertas.</h2>
-                    <p class="text-gray-500 text-[15px] mb-3 max-w-xl mx-auto leading-relaxed">Conecta o teu quadro Trello agora — em menos de 2 minutos tens o pipeline ativo, os leads críticos identificados e os scripts de reativação disponíveis.</p>
-                    <p class="text-[13px] text-gray-600 mb-10 max-w-md mx-auto font-medium">Sem Excel. Sem configurações. Sem IT. Só o teu Trello, transformado numa máquina de não perder leads.</p>
+                <p data-translate="cta-eyebrow" class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.2em] mb-4">${_t('cta-eyebrow')}</p>
+                <h2 class="text-3xl sm:text-4xl font-black mb-4 text-white tracking-tight leading-tight"><span data-translate="cta-h2-1">${_t('cta-h2-1')}</span><br><span data-translate="cta-h2-2">${_t('cta-h2-2')}</span></h2>
+                <p data-translate="cta-desc" class="text-gray-500 text-[15px] mb-3 max-w-xl mx-auto leading-relaxed">${_t('cta-desc')}</p>
+                <p data-translate="cta-note" class="text-[13px] text-gray-600 mb-10 max-w-md mx-auto font-medium">${_t('cta-note')}</p>
 
-                    <button id="ctaStartBtn" class="bg-blue-600 text-white rounded-xl px-10 py-4 text-[16px] font-black hover:bg-blue-500 transition-all shadow-2xl shadow-blue-500/30 hover:-translate-y-0.5 transform inline-flex items-center gap-2 group mb-6 active:scale-95">
-                        Ligar o meu Trello — é grátis
-                        <svg class="w-5 h-5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-                    </button>
+                <button id="ctaStartBtn" class="bg-blue-600 text-white rounded-xl px-10 py-4 text-[16px] font-black hover:bg-blue-500 transition-all shadow-2xl shadow-blue-500/30 hover:-translate-y-0.5 transform inline-flex items-center gap-2 group mb-6 active:scale-95">
+                    <span data-translate="cta-btn">${_t('cta-btn')}</span>
+                    <svg class="w-5 h-5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                </button>
 
-                    <div class="flex items-center justify-center gap-6 text-[11px] text-gray-600 flex-wrap">
-                        <span class="flex items-center gap-1.5"><span class="w-1 h-1 rounded-full bg-emerald-500"></span>100% gratuito</span>
-                        <span class="flex items-center gap-1.5"><span class="w-1 h-1 rounded-full bg-emerald-500"></span>Sem cartão de crédito</span>
-                        <span class="flex items-center gap-1.5"><span class="w-1 h-1 rounded-full bg-emerald-500"></span>Liga em 2 minutos</span>
-                        <span class="flex items-center gap-1.5"><span class="w-1 h-1 rounded-full bg-emerald-500"></span>Scripts de reativação incluídos</span>
-                    </div>
+                <div class="flex items-center justify-center gap-6 text-[11px] text-gray-600 flex-wrap">
+                    ${['cta-trust-0', 'cta-trust-1', 'cta-trust-2', 'cta-trust-3'].map(k => `<span class="flex items-center gap-1.5"><span class="w-1 h-1 rounded-full bg-emerald-500"></span><span data-translate="${k}">${_t(k)}</span></span>`).join('')}
                 </div>
             </div>
+        </div>
         </section>
     `;
 };
 
 UI.renderLandingFooter = function () {
+    const lang = UI._lpLang || 'pt';
+    const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
     return `
-        <footer class="border-t border-white/[0.04] py-10 px-4 bg-[#080c14]">
-            <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-                <div class="flex items-center gap-3">
-                    <div class="w-6 h-6 bg-blue-600 rounded-md flex items-center justify-center text-[10px] font-black text-white">K</div>
-                    <div>
-                        <span class="text-[13px] font-black text-gray-400">KPI Master</span>
-                        <span class="text-[10px] text-blue-400 font-bold ml-2">Imobiliário</span>
-                    </div>
-                </div>
-                <p class="text-[12px] text-gray-600">© ${new Date().getFullYear()} KPI Master. Feito para consultores imobiliários que usam Trello.</p>
-                <div class="flex items-center gap-6 text-[12px] text-gray-600">
-                    <a href="#" class="hover:text-gray-300 transition-colors">Privacidade</a>
-                    <a href="#" class="hover:text-gray-300 transition-colors">Termos</a>
-                    <a href="#" class="hover:text-gray-300 transition-colors">Contacto</a>
+    <footer class="border-t border-white/[0.04] py-10 px-4 bg-[#080c14]">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-6 h-6 bg-blue-600 rounded-md flex items-center justify-center text-[10px] font-black text-white">K</div>
+                <div>
+                    <span class="text-[13px] font-black text-gray-400">KPI Master</span>
+                    <span data-translate="footer-badge" class="text-[10px] text-blue-400 font-bold ml-2">${_t('footer-badge')}</span>
                 </div>
             </div>
+            <p data-translate="footer-copy" class="text-[12px] text-gray-600">${_t('footer-copy')}</p>
+            <div class="flex items-center gap-6 text-[12px] text-gray-600">
+                <a href="#" data-translate="footer-privacy" class="hover:text-gray-300 transition-colors">${_t('footer-privacy')}</a>
+                <a href="#" data-translate="footer-terms" class="hover:text-gray-300 transition-colors">${_t('footer-terms')}</a>
+                <a href="#" data-translate="footer-contact" class="hover:text-gray-300 transition-colors">${_t('footer-contact')}</a>
+            </div>
+        </div>
         </footer>
     `;
 };

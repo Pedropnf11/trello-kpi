@@ -2,7 +2,7 @@ App.exportarExcel = function () {
     if (!this.state.kpis) return;
 
     const listsDef = this.state.kpis.listsDef;
-    const headers = ['Período', 'Consultor', 'Comentários', 'Total Leads', ...listsDef.map(l => l.name)];
+    const headers = [(UI._lpLang || 'pt') === 'en' ? 'Period' : 'Período', (UI._lpLang || 'pt') === 'en' ? 'Agent' : 'Consultor', (UI._lpLang || 'pt') === 'en' ? 'Comments' : 'Comentários', (UI._lpLang || 'pt') === 'en' ? 'Total Leads' : 'Total Leads', ...listsDef.map(l => l.name)];
 
     const gerarLinhas = (dados, periodo) => dados.consultores.map(c => [
         periodo,
@@ -12,8 +12,8 @@ App.exportarExcel = function () {
         ...listsDef.map(l => c.listCounts[l.id] || 0)
     ]);
 
-    const rowsGeral = gerarLinhas(this.state.kpis.geral, 'Geral');
-    const rowsSemanal = gerarLinhas(this.state.kpis.semanal, 'Esta Semana');
+    const rowsGeral = gerarLinhas(this.state.kpis.geral, (UI._lpLang || 'pt') === 'en' ? 'Overall' : 'Geral');
+    const rowsSemanal = gerarLinhas(this.state.kpis.semanal, (UI._lpLang || 'pt') === 'en' ? 'This Week' : 'Esta Semana');
 
     Utils.generateCSV(
         headers,
@@ -26,12 +26,12 @@ App.exportarPDF = async function (returnContent = false) {
     if (!this.state.kpis) return;
 
     const appElement = document.getElementById('app');
-    const boardName = this.state.availableBoards?.find(b => b.id === this.state.boardId)?.name || 'Quadro Trello';
+    const boardName = this.state.availableBoards?.find(b => b.id === this.state.boardId)?.name || ((UI._lpLang || 'pt') === 'en' ? 'Trello Board' : 'Quadro Trello');
 
     // Mostrar mensagem de loading
     const loadingMsg = document.createElement('div');
     loadingMsg.className = 'fixed top-4 right-4 bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg z-50 font-bold flex items-center gap-2';
-    loadingMsg.innerHTML = '<span class="animate-spin">⌛</span> Gerando PDF...';
+    loadingMsg.innerHTML = `<span class="animate-spin">⌛</span> ${(UI._lpLang || 'pt') === 'en' ? 'Generating PDF...' : 'Gerando PDF...'}`;
     document.body.appendChild(loadingMsg);
 
     try {
@@ -76,8 +76,8 @@ App.exportarPDF = async function (returnContent = false) {
                     <div style="margin-bottom: 40px; border-bottom: 1px solid #334155; padding-bottom: 20px;">
                         <h1 style="color: white; font-size: 32px; font-weight: 800; margin-bottom: 10px;">${boardName}</h1>
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="color: #94a3b8; font-size: 16px; font-weight: bold;">Relatório de Performance</span>
-                            <span style="color: #64748b; font-size: 14px;">Gerado em: ${new Date().toLocaleDateString('pt-PT')} às ${new Date().toLocaleTimeString('pt-PT')}</span>
+                            <span style="color: #94a3b8; font-size: 16px; font-weight: bold;">${(UI._lpLang || 'pt') === 'en' ? 'Performance Report' : 'Relatório de Performance'}</span>
+                            <span style="color: #64748b; font-size: 14px;">${(UI._lpLang || 'pt') === 'en' ? 'Generated on:' : 'Gerado em:'} ${new Date().toLocaleDateString('pt-PT')} às ${new Date().toLocaleTimeString('pt-PT')}</span>
                         </div>
                     </div>
                 `;
@@ -250,7 +250,7 @@ App.exportarPDF = async function (returnContent = false) {
     } catch (error) {
         console.error('Erro ao gerar PDF:', error);
         if (loadingMsg && loadingMsg.parentNode) document.body.removeChild(loadingMsg);
-        alert('Erro ao gerar PDF. Tente novamente.');
+        alert((UI._lpLang || 'pt') === 'en' ? 'Error generating PDF. Please try again.' : 'Erro ao gerar PDF. Tente novamente.');
         return null;
     }
 };
@@ -260,22 +260,22 @@ App.enviarWebhook = async function () {
     const webhookUrl = this.state.webhookUrl;
 
     // Check if URL is configured
-    if (!webhookUrl) return alert('Por favor, configure o URL do Webhook nas definições primeiro.');
+    if (!webhookUrl) return alert((UI._lpLang || 'pt') === 'en' ? 'Please configure the Webhook URL in the settings first.' : 'Por favor, configure o URL do Webhook nas definições primeiro.');
 
     // Basic URL validation
     try {
         new URL(webhookUrl);
     } catch (_) {
-        return alert('URL do Webhook inválido.');
+        return alert((UI._lpLang || 'pt') === 'en' ? 'Invalid Webhook URL.' : 'URL do Webhook inválido.');
     }
 
-    const confirmSend = confirm(`Pretende gerar o PDF e enviar o relatório completo (Dados + PDF) para o Webhook?\n\nURL: ${webhookUrl}`);
+    const confirmSend = confirm(`${(UI._lpLang || 'pt') === 'en' ? 'Generate the PDF and send the full report (Data + PDF) to the Webhook?' : 'Pretende gerar o PDF e enviar o relatório completo (Dados + PDF) para o Webhook?'}\n\nURL: ${webhookUrl}`);
     if (!confirmSend) return;
 
     // 1. Gerar PDF
     const pdfResult = await this.exportarPDF(true);
     if (!pdfResult || !pdfResult.dataUri) {
-        alert('Erro: O PDF não foi gerado corretamente.');
+        alert((UI._lpLang || 'pt') === 'en' ? 'Error: The PDF was not generated correctly.' : 'Erro: O PDF não foi gerado corretamente.');
         return;
     }
 
@@ -284,11 +284,11 @@ App.enviarWebhook = async function () {
     // 2. Mostrar Loading
     const sendingMsg = document.createElement('div');
     sendingMsg.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg z-50 font-bold flex items-center gap-2';
-    sendingMsg.innerHTML = '<span class="animate-spin">🚀</span> Enviando Relatório...';
+    sendingMsg.innerHTML = `<span class="animate-spin">🚀</span> ${(UI._lpLang || 'pt') === 'en' ? 'Sending Report...' : 'Enviando Relatório...'}`;
     document.body.appendChild(sendingMsg);
 
     // 3. Preparar Dados Estruturados (Restaurado)
-    const boardName = this.state.availableBoards?.find(b => b.id === this.state.boardId)?.name || 'Quadro Trello';
+    const boardName = this.state.availableBoards?.find(b => b.id === this.state.boardId)?.name || ((UI._lpLang || 'pt') === 'en' ? 'Trello Board' : 'Quadro Trello');
     const timestamp = new Date().toISOString();
 
     // Dados Gerais (Acumulado)
@@ -312,10 +312,10 @@ App.enviarWebhook = async function () {
         meta: {
             boardName: boardName,
             timestamp: timestamp,
-            user: this.state.currentUser?.fullName || 'Desconhecido',
-            startDate: this.state.startDate || 'Início',
-            endDate: this.state.endDate || 'Agora',
-            message: 'Segue em anexo o relatório de performance PDF e os dados estruturados JSON.'
+            user: this.state.currentUser?.fullName || ((UI._lpLang || 'pt') === 'en' ? 'Unknown' : 'Desconhecido'),
+            startDate: this.state.startDate || ((UI._lpLang || 'pt') === 'en' ? 'Start' : 'Início'),
+            endDate: this.state.endDate || ((UI._lpLang || 'pt') === 'en' ? 'Now' : 'Agora'),
+            message: (UI._lpLang || 'pt') === 'en' ? 'Attached is the performance report PDF and structured JSON data.' : 'Segue em anexo o relatório de performance PDF e os dados estruturados JSON.'
         },
         // Dados brutos de KPIs (Útil para automações que leem números)
         data: {
@@ -347,7 +347,7 @@ App.enviarWebhook = async function () {
         document.body.removeChild(sendingMsg);
 
         if (response.ok) {
-            alert('✅ Relatório enviado com sucesso!\n(PDF e Dados JSON enviados para o Webhook)');
+            alert(`✅ ${(UI._lpLang || 'pt') === 'en' ? 'Report sent successfully!' : 'Relatório enviado com sucesso!'}\n(PDF e Dados JSON enviados para o Webhook)`);
         } else {
             throw new Error(`Erro ${response.status}: ${response.statusText}`);
         }
@@ -355,7 +355,7 @@ App.enviarWebhook = async function () {
     } catch (error) {
         console.error('Erro ao enviar Webhook:', error);
         if (sendingMsg && sendingMsg.parentNode) document.body.removeChild(sendingMsg);
-        alert('❌ Falha ao enviar relatório. Verifique se o Webhook aceita o tamanho do payload (PDF).\n\nErro: ' + error.message);
+        alert(`❌ ${(UI._lpLang || 'pt') === 'en' ? 'Failed to send report. Check if the Webhook accepts the payload size (PDF).' : 'Falha ao enviar relatório. Verifique se o Webhook aceita o tamanho do payload (PDF).'}\n\nErro: ` + error.message);
     }
 };
 

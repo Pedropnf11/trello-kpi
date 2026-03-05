@@ -6,6 +6,8 @@ UI.renderManagerDashboard = function (state) {
     const filterId = state.selectedMemberId;
     const listsDef = kpis.listsDef;
     const rawData = state.rawData;
+    const lang = UI._lpLang || 'pt';
+    const t = (pt, en) => lang === 'en' ? en : pt;
 
     // 1. Filtrar KPIs
     const dadosGeral = KPILogic.filtrarDados(kpis.geral, filterId);
@@ -25,9 +27,9 @@ UI.renderManagerDashboard = function (state) {
     if (rawData) actionItems = KPILogic.gerarActionItems(rawData.cards, rawData.listas, rawData.membros, filterId);
 
     // Título da Tabela de Período
-    let periodoTitulo = 'Performance da Semana';
+    let periodoTitulo = t('Performance da Semana', 'Weekly Performance');
     if (state.startDate || state.endDate) {
-        periodoTitulo = 'Performance do Período Selecionado';
+        periodoTitulo = t('Performance do Período Selecionado', 'Performance for Selected Period');
     }
 
     // LAYOUT DARK PREMIUM - SMART GRID
@@ -47,13 +49,13 @@ UI.renderManagerDashboard = function (state) {
                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                            </button>
 
-                           <span class="hidden md:inline">Dashboard Gestor</span>
+                           <span class="hidden md:inline">${t('Dashboard Gestor', 'Manager Dashboard')}</span>
                            <span class="text-xs font-normal text-blue-400 bg-blue-500/10 px-2 py-1 rounded hidden md:inline">Manager</span>
                         </h1>
                     </div>
                     
                         <div class="flex items-center gap-2 md:gap-3">
-                        <button id="atualizarBtn" class="p-2 rounded-lg text-gray-400 hover:text-white transition-all" title="Atualizar Dados">
+                        <button id="atualizarBtn" class="p-2 rounded-lg text-gray-400 hover:text-white transition-all" title="${t('Atualizar Dados', 'Refresh Data')}">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                         </button>
                         
@@ -66,14 +68,14 @@ UI.renderManagerDashboard = function (state) {
                           <div class="relative group z-50">
                             <button class="bg-[#111827] border border-white/[0.06] text-gray-200 px-3 py-2 rounded-lg hover:bg-[#1a2235] text-sm font-bold flex items-center gap-2 transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                <span class="hidden md:inline">Exportar</span>
+                                <span class="hidden md:inline">${t('Exportar', 'Export')}</span>
                             </button>
                             <!-- Dropdown com ponte invisível (pt-2) para não fechar no hover -->
                             <div class="absolute right-0 top-full w-56 pt-2 hidden group-hover:block">
                                 <div class="bg-[#1e293b] rounded-xl shadow-2xl border border-gray-700 p-1">
                                     <button id="exportarPdfBtn" class="w-full text-left px-4 py-3 hover:bg-gray-800 text-sm font-bold text-gray-300 rounded-lg transition-colors flex items-center gap-2">PDF</button>
                                     <button id="exportarBtn" class="w-full text-left px-4 py-3 hover:bg-gray-800 text-sm font-bold text-gray-300 rounded-lg transition-colors flex items-center gap-2">CSV</button>
-                                    <button id="enviarWebhookBtn" class="w-full text-left px-4 py-3 hover:bg-gray-800 text-sm font-bold text-gray-300 rounded-lg transition-colors flex items-center gap-2">Exportar e enviar com email</button>
+                                    <button id="enviarWebhookBtn" class="w-full text-left px-4 py-3 hover:bg-gray-800 text-sm font-bold text-gray-300 rounded-lg transition-colors flex items-center gap-2">${t('Exportar e enviar com email', 'Export & send by email')}</button>
                                 </div>
                             </div>
                         </div>
@@ -119,7 +121,7 @@ UI.renderManagerDashboard = function (state) {
                                 ${UI.renderTable(periodoTitulo, dadosPeriodo, listsDef, 'blue')}
                             </div>
                             <div class="bg-[#0f172a] rounded-2xl p-6 border border-white/[0.04] overflow-x-auto hover:border-white/[0.07] transition-colors duration-200">
-                                ${UI.renderTable('Performance Geral (Acumulado Total)', dadosGeral, listsDef, 'gray')}
+                                ${UI.renderTable(t('Performance Geral (Acumulado Total)', 'Overall Performance (All-time)'), dadosGeral, listsDef, 'gray')}
                             </div>
                         </div>
 
@@ -146,7 +148,7 @@ UI.renderFunnel = function (funilData) {
                     <span class="w-1.5 h-4 rounded-full bg-blue-500"></span>
                     <p class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.12em]">PIPELINE</p>
                 </div>
-                <button id="resetHiddenListsBtn" class="text-[10px] font-bold text-blue-500/70 hover:text-blue-400 uppercase tracking-wider transition-colors">Restaurar</button>
+                <button id="resetHiddenListsBtn" class="text-[10px] font-bold text-blue-500/70 hover:text-blue-400 uppercase tracking-wider transition-colors">${(UI._lpLang || 'pt') === 'en' ? 'Restore' : 'Restaurar'}</button>
             </div>
             <div class="flex-1 flex flex-col gap-3.5 overflow-y-auto custom-scrollbar-dark pr-1">
                 ${funilData.map((step) => {
@@ -155,8 +157,8 @@ UI.renderFunnel = function (funilData) {
                         <div class="w-full group flex-shrink-0">
                             <div class="flex justify-between items-center mb-1.5">
                                 <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2 group-hover:text-gray-200 transition-colors">
-                                     ${step.stage}
-                                     <button class="remove-funnel-list-btn w-4 h-4 flex items-center justify-center rounded bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white opacity-0 group-hover:opacity-100 transition-all font-bold text-[10px]" data-id="${step.id}">✕</button>
+                                     ${Utils.escapeHtml(step.stage)}
+                                     <button class="remove-funnel-list-btn w-4 h-4 flex items-center justify-center rounded bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white opacity-0 group-hover:opacity-100 transition-all font-bold text-[10px]" data-id="${Utils.escapeHtmlAttribute(step.id)}">✕</button>
                                 </span>
                                 <span class="text-[13px] font-bold text-white tabular-nums">${step.count}</span>
                             </div>
@@ -197,22 +199,22 @@ UI.renderActionItems = function (actions) {
             <div class="flex-1 overflow-y-auto pr-1 custom-scrollbar-dark space-y-2" id="actionItemsList">
                 ${actions.map(item => {
         const borderClass = item.priority === 'critical' ? 'border-rose-600/70' : (item.priority === 'high' ? 'border-orange-500/70' : 'border-yellow-500/70');
-        const label = item.priority === 'critical' ? 'CRÍTICO' : (item.priority === 'high' ? 'URGENTE' : 'ATENÇÃO');
+        const label = item.priority === 'critical' ? ((UI._lpLang || 'pt') === 'en' ? 'CRITICAL' : 'CRÍTICO') : (item.priority === 'high' ? ((UI._lpLang || 'pt') === 'en' ? 'URGENT' : 'URGENTE') : ((UI._lpLang || 'pt') === 'en' ? 'ATTENTION' : 'ATENÇÃO'));
         const labelColor = item.priority === 'critical' ? 'text-rose-500' : (item.priority === 'high' ? 'text-orange-400' : 'text-yellow-400');
         const labelBg = item.priority === 'critical' ? 'bg-rose-500/8' : (item.priority === 'high' ? 'bg-orange-500/8' : 'bg-yellow-500/8');
         return `
                         <div class="action-item relative ${labelBg} p-3.5 rounded-xl border-l-4 ${borderClass} border-t border-r border-b border-white/[0.03] hover:border-white/[0.06] transition-colors group" data-priority="${item.priority}">
                              <div class="flex justify-between items-center mb-1">
                                 <span class="text-[9px] font-bold ${labelColor} uppercase tracking-wider">${label}</span>
-                                <span class="text-[9px] font-bold text-gray-600 uppercase truncate max-w-[100px]">${item.list}</span>
+                                <span class="text-[9px] font-bold text-gray-600 uppercase truncate max-w-[100px]">${Utils.escapeHtml(item.list)}</span>
                              </div>
-                             <h4 class="font-bold text-gray-200 text-[13px] mb-0.5 line-clamp-1" title="${item.card}">${item.card}</h4>
-                             <p class="text-[11px] text-gray-500 truncate">${item.action}</p>
-                             ${item.url ? `<a href="${item.url}" target="_blank" class="absolute inset-0 z-10"></a>` : ''}
+                             <h4 class="font-bold text-gray-200 text-[13px] mb-0.5 line-clamp-1" title="${Utils.escapeHtmlAttribute(item.card)}">${Utils.escapeHtml(item.card)}</h4>
+                             <p class="text-[11px] text-gray-500 truncate">${Utils.escapeHtml(item.action)}</p>
+                             ${item.url ? `<a href="${/^https:\/\/trello\.com\//.test(item.url) ? item.url : '#'}" target="_blank" rel="noopener noreferrer" class="absolute inset-0 z-10"></a>` : ''}
                         </div>
                     `;
     }).join('')}
-                ${actions.length === 0 ? '<div class="text-center text-gray-600 pt-10 text-[12px] font-medium">Tudo limpo! ✓</div>' : ''}
+                ${actions.length === 0 ? `<div class="text-center text-gray-600 pt-10 text-[12px] font-medium">${(UI._lpLang || 'pt') === 'en' ? 'All clear! ✓' : 'Tudo limpo! ✓'}</div>` : ''}
             </div>
         </div>
     `;

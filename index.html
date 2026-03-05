@@ -12,6 +12,7 @@
             https://cdn.tailwindcss.com 
             https://cdnjs.cloudflare.com 
             https://vitals.vercel-insights.com 
+            https://va.vercel-scripts.com
             'unsafe-inline' 
             'unsafe-eval';
         style-src 'self' 
@@ -19,19 +20,19 @@
             https://cdn.tailwindcss.com 
             'unsafe-inline';
         font-src 
-            https://fonts.gstatic.com;
+            'self' data: https://fonts.gstatic.com;
         connect-src 'self' 
             https://api.trello.com 
             https://vitals.vercel-insights.com 
-            https://vitals.vercel-analytics.com;
+            https://vitals.vercel-analytics.com
+            https://va.vercel-scripts.com
+            https://cdnjs.cloudflare.com;
         img-src 'self' 
             https: 
             data:;
-        frame-ancestors 'none';
         base-uri 'self';
         form-action 'self' https://trello.com;
     ">
-    <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">

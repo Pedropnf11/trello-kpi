@@ -4,9 +4,11 @@
 // ========================================
 UI.renderSalesDashboard = function (state) {
     const kpis = state.kpis;
-    const filterId = state.selectedMemberId; // Já vem pré-filtrado pelo trello.js
+    const filterId = state.selectedMemberId;
     const listsDef = kpis.listsDef;
     const rawData = state.rawData;
+    const lang = UI._lpLang || 'pt';
+    const t = (pt, en) => lang === 'en' ? en : pt;
 
     // 1. Filtrar KPIs (sempre filtrado para o vendedor)
     const dadosGeral = KPILogic.filtrarDados(kpis.geral, filterId);
@@ -25,10 +27,10 @@ UI.renderSalesDashboard = function (state) {
     let actionItems = [];
     if (rawData) actionItems = KPILogic.gerarActionItems(rawData.cards, rawData.listas, rawData.membros, filterId);
 
-    // Título da Tabela de Período (personalizado para vendedor)
-    let periodoTitulo = 'A Minha Performance desta Semana';
+    // Título da Tabela de Período
+    let periodoTitulo = t('A Minha Performance desta Semana', 'My Performance This Week');
     if (state.startDate || state.endDate) {
-        periodoTitulo = 'A Minha Performance do Período';
+        periodoTitulo = t('A Minha Performance do Período', 'My Performance for This Period');
     }
 
     // LAYOUT IDÊNTICO AO MANAGER MAS COM TEXTOS PERSONALIZADOS
@@ -48,20 +50,20 @@ UI.renderSalesDashboard = function (state) {
                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                            </button>
 
-                           <span class="hidden md:inline">O Meu Dashboard</span>
-                           <span class="text-xs font-normal text-green-400 bg-green-500/10 px-2 py-1 rounded hidden md:inline">Vendedor</span>
+                           <span class="hidden md:inline">${t('O Meu Dashboard', 'My Dashboard')}</span>
+                           <span class="text-xs font-normal text-green-400 bg-green-500/10 px-2 py-1 rounded hidden md:inline">${t('Vendedor', 'Agent')}</span>
                         </h1>
                     </div>
                     
                     <div class="flex items-center gap-3">
-                        <button id="atualizarBtn" class="p-2 rounded-lg text-gray-400 hover:text-white transition-all" title="Atualizar Dados">
+                        <button id="atualizarBtn" class="p-2 rounded-lg text-gray-400 hover:text-white transition-all" title="${t('Atualizar Dados', 'Refresh Data')}">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                         </button>
                         
                           <div class="relative group z-50 ml-2">
                             <button class="bg-[#1e293b] border border-gray-700 text-gray-200 px-3 py-2 rounded-lg hover:bg-gray-800 text-sm font-bold flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                <span class="hidden md:inline">Exportar</span>
+                                <span class="hidden md:inline">${t('Exportar', 'Export')}</span>
                             </button>
                             <div class="absolute right-0 top-full w-56 pt-2 hidden group-hover:block">
                                 <div class="bg-[#1e293b] rounded-xl shadow-2xl border border-gray-700 p-1">
@@ -109,7 +111,7 @@ UI.renderSalesDashboard = function (state) {
                                 ${UI.renderTable(periodoTitulo, dadosPeriodo, listsDef, 'blue')}
                             </div>
                             <div class="bg-[#1e293b] rounded-2xl p-6 border border-gray-800 w-full overflow-x-auto">
-                                ${UI.renderTable('A Minha Performance Geral', dadosGeral, listsDef, 'gray')}
+                                ${UI.renderTable(t('A Minha Performance Geral', 'My Overall Performance'), dadosGeral, listsDef, 'gray')}
                             </div>
                         </div>
 

@@ -6,7 +6,7 @@ const TrelloConfig = {
     apiKey: import.meta.env.VITE_TRELLO_API_KEY,
     appName: 'Trello KPI Dashboard',
     scope: 'read',
-    expiration: 'never'
+    expiration: '30days'
 };
 
 // Helper para prevenir crashes por localStorage corrompido
@@ -248,6 +248,15 @@ App.attachLoginEvents = function () {
 
     const ctaBtn = document.getElementById('ctaStartBtn');
     if (ctaBtn) ctaBtn.addEventListener('click', loginHandler);
+
+    // Language Toggle
+    const langBtn = document.getElementById('lpLangToggleBtn');
+    if (langBtn) {
+        langBtn.addEventListener('click', () => {
+            const newLang = UI._lpLang === 'pt' ? 'en' : 'pt';
+            UI.applyLandingTranslation(newLang);
+        });
+    }
 
     const manualBtn = document.getElementById('showManualConfig');
     if (manualBtn) {

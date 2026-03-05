@@ -72,7 +72,7 @@ App.conectarTrello = async function () {
         localStorage.setItem('trello_webhook_url', this.state.webhookUrl);
     }
     if (this.state.groqApiKey) {
-        localStorage.setItem('trello_groq_key', this.state.groqApiKey);
+        sessionStorage.setItem('trello_groq_key', this.state.groqApiKey);
     }
 
     // Se já temos KPIs (dashboard carregado), NÃO mostramos loading screen
@@ -101,6 +101,25 @@ App.conectarTrello = async function () {
         // Identificar Utilizador Atual
         const userInfo = await TrelloAPI.fetchUserInfo(apiKey, token);
         this.state.currentUser = userInfo;
+
+        // VALIDAÇÃO DE SEGURANÇA: Validar se a role de 'gestor' tem permissão real (Admin) via API do Trello
+        if (this.state.userRole === 'manager') {
+            try {
+                const boards = await TrelloAPI.fetchBoards(apiKey, token);
+                const currentBoard = boards.find(b => b.id === boardId);
+                const myMembership = currentBoard?.memberships?.find(m => m.idMember === userInfo.id);
+
+                if (!myMembership || myMembership.memberType !== 'admin') {
+                    console.warn('Proteção ativada: Tentativa de acesso como Gestor sem permissões de admin no quadro.');
+                    this.state.userRole = 'sales';
+                    localStorage.setItem('trello_user_role', 'sales');
+                }
+            } catch (err) {
+                console.error('Erro ao validar permissões de gestor:', err);
+                this.state.userRole = 'sales';
+                localStorage.setItem('trello_user_role', 'sales');
+            }
+        }
 
         // Lógica de Permissão: Se for Vendedor, forçar filtro para ele mesmo
         if (this.state.userRole === 'sales') {
