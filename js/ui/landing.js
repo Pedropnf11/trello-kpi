@@ -1,8 +1,8 @@
-// Landing Page UI Templates — Premium Dark (KPI Master · Real Estate Edition)
+﻿// Landing Page UI Templates — Premium Dark (KPI Master · Real Estate Edition)
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // TRANSLATION ENGINE
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 UI._lpLang = localStorage.getItem('kpi_lp_lang') || 'pt';
 
 UI.landingTranslations = {
@@ -69,7 +69,7 @@ UI.landingTranslations = {
     'aud-2-label': { pt: 'Equipas Comerciais B2B', en: 'B2B Sales Teams' },
     'aud-2-desc': { pt: 'Startups e PMEs com pipeline de vendas no Trello que precisam de saber qual o lead mais quente, quem está a produzir e qual a taxa de conversão real.', en: 'Startups and SMBs with a Trello sales pipeline who need to know the hottest lead, who\'s producing and the real conversion rate.' },
     'aud-3-label': { pt: 'Account Managers', en: 'Account Managers' },
-    'aud-3-desc': { pt: 'Profissionais que gerem um portefólio de clientes no Trello e perdem horas a compilar relatórios semanais manualmente para apresentar à chefia.', en: 'Professionals who manage a client portfolio in Trello and waste hours manually compiling weekly reports to present to management.' },
+    'aud-3-desc': { pt: 'Profissionais que gerem um portefólio de clientes no Trello e perdem horas a compilar relatórios semanais manualmente para apresentar Ã  chefia.', en: 'Professionals who manage a client portfolio in Trello and waste hours manually compiling weekly reports to present to management.' },
     'aud-note': { pt: 'Se a tua equipa usa o Trello como CRM informal — listas como "Lead", "Visita Marcada", "Proposta", "Fecho" — o KPI Master lê esses dados e transforma-os num dashboard de performance em tempo real. Sem configurações, sem integrações, sem IT.', en: 'If your team uses Trello as an informal CRM — lists like "Lead", "Visit Scheduled", "Proposal", "Close" — KPI Master reads that data and turns it into a real-time performance dashboard. No setup, no integrations, no IT.' },
     // Profiles
     'prof-eyebrow': { pt: 'Para quem é', en: 'Who it\'s for' },
@@ -78,7 +78,7 @@ UI.landingTranslations = {
     'prof-desc': { pt: 'O teu cargo define o que vês. Sem informação a mais, sem confusão. Só o que precisas para agir.', en: 'Your role defines what you see. No clutter, no confusion. Just what you need to act.' },
     'prof-mgr-title': { pt: 'Diretor / Gestor', en: 'Director / Manager' },
     'prof-mgr-badge': { pt: 'Visão completa da agência', en: 'Full agency overview' },
-    'prof-mgr-desc': { pt: 'Chega de perguntar à equipa como estão os números. Abre o dashboard de manhã e já sabes quem precisa de suporte, qual o lead mais crítico e qual o consultor do mês.', en: "Stop asking the team how the numbers look. Open the dashboard in the morning and you already know who needs support, the most critical lead and the agent of the month." },
+    'prof-mgr-desc': { pt: 'Chega de perguntar Ã  equipa como estão os números. Abre o dashboard de manhã e já sabes quem precisa de suporte, qual o lead mais crítico e qual o consultor do mês.', en: "Stop asking the team how the numbers look. Open the dashboard in the morning and you already know who needs support, the most critical lead and the agent of the month." },
     'prof-mgr-li-0': { pt: 'Pipeline completo da agência por fase e por consultor', en: 'Full agency pipeline by stage and by agent' },
     'prof-mgr-li-1': { pt: 'Ranking automático — sem Excel, sem cálculos manuais', en: 'Automatic ranking — no Excel, no manual calculations' },
     'prof-mgr-li-2': { pt: 'Alertas de leads críticos antes de se perderem definitivamente', en: 'Critical lead alerts before they\'re lost for good' },
@@ -130,19 +130,159 @@ UI.applyLandingTranslation = function (lang) {
     }
 };
 
+
+/* â”€â”€â”€ LP STYLES â”€â”€â”€ */
+const _lpStyle = `
+<style id="lp-styles">
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06080f;
+  --bg1:#0b0e17;
+  --bg2:#0f1320;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.04);
+  --text:#f1f5f9;
+  --muted:#64748b;
+  --muted2:#475569;
+  --blue:#3b82f6;
+  --blue-dark:#2563eb;
+  --blue-glow:rgba(59,130,246,0.15);
+}
+.lp *{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;}
+.lp section{padding:96px 24px;}
+.lp .wrap{max-width:1080px;margin:0 auto;}
+.lp .pill{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:5px 14px;border-radius:999px;
+  font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  border:1px solid rgba(59,130,246,0.25);
+  color:#93c5fd;background:rgba(59,130,246,0.08);
+  margin-bottom:24px;
+}
+.lp h2.section-title{
+  font-size:clamp(30px,4vw,46px);font-weight:800;
+  color:#f1f5f9;letter-spacing:-0.025em;line-height:1.12;
+  margin-bottom:16px;
+}
+.lp p.section-sub{
+  font-size:16px;color:var(--muted);line-height:1.7;
+  max-width:600px;
+}
+.lp .card{
+  background:var(--bg1);
+  border:1px solid var(--border);
+  border-radius:16px;
+  transition:border-color .2s;
+}
+.lp .card:hover{border-color:rgba(255,255,255,0.12);}
+.lp .btn-primary{
+  display:inline-flex;align-items:center;gap:9px;
+  background:var(--blue-dark);color:#fff;
+  border:none;border-radius:10px;
+  padding:13px 28px;font-size:14px;font-weight:700;
+  cursor:pointer;letter-spacing:-.01em;
+  box-shadow:0 4px 20px rgba(37,99,235,0.35);
+  transition:all .2s;
+}
+.lp .btn-primary:hover{background:#1d4ed8;box-shadow:0 8px 30px rgba(37,99,235,0.5);transform:translateY(-1px);}
+.lp .btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  background:transparent;color:var(--muted);
+  border:1px solid var(--border);border-radius:10px;
+  padding:13px 28px;font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+}
+.lp .btn-ghost:hover{color:var(--text);border-color:rgba(255,255,255,0.15);}
+.lp .check-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;}
+.lp .check-icon{
+  width:20px;height:20px;border-radius:50%;flex-shrink:0;margin-top:1px;
+  background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);
+  display:flex;align-items:center;justify-content:center;
+}
+@keyframes lp-fade-up{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.lp-section-anim{animation:lp-fade-up .5s ease both;}
+
+/* --- ANIMATIONS --- */
+@keyframes lp-fade-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes lp-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes lp-typing { from { width: 0; } to { width: 100%; } }
+@keyframes lp-blink { 50% { border-color: transparent; } }
+@keyframes lp-slide-right { from { width: 0; } }
+
+.lp-anim-hidden { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+.lp-anim-hidden.is-visible { opacity: 1; transform: translateY(0); }
+.lp-fade-hidden { opacity: 0; transition: opacity 1s ease-out; }
+.lp-fade-hidden.is-visible { opacity: 1; }
+.lp-delay-1 { transition-delay: 0.1s; }
+.lp-delay-2 { transition-delay: 0.2s; }
+.lp-delay-3 { transition-delay: 0.3s; }
+
+.lp-typing-txt {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 3px solid var(--blue);
+    width: 0;
+}
+.lp-typing-txt.is-visible {
+    animation: lp-typing 2.5s steps(40, end) forwards, lp-blink .75s step-end infinite;
+}
+.lp-bar-fill {
+    transform-origin: left;
+}
+.lp-bar-fill.is-visible {
+    animation: lp-slide-right 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+</style>`;
+
 UI.renderLandingPage = function (state) {
     return `
-        <div class="min-h-screen bg-[#080c14] text-gray-300 overflow-x-hidden" style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;">
-            ${UI.renderLandingNavbar()}
-            ${UI.renderLandingHero()}
-            ${UI.renderLandingPainPoints()}
-            ${UI.renderLandingFeatures()}
-            <!-- DOCS SECTION — temporariamente oculta (DB pendente) -->
-            ${UI.renderLandingAudience()}
-            ${UI.renderLandingProfiles()}
-            ${UI.renderLandingCTA()}
-            ${UI.renderLandingFooter()}
+    ${_lpStyle}
+    <div class="lp" style="min-height:100vh;overflow-x:hidden;background:var(--bg);color:var(--text);">
+        ${UI.renderLandingNavbar()}
+        ${UI.renderLandingHero()}
+        ${UI.renderLandingPainPoints()}
+        ${UI.renderLandingFeatures()}
+        <!-- DOCS SECTION — temporariamente oculta (DB pendente) -->
+        ${UI.renderLandingAudience()}
+        ${UI.renderLandingProfiles()}
+        ${UI.renderLandingCTA()}
+        ${UI.renderLandingFooter()}
+    </div>
+    `;
+};
+
+UI.renderLandingNavbar = function () {
+    const lang = UI._lpLang || 'pt';
+    const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
+    const langLabel = lang === 'pt'
+        ? `<span style="opacity:.4">PT</span> <span style="opacity:.15">|</span> EN`
+        : `PT <span style="opacity:.15">|</span> <span style="opacity:.4">EN</span>`;
+    return `
+    <nav style="position:fixed;top:0;left:0;right:0;z-index:100;
+        background:rgba(6,8,15,0.85);
+        backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+        border-bottom:1px solid var(--border2);">
+        <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;height:58px;padding:0 24px;">
+            <!-- Logo -->
+            <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+                <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#2563eb,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;letter-spacing:-.02em;box-shadow:0 2px 12px rgba(37,99,235,0.4);">K</div>
+                <span style="font-size:15px;font-weight:800;color:#fff;letter-spacing:-.03em;">KPI Master</span>
+                <span style="font-size:9px;font-weight:700;color:#93c5fd;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:99px;padding:3px 8px;letter-spacing:.06em;text-transform:uppercase;" data-translate="nav-badge">${_t('nav-badge')}</span>
+            </div>
+            <!-- Links -->
+            <div style="display:flex;align-items:center;gap:32px;font-size:13px;font-weight:500;">
+                <a href="#features" data-translate="nav-features" style="color:var(--muted);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'">${_t('nav-features')}</a>
+                <a href="#perfis" data-translate="nav-profiles" style="color:var(--muted);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'">${_t('nav-profiles')}</a>
+            </div>
+            <!-- Actions -->
+            <div style="display:flex;align-items:center;gap:8px;">
+                <button id="lpLangToggleBtn" style="font-size:11px;font-weight:700;color:var(--muted);background:transparent;border:1px solid var(--border);border-radius:7px;padding:6px 10px;cursor:pointer;letter-spacing:.06em;transition:all .15s;" onmouseover="this.style.color='#f1f5f9';this.style.borderColor='rgba(255,255,255,0.15)'" onmouseout="this.style.color='#64748b';this.style.borderColor='rgba(255,255,255,0.07)'">${langLabel}</button>
+                <button id="navLoginBtn" data-translate="nav-login-btn" class="btn-primary" style="padding:9px 18px;font-size:13px;border-radius:8px;">${_t('nav-login-btn')}</button>
+            </div>
         </div>
+    </nav>
     `;
 };
 
@@ -150,549 +290,441 @@ UI.renderLandingAudience = function () {
     const lang = UI._lpLang || 'pt';
     const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
     const profiles = [
-        { key: 'aud-0', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
-        { key: 'aud-1', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
-        { key: 'aud-2', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', color: 'text-indigo-400', bg: 'bg-indigo-500/10 border-indigo-500/20' },
-        { key: 'aud-3', icon: 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
+        { key: 'aud-0', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4', accent: '#3b82f6' },
+        { key: 'aud-1', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', accent: '#10b981' },
+        { key: 'aud-2', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', accent: '#8b5cf6' },
+        { key: 'aud-3', icon: 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', accent: '#f59e0b' },
     ];
-
     return `
-        <section id="audiencia" class="py-20 px-4 bg-[#0b0f19] border-y border-white/[0.04]">
-            <div class="max-w-5xl mx-auto">
-                <div class="text-center mb-12">
-                    <p data-translate="aud-eyebrow" class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.2em] mb-3">${_t('aud-eyebrow')}</p>
-                    <h2 data-translate="aud-h2" class="text-3xl sm:text-4xl font-black text-white tracking-tight mb-4">${_t('aud-h2')}</h2>
-                    <p data-translate="aud-desc" class="text-gray-500 text-[15px] max-w-xl mx-auto">${_t('aud-desc')}</p>
-                </div>
-
-                <div class="grid sm:grid-cols-2 gap-4 mb-6">
-                    ${profiles.map(p => `
-                        <div class="bg-[#080c14] border border-white/[0.04] rounded-2xl p-6 flex items-start gap-4 hover:border-white/[0.08] transition-all">
-                            <div class="w-10 h-10 rounded-xl ${p.bg} border flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 ${p.color}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${p.icon}"/></svg>
-                            </div>
-                            <div>
-                                <h3 data-translate="${p.key}-label" class="text-[14px] font-bold text-white mb-1">${_t(p.key + '-label')}</h3>
-                                <p data-translate="${p.key}-desc" class="text-[12px] text-gray-500 leading-relaxed">${_t(p.key + '-desc')}</p>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-
-                <div class="bg-[#080c14] border border-white/[0.04] rounded-2xl p-5 flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    </div>
-                    <p data-translate="aud-note" class="text-[13px] text-gray-500 leading-relaxed">${_t('aud-note')}</p>
-                </div>
+    <section id="audiencia" style="padding:80px 24px;background:var(--bg1);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);">
+        <div class="wrap">
+            <div style="text-align:center;margin-bottom:56px;">
+                <div class="pill" data-translate="aud-eyebrow">${_t('aud-eyebrow')}</div>
+                <h2 class="section-title" data-translate="aud-h2" style="max-width:700px;margin:0 auto 16px;">${_t('aud-h2')}</h2>
+                <p class="section-sub" data-translate="aud-desc" style="margin:0 auto;">${_t('aud-desc')}</p>
             </div>
-        </section>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:16px;">
+                ${profiles.map(p => `
+                <div class="card lp-anim-hidden lp-delay-2" style="padding:24px;">
+                    <div style="width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
+                        <svg width="18" height="18" fill="none" stroke="${p.accent}" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="${p.icon}"/></svg>
+                    </div>
+                    <h3 style="font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:8px;" data-translate="${p.key}-label">${_t(p.key + '-label')}</h3>
+                    <p style="font-size:12px;color:var(--muted);line-height:1.65;" data-translate="${p.key}-desc">${_t(p.key + '-desc')}</p>
+                </div>`).join('')}
+            </div>
+            <div class="card lp-anim-hidden lp-delay-3" style="padding:20px 24px;display:flex;align-items:flex-start;gap:14px;">
+                <div style="width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,0.03);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">
+                    <svg width="16" height="16" fill="none" stroke="#64748b" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <p style="font-size:13px;color:var(--muted);line-height:1.7;" data-translate="aud-note">${_t('aud-note')}</p>
+            </div>
+        </div>
+    </section>
     `;
 };
 
-UI.renderLandingNavbar = function () {
-    const lang = UI._lpLang || 'pt';
-    const t = UI.landingTranslations;
-    const _t = (key) => (t[key] && t[key][lang]) || '';
-    const langLabel = lang === 'pt'
-        ? `<span class="opacity-50">PT</span> <span class="opacity-20">|</span> EN`
-        : `PT <span class="opacity-20">|</span> <span class="opacity-50">EN</span>`;
-    return `
-        <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.04] bg-[#080c14]/95 backdrop-blur-xl">
-            <div class="max-w-6xl mx-auto flex items-center justify-between px-5 h-14">
-                <div class="flex items-center gap-3">
-                    <div class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center text-white text-[12px] font-black shadow-lg shadow-blue-900/40 ring-1 ring-blue-500/30">K</div>
-                    <div>
-                        <span class="font-black text-[14px] text-white tracking-wide">KPI Master</span>
-                        <span data-translate="nav-badge" class="text-[10px] text-blue-400 font-bold ml-2 bg-blue-500/10 px-1.5 py-0.5 rounded">${_t('nav-badge')}</span>
-                    </div>
-                </div>
-                <div class="hidden sm:flex items-center gap-8 text-[13px]">
-                    <a href="#features" data-translate="nav-features" class="text-gray-500 hover:text-white transition-colors font-medium">${_t('nav-features')}</a>
-                    <a href="#docs" data-translate="nav-docs" class="text-gray-500 hover:text-white transition-colors font-medium">${_t('nav-docs')}</a>
-                    <a href="#perfis" data-translate="nav-profiles" class="text-gray-500 hover:text-white transition-colors font-medium">${_t('nav-profiles')}</a>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button id="lpLangToggleBtn" class="text-[11px] font-bold text-gray-400 hover:text-white transition-colors px-2.5 py-1.5 rounded-lg border border-white/[0.06] hover:border-white/[0.12] bg-white/[0.02] hover:bg-white/[0.05] active:scale-95 tracking-widest">${langLabel}</button>
-                    <button id="navLoginBtn" data-translate="nav-login-btn" class="bg-blue-600 hover:bg-blue-500 text-white text-[12px] font-bold px-4 py-2 rounded-lg transition-all shadow-md shadow-blue-900/30 active:scale-95">${_t('nav-login-btn')}</button>
-                </div>
-            </div>
-        </nav>
-    `;
-};
 
+
+
+/* â”€â”€â”€ HERO â”€â”€â”€ */
 UI.renderLandingHero = function () {
     const lang = UI._lpLang || 'pt';
     const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
     return `
-        <section class="relative min-h-screen flex items-center justify-center overflow-hidden px-4 pt-14">
-            <!-- Ambient glows -->
-            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-blue-600/[0.07] rounded-full blur-[160px] pointer-events-none"></div>
-            <div class="absolute bottom-1/4 right-0 w-96 h-96 bg-indigo-600/[0.04] rounded-full blur-[140px] pointer-events-none"></div>
+    <section class="lp-fade-hidden" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:100px 24px 80px;position:relative;overflow:hidden;
+        background:radial-gradient(ellipse 80% 50% at 50% 0%, rgba(37,99,235,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 30% at 80% 70%, rgba(99,102,241,0.07) 0%, transparent 60%),
+        var(--bg);">
+        <!-- Subtle grid -->
+        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:56px 56px;pointer-events:none;"></div>
 
-            <div class="relative z-10 max-w-6xl mx-auto text-center w-full">
+        <div class="wrap" style="position:relative;text-align:center;max-width:860px;">
 
-                <!-- Urgency badge -->
-                <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-amber-500/[0.08] border border-amber-500/20 mb-8 text-[12px] text-amber-400 font-semibold backdrop-blur-md">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                    <span data-translate="hero-urgency">${_t('hero-urgency')}</span>
-                </div>
+            <!-- Pill badge -->
+            <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:999px;margin-bottom:36px;background:rgba(37,99,235,0.08);border:1px solid rgba(59,130,246,0.2);">
+                <span style="width:5px;height:5px;border-radius:50%;background:#f59e0b;display:inline-block;box-shadow:0 0 6px #f59e0b;"></span>
+                <span style="font-size:12px;font-weight:600;color:#fcd34d;letter-spacing:.01em;" data-translate="hero-urgency">${_t('hero-urgency')}</span>
+            </div>
 
-                <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.06] mb-7 text-white">
-                    <span data-translate="hero-h1-1">${_t('hero-h1-1')}</span><br>
-                    <span data-translate="hero-h1-2">${_t('hero-h1-2')}</span><br>
-                    <span data-translate="hero-h1-3" class="bg-gradient-to-r from-blue-400 via-blue-300 to-indigo-400 bg-clip-text text-transparent">${_t('hero-h1-3')}</span>
-                </h1>
+            <!-- H1 -->
+            <h1 style="font-size:clamp(40px,6.5vw,80px);font-weight:800;line-height:1.08;letter-spacing:-0.03em;color:#f1f5f9;margin-bottom:24px;">
+                <span data-translate="hero-h1-1" style="display:block;">${_t('hero-h1-1')}</span>
+                <span data-translate="hero-h1-2" style="display:block;">${_t('hero-h1-2')}</span>
+                <span data-translate="hero-h1-3" style="display:block; max-width:100%;" class="lp-typing-txt" background:linear-gradient(135deg,#60a5fa 0%,#818cf8 50%,#c084fc 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" id="lp-hero-typer" class="lp-typing-txt">${_t('hero-h1-3')}</span>
+            </h1>
 
-                <p data-translate="hero-desc" class="text-[17px] sm:text-xl text-gray-500 max-w-2xl mx-auto mb-5 leading-relaxed font-light">${_t('hero-desc')}</p>
+            <!-- Description -->
+            <p data-translate="hero-desc" style="font-size:17px;color:var(--muted);max-width:560px;margin:0 auto 40px;line-height:1.75;">${_t('hero-desc')}</p>
 
+            <!-- CTAs -->
+            <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:48px;">
+                <button id="heroStartBtn" class="btn-primary" style="padding:14px 32px;font-size:15px;border-radius:12px;">
+                    <span data-translate="hero-cta-main">${_t('hero-cta-main')}</span>
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </button>
+                <button data-translate="hero-cta-secondary" class="btn-ghost" style="padding:14px 32px;font-size:15px;border-radius:12px;" onmouseover="this.style.color='#f1f5f9';this.style.borderColor='rgba(255,255,255,0.15)'" onmouseout="this.style.color='#64748b';this.style.borderColor='rgba(255,255,255,0.07)'">${_t('hero-cta-secondary')}</button>
+            </div>
 
-                <!-- CTAs -->
-                <div class="flex flex-col sm:flex-row gap-3 justify-center mb-16">
-                    <button id="heroStartBtn" class="bg-blue-600 text-white rounded-xl px-9 py-4 text-[15px] font-bold hover:bg-blue-500 transition-all shadow-xl shadow-blue-500/25 flex items-center justify-center gap-2 group active:scale-95">
-                        <span data-translate="hero-cta-main">${_t('hero-cta-main')}</span>
-                        <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-                    </button>
-                    <button data-translate="hero-cta-secondary" class="bg-white/[0.04] border border-white/[0.06] text-gray-300 rounded-xl px-9 py-4 text-[15px] font-medium hover:bg-white/[0.07] transition-all">${_t('hero-cta-secondary')}</button>
-                </div>
+            <!-- Trust bar -->
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:28px;margin-bottom:64px;">
+                ${[
+            { icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', label: 'OAuth Trello — 30 segundos', c: '#34d399' },
+            { icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', label: 'Sem dados armazenados', c: '#60a5fa' },
+            { icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6', label: 'Tempo real — sempre atualizado', c: '#a78bfa' },
+        ].map(i => `<span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#475569;font-weight:500;">
+                    <svg width="13" height="13" fill="none" stroke="${i.c}" viewBox="0 0 24 24" style="flex-shrink:0;opacity:.85;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${i.icon}"/></svg>${i.label}</span>`).join('')}
+            </div>
 
-                <!-- DASHBOARD MOCKUP -->
-                <div class="bg-[#0b0f19] border border-white/[0.06] rounded-2xl overflow-hidden shadow-2xl shadow-black/60 ring-1 ring-white/[0.03] text-left select-none">
-                    <div class="flex h-[520px] overflow-hidden">
+            <!-- DASHBOARD MOCKUP -->
+            <div style="position:relative;border-radius:18px;overflow:hidden;
+                box-shadow:0 0 0 1px rgba(59,130,246,0.18),0 40px 80px rgba(0,0,0,0.65);
+                background:#0a0f1a;">
+                <!-- Top gradient line -->
+                <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.6),rgba(167,139,250,0.4),transparent);z-index:10;"></div>
 
-                        <!-- SIDEBAR -->
-                        <div class="w-[180px] bg-[#080c14] border-r border-white/[0.04] flex flex-col flex-shrink-0">
-                            <div class="h-10 flex items-center gap-2 px-3 border-b border-white/[0.04]">
-                                <div class="w-5 h-5 bg-blue-600 rounded-md flex items-center justify-center text-[8px] font-black text-white ring-1 ring-blue-500/30">K</div>
-                                <span class="text-[11px] font-black text-white">KPI Master</span>
-                            </div>
-                            <div class="flex-1 py-3 px-2.5 space-y-4 overflow-hidden">
-                                <div>
-                                    <p class="text-[7px] text-gray-600 font-bold uppercase tracking-[0.15em] mb-2 pl-1">O Meu Perfil</p>
-                                    <div class="flex items-center gap-2 px-2 py-1.5 bg-[#0d1117] rounded-lg border border-white/[0.04]">
-                                        <div class="w-5 h-5 rounded-md bg-blue-600/20 border border-blue-500/20 flex items-center justify-center text-[7px] font-bold text-blue-300">RC</div>
-                                        <div>
-                                            <div class="text-[9px] font-bold text-white">Ricardo C.</div>
-                                            <div class="flex items-center gap-1 mt-0.5"><span class="w-1 h-1 rounded-full bg-emerald-500"></span><span class="text-[7px] text-emerald-500 font-semibold">Gestor</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-[7px] text-gray-600 font-bold uppercase tracking-[0.15em] mb-1.5 pl-1">Período</p>
-                                    <div class="space-y-1">
-                                        <div class="bg-[#0d1117] border border-white/[0.05] rounded-md px-2 py-1 text-[8px] text-gray-500">2025-02-01</div>
-                                        <div class="bg-[#0d1117] border border-white/[0.05] rounded-md px-2 py-1 text-[8px] text-gray-500">2025-02-28</div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-[7px] text-gray-600 font-bold uppercase tracking-[0.15em] mb-1.5 pl-1">Consultores</p>
-                                    <div class="space-y-0.5">
-                                        <div class="flex items-center gap-1.5 px-2 py-1 rounded-md bg-blue-600/15 border border-blue-500/20">
-                                            <div class="w-4 h-4 rounded-sm bg-white/[0.06] flex items-center justify-center text-[6px] font-bold">ALL</div>
-                                            <span class="text-[9px] font-semibold text-white">Todos</span>
-                                        </div>
-                                        ${['Ana M.', 'Bruno S.', 'Carla F.'].map(n => `<div class="flex items-center gap-1.5 px-2 py-1 rounded-md"><div class="w-4 h-4 rounded-sm bg-[#1a2235] flex items-center justify-center text-[6px] font-bold text-gray-400">${n.substring(0, 2)}</div><span class="text-[9px] text-gray-500">${n}</span></div>`).join('')}
-                                    </div>
+                <div style="display:flex;height:480px;overflow:hidden;text-align:left;user-select:none;">
+                    <!-- Sidebar -->
+                    <div style="width:172px;background:#070b12;border-right:1px solid rgba(255,255,255,0.04);flex-shrink:0;display:flex;flex-direction:column;">
+                        <div style="height:38px;display:flex;align-items:center;gap:7px;padding:0 10px;border-bottom:1px solid rgba(255,255,255,0.04);">
+                            <div style="width:18px;height:18px;background:#2563eb;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#fff;">K</div>
+                            <span style="font-size:11px;font-weight:800;color:#fff;">KPI Master</span>
+                        </div>
+                        <div style="flex:1;padding:10px 8px;overflow:hidden;display:flex;flex-direction:column;gap:14px;">
+                            <div>
+                                <p style="font-size:6.5px;color:#374151;font-weight:700;text-transform:uppercase;letter-spacing:.15em;margin-bottom:6px;padding-left:4px;">Perfil</p>
+                                <div style="display:flex;align-items:center;gap:7px;padding:7px 8px;background:#0d1117;border-radius:8px;border:1px solid rgba(255,255,255,0.04);">
+                                    <div style="width:18px;height:18px;border-radius:5px;background:rgba(37,99,235,0.2);border:1px solid rgba(37,99,235,0.2);display:flex;align-items:center;justify-content:center;font-size:6px;font-weight:700;color:#93c5fd;">RC</div>
+                                    <div><div style="font-size:8px;font-weight:700;color:#fff;">Ricardo C.</div><div style="font-size:6.5px;color:#10b981;font-weight:600;">â— Gestor</div></div>
                                 </div>
                             </div>
-                            <div class="p-2 border-t border-white/[0.04] space-y-0.5">
-                                <div class="flex items-center gap-1.5 px-2 py-1.5 rounded-md text-emerald-600 text-[9px] font-semibold cursor-default">
-                                    <div class="w-2.5 h-2.5 rounded-sm bg-emerald-500/10"></div>Scripts Reativação
+                            <div>
+                                <p style="font-size:6.5px;color:#374151;font-weight:700;text-transform:uppercase;letter-spacing:.15em;margin-bottom:5px;padding-left:4px;">Consultores</p>
+                                <div style="display:flex;align-items:center;gap:7px;padding:5px 8px;background:rgba(37,99,235,0.15);border-radius:6px;border:1px solid rgba(37,99,235,0.2);margin-bottom:2px;">
+                                    <span style="font-size:8px;font-weight:600;color:#fff;">Todos</span>
                                 </div>
-                                <div class="flex items-center gap-1.5 px-2 py-1.5 rounded-md text-gray-600 text-[9px] font-semibold cursor-default">
-                                    <div class="w-2.5 h-2.5 rounded-sm bg-white/[0.03]"></div>Configurações
-                                </div>
+                                ${['Ana M.', 'Bruno S.', 'Carla F.'].map(n => `<div style="display:flex;align-items:center;gap:7px;padding:4px 8px;"><span style="font-size:8px;color:#475569;">${n}</span></div>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main content -->
+                    <div style="flex:1;background:#0f172a;display:flex;flex-direction:column;min-width:0;">
+                        <div style="height:38px;background:#0f172a;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:space-between;padding:0 14px;flex-shrink:0;">
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <span style="font-size:11px;font-weight:800;color:#fff;">Dashboard Imobiliário</span>
+                                <span style="font-size:7px;font-weight:700;color:#60a5fa;background:rgba(37,99,235,0.12);padding:2px 6px;border-radius:4px;">Manager</span>
+                            </div>
+                            <div style="display:flex;gap:6px;">
+                                <div style="background:#2563eb;border-radius:6px;padding:4px 10px;font-size:8px;font-weight:700;color:#fff;">Analytics</div>
+                                <div style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:4px 10px;font-size:8px;color:#94a3b8;">Exportar PDF</div>
                             </div>
                         </div>
 
-                        <!-- MAIN -->
-                        <div class="flex-1 flex flex-col min-w-0 bg-[#0f172a]">
-                            <div class="h-10 bg-[#0f172a] border-b border-white/[0.04] flex items-center justify-between px-4 flex-shrink-0">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-[12px] font-black text-white">Dashboard Imobiliário</span>
-                                    <span class="text-[8px] font-bold text-blue-400 bg-blue-500/10 px-1.5 py-0.5 rounded">Manager</span>
+                        <div style="flex:1;padding:12px;display:grid;grid-template-rows:auto auto auto;gap:10px;overflow:hidden;">
+                            <!-- Row 1: Pipeline + Focus -->
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                                <div style="background:#0a0f1a;border:1px solid rgba(255,255,255,0.04);border-radius:10px;padding:10px;">
+                                    <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;"><div style="width:6px;height:6px;background:#3b82f6;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Pipeline Imob.</span></div>
+                                    ${[{ s: 'Novo Contacto', n: 52, p: 100 }, { s: 'Visita Marcada', n: 35, p: 67 }, { s: 'Proposta Enviada', n: 21, p: 40 }, { s: 'Contrato', n: 8, p: 15 }].map(r => `<div style="display:flex;align-items:center;gap:6px;font-size:7px;margin-bottom:5px;"><span style="width:72px;color:#475569;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.s}</span><div style="flex:1;height:4px;background:rgba(255,255,255,0.04);border-radius:2px;"><div style="height:100%;border-radius:2px;background:${r.n === 8 ? '#10b981' : '#3b82f6'};width:${r.p}%;" class="lp-bar-fill"></div></div><span style="color:#475569;width:14px;text-align:right;" data-count-to="${r.n}">0</span></div>`).join('')}
                                 </div>
-                                <div class="flex items-center gap-1.5">
-                                    <div class="flex items-center gap-1 bg-blue-600 px-2 py-1 rounded-md"><span class="text-[9px] font-bold text-white">Analytics</span></div>
-                                    <div class="flex items-center gap-1 bg-[#111827] border border-white/[0.06] px-2 py-1 rounded-md"><span class="text-[9px] font-bold text-gray-300">Exportar PDF</span></div>
+                                <div style="background:#0a0f1a;border:1px solid rgba(255,255,255,0.04);border-radius:10px;padding:10px;">
+                                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                                        <div style="display:flex;align-items:center;gap:5px;"><div style="width:6px;height:6px;background:#ef4444;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Leads Críticos</span></div>
+                                        <span style="font-size:6.5px;font-weight:700;color:#f87171;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);padding:1px 5px;border-radius:99px;">âš  5</span>
+                                    </div>
+                                    ${[{ n: 'Família Mendes — T3 Algés', t: 'ðŸ”´ 14d', bg: 'rgba(239,68,68,0.05)' }, { n: 'Dr. Ferreira — Escritório', t: 'ðŸŸ¡ 8d', bg: 'rgba(245,158,11,0.05)' }, { n: 'Ana Costa — T2 Cascais', t: 'ðŸŸ¡ 6d', bg: 'rgba(245,158,11,0.05)' }].map(a => `<div style="background:${a.bg};border:1px solid rgba(255,255,255,0.03);border-radius:7px;padding:5px 8px;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:7px;color:#94a3b8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:130px;">${a.n}</span><span style="font-size:6.5px;color:#475569;flex-shrink:0;">${a.t}</span></div>`).join('')}
                                 </div>
                             </div>
 
-                            <div class="flex-1 overflow-hidden p-3 grid grid-rows-[auto_auto_auto] gap-3">
-                                <!-- ROW 1: Pipeline + Focus Zone -->
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div class="bg-[#0f172a] border border-white/[0.04] rounded-xl p-3">
-                                        <div class="flex items-center gap-1.5 mb-2.5">
-                                            <div class="w-2 h-2 rounded-sm bg-blue-500"></div>
-                                            <span class="text-[8px] font-bold text-gray-500 uppercase tracking-wider">Pipeline Imobiliário</span>
+                            <!-- Row 2: Tempo + Performance -->
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                                <div style="background:#0a0f1a;border:1px solid rgba(255,255,255,0.04);border-radius:10px;padding:10px;">
+                                    <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;"><div style="width:6px;height:6px;background:#f59e0b;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Tempo Médio por Fase</span></div>
+                                    <div style="display:grid;grid-template-columns:auto 1fr;gap:6px;align-items:center;">
+                                        <div style="background:#111827;border-radius:8px;padding:8px 10px;border:1px solid rgba(255,255,255,0.04);">
+                                            <p style="font-size:22px;font-weight:900;color:#fff;line-height:1;">11d</p>
+                                            <p style="font-size:7px;color:#f87171;margin-top:2px;">↑ acima do ideal</p>
                                         </div>
-                                        <div class="space-y-1.5">
-                                            ${[
-            { s: 'Novo Contacto', pct: 100, n: 52, c: 'bg-gradient-to-r from-blue-600 to-blue-500' },
-            { s: 'Visita Marcada', pct: 68, n: 35, c: 'bg-gradient-to-r from-blue-600 to-blue-500' },
-            { s: 'Proposta Enviada', pct: 41, n: 21, c: 'bg-gradient-to-r from-blue-600 to-blue-500' },
-            { s: 'Contrato Assinado', pct: 15, n: 8, c: 'bg-gradient-to-r from-emerald-600 to-emerald-500' },
-        ].map(r => `<div class="flex items-center gap-1.5 text-[8px]"><span class="w-16 text-gray-500 truncate">${r.s}</span><div class="flex-1 h-1 rounded-full bg-white/[0.04]"><div class="h-full rounded-full ${r.c}" style="width:${r.pct}%"></div></div><span class="text-gray-500 w-4 text-right">${r.n}</span></div>`).join('')}
-                                        </div>
-                                    </div>
-                                    <div class="bg-[#0f172a] border border-white/[0.04] rounded-xl p-3">
-                                        <div class="flex items-center justify-between mb-2.5">
-                                            <div class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-sm bg-rose-500"></div><span class="text-[8px] font-bold text-gray-500 uppercase tracking-wider">Leads a Perder Tração</span></div>
-                                            <span class="text-[7px] font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 px-1.5 py-0.5 rounded-full">⚠ 5 críticos</span>
-                                        </div>
-                                        <div class="space-y-1.5">
-                                            ${[
-            { name: 'Família Mendes — T3 Algés', tag: '🔴 14 dias parado', bg: 'bg-rose-500/[0.05]' },
-            { name: 'Dr. Ferreira — Escritório Lisboa', tag: '🟡 8 dias parado', bg: 'bg-amber-500/[0.05]' },
-            { name: 'Ana Costa — T2 Cascais', tag: '🟡 6 dias parado', bg: 'bg-amber-500/[0.05]' },
-        ].map(a => `<div class="${a.bg} border border-white/[0.03] rounded-lg px-2 py-1 flex items-center justify-between"><span class="text-[8px] text-gray-400 truncate">${a.name}</span><span class="text-[7px] text-gray-600 flex-shrink-0 ml-1">${a.tag}</span></div>`).join('')}
+                                        <div style="display:flex;flex-direction:column;gap:4px;">
+                                            ${[{ l: 'Visita→Proposta', t: '7d', c: '#f87171' }, { l: 'Proposta→Fecho', t: '18d', c: '#f87171' }, { l: 'Contacto→Visita', t: '4d', c: '#34d399' }].map(r => `<div style="background:#111827;border-radius:5px;padding:4px 7px;border:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:6.5px;color:#475569;" data-count-to="${r.l}">0</span><span style="font-size:7.5px;font-weight:700;color:${r.c};">${r.t}</span></div>`).join('')}
                                         </div>
                                     </div>
                                 </div>
+                                <div style="background:#0a0f1a;border:1px solid rgba(255,255,255,0.04);border-radius:10px;padding:10px;">
+                                    <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;"><div style="width:6px;height:6px;background:#8b5cf6;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Performance</span></div>
+                                    <div style="background:#111827;border:1px solid rgba(245,158,11,0.15);border-radius:8px;padding:7px 9px;display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                                        <div style="display:flex;align-items:center;gap:6px;">
+                                            <div style="width:16px;height:16px;border-radius:4px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:6px;font-weight:700;color:#fcd34d;">AN</div>
+                                            <div><p style="font-size:8px;font-weight:700;color:#fff;">Ana Martins</p><p style="font-size:7px;color:#f59e0b;">ðŸ† 8 contratos</p></div>
+                                        </div>
+                                        <span style="font-size:14px;font-weight:900;color:#fff;" data-count-to="42">0</span>
+                                    </div>
+                                    ${[{ n: 'Bruno S.', v: 31, p: 74 }, { n: 'Carla F.', v: 22, p: 52 }, { n: 'David R.', v: 15, p: 36 }].map(m => `<div style="display:flex;align-items:center;gap:5px;font-size:7px;margin-bottom:4px;"><span style="width:42px;color:#475569;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${m.n}</span><div style="flex:1;height:4px;background:rgba(255,255,255,0.04);border-radius:2px;"><div style="height:100%;border-radius:2px;background:rgba(255,255,255,0.15);width:${m.p}%;" class="lp-bar-fill"></div></div><span style="color:#475569;width:14px;text-align:right;" data-count-to="${m.v}">0</span></div>`).join('')}
+                                </div>
+                            </div>
 
-                                <!-- ROW 2: Tempo Espera + Atividade -->
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div class="bg-[#0f172a] border border-white/[0.04] rounded-xl p-3">
-                                        <div class="flex items-center gap-1.5 mb-2"><div class="w-2 h-2 rounded-sm bg-amber-500"></div><span class="text-[8px] font-bold text-gray-500 uppercase tracking-wider">Tempo Médio por Fase</span></div>
-                                        <div class="grid grid-cols-2 gap-2">
-                                            <div class="bg-[#111827] rounded-lg p-2.5 border border-white/[0.04]">
-                                                <p class="text-[7px] text-gray-600 uppercase tracking-wider mb-1">Geral</p>
-                                                <p class="text-[22px] font-black text-white leading-none">11d</p>
-                                                <p class="text-[8px] text-rose-400 mt-0.5">↑ acima do ideal</p>
-                                            </div>
-                                            <div class="space-y-1">
-                                                ${[
-            { l: 'Visita → Proposta', t: '7d', c: 'text-rose-400' },
-            { l: 'Proposta → Fecho', t: '18d', c: 'text-rose-400' },
-            { l: 'Contacto → Visita', t: '4d', c: 'text-emerald-400' },
-        ].map(r => `<div class="bg-[#111827] rounded-md px-2 py-1 border border-white/[0.04] flex justify-between items-center"><span class="text-[7px] text-gray-600 truncate">${r.l}</span><span class="text-[8px] font-bold ${r.c}">${r.t}</span></div>`).join('')}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="bg-[#0f172a] border border-white/[0.04] rounded-xl p-3">
-                                        <div class="flex items-center gap-1.5 mb-2"><div class="w-2 h-2 rounded-sm bg-purple-500"></div><span class="text-[8px] font-bold text-gray-500 uppercase tracking-wider">Performance Consultores</span></div>
-                                        <div class="bg-[#111827] border border-amber-500/20 rounded-lg px-2 py-1.5 flex items-center justify-between mb-2">
-                                            <div class="flex items-center gap-1.5">
-                                                <div class="w-4 h-4 rounded-md bg-amber-500/20 flex items-center justify-center text-[7px] font-bold text-amber-300">AN</div>
-                                                <div><p class="text-[8px] font-bold text-white">Ana Martins</p><p class="text-[7px] text-amber-400">🏆 8 contratos este mês</p></div>
-                                            </div>
-                                            <span class="text-[10px] font-black text-white">42</span>
-                                        </div>
-                                        <div class="space-y-1">
-                                            ${[{ n: 'Bruno S.', v: 31, pct: 74 }, { n: 'Carla F.', v: 22, pct: 52 }, { n: 'David R.', v: 15, pct: 36 }].map(m => `<div class="flex items-center gap-1.5 text-[8px]"><span class="w-12 text-gray-500 truncate">${m.n}</span><div class="flex-1 h-1 rounded-full bg-white/[0.04]"><div class="h-full rounded-full bg-white/20" style="width:${m.pct}%"></div></div><span class="text-gray-500 w-4 text-right">${m.v}</span></div>`).join('')}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- ROW 3: Tabela -->
-                                <div class="bg-[#0f172a] border border-white/[0.04] rounded-xl p-3 overflow-hidden">
-                                    <div class="flex items-center gap-1.5 mb-2">
-                                        <div class="w-2 h-2 rounded-sm bg-indigo-500"></div>
-                                        <span class="text-[8px] font-bold text-gray-500 uppercase tracking-wider">Tabela de Performance — Fevereiro</span>
-                                        <div class="ml-auto flex items-center gap-2 text-[7px] text-gray-600">
-                                            <span class="bg-[#111827] border border-white/[0.04] px-1.5 py-0.5 rounded">Leads: <span class="text-white font-bold">52</span></span>
-                                            <span class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded font-bold">8 contratos</span>
-                                        </div>
-                                    </div>
-                                    <table class="w-full text-[7px]">
-                                        <thead><tr class="border-b border-white/[0.04]">${['Consultor', 'Leads', 'Visitas', 'Propostas', 'Contratos', 'Taxa'].map(h => `<th class="text-left text-gray-600 pb-1.5 font-bold uppercase tracking-wider pr-3">${h}</th>`).join('')}</tr></thead>
-                                        <tbody class="divide-y divide-white/[0.03]">
-                                            ${[
-            { n: 'Ana Martins', l: 42, v: 28, p: 15, c: 8, t: '19%' },
-            { n: 'Bruno S.', l: 31, v: 19, p: 11, c: 5, t: '16%' },
-            { n: 'Carla F.', l: 22, v: 14, p: 7, c: 3, t: '14%' },
-        ].map(r => `<tr><td class="py-1 pr-3 text-gray-300 font-semibold">${r.n}</td><td class="py-1 pr-3"><span class="bg-blue-500/15 text-blue-400 px-1.5 py-0.5 rounded-full font-bold">${r.l}</span></td><td class="py-1 pr-3 text-gray-500">${r.v}</td><td class="py-1 pr-3 text-gray-500">${r.p}</td><td class="py-1 pr-3 text-emerald-400 font-bold">${r.c}</td><td class="py-1 pr-3 text-amber-400 font-bold">${r.t}</td></tr>`).join('')}
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <!-- Row 3: Table -->
+                            <div style="background:#0a0f1a;border:1px solid rgba(255,255,255,0.04);border-radius:10px;padding:10px;overflow:hidden;">
+                                <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;"><div style="width:6px;height:6px;background:#6366f1;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Tabela de Performance — Fev</span><span style="margin-left:auto;font-size:7px;font-weight:700;color:#34d399;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.15);padding:1px 6px;border-radius:4px;">8 contratos</span></div>
+                                <table style="width:100%;font-size:7.5px;border-collapse:collapse;">
+                                    <thead><tr style="border-bottom:1px solid rgba(255,255,255,0.04);">${['Consultor', 'Leads', 'Visitas', 'Propostas', 'Contratos', 'Taxa'].map(h => `<th style="text-align:left;color:#374151;padding-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding-right:10px;">${h}</th>`).join('')}</tr></thead>
+                                    <tbody>${[{ n: 'Ana Martins', l: 42, v: 28, p: 15, c: 8, t: '19%' }, { n: 'Bruno S.', l: 31, v: 19, p: 11, c: 5, t: '16%' }, { n: 'Carla F.', l: 22, v: 14, p: 7, c: 3, t: '14%' }].map(r => `<tr><td style="padding:4px 10px 4px 0;color:#cbd5e1;font-weight:600;" data-count-to="${r.n}">0</td><td style="padding:4px 10px 4px 0;"><span style="background:rgba(59,130,246,0.12);color:#60a5fa;padding:1px 5px;border-radius:99px;font-weight:700;" data-count-to="${r.l}">0</span></td><td style="padding:4px 10px 4px 0;color:#475569;" data-count-to="${r.v}">0</td><td style="padding:4px 10px 4px 0;color:#475569;" data-count-to="${r.p}">0</td><td style="padding:4px 10px 4px 0;color:#34d399;font-weight:700;" data-count-to="${r.c}">0</td><td style="padding:4px 10px 4px 0;color:#fbbf24;font-weight:700;">${r.t}</td></tr>`).join('')}</tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
     `;
 };
 
+/* â”€â”€â”€ PAIN POINTS â”€â”€â”€ */
 UI.renderLandingPainPoints = function () {
     const lang = UI._lpLang || 'pt';
     const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
     const pains = [
-        { key: 'pain-0', iconPath: 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z', iconColor: 'text-rose-400', iconBg: 'bg-rose-500/[0.08] border-rose-500/15' },
-        { key: 'pain-1', iconPath: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', iconColor: 'text-amber-400', iconBg: 'bg-amber-500/[0.08] border-amber-500/15' },
-        { key: 'pain-2', iconPath: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', iconColor: 'text-blue-400', iconBg: 'bg-blue-500/[0.08] border-blue-500/15' },
-        { key: 'pain-3', iconPath: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', iconColor: 'text-purple-400', iconBg: 'bg-purple-500/[0.08] border-purple-500/15' },
+        { key: 'pain-0', icon: 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z', accent: '#ef4444' },
+        { key: 'pain-1', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', accent: '#f59e0b' },
+        { key: 'pain-2', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', accent: '#3b82f6' },
+        { key: 'pain-3', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', accent: '#8b5cf6' },
     ];
-
     return `
-        <section class="py-20 px-4 bg-[#080c14]">
-            <div class="max-w-5xl mx-auto">
-                <div class="text-center mb-12">
-                    <p data-translate="pain-eyebrow" class="text-[10px] text-rose-400 font-bold uppercase tracking-[0.2em] mb-3">${_t('pain-eyebrow')}</p>
-                    <h2 data-translate="pain-h2" class="text-3xl sm:text-4xl font-black text-white tracking-tight mb-4">${_t('pain-h2')}</h2>
-                    <p data-translate="pain-desc" class="text-gray-500 text-[15px] max-w-xl mx-auto">${_t('pain-desc')}</p>
-                </div>
-                <div class="grid sm:grid-cols-2 gap-4">
-                    ${pains.map(p => `
-                        <div class="bg-[#0b0f19] border border-white/[0.04] rounded-2xl p-6 hover:border-white/[0.08] transition-all">
-                            <div class="flex items-start gap-4">
-                                <div class="w-10 h-10 rounded-xl ${p.iconBg} border flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-5 h-5 ${p.iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${p.iconPath}"/></svg>
-                                </div>
-                                <div>
-                                    <p data-translate="${p.key}-pain" class="text-[13px] font-bold text-gray-300 mb-2 leading-snug">${_t(p.key + '-pain')}</p>
-                                    <div class="flex items-start gap-2 mt-3">
-                                        <svg class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-                                        <p data-translate="${p.key}-fix" class="text-[12px] text-emerald-400/80 leading-relaxed">${_t(p.key + '-fix')}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
+    <section class="lp-fade-hidden" style="padding:96px 24px;background:var(--bg1);border-top:1px solid var(--border2);">
+        <div class="wrap">
+            <div style="text-align:center;margin-bottom:64px;">
+                <div class="pill" data-translate="pain-eyebrow" style="border-color:rgba(239,68,68,0.25);color:#fca5a5;background:rgba(239,68,68,0.08);">${_t('pain-eyebrow')}</div>
+                <h2 class="section-title" data-translate="pain-h2" style="max-width:700px;margin:0 auto 16px;">${_t('pain-h2')}</h2>
+                <p class="section-sub" data-translate="pain-desc" style="margin:0 auto;">${_t('pain-desc')}</p>
             </div>
-        </section>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;">
+                ${pains.map(p => `
+                <div class="card lp-anim-hidden lp-delay-1" style="padding:28px;position:relative;overflow:hidden;">
+                    <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${p.accent};opacity:.6;border-radius:3px 0 0 3px;"></div>
+                    <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+                        <svg width="18" height="18" fill="none" stroke="${p.accent}" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="${p.icon}"/></svg>
+                    </div>
+                    <p style="font-size:14px;font-weight:700;color:#e2e8f0;margin-bottom:14px;line-height:1.45;" data-translate="${p.key}-pain">${_t(p.key + '-pain')}</p>
+                    <div style="display:flex;align-items:flex-start;gap:9px;">
+                        <div style="width:18px;height:18px;border-radius:50%;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">
+                            <svg width="10" height="10" fill="none" stroke="#34d399" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                        <p style="font-size:12px;color:#34d399;line-height:1.6;" data-translate="${p.key}-fix">${_t(p.key + '-fix')}</p>
+                    </div>
+                </div>`).join('')}
+            </div>
+        </div>
+    </section>
     `;
 };
 
+/* â”€â”€â”€ FEATURES â”€â”€â”€ */
 UI.renderLandingFeatures = function () {
     const lang = UI._lpLang || 'pt';
     const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
     const features = [
-        { key: 'feat-0', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
-        { key: 'feat-1', icon: 'M13 10V3L4 14h7v7l9-11h-7z', color: 'text-rose-400', bg: 'bg-rose-500/10 border-rose-500/20' },
-        { key: 'feat-2', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
-        { key: 'feat-3', icon: 'M3 10h18M3 6h18M3 14h18M3 18h18', color: 'text-indigo-400', bg: 'bg-indigo-500/10 border-indigo-500/20' },
-        { key: 'feat-4', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
-        { key: 'feat-5', icon: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4', color: 'text-purple-400', bg: 'bg-purple-500/10 border-purple-500/20' },
-        { key: 'feat-6', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', color: 'text-gray-400', bg: 'bg-white/[0.04] border-white/[0.06]' },
-        { key: 'feat-7', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
-        { key: 'feat-8', icon: 'M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z', color: 'text-indigo-400', bg: 'bg-indigo-500/10 border-indigo-500/20' },
+        { key: 'feat-0', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', accent: '#3b82f6', badgeStyle: 'background:rgba(59,130,246,0.12);color:#60a5fa;border:1px solid rgba(59,130,246,0.2);' },
+        { key: 'feat-1', icon: 'M13 10V3L4 14h7v7l9-11h-7z', accent: '#ef4444', badgeStyle: 'background:rgba(34,197,94,0.1);color:#4ade80;border:1px solid rgba(34,197,94,0.2);' },
+        { key: 'feat-2', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', accent: '#f59e0b', badgeStyle: '' },
+        { key: 'feat-3', icon: 'M3 10h18M3 6h18M3 14h18M3 18h18', accent: '#6366f1', badgeStyle: '' },
+        { key: 'feat-4', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', accent: '#10b981', badgeStyle: 'background:rgba(139,92,246,0.1);color:#c4b5fd;border:1px solid rgba(139,92,246,0.2);' },
+        { key: 'feat-5', icon: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4', accent: '#8b5cf6', badgeStyle: '' },
+        { key: 'feat-6', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', accent: '#64748b', badgeStyle: '' },
+        { key: 'feat-7', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', accent: '#10b981', badgeStyle: '' },
+        { key: 'feat-8', icon: 'M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z', accent: '#6366f1', badgeStyle: '' },
     ];
-
     return `
-        <section id="features" class="py-24 px-4 bg-[#0b0f19] border-y border-white/[0.04]">
-            <div class="max-w-6xl mx-auto">
-                <div class="text-center mb-14">
-                    <p data-translate="feat-eyebrow" class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.2em] mb-3">${_t('feat-eyebrow')}</p>
-                    <h2 class="text-3xl sm:text-4xl font-black mb-4 text-white tracking-tight"><span data-translate="feat-h2-1">${_t('feat-h2-1')}</span><br><span data-translate="feat-h2-2">${_t('feat-h2-2')}</span></h2>
-                    <p data-translate="feat-desc" class="text-gray-500 text-[15px] max-w-2xl mx-auto">${_t('feat-desc')}</p>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    ${features.map(f => `
-                        <div class="bg-[#111827] border border-white/[0.04] p-6 rounded-2xl hover:border-white/[0.08] transition-all group relative">
-                            ${_t(f.key + '-tag') ? `<span data-translate="${f.key}-tag" class="absolute top-4 right-4 text-[8px] font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-full">${_t(f.key + '-tag')}</span>` : ''}
-                            <div class="w-9 h-9 rounded-xl ${f.bg} border flex items-center justify-center ${f.color} mb-4 transition-transform group-hover:scale-105">
-                                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${f.icon}"/></svg>
-                            </div>
-                            <h3 data-translate="${f.key}-title" class="font-bold text-[14px] text-white mb-2 leading-snug">${_t(f.key + '-title')}</h3>
-                            <p data-translate="${f.key}-desc" class="text-[12px] text-gray-500 leading-relaxed">${_t(f.key + '-desc')}</p>
-                        </div>
-                    `).join('')}
-                </div>
+    <section id="features" style="padding:96px 24px;background:var(--bg);border-top:1px solid var(--border2);">
+        <div class="wrap">
+            <div style="text-align:center;margin-bottom:64px;">
+                <div class="pill" data-translate="feat-eyebrow">${_t('feat-eyebrow')}</div>
+                <h2 class="section-title" style="max-width:700px;margin:0 auto 10px;">
+                    <span data-translate="feat-h2-1">${_t('feat-h2-1')}</span><br>
+                    <span data-translate="feat-h2-2">${_t('feat-h2-2')}</span>
+                </h2>
+                <p class="section-sub" data-translate="feat-desc" style="margin:0 auto;">${_t('feat-desc')}</p>
             </div>
-        </section>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+                ${features.map(f => {
+        const tag = _t(f.key + '-tag');
+        return `<div class="card lp-anim-hidden lp-delay-2" style="padding:28px;position:relative;">
+                        ${tag ? `<span style="position:absolute;top:16px;right:16px;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.06em;${f.badgeStyle || 'background:rgba(59,130,246,0.1);color:#60a5fa;border:1px solid rgba(59,130,246,0.15);'}" data-translate="${f.key}-tag">${tag}</span>` : ''}
+                        <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+                            <svg width="18" height="18" fill="none" stroke="${f.accent}" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="${f.icon}"/></svg>
+                        </div>
+                        <h3 style="font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:8px;line-height:1.4;" data-translate="${f.key}-title">${_t(f.key + '-title')}</h3>
+                        <p style="font-size:12px;color:var(--muted);line-height:1.7;" data-translate="${f.key}-desc">${_t(f.key + '-desc')}</p>
+                    </div>`;
+    }).join('')}
+            </div>
+        </div>
+    </section>
     `;
 };
 
-UI.renderLandingDocs = function () {
-    const docs = [
-        {
-            iconPath: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z',
-            iconColor: 'text-blue-400', iconBg: 'bg-blue-500/10 border-blue-500/20',
-            title: 'Script de Reativação por Telefone',
-            desc: 'Guia passo-a-passo para reativar leads frios em 5 minutos de chamada. Com objeções, respostas e próximos passos.',
-            badge: 'PDF · 4 páginas', color: 'border-blue-500/20 bg-blue-500/[0.04]', badgeColor: 'text-blue-400 bg-blue-500/10'
-        },
-        {
-            iconPath: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
-            iconColor: 'text-emerald-400', iconBg: 'bg-emerald-500/10 border-emerald-500/20',
-            title: 'Templates de Email — 3 Fases',
-            desc: '9 emails prontos a enviar: reativação de frios, follow-up pós-visita e proposta sem resposta. Personalizáveis com o nome do lead.',
-            badge: 'DOCX · 9 templates', color: 'border-emerald-500/20 bg-emerald-500/[0.04]', badgeColor: 'text-emerald-400 bg-emerald-500/10'
-        },
-        {
-            iconPath: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
-            iconColor: 'text-purple-400', iconBg: 'bg-purple-500/10 border-purple-500/20',
-            title: 'Guia de Follow-up Pós-Visita',
-            desc: 'O que dizer nas primeiras 24h após uma visita. Sequência de 3 pontos de contacto para transformar interesse em proposta.',
-            badge: 'PDF · 6 páginas', color: 'border-purple-500/20 bg-purple-500/[0.04]', badgeColor: 'text-purple-400 bg-purple-500/10'
-        },
-        {
-            iconPath: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
-            iconColor: 'text-amber-400', iconBg: 'bg-amber-500/10 border-amber-500/20',
-            title: 'Mensagens WhatsApp para Leads Frios',
-            desc: '12 mensagens curtas com alta taxa de resposta para reativar leads sem contacto há 2 ou mais semanas. Tom natural, não invasivo.',
-            badge: 'PDF · 12 mensagens', color: 'border-amber-500/20 bg-amber-500/[0.04]', badgeColor: 'text-amber-400 bg-amber-500/10'
-        },
-    ];
+/* â”€â”€â”€ DOCS (hidden — DB pending) â”€â”€â”€ */
+UI.renderLandingDocs = function () { return ''; };
 
-    return `
-        <section id="docs" class="py-24 px-4 bg-[#080c14]">
-            <div class="max-w-5xl mx-auto">
-                <div class="text-center mb-12">
-                    <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-[0.2em] mb-3">Incluído na plataforma</p>
-                    <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight mb-4">Documentos de Reativação<br>de Leads Imobiliários</h2>
-                    <p class="text-gray-500 text-[15px] max-w-xl mx-auto">Além do dashboard, tens acesso a uma biblioteca exclusiva de scripts, templates e guias criados para o mercado imobiliário português.</p>
-                </div>
-
-                <div class="bg-[#0b0f19] border border-emerald-500/[0.15] rounded-3xl p-8 mb-6 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/[0.03] rounded-full blur-[80px] pointer-events-none"></div>
-                    <div class="relative z-10">
-                        <div class="flex items-center justify-between mb-8 flex-wrap gap-4">
-                            <div>
-                                <div class="flex items-center gap-2 mb-2">
-                                    <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider">Biblioteca Exclusiva</span>
-                                </div>
-                                <h3 class="text-xl font-black text-white">Scripts e Templates — Mercado Português</h3>
-                                <p class="text-[13px] text-gray-500 mt-1">Criados para o mercado português. Disponíveis dentro da plataforma.</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-[28px] font-black text-white">100%</p>
-                                <p class="text-[11px] text-emerald-400 font-bold">Incluído · Sem custo extra</p>
-                            </div>
-                        </div>
-                        <div class="grid sm:grid-cols-2 gap-4">
-                            ${docs.map(d => `
-                                <div class="border ${d.color} rounded-2xl p-5 backdrop-blur-sm">
-                                    <div class="flex items-start gap-3">
-                                        <div class="w-9 h-9 rounded-xl ${d.iconBg} border flex items-center justify-center flex-shrink-0">
-                                            <svg class="w-4 h-4 ${d.iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${d.iconPath}"/></svg>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <div class="flex items-start justify-between gap-2 mb-1">
-                                                <h4 class="text-[13px] font-bold text-white leading-snug">${d.title}</h4>
-                                                <span class="text-[8px] font-bold ${d.badgeColor} px-1.5 py-0.5 rounded flex-shrink-0">${d.badge}</span>
-                                            </div>
-                                            <p class="text-[11px] text-gray-500 leading-relaxed">${d.desc}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-
-                <p class="text-center text-[12px] text-gray-600">Novos documentos adicionados regularmente. Membros da plataforma têm acesso automático a todas as atualizações.</p>
-            </div>
-        </section>
-    `;
-};
-
+/* â”€â”€â”€ PROFILES â”€â”€â”€ */
 UI.renderLandingProfiles = function () {
     const lang = UI._lpLang || 'pt';
     const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
     const mgrItems = ['prof-mgr-li-0', 'prof-mgr-li-1', 'prof-mgr-li-2', 'prof-mgr-li-3', 'prof-mgr-li-4'];
     const consItems = ['prof-cons-li-0', 'prof-cons-li-1', 'prof-cons-li-2', 'prof-cons-li-3', 'prof-cons-li-4'];
     return `
-        <section id="perfis" class="py-24 px-4 bg-[#0b0f19] border-y border-white/[0.04]">
-            <div class="max-w-5xl mx-auto">
-                <div class="text-center mb-14">
-                    <p data-translate="prof-eyebrow" class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.2em] mb-3">${_t('prof-eyebrow')}</p>
-                    <h2 class="text-3xl sm:text-4xl font-black mb-4 text-white tracking-tight"><span data-translate="prof-h2-1">${_t('prof-h2-1')}</span><br><span data-translate="prof-h2-2">${_t('prof-h2-2')}</span></h2>
-                    <p data-translate="prof-desc" class="text-gray-500 text-[15px] max-w-xl mx-auto">${_t('prof-desc')}</p>
+    <section id="perfis" style="padding:96px 24px;background:var(--bg1);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);">
+        <div class="wrap">
+            <div style="text-align:center;margin-bottom:64px;">
+                <div class="pill" data-translate="prof-eyebrow">${_t('prof-eyebrow')}</div>
+                <h2 class="section-title" style="max-width:700px;margin:0 auto 10px;">
+                    <span data-translate="prof-h2-1">${_t('prof-h2-1')}</span><br>
+                    <span data-translate="prof-h2-2">${_t('prof-h2-2')}</span>
+                </h2>
+                <p class="section-sub" data-translate="prof-desc" style="margin:0 auto;">${_t('prof-desc')}</p>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px;">
+                <!-- Gestor -->
+                <div class="card lp-anim-hidden lp-delay-3" style="padding:36px;border-color:rgba(59,130,246,0.2);position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(59,130,246,0.35)'" onmouseout="this.style.borderColor='rgba(59,130,246,0.2)'">
+                    <div style="position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(ellipse at top right,rgba(37,99,235,0.06),transparent 70%);pointer-events:none;"></div>
+                    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+                        <div style="width:44px;height:44px;border-radius:12px;background:rgba(37,99,235,0.1);border:1px solid rgba(59,130,246,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <svg width="20" height="20" fill="none" stroke="#60a5fa" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                        </div>
+                        <div>
+                            <h3 style="font-size:18px;font-weight:800;color:#f1f5f9;" data-translate="prof-mgr-title">${_t('prof-mgr-title')}</h3>
+                            <span style="font-size:10px;color:#60a5fa;font-weight:700;text-transform:uppercase;letter-spacing:.06em;" data-translate="prof-mgr-badge">${_t('prof-mgr-badge')}</span>
+                        </div>
+                    </div>
+                    <p style="font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.7;" data-translate="prof-mgr-desc">${_t('prof-mgr-desc')}</p>
+                    <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+                        ${mgrItems.map(k => `<li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#94a3b8;">
+                            <span style="width:6px;height:6px;border-radius:50%;background:#3b82f6;flex-shrink:0;margin-top:5px;display:block;"></span>
+                            <span data-translate="${k}">${_t(k)}</span></li>`).join('')}
+                    </ul>
                 </div>
-
-                <div class="grid md:grid-cols-2 gap-6">
-                    <!-- Director / Gestor -->
-                    <div class="bg-[#080c14] border border-blue-500/20 p-8 rounded-2xl text-left relative overflow-hidden group hover:border-blue-500/35 transition-all">
-                        <div class="absolute top-0 right-0 p-8 opacity-[0.05] group-hover:opacity-[0.08] transition-opacity">
-                            <svg class="w-32 h-32 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                <!-- Consultor -->
+                <div class="card lp-anim-hidden lp-delay-1" style="padding:36px;border-color:rgba(16,185,129,0.2);position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(16,185,129,0.35)'" onmouseout="this.style.borderColor='rgba(16,185,129,0.2)'">
+                    <div style="position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(ellipse at top right,rgba(16,185,129,0.06),transparent 70%);pointer-events:none;"></div>
+                    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+                        <div style="width:44px;height:44px;border-radius:12px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <svg width="20" height="20" fill="none" stroke="#34d399" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                         </div>
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-11 h-11 rounded-xl bg-blue-600/15 border border-blue-500/20 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                            </div>
-                            <div>
-                                <h3 data-translate="prof-mgr-title" class="text-xl font-black text-white">${_t('prof-mgr-title')}</h3>
-                                <span data-translate="prof-mgr-badge" class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">${_t('prof-mgr-badge')}</span>
-                            </div>
+                        <div>
+                            <h3 style="font-size:18px;font-weight:800;color:#f1f5f9;" data-translate="prof-cons-title">${_t('prof-cons-title')}</h3>
+                            <span style="font-size:10px;color:#34d399;font-weight:700;text-transform:uppercase;letter-spacing:.06em;" data-translate="prof-cons-badge">${_t('prof-cons-badge')}</span>
                         </div>
-                        <p data-translate="prof-mgr-desc" class="text-[13px] text-gray-500 mb-6 leading-relaxed">${_t('prof-mgr-desc')}</p>
-                        <ul class="space-y-3">
-                            ${mgrItems.map(k => `<li class="flex items-start gap-2.5 text-[13px] text-gray-400"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0 mt-1.5"></span><span data-translate="${k}">${_t(k)}</span></li>`).join('')}
-                        </ul>
                     </div>
-
-                    <!-- Consultor -->
-                    <div class="bg-[#080c14] border border-emerald-500/20 p-8 rounded-2xl text-left relative overflow-hidden group hover:border-emerald-500/35 transition-all">
-                        <div class="absolute top-0 right-0 p-8 opacity-[0.05] group-hover:opacity-[0.08] transition-opacity">
-                            <svg class="w-32 h-32 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                        </div>
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-11 h-11 rounded-xl bg-emerald-600/15 border border-emerald-500/20 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                            </div>
-                            <div>
-                                <h3 data-translate="prof-cons-title" class="text-xl font-black text-white">${_t('prof-cons-title')}</h3>
-                                <span data-translate="prof-cons-badge" class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">${_t('prof-cons-badge')}</span>
-                            </div>
-                        </div>
-                        <p data-translate="prof-cons-desc" class="text-[13px] text-gray-500 mb-6 leading-relaxed">${_t('prof-cons-desc')}</p>
-                        <ul class="space-y-3">
-                            ${consItems.map(k => `<li class="flex items-start gap-2.5 text-[13px] text-gray-400"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0 mt-1.5"></span><span data-translate="${k}">${_t(k)}</span></li>`).join('')}
-                        </ul>
-                    </div>
+                    <p style="font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.7;" data-translate="prof-cons-desc">${_t('prof-cons-desc')}</p>
+                    <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+                        ${consItems.map(k => `<li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#94a3b8;">
+                            <span style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0;margin-top:5px;display:block;"></span>
+                            <span data-translate="${k}">${_t(k)}</span></li>`).join('')}
+                    </ul>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
     `;
 };
 
-
-
-
+/* â”€â”€â”€ CTA â”€â”€â”€ */
 UI.renderLandingCTA = function () {
     const lang = UI._lpLang || 'pt';
     const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
     return `
-    <section id="cta" class="py-24 px-4 bg-[#080c14]">
-        <div class="max-w-3xl mx-auto relative">
-            <div class="absolute inset-0 bg-blue-600/[0.05] rounded-3xl blur-2xl pointer-events-none"></div>
-            <div class="relative bg-[#0b0f19] border border-white/[0.06] p-10 sm:p-16 rounded-3xl text-center overflow-hidden">
-                <!-- Top glow accent -->
-                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+    <section id="cta" style="padding:120px 24px;background:var(--bg);">
+        <div class="wrap" style="max-width:760px;text-align:center;">
+            <!-- Card -->
+            <div style="position:relative;border-radius:24px;overflow:hidden;padding:72px 48px;
+                background:linear-gradient(145deg,#0d1526,#0a0f1a);
+                border:1px solid rgba(59,130,246,0.18);
+                box-shadow:0 40px 80px rgba(0,0,0,0.5),0 0 0 1px rgba(99,102,241,0.06);">
+                <!-- Top line -->
+                <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.5),rgba(167,139,250,0.4),transparent);"></div>
+                <!-- Ambient glow -->
+                <div style="position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:400px;height:250px;background:radial-gradient(ellipse,rgba(37,99,235,0.12),transparent 70%);pointer-events:none;"></div>
 
-                <p data-translate="cta-eyebrow" class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.2em] mb-4">${_t('cta-eyebrow')}</p>
-                <h2 class="text-3xl sm:text-4xl font-black mb-4 text-white tracking-tight leading-tight"><span data-translate="cta-h2-1">${_t('cta-h2-1')}</span><br><span data-translate="cta-h2-2">${_t('cta-h2-2')}</span></h2>
-                <p data-translate="cta-desc" class="text-gray-500 text-[15px] mb-3 max-w-xl mx-auto leading-relaxed">${_t('cta-desc')}</p>
-                <p data-translate="cta-note" class="text-[13px] text-gray-600 mb-10 max-w-md mx-auto font-medium">${_t('cta-note')}</p>
+                <div style="position:relative;">
+                    <p style="font-size:11px;font-weight:700;color:#60a5fa;text-transform:uppercase;letter-spacing:.2em;margin-bottom:20px;" data-translate="cta-eyebrow">${_t('cta-eyebrow')}</p>
+                    <h2 style="font-size:clamp(28px,4vw,48px);font-weight:800;color:#f1f5f9;line-height:1.1;letter-spacing:-0.025em;margin-bottom:20px;">
+                        <span data-translate="cta-h2-1">${_t('cta-h2-1')}</span><br>
+                        <span data-translate="cta-h2-2" style="background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${_t('cta-h2-2')}</span>
+                    </h2>
+                    <p style="font-size:15px;color:var(--muted);margin-bottom:12px;line-height:1.7;max-width:540px;margin-left:auto;margin-right:auto;" data-translate="cta-desc">${_t('cta-desc')}</p>
+                    <p style="font-size:13px;color:#334155;margin-bottom:40px;max-width:440px;margin-left:auto;margin-right:auto;" data-translate="cta-note">${_t('cta-note')}</p>
 
-                <button id="ctaStartBtn" class="bg-blue-600 text-white rounded-xl px-10 py-4 text-[16px] font-black hover:bg-blue-500 transition-all shadow-2xl shadow-blue-500/30 hover:-translate-y-0.5 transform inline-flex items-center gap-2 group mb-6 active:scale-95">
-                    <span data-translate="cta-btn">${_t('cta-btn')}</span>
-                    <svg class="w-5 h-5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                </button>
+                    <button id="ctaStartBtn" class="btn-primary" style="font-size:16px;padding:16px 40px;border-radius:12px;margin-bottom:28px;">
+                        <span data-translate="cta-btn">${_t('cta-btn')}</span>
+                        <svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                    </button>
 
-                <div class="flex items-center justify-center gap-6 text-[11px] text-gray-600 flex-wrap">
-                    ${['cta-trust-0', 'cta-trust-1', 'cta-trust-2', 'cta-trust-3'].map(k => `<span class="flex items-center gap-1.5"><span class="w-1 h-1 rounded-full bg-emerald-500"></span><span data-translate="${k}">${_t(k)}</span></span>`).join('')}
+                    <div style="display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;">
+                        ${['cta-trust-0', 'cta-trust-1', 'cta-trust-2', 'cta-trust-3'].map(k => `<span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#334155;font-weight:500;">
+                            <span style="width:5px;height:5px;border-radius:50%;background:#10b981;display:block;"></span>
+                            <span data-translate="${k}">${_t(k)}</span></span>`).join('')}
+                    </div>
                 </div>
             </div>
         </div>
-        </section>
+    </section>
     `;
 };
 
+/* â”€â”€â”€ FOOTER â”€â”€â”€ */
 UI.renderLandingFooter = function () {
     const lang = UI._lpLang || 'pt';
     const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
     return `
-    <footer class="border-t border-white/[0.04] py-10 px-4 bg-[#080c14]">
-        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div class="flex items-center gap-3">
-                <div class="w-6 h-6 bg-blue-600 rounded-md flex items-center justify-center text-[10px] font-black text-white">K</div>
-                <div>
-                    <span class="text-[13px] font-black text-gray-400">KPI Master</span>
-                    <span data-translate="footer-badge" class="text-[10px] text-blue-400 font-bold ml-2">${_t('footer-badge')}</span>
-                </div>
+    <footer style="padding:40px 24px;border-top:1px solid var(--border2);background:var(--bg);">
+        <div class="wrap" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#2563eb,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff;">K</div>
+                <span style="font-size:14px;font-weight:800;color:#f1f5f9;letter-spacing:-.02em;">KPI Master</span>
+                <span style="font-size:9px;font-weight:700;color:#93c5fd;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:99px;padding:2px 7px;letter-spacing:.06em;text-transform:uppercase;" data-translate="footer-badge">${_t('footer-badge')}</span>
             </div>
-            <p data-translate="footer-copy" class="text-[12px] text-gray-600">${_t('footer-copy')}</p>
-            <div class="flex items-center gap-6 text-[12px] text-gray-600">
-                <a href="#" data-translate="footer-privacy" class="hover:text-gray-300 transition-colors">${_t('footer-privacy')}</a>
-                <a href="#" data-translate="footer-terms" class="hover:text-gray-300 transition-colors">${_t('footer-terms')}</a>
-                <a href="#" data-translate="footer-contact" class="hover:text-gray-300 transition-colors">${_t('footer-contact')}</a>
+            <p style="font-size:12px;color:#334155;" data-translate="footer-copy">${_t('footer-copy')}</p>
+            <div style="display:flex;gap:24px;">
+                ${['footer-privacy', 'footer-terms', 'footer-contact'].map(k => `<a href="#" style="font-size:12px;color:#334155;text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#94a3b8'" onmouseout="this.style.color='#334155'" data-translate="${k}">${_t(k)}</a>`).join('')}
             </div>
         </div>
-        </footer>
+    </footer>
     `;
+};
+
+
+
+UI.initLandingAnimations = function() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                
+                // Animate counters
+                if(entry.target.hasAttribute('data-count-to')) {
+                    const targetStr = entry.target.getAttribute('data-count-to');
+                    const target = parseInt(targetStr, 10);
+                    animateCounter(entry.target, target, targetStr.includes('%'));
+                    entry.target.removeAttribute('data-count-to');
+                }
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.lp-anim-hidden, .lp-fade-hidden, .lp-typing-txt, .lp-bar-fill, [data-count-to]').forEach(el => observer.observe(el));
+
+    function animateCounter(el, target, isPercentage) {
+        let current = 0;
+        const duration = 1500;
+        const stepTime = Math.max(20, Math.floor(duration / target)) || 30;
+        const timer = setInterval(() => {
+            current += Math.max(1, Math.ceil(target / (duration / stepTime)));
+            if(current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            el.innerText = current + (isPercentage ? '%' : '');
+        }, stepTime);
+    }
 };

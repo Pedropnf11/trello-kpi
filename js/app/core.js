@@ -226,6 +226,8 @@ App.attachDynamicEvents = function () {
 };
 
 App.attachLoginEvents = function () {
+    if (UI.initLandingAnimations) UI.initLandingAnimations();
+
     const loginHandler = () => {
         if (!this.state.apiKey) {
             alert('Erro: API Key não encontrada no .env!');
