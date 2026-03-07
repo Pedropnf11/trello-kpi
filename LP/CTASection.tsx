@@ -14,7 +14,7 @@ const CTASection = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-purple/10" />
         <div className="relative z-10">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Pronto para transformar o teu Traello?
+            Pronto para transformar o teu Trello?
           </h2>
           <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
             Conecta o teu quadro e começa a ver métricas de performance em menos de 2 minutos.
