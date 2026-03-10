@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAppStore } from "@/store/appStore";
-import { X, Save, Copy, CheckCircle2 } from "lucide-react";
+import { X, Save, Copy, CheckCircle2, ExternalLink, Zap } from "lucide-react";
 
 interface WebhookSettingsModalProps {
     isOpen: boolean;
@@ -81,15 +81,56 @@ export default function WebhookSettingsModal({ isOpen, onClose }: WebhookSetting
                     </div>
 
                     <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
-                        <h4 className="text-sm font-semibold text-blue-400 mb-1">Payload de Exemplo</h4>
-                        <pre className="text-xs text-gray-400 overflow-x-auto">
+                        <div className="flex items-center gap-2 mb-3">
+                            <Zap className="w-4 h-4 text-blue-400" />
+                            <h4 className="text-sm font-semibold text-blue-400 uppercase tracking-widest">Dicas e Templates</h4>
+                        </div>
+                        <div className="space-y-3">
+                            <p className="text-[11px] text-gray-400 leading-relaxed font-medium">
+                                Usa estes templates para criar a tua automação no <span className="text-white">Make.com</span> e receber relatórios automáticos.
+                            </p>
+                            <div className="space-y-2">
+                                <a
+                                    href="https://eu1.make.com/public/shared-scenario/sYmeIcy6C7x/integration-webhooks-gmail-corrected"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:border-blue-500/30 hover:bg-white/10 transition-all group"
+                                >
+                                    <div className="flex flex-col">
+                                        <span className="text-xs font-bold text-gray-200 group-hover:text-blue-400 transition-colors">Webhook → Gmail</span>
+                                        <span className="text-[10px] text-gray-500 lowercase">Relatório Simples</span>
+                                    </div>
+                                    <ExternalLink className="w-3.5 h-3.5 text-gray-600 group-hover:text-blue-400" />
+                                </a>
+                                <a
+                                    href="https://eu1.make.com/public/shared-scenario/sYmeIcy6C7x/integration-webhooks-gmail-corrected"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:border-blue-500/30 hover:bg-white/10 transition-all group"
+                                >
+                                    <div className="flex flex-col">
+                                        <span className="text-xs font-bold text-gray-200 group-hover:text-blue-400 transition-colors">Webhook → Slack/Teams</span>
+                                        <span className="text-[10px] text-gray-500 lowercase">Relatório Avançado</span>
+                                    </div>
+                                    <ExternalLink className="w-3.5 h-3.5 text-gray-600 group-hover:text-blue-400" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-[#0a0a0b] border border-white/5 rounded-xl p-4">
+                        <div className="flex items-center justify-between mb-3 text-[10px] uppercase font-black tracking-widest text-gray-600">
+                            <span>Payload de Exemplo</span>
+                            <span className="text-blue-500/50">JSON</span>
+                        </div>
+                        <pre className="text-[11px] text-gray-500 overflow-x-auto font-mono leading-relaxed p-2">
                             {`{
   "event": "goal_reached",
-  "user_name": "Trello KPI",
-  "pipeline_name": "Vendas",
-  "deals_won": 12,
-  "value": 45000,
-  "timestamp": "2026-03-09T17:45:00Z"
+  "user_name": "Consultor Exemplo",
+  "pipeline": "Vendas Imobiliário",
+  "deals_won": 5,
+  "total_value": 150000,
+  "timestamp": "${new Date().toISOString()}"
 }`}
                         </pre>
                     </div>

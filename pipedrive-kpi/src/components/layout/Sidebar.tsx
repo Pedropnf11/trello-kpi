@@ -10,7 +10,9 @@ import {
     Building2,
     Users,
     ChevronRight,
-    Circle
+    Circle,
+    Calendar,
+    X
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -27,6 +29,10 @@ export default function Sidebar() {
     const setViewUsers = useAppStore(state => state.setViewUsers);
     const selectedUserId = useAppStore(state => state.selectedUserId);
     const setSelectedUserId = useAppStore(state => state.setSelectedUserId);
+    const startDate = useAppStore(state => state.startDate);
+    const endDate = useAppStore(state => state.endDate);
+    const setStartDate = useAppStore(state => state.setStartDate);
+    const setEndDate = useAppStore(state => state.setEndDate);
     const logout = useAppStore(state => state.logout);
 
     const [isWebhookModalOpen, setIsWebhookModalOpen] = useState(false);
@@ -114,6 +120,45 @@ export default function Sidebar() {
                         </nav>
                     </div>
 
+                    {/* Period Section (Matches Trello structure) */}
+                    <div className="px-6 py-4 border-b border-white/5">
+                        <div className="flex items-center justify-between mb-4 px-1">
+                            <h3 className="text-[10px] text-gray-500 uppercase tracking-widest font-black flex items-center gap-2">
+                                <Calendar className="w-3 h-3" />
+                                Período
+                            </h3>
+                            {(startDate || endDate) && (
+                                <button
+                                    onClick={() => { setStartDate(null); setEndDate(null); }}
+                                    className="text-[10px] text-rose-500 hover:text-rose-400 font-bold flex items-center gap-1 transition-colors"
+                                >
+                                    <X className="w-2 h-2" />
+                                    Limpar
+                                </button>
+                            )}
+                        </div>
+                        <div className="space-y-2">
+                            <div className="relative">
+                                <input
+                                    type="date"
+                                    value={startDate || ''}
+                                    onChange={(e) => setStartDate(e.target.value || null)}
+                                    className="w-full bg-white/[0.03] border border-white/5 rounded-xl px-3 py-2 text-xs text-gray-300 focus:outline-none focus:border-blue-500/40 focus:ring-0 transition-colors appearance-none"
+                                />
+                                <span className="absolute right-3 top-2.5 text-[10px] text-gray-600 pointer-events-none uppercase font-bold">Início</span>
+                            </div>
+                            <div className="relative">
+                                <input
+                                    type="date"
+                                    value={endDate || ''}
+                                    onChange={(e) => setEndDate(e.target.value || null)}
+                                    className="w-full bg-white/[0.03] border border-white/5 rounded-xl px-3 py-2 text-xs text-gray-300 focus:outline-none focus:border-blue-500/40 focus:ring-0 transition-colors appearance-none"
+                                />
+                                <span className="absolute right-3 top-2.5 text-[10px] text-gray-600 pointer-events-none uppercase font-bold">Fim</span>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Team Section (Only for Manager) */}
                     {role === 'manager' && (
                         <div className="px-6 py-4 flex-1 flex flex-col min-h-0">
@@ -129,8 +174,8 @@ export default function Sidebar() {
                                 <button
                                     onClick={() => setSelectedUserId(null)}
                                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all text-xs ${selectedUserId === null
-                                            ? 'bg-blue-600/10 text-blue-400 font-bold border border-blue-500/10'
-                                            : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
+                                        ? 'bg-blue-600/10 text-blue-400 font-bold border border-blue-500/10'
+                                        : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
                                         }`}
                                 >
                                     <Circle className={`w-2 h-2 ${selectedUserId === null ? 'fill-blue-400 text-blue-400' : 'text-gray-600'}`} />
@@ -142,8 +187,8 @@ export default function Sidebar() {
                                         key={user.id}
                                         onClick={() => setSelectedUserId(user.id)}
                                         className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-all text-xs group ${selectedUserId === user.id
-                                                ? 'bg-blue-600/10 text-blue-400 font-bold border border-blue-500/10'
-                                                : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
+                                            ? 'bg-blue-600/10 text-blue-400 font-bold border border-blue-500/10'
+                                            : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
                                             }`}
                                     >
                                         <div className="flex items-center gap-3 overflow-hidden">

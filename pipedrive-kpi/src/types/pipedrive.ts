@@ -43,6 +43,7 @@ export interface Deal {
     update_time: string;
     won_time: string | null;
     lost_time: string | null;
+    stage_change_time: string | null;
     lost_reason: string | null;
     expected_close_date: string | null;
     probability: number | null;
@@ -110,6 +111,8 @@ export interface AppState {
     webhookUrl: string;
     viewUsers: PipedriveUser[];
     selectedUserId: number | null;
+    startDate: string | null;
+    endDate: string | null;
     dashboardSettings: {
         showPipelineValue: boolean;
         showWinRate: boolean;
@@ -125,6 +128,8 @@ export interface AppState {
     setWebhookUrl: (url: string) => void;
     setViewUsers: (users: PipedriveUser[]) => void;
     setSelectedUserId: (userId: number | null) => void;
+    setStartDate: (date: string | null) => void;
+    setEndDate: (date: string | null) => void;
     updateDashboardSettings: (settings: Partial<AppState['dashboardSettings']>) => void;
     resetPipelineAndRole: () => void;
     logout: () => void;

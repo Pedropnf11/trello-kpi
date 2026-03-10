@@ -16,6 +16,8 @@ export const useAppStore = create<AppState>()(
             webhookUrl: '',
             viewUsers: [],
             selectedUserId: null,
+            startDate: null,
+            endDate: null,
             dashboardSettings: {
                 showPipelineValue: true,
                 showWinRate: true,
@@ -51,6 +53,12 @@ export const useAppStore = create<AppState>()(
 
             setSelectedUserId: (userId: number | null) =>
                 set({ selectedUserId: userId }),
+
+            setStartDate: (date: string | null) =>
+                set({ startDate: date }),
+
+            setEndDate: (date: string | null) =>
+                set({ endDate: date }),
 
             updateDashboardSettings: (settings: Partial<AppState['dashboardSettings']>) =>
                 set((state) => ({

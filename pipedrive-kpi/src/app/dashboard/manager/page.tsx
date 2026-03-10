@@ -10,6 +10,9 @@ import VisualFunnel from '@/components/dashboard/VisualFunnel';
 import Leaderboard from '@/components/dashboard/Leaderboard';
 import ActiveSalespeople from '@/components/dashboard/ActiveSalespeople';
 import WonLostChart from '@/components/dashboard/WonLostChart';
+import FocusZone from '@/components/dashboard/FocusZone';
+import PerformanceTable from '@/components/dashboard/PerformanceTable';
+import ActivitiesTable from '@/components/dashboard/ActivitiesTable';
 import {
     TrendingUp,
     Target,
@@ -20,16 +23,22 @@ import {
     RefreshCw,
     Settings2,
     Eye,
-    EyeOff
+    EyeOff,
+    Filter,
+    Users,
+    Activity as ActivityIcon
 } from 'lucide-react';
 
 export default function ManagerDashboard() {
     const token = useAppStore(state => state.token);
     const selectedPipelineId = useAppStore(state => state.selectedPipelineId);
     const selectedUserId = useAppStore(state => state.selectedUserId);
+    const setSelectedUserId = useAppStore(state => state.setSelectedUserId);
     const viewUsers = useAppStore(state => state.viewUsers);
     const { showPipelineValue, showWinRate, showLeaderboard, defaultModule } = useAppStore(state => state.dashboardSettings);
     const updateSettings = useAppStore(state => state.updateDashboardSettings);
+    const startDate = useAppStore(state => state.startDate);
+    const endDate = useAppStore(state => state.endDate);
 
     const [deals, setDeals] = useState<Deal[]>([]);
     const [allDeals, setAllDeals] = useState<Deal[]>([]);
@@ -77,11 +86,52 @@ export default function ManagerDashboard() {
         fetchData();
     }, [token, selectedPipelineId]);
 
+    // Date filter logic
+    // Date filter logic (Standard range check)
+    const isDateInRange = (dateStr: string | null, start: string | null, end: string | null) => {
+        if (!dateStr) return false;
+        if (!start && !end) return true;
+
+        const date = new Date(dateStr);
+        date.setHours(0, 0, 0, 0);
+
+        if (start) {
+            const startDate = new Date(start);
+            startDate.setHours(0, 0, 0, 0);
+            if (date < startDate) return false;
+        }
+
+        if (end) {
+            const endDate = new Date(end);
+            endDate.setHours(23, 59, 59, 999);
+            if (date > endDate) return false;
+        }
+
+        return true;
+    };
+
     // Filtering & Calculations
     const filteredDeals = useMemo(() => {
-        if (selectedUserId === null) return deals;
-        return deals.filter(deal => deal.user_id.id === selectedUserId);
-    }, [deals, selectedUserId]);
+        let result = deals;
+
+        // 1. User Filter
+        if (selectedUserId !== null) {
+            result = result.filter(deal => {
+                const uid = typeof deal.user_id === 'object' ? deal.user_id?.id : deal.user_id;
+                return Number(uid) === Number(selectedUserId);
+            });
+        }
+
+        // 2. Date Filter
+        result = result.filter(deal => {
+            if (deal.status === 'open') return isDateInRange(deal.add_time, startDate, endDate);
+            if (deal.status === 'won') return isDateInRange(deal.won_time, startDate, endDate);
+            if (deal.status === 'lost') return isDateInRange(deal.lost_time, startDate, endDate);
+            return true;
+        });
+
+        return result;
+    }, [deals, selectedUserId, startDate, endDate]);
 
     const metrics = useMemo(() => {
         const activeDeals = filteredDeals.filter(d => d.status === 'open');
@@ -113,24 +163,115 @@ export default function ManagerDashboard() {
             .sort((a, b) => b.count - a.count);
     }, [filteredDeals]);
 
+    const pipelineVelocity = useMemo(() => {
+        // Calculate average days in each stage for open deals
+        const stageVelocity = stages.map(stage => {
+            const stageDeals = deals.filter(d => d.stage_id === stage.id && d.status === 'open');
+            if (stageDeals.length === 0) return { stageId: stage.id, avgDays: 0 };
+
+            const totalDays = stageDeals.reduce((sum, deal) => {
+                const start = new Date(deal.stage_change_time || deal.add_time);
+                const diff = Math.floor((new Date().getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+                return sum + diff;
+            }, 0);
+
+            return {
+                stageId: stage.id,
+                avgDays: Math.round(totalDays / stageDeals.length)
+            };
+        });
+        return stageVelocity;
+    }, [stages, deals]);
+
     const funnelData = useMemo(() => {
         return stages.map(stage => {
             const dealsInStage = filteredDeals.filter(d => d.stage_id === stage.id && d.status === 'open');
+            const velocity = pipelineVelocity.find(v => v.stageId === stage.id);
             return {
                 name: stage.name,
                 value: dealsInStage.reduce((sum, d) => sum + (d.value || 0), 0),
-                deals: dealsInStage.length
+                deals: dealsInStage.length,
+                avgDays: velocity?.avgDays
             };
         });
-    }, [stages, filteredDeals]);
+    }, [stages, filteredDeals, pipelineVelocity]);
+
+    const formatCurrency = (val: number) => {
+        return new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(val);
+    };
+
+    const goalTrackingData = useMemo(() => {
+        // Mock targets for demonstration - in a real app these could come from the store or Pipedrive goals API
+        const TEAM_GOAL = 500000; // 500k €
+        const INDIVIDUAL_GOAL = 100000; // 100k € per person
+
+        const wonDeals = filteredDeals.filter(d => d.status === 'won');
+        const openDeals = filteredDeals.filter(d => d.status === 'open');
+
+        let teamCurrent = 0;
+        let teamForecast = 0;
+
+        const userStats = new Map();
+
+        // Process Won deals for current progress
+        wonDeals.forEach(deal => {
+            const dealUserId = typeof deal.user_id === 'object' ? deal.user_id?.id : deal.user_id;
+            const userId = Number(dealUserId);
+            const value = deal.value || 0;
+            teamCurrent += value;
+
+            if (!userStats.has(userId)) {
+                const userName = typeof deal.user_id === 'object' ? deal.user_id?.name : 'Vendedor';
+                userStats.set(userId, { id: userId, name: userName, current: 0, forecast: 0, target: INDIVIDUAL_GOAL });
+            }
+            userStats.get(userId).current += value;
+        });
+
+        // Process Open deals for forecasting (value * probability)
+        openDeals.forEach(deal => {
+            const dealUserId = typeof deal.user_id === 'object' ? deal.user_id?.id : deal.user_id;
+            const userId = Number(dealUserId);
+            // Use deal probability or stage probability as fallback
+            const probability = (deal.probability || 100) / 100;
+            const weightedValue = (deal.value || 0) * probability;
+
+            teamForecast += weightedValue;
+
+            if (!userStats.has(userId)) {
+                const userName = typeof deal.user_id === 'object' ? deal.user_id?.name : 'Vendedor';
+                userStats.set(userId, { id: userId, name: userName, current: 0, forecast: 0, target: INDIVIDUAL_GOAL });
+            }
+            userStats.get(userId).forecast += weightedValue;
+        });
+
+        // Total forecast is Won + Weighted Open
+        teamForecast += teamCurrent;
+
+        // Finalize individual forecast by adding current
+        userStats.forEach(stat => {
+            stat.forecast += stat.current;
+        });
+
+        return {
+            teamGoal: TEAM_GOAL,
+            teamCurrent,
+            teamForecast,
+            vendedores: Array.from(userStats.values())
+        };
+    }, [filteredDeals]);
+
+
 
     const leaderboardData = useMemo(() => {
         const wonDeals = filteredDeals.filter(d => d.status === 'won');
         const usersMap = new Map();
 
         wonDeals.forEach(deal => {
-            const userId = deal.user_id.id;
-            const current = usersMap.get(userId) || { id: userId, name: deal.user_id.name, value: 0, deals: 0 };
+            const dealUserId = typeof deal.user_id === 'object' ? deal.user_id?.id : deal.user_id;
+            const userId = Number(dealUserId);
+            const userName = typeof deal.user_id === 'object' ? deal.user_id?.name : 'Vendedor';
+
+            const current = usersMap.get(userId) || { id: userId, name: userName, value: 0, deals: 0 };
             usersMap.set(userId, {
                 ...current,
                 value: current.value + deal.value,
@@ -143,8 +284,6 @@ export default function ManagerDashboard() {
 
     const activeSalespeopleData = useMemo(() => {
         const usersMap = new Map();
-        const now = new Date();
-        const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
 
         // Initialize with viewUsers
         viewUsers.forEach(u => {
@@ -160,6 +299,9 @@ export default function ManagerDashboard() {
         if (activities) {
             activities.forEach(act => {
                 if (!act.done) return;
+                // Add date filter application for activity
+                if (!isDateInRange(act.add_time || act.due_date, startDate, endDate)) return;
+
                 const userId = act.user_id;
                 if (!usersMap.has(userId)) return;
 
@@ -177,6 +319,8 @@ export default function ManagerDashboard() {
         // 2. Process Notes (Comments)
         if (notes) {
             notes.forEach(note => {
+                if (!isDateInRange(note.add_time, startDate, endDate)) return;
+
                 const userId = note.user_id;
                 if (!usersMap.has(userId)) return;
                 const current = usersMap.get(userId);
@@ -187,14 +331,13 @@ export default function ManagerDashboard() {
         }
 
         // 3. Process Deal Creations & Movements
-        // For movements, we check deals where stage_change_time is recent
         if (allDeals) {
             allDeals.forEach(deal => {
-                const creatorId = deal.user_id.id; // Usually owner is creator in small teams or recent lists
+                const dealUserId = typeof deal.user_id === 'object' ? deal.user_id?.id : deal.user_id;
+                const creatorId = Number(dealUserId);
 
-                // Track Creations (approximate by user ownership if not explicitly returning creator)
-                const addDate = new Date(deal.add_time);
-                if (addDate >= sevenDaysAgo && usersMap.has(creatorId)) {
+                // Track Creations
+                if (isDateInRange(deal.add_time, startDate, endDate) && usersMap.has(creatorId)) {
                     const current = usersMap.get(creatorId);
                     current.breakdown.creations += 1;
                     current.totalImpact += 5; // Creating a lead is high value
@@ -202,9 +345,8 @@ export default function ManagerDashboard() {
                 }
 
                 // Track Movements
-                if (deal.stage_change_time) {
-                    const changeDate = new Date(deal.stage_change_time);
-                    if (changeDate >= sevenDaysAgo && usersMap.has(creatorId)) {
+                if (deal.stage_change_time && isDateInRange(deal.stage_change_time, startDate, endDate)) {
+                    if (usersMap.has(creatorId)) {
                         const current = usersMap.get(creatorId);
                         current.breakdown.movements += 1;
                         current.totalImpact += 3; // Moving a lead shows progression
@@ -215,11 +357,53 @@ export default function ManagerDashboard() {
         }
 
         return Array.from(usersMap.values()).filter(u => u.totalImpact > 0 || (selectedUserId === null));
-    }, [activities, notes, allDeals, viewUsers, selectedUserId]);
+    }, [(activities || []), notes, allDeals, viewUsers, selectedUserId, startDate, endDate]);
 
-    const formatCurrency = (val: number) => {
-        return new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(val);
-    };
+    // NEW: Performance and Activities data for the whole team
+    const performanceTableData = useMemo(() => {
+        if (!viewUsers) return [];
+        return viewUsers.map(user => {
+            const userDeals = (allDeals || []).filter(d => {
+                const dealUserId = typeof d.user_id === 'object' ? d.user_id?.id : d.user_id;
+                return Number(dealUserId) === Number(user.id);
+            });
+            const stageCounts: Record<number, number> = {};
+            (stages || []).forEach(s => {
+                stageCounts[s.id] = userDeals.filter(d => d.stage_id === s.id && d.status === 'open').length;
+            });
+            const wonValue = userDeals.filter(d => d.status === 'won').reduce((sum, d) => sum + (d.value || 0), 0);
+
+            return {
+                id: user.id,
+                name: user.name,
+                stageCounts,
+                totalDeals: userDeals.length,
+                totalValue: wonValue
+            };
+        });
+    }, [viewUsers, allDeals, stages]);
+
+    const activitiesTableData = useMemo(() => {
+        if (!viewUsers) return [];
+        const now = new Date();
+        const safeActivities = activities || [];
+        return viewUsers.map(user => {
+            const userActivities = safeActivities.filter(a => a.user_id === user.id);
+            const total = userActivities.length;
+            const onTime = userActivities.filter(a => a.done || (a.due_date && new Date(a.due_date) >= now)).length;
+            const overdue = userActivities.filter(a => !a.done && a.due_date && new Date(a.due_date) < now).length;
+            const pending = userActivities.filter(a => !a.done).length;
+
+            return {
+                id: user.id,
+                name: user.name,
+                total,
+                onTime,
+                overdue,
+                pending
+            };
+        });
+    }, [viewUsers, activities]);
 
     if (loading) {
         return (
@@ -312,21 +496,23 @@ export default function ManagerDashboard() {
                             </span>
                         </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={() => setShowSettings(!showSettings)}
-                            className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all border shadow-lg ${showSettings ? 'bg-blue-600 border-blue-500 text-white shadow-blue-500/20' : 'bg-white/[0.03] hover:bg-white/[0.08] border-white/5 text-gray-400'}`}
-                        >
-                            <Settings2 className="w-4 h-4" />
-                            Personalizar
-                        </button>
-                        <button
-                            onClick={fetchData}
-                            className="flex items-center gap-2 px-6 py-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl text-[11px] font-black uppercase tracking-widest text-gray-400 transition-all border border-white/5 active:scale-95"
-                        >
-                            <RefreshCw className="w-4 h-4" />
-                            Sync
-                        </button>
+                    <div className="flex flex-col md:flex-row items-end md:items-center gap-4">
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setShowSettings(!showSettings)}
+                                className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all border shadow-lg ${showSettings ? 'bg-blue-600 border-blue-500 text-white shadow-blue-500/20' : 'bg-white/[0.03] hover:bg-white/[0.08] border-white/5 text-gray-400'}`}
+                            >
+                                <Settings2 className="w-4 h-4" />
+                                Personalizar
+                            </button>
+                            <button
+                                onClick={fetchData}
+                                className="flex items-center gap-2 px-6 py-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl text-[11px] font-black uppercase tracking-widest text-gray-400 transition-all border border-white/5 active:scale-95"
+                            >
+                                <RefreshCw className="w-4 h-4" />
+                                Sync
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -367,18 +553,38 @@ export default function ManagerDashboard() {
                 </div>
 
                 {/* 2. Main Content Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    {/* Visual Funnel */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    {/* Visual Funnel & WonLost Chart */}
                     <div className="lg:col-span-8 space-y-8">
                         <VisualFunnel data={funnelData} />
 
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8">
                             <WonLostChart won={metrics.wonCount} lost={metrics.lostCount} lostReasons={lostReasons} />
                         </div>
+
+                        {/* Team Performance and Activities Tables - Integrated here to avoid overlap */}
+                        <div className="space-y-8 pt-8">
+                            <div className="bg-[#0f172a] rounded-3xl p-8 border border-white/[0.04] shadow-2xl">
+                                <ActivitiesTable members={activitiesTableData} />
+                            </div>
+
+                            <div className="bg-[#0f172a] rounded-3xl p-8 border border-white/[0.04] shadow-2xl">
+                                <PerformanceTable
+                                    title="Performance de Equipa por Stage"
+                                    members={performanceTableData}
+                                    stages={stages}
+                                />
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Lateral Modules: Activities or Leaderboard */}
+                    {/* Lateral Modules: FocusZone, Activities or Leaderboard */}
                     <div className="lg:col-span-4 space-y-8">
+                        <FocusZone
+                            deals={allDeals}
+                            stages={stages}
+                        />
+
                         {defaultModule === 'activities' ? (
                             <ActiveSalespeople data={activeSalespeopleData} />
                         ) : (
@@ -396,6 +602,8 @@ export default function ManagerDashboard() {
                         )}
                     </div>
                 </div>
+
+
 
             </main>
         </div>

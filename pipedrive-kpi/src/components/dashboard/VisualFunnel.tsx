@@ -1,11 +1,12 @@
 "use client";
 
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, LabelList } from 'recharts';
 
 interface FunnelData {
     name: string;
     value: number;
     deals: number;
+    avgDays?: number;
 }
 
 interface VisualFunnelProps {
@@ -33,6 +34,12 @@ export default function VisualFunnel({ data }: VisualFunnelProps) {
                             <span className="text-gray-500 font-bold">Negócios:</span>
                             <span>{item.deals}</span>
                         </p>
+                        {item.avgDays !== undefined && (
+                            <p className="text-sm font-black text-white flex items-center justify-between gap-4">
+                                <span className="text-gray-500 font-bold">Média de Dias:</span>
+                                <span className="text-orange-400">{item.avgDays}d</span>
+                            </p>
+                        )}
                     </div>
                 </div>
             );
@@ -97,6 +104,37 @@ export default function VisualFunnel({ data }: VisualFunnelProps) {
                                     className="filter drop-shadow-lg transition-all duration-300 hover:opacity-80"
                                 />
                             ))}
+                        </Bar>
+                        <Bar
+                            dataKey={useDealsForWidth ? "deals" : "value"}
+                            xAxisId={0}
+                            hide
+                        >
+                            {data.map((entry, index) => (
+                                <Cell key={`label-${index}`} />
+                            ))}
+                            {/* @ts-ignore */}
+                            <LabelList
+                                dataKey="avgDays"
+                                position="insideRight"
+                                content={(props: any) => {
+                                    const { x, y, width, height, value } = props;
+                                    if (value === undefined) return null;
+                                    return (
+                                        <g transform={`translate(${x + width + 5},${y + height / 2})`}>
+                                            <text
+                                                dy={4}
+                                                fill="#9ca3af"
+                                                fontSize={10}
+                                                fontWeight="900"
+                                                className="uppercase tracking-tighter"
+                                            >
+                                                {value}d
+                                            </text>
+                                        </g>
+                                    );
+                                }}
+                            />
                         </Bar>
                     </BarChart>
                 </ResponsiveContainer>

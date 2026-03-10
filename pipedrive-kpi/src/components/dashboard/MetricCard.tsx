@@ -9,7 +9,7 @@ interface MetricCardProps {
         value: number;
         isPositive: boolean;
     };
-    color: 'blue' | 'green' | 'red' | 'orange' | 'purple';
+    color: 'blue' | 'green' | 'red' | 'orange' | 'purple' | 'violet';
 }
 
 export default function MetricCard({ title, value, subtitle, icon: Icon, trend, color }: MetricCardProps) {
@@ -19,6 +19,7 @@ export default function MetricCard({ title, value, subtitle, icon: Icon, trend, 
         red: 'from-red-500/20 to-red-600/5 text-red-400 border-red-500/20 shadow-red-500/10',
         orange: 'from-orange-500/20 to-orange-600/5 text-orange-400 border-orange-500/20 shadow-orange-500/10',
         purple: 'from-purple-500/20 to-purple-600/5 text-purple-400 border-purple-500/20 shadow-purple-500/10',
+        violet: 'from-violet-500/20 to-violet-600/5 text-violet-400 border-violet-500/20 shadow-violet-500/10',
     };
 
     const iconBgClasses = {
@@ -27,6 +28,7 @@ export default function MetricCard({ title, value, subtitle, icon: Icon, trend, 
         red: 'bg-red-500/10 text-red-400',
         orange: 'bg-orange-500/10 text-orange-400',
         purple: 'bg-purple-500/10 text-purple-400',
+        violet: 'bg-violet-500/10 text-violet-400',
     };
 
     return (
