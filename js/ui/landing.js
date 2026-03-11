@@ -741,14 +741,14 @@ UI.renderLandingFooter = function () {
 
 
 
-UI.initLandingAnimations = function() {
+UI.initLandingAnimations = function () {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if(entry.isIntersecting) {
+            if (entry.isIntersecting) {
                 entry.target.classList.add('is-visible');
-                
+
                 // Animate counters
-                if(entry.target.hasAttribute('data-count-to')) {
+                if (entry.target.hasAttribute('data-count-to')) {
                     const targetStr = entry.target.getAttribute('data-count-to');
                     const target = parseInt(targetStr, 10);
                     if (!isNaN(target)) {
@@ -768,7 +768,7 @@ UI.initLandingAnimations = function() {
         const stepTime = Math.max(20, Math.floor(duration / target)) || 30;
         const timer = setInterval(() => {
             current += Math.max(1, Math.ceil(target / (duration / stepTime)));
-            if(current >= target) {
+            if (current >= target) {
                 current = target;
                 clearInterval(timer);
             }
