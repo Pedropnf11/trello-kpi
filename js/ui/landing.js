@@ -123,7 +123,7 @@ UI.applyLandingTranslation = function (lang) {
     });
     // Update toggle button labels (desktop + mobile)
     const label = lang === 'pt'
-        ? `<span style="opacity:.4">PT</span> <span style="opacity:.15">|</span> EN`
+        ? `<span style="opacity:.4">PTT</span> <span style="opacity:.15">|</span> EN`
         : `PT <span style="opacity:.15">|</span> <span style="opacity:.4">EN</span>`;
     const btn = document.getElementById('lpLangToggleBtn');
     if (btn) btn.innerHTML = label;
@@ -741,14 +741,14 @@ UI.renderLandingFooter = function () {
 
 
 
-UI.initLandingAnimations = function() {
+UI.initLandingAnimations = function () {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if(entry.isIntersecting) {
+            if (entry.isIntersecting) {
                 entry.target.classList.add('is-visible');
-                
+
                 // Animate counters
-                if(entry.target.hasAttribute('data-count-to')) {
+                if (entry.target.hasAttribute('data-count-to')) {
                     const targetStr = entry.target.getAttribute('data-count-to');
                     const target = parseInt(targetStr, 10);
                     if (!isNaN(target)) {
@@ -768,7 +768,7 @@ UI.initLandingAnimations = function() {
         const stepTime = Math.max(20, Math.floor(duration / target)) || 30;
         const timer = setInterval(() => {
             current += Math.max(1, Math.ceil(target / (duration / stepTime)));
-            if(current >= target) {
+            if (current >= target) {
                 current = target;
                 clearInterval(timer);
             }
