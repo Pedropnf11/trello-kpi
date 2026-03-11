@@ -270,7 +270,7 @@ UI.renderLandingPage = function (state) {
         ${UI.renderLandingHero()}
         ${UI.renderLandingPainPoints()}
         ${UI.renderLandingFeatures()}
-        <!-- DOCS SECTION — temporariamente oculta (DB pendente) -->
+        <!-- DOCCS SECTION — temporariamente oculta (DB pendente) -->
         ${UI.renderLandingAudience()}
         ${UI.renderLandingProfiles()}
         ${UI.renderLandingCTA()}
