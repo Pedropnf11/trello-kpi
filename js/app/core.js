@@ -238,23 +238,39 @@ App.attachLoginEvents = function () {
         window.location.href = authUrl;
     };
 
+    // Auth screen button
     const loginBtn = document.getElementById('loginTrelloBtn');
     if (loginBtn) loginBtn.addEventListener('click', loginHandler);
 
-    // Landing Page Buttons
+    // Landing Page: hero button
     const heroBtn = document.getElementById('heroStartBtn');
     if (heroBtn) heroBtn.addEventListener('click', loginHandler);
 
+    // Landing Page: navbar desktop button
     const navBtn = document.getElementById('navLoginBtn');
     if (navBtn) navBtn.addEventListener('click', loginHandler);
 
+    // Landing Page: navbar mobile dropdown button  ← FIX
+    const navBtnMob = document.getElementById('navLoginBtnMob');
+    if (navBtnMob) navBtnMob.addEventListener('click', loginHandler);
+
+    // Landing Page: CTA section button
     const ctaBtn = document.getElementById('ctaStartBtn');
     if (ctaBtn) ctaBtn.addEventListener('click', loginHandler);
 
-    // Language Toggle
+    // Language Toggle (desktop)
     const langBtn = document.getElementById('lpLangToggleBtn');
     if (langBtn) {
         langBtn.addEventListener('click', () => {
+            const newLang = UI._lpLang === 'pt' ? 'en' : 'pt';
+            UI.applyLandingTranslation(newLang);
+        });
+    }
+
+    // Language Toggle (mobile)
+    const langBtnMob = document.getElementById('lpLangToggleBtnMob');
+    if (langBtnMob) {
+        langBtnMob.addEventListener('click', () => {
             const newLang = UI._lpLang === 'pt' ? 'en' : 'pt';
             UI.applyLandingTranslation(newLang);
         });

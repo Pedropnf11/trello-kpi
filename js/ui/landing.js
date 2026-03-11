@@ -1,8 +1,8 @@
-﻿// Landing Page UI Templates — Premium Dark (KPI Master · Real Estate Edition)
+// Landing Page UI Templates — Premium Dark (KPI Master · Real Estate Edition)
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────
 // TRANSLATION ENGINE
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────
 UI._lpLang = localStorage.getItem('kpi_lp_lang') || 'pt';
 
 UI.landingTranslations = {
@@ -69,7 +69,7 @@ UI.landingTranslations = {
     'aud-2-label': { pt: 'Equipas Comerciais B2B', en: 'B2B Sales Teams' },
     'aud-2-desc': { pt: 'Startups e PMEs com pipeline de vendas no Trello que precisam de saber qual o lead mais quente, quem está a produzir e qual a taxa de conversão real.', en: 'Startups and SMBs with a Trello sales pipeline who need to know the hottest lead, who\'s producing and the real conversion rate.' },
     'aud-3-label': { pt: 'Account Managers', en: 'Account Managers' },
-    'aud-3-desc': { pt: 'Profissionais que gerem um portefólio de clientes no Trello e perdem horas a compilar relatórios semanais manualmente para apresentar Ã  chefia.', en: 'Professionals who manage a client portfolio in Trello and waste hours manually compiling weekly reports to present to management.' },
+    'aud-3-desc': { pt: 'Profissionais que gerem um portefólio de clientes no Trello e perdem horas a compilar relatórios semanais manualmente para apresentar à chefia.', en: 'Professionals who manage a client portfolio in Trello and waste hours manually compiling weekly reports to present to management.' },
     'aud-note': { pt: 'Se a tua equipa usa o Trello como CRM informal — listas como "Lead", "Visita Marcada", "Proposta", "Fecho" — o KPI Master lê esses dados e transforma-os num dashboard de performance em tempo real. Sem configurações, sem integrações, sem IT.', en: 'If your team uses Trello as an informal CRM — lists like "Lead", "Visit Scheduled", "Proposal", "Close" — KPI Master reads that data and turns it into a real-time performance dashboard. No setup, no integrations, no IT.' },
     // Profiles
     'prof-eyebrow': { pt: 'Para quem é', en: 'Who it\'s for' },
@@ -78,7 +78,7 @@ UI.landingTranslations = {
     'prof-desc': { pt: 'O teu cargo define o que vês. Sem informação a mais, sem confusão. Só o que precisas para agir.', en: 'Your role defines what you see. No clutter, no confusion. Just what you need to act.' },
     'prof-mgr-title': { pt: 'Diretor / Gestor', en: 'Director / Manager' },
     'prof-mgr-badge': { pt: 'Visão completa da agência', en: 'Full agency overview' },
-    'prof-mgr-desc': { pt: 'Chega de perguntar Ã  equipa como estão os números. Abre o dashboard de manhã e já sabes quem precisa de suporte, qual o lead mais crítico e qual o consultor do mês.', en: "Stop asking the team how the numbers look. Open the dashboard in the morning and you already know who needs support, the most critical lead and the agent of the month." },
+    'prof-mgr-desc': { pt: 'Chega de perguntar à equipa como estão os números. Abre o dashboard de manhã e já sabes quem precisa de suporte, qual o lead mais crítico e qual o consultor do mês.', en: "Stop asking the team how the numbers look. Open the dashboard in the morning and you already know who needs support, the most critical lead and the agent of the month." },
     'prof-mgr-li-0': { pt: 'Pipeline completo da agência por fase e por consultor', en: 'Full agency pipeline by stage and by agent' },
     'prof-mgr-li-1': { pt: 'Ranking automático — sem Excel, sem cálculos manuais', en: 'Automatic ranking — no Excel, no manual calculations' },
     'prof-mgr-li-2': { pt: 'Alertas de leads críticos antes de se perderem definitivamente', en: 'Critical lead alerts before they\'re lost for good' },
@@ -121,17 +121,18 @@ UI.applyLandingTranslation = function (lang) {
             el.innerHTML = map[lang];
         }
     });
-    // Update toggle button label
+    // Update toggle button labels (desktop + mobile)
+    const label = lang === 'pt'
+        ? `<span style="opacity:.4">PT</span> <span style="opacity:.15">|</span> EN`
+        : `PT <span style="opacity:.15">|</span> <span style="opacity:.4">EN</span>`;
     const btn = document.getElementById('lpLangToggleBtn');
-    if (btn) {
-        btn.innerHTML = lang === 'pt'
-            ? `<span class="opacity-50">PT</span> <span class="opacity-20">|</span> EN`
-            : `PT <span class="opacity-20">|</span> <span class="opacity-50">EN</span>`;
-    }
+    if (btn) btn.innerHTML = label;
+    const btnMob = document.getElementById('lpLangToggleBtnMob');
+    if (btnMob) btnMob.innerHTML = label;
 };
 
 
-/* â”€â”€â”€ LP STYLES â”€â”€â”€ */
+/* --- LP STYLES --- */
 const _lpStyle = `
 <style id="lp-styles">
 *{box-sizing:border-box;margin:0;padding:0}
@@ -234,6 +235,31 @@ const _lpStyle = `
     animation: lp-slide-right 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* --- NAVBAR RESPONSIVE --- */
+.lp-nav-links { display: flex; align-items: center; gap: 32px; font-size: 13px; font-weight: 500; }
+.lp-nav-desktop-cta { display: flex; align-items: center; gap: 8px; }
+.lp-nav-hamburger { display: none; }
+.lp-nav-mobile-menu {
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 58px;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    background: rgba(6,8,15,0.97);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 20px 24px 24px;
+    gap: 0;
+}
+.lp-nav-mobile-menu.open { display: flex; }
+
+@media (max-width: 700px) {
+    .lp-nav-links { display: none !important; }
+    .lp-nav-desktop-cta { display: none !important; }
+    .lp-nav-hamburger { display: flex !important; align-items: center; gap: 10px; }
+}
 </style>`;
 
 UI.renderLandingPage = function (state) {
@@ -265,24 +291,44 @@ UI.renderLandingNavbar = function () {
         backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
         border-bottom:1px solid var(--border2);">
         <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;height:58px;padding:0 24px;">
+
             <!-- Logo -->
             <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
                 <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#2563eb,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;letter-spacing:-.02em;box-shadow:0 2px 12px rgba(37,99,235,0.4);">K</div>
-                <span style="font-size:15px;font-weight:800;color:#fff;letter-spacing:-.03em;">KPI Master</span>
-                <span style="font-size:9px;font-weight:700;color:#93c5fd;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:99px;padding:3px 8px;letter-spacing:.06em;text-transform:uppercase;" data-translate="nav-badge">${_t('nav-badge')}</span>
+                <span style="font-size:15px;font-weight:800;color:#fff;letter-spacing:-.03em;white-space:nowrap;">KPI Master</span>
+                <span style="font-size:9px;font-weight:700;color:#93c5fd;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:99px;padding:3px 8px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;" data-translate="nav-badge">${_t('nav-badge')}</span>
             </div>
-            <!-- Links -->
-            <div style="display:flex;align-items:center;gap:32px;font-size:13px;font-weight:500;">
-                <a href="#features" data-translate="nav-features" style="color:var(--muted);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'">${_t('nav-features')}</a>
-                <a href="#perfis" data-translate="nav-profiles" style="color:var(--muted);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'">${_t('nav-profiles')}</a>
+
+            <!-- Desktop: center links -->
+            <div class="lp-nav-links">
+                <a href="#features" data-translate="nav-features" style="color:var(--muted);text-decoration:none;transition:color .15s;white-space:nowrap;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'">${_t('nav-features')}</a>
+                <a href="#perfis" data-translate="nav-profiles" style="color:var(--muted);text-decoration:none;transition:color .15s;white-space:nowrap;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'">${_t('nav-profiles')}</a>
             </div>
-            <!-- Actions -->
-            <div style="display:flex;align-items:center;gap:8px;">
-                <button id="lpLangToggleBtn" style="font-size:11px;font-weight:700;color:var(--muted);background:transparent;border:1px solid var(--border);border-radius:7px;padding:6px 10px;cursor:pointer;letter-spacing:.06em;transition:all .15s;" onmouseover="this.style.color='#f1f5f9';this.style.borderColor='rgba(255,255,255,0.15)'" onmouseout="this.style.color='#64748b';this.style.borderColor='rgba(255,255,255,0.07)'">${langLabel}</button>
-                <button id="navLoginBtn" data-translate="nav-login-btn" class="btn-primary" style="padding:9px 18px;font-size:13px;border-radius:8px;">${_t('nav-login-btn')}</button>
+
+            <!-- Desktop: lang + CTA -->
+            <div class="lp-nav-desktop-cta" style="flex-shrink:0;">
+                <button id="lpLangToggleBtn" style="font-size:11px;font-weight:700;color:var(--muted);background:transparent;border:1px solid var(--border);border-radius:7px;padding:6px 10px;cursor:pointer;letter-spacing:.06em;transition:all .15s;white-space:nowrap;" onmouseover="this.style.color='#f1f5f9';this.style.borderColor='rgba(255,255,255,0.15)'" onmouseout="this.style.color='#64748b';this.style.borderColor='rgba(255,255,255,0.07)'">${langLabel}</button>
+                <button id="navLoginBtn" data-translate="nav-login-btn" class="btn-primary" style="padding:9px 18px;font-size:13px;border-radius:8px;white-space:nowrap;">${_t('nav-login-btn')}</button>
+            </div>
+
+            <!-- Mobile: lang + hamburger -->
+            <div class="lp-nav-hamburger" style="flex-shrink:0;">
+                <button id="lpLangToggleBtnMob" style="font-size:11px;font-weight:700;color:var(--muted);background:transparent;border:1px solid var(--border);border-radius:7px;padding:5px 8px;cursor:pointer;letter-spacing:.06em;transition:all .15s;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'">${langLabel}</button>
+                <button id="lpNavHamburger" style="background:transparent;border:1px solid var(--border);border-radius:7px;padding:6px 8px;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all .15s;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'" aria-label="Menu">
+                    <svg id="lpHamIcon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
             </div>
         </div>
     </nav>
+
+    <!-- Mobile dropdown -->
+    <div id="lpMobileMenu" class="lp-nav-mobile-menu">
+        <a href="#features" data-translate="nav-features" style="display:block;padding:13px 0;font-size:14px;font-weight:500;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--border2);transition:color .15s;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'">${_t('nav-features')}</a>
+        <a href="#perfis" data-translate="nav-profiles" style="display:block;padding:13px 0;font-size:14px;font-weight:500;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--border2);transition:color .15s;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'">${_t('nav-profiles')}</a>
+        <div style="padding-top:16px;">
+            <button id="navLoginBtnMob" data-translate="nav-login-btn" class="btn-primary" style="width:100%;justify-content:center;padding:12px 20px;font-size:14px;border-radius:10px;">${_t('nav-login-btn')}</button>
+        </div>
+    </div>
     `;
 };
 
@@ -327,7 +373,7 @@ UI.renderLandingAudience = function () {
 
 
 
-/* â”€â”€â”€ HERO â”€â”€â”€ */
+/* --- HERO --- */
 UI.renderLandingHero = function () {
     const lang = UI._lpLang || 'pt';
     const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
@@ -395,7 +441,7 @@ UI.renderLandingHero = function () {
                                 <p style="font-size:6.5px;color:#374151;font-weight:700;text-transform:uppercase;letter-spacing:.15em;margin-bottom:6px;padding-left:4px;">Perfil</p>
                                 <div style="display:flex;align-items:center;gap:7px;padding:7px 8px;background:#0d1117;border-radius:8px;border:1px solid rgba(255,255,255,0.04);">
                                     <div style="width:18px;height:18px;border-radius:5px;background:rgba(37,99,235,0.2);border:1px solid rgba(37,99,235,0.2);display:flex;align-items:center;justify-content:center;font-size:6px;font-weight:700;color:#93c5fd;">RC</div>
-                                    <div><div style="font-size:8px;font-weight:700;color:#fff;">Ricardo C.</div><div style="font-size:6.5px;color:#10b981;font-weight:600;">â— Gestor</div></div>
+                                    <div><div style="font-size:8px;font-weight:700;color:#fff;">Ricardo C.</div><div style="font-size:6.5px;color:#10b981;font-weight:600;">● Gestor</div></div>
                                 </div>
                             </div>
                             <div>
@@ -431,9 +477,9 @@ UI.renderLandingHero = function () {
                                 <div style="background:#0a0f1a;border:1px solid rgba(255,255,255,0.04);border-radius:10px;padding:10px;">
                                     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
                                         <div style="display:flex;align-items:center;gap:5px;"><div style="width:6px;height:6px;background:#ef4444;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Leads Críticos</span></div>
-                                        <span style="font-size:6.5px;font-weight:700;color:#f87171;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);padding:1px 5px;border-radius:99px;">âš  5</span>
+                                        <span style="font-size:6.5px;font-weight:700;color:#f87171;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);padding:1px 5px;border-radius:99px;">⚠ 5</span>
                                     </div>
-                                    ${[{ n: 'Família Mendes — T3 Algés', t: 'ðŸ”´ 14d', bg: 'rgba(239,68,68,0.05)' }, { n: 'Dr. Ferreira — Escritório', t: 'ðŸŸ¡ 8d', bg: 'rgba(245,158,11,0.05)' }, { n: 'Ana Costa — T2 Cascais', t: 'ðŸŸ¡ 6d', bg: 'rgba(245,158,11,0.05)' }].map(a => `<div style="background:${a.bg};border:1px solid rgba(255,255,255,0.03);border-radius:7px;padding:5px 8px;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:7px;color:#94a3b8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:130px;">${a.n}</span><span style="font-size:6.5px;color:#475569;flex-shrink:0;">${a.t}</span></div>`).join('')}
+                                    ${[{ n: 'Família Mendes — T3 Algés', t: '🔴 14d', bg: 'rgba(239,68,68,0.05)' }, { n: 'Dr. Ferreira — Escritório', t: '🟡 8d', bg: 'rgba(245,158,11,0.05)' }, { n: 'Ana Costa — T2 Cascais', t: '🟡 6d', bg: 'rgba(245,158,11,0.05)' }].map(a => `<div style="background:${a.bg};border:1px solid rgba(255,255,255,0.03);border-radius:7px;padding:5px 8px;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:7px;color:#94a3b8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:130px;">${a.n}</span><span style="font-size:6.5px;color:#475569;flex-shrink:0;">${a.t}</span></div>`).join('')}
                                 </div>
                             </div>
 
@@ -447,7 +493,7 @@ UI.renderLandingHero = function () {
                                             <p style="font-size:7px;color:#f87171;margin-top:2px;">↑ acima do ideal</p>
                                         </div>
                                         <div style="display:flex;flex-direction:column;gap:4px;">
-                                            ${[{ l: 'Visita→Proposta', t: '7d', c: '#f87171' }, { l: 'Proposta→Fecho', t: '18d', c: '#f87171' }, { l: 'Contacto→Visita', t: '4d', c: '#34d399' }].map(r => `<div style="background:#111827;border-radius:5px;padding:4px 7px;border:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:6.5px;color:#475569;" data-count-to="${r.l}">0</span><span style="font-size:7.5px;font-weight:700;color:${r.c};">${r.t}</span></div>`).join('')}
+                                            ${[{ l: 'Visita→Proposta', t: '7d', c: '#f87171' }, { l: 'Proposta→Fecho', t: '18d', c: '#f87171' }, { l: 'Contacto→Visita', t: '4d', c: '#34d399' }].map(r => `<div style="background:#111827;border-radius:5px;padding:4px 7px;border:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:6.5px;color:#475569;">${r.l}</span><span style="font-size:7.5px;font-weight:700;color:${r.c};">${r.t}</span></div>`).join('')}
                                         </div>
                                     </div>
                                 </div>
@@ -456,7 +502,7 @@ UI.renderLandingHero = function () {
                                     <div style="background:#111827;border:1px solid rgba(245,158,11,0.15);border-radius:8px;padding:7px 9px;display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
                                         <div style="display:flex;align-items:center;gap:6px;">
                                             <div style="width:16px;height:16px;border-radius:4px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:6px;font-weight:700;color:#fcd34d;">AN</div>
-                                            <div><p style="font-size:8px;font-weight:700;color:#fff;">Ana Martins</p><p style="font-size:7px;color:#f59e0b;">ðŸ† 8 contratos</p></div>
+                                            <div><p style="font-size:8px;font-weight:700;color:#fff;">Ana Martins</p><p style="font-size:7px;color:#f59e0b;">🏆 8 contratos</p></div>
                                         </div>
                                         <span style="font-size:14px;font-weight:900;color:#fff;" data-count-to="42">0</span>
                                     </div>
@@ -469,7 +515,7 @@ UI.renderLandingHero = function () {
                                 <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;"><div style="width:6px;height:6px;background:#6366f1;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Tabela de Performance — Fev</span><span style="margin-left:auto;font-size:7px;font-weight:700;color:#34d399;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.15);padding:1px 6px;border-radius:4px;">8 contratos</span></div>
                                 <table style="width:100%;font-size:7.5px;border-collapse:collapse;">
                                     <thead><tr style="border-bottom:1px solid rgba(255,255,255,0.04);">${['Consultor', 'Leads', 'Visitas', 'Propostas', 'Contratos', 'Taxa'].map(h => `<th style="text-align:left;color:#374151;padding-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding-right:10px;">${h}</th>`).join('')}</tr></thead>
-                                    <tbody>${[{ n: 'Ana Martins', l: 42, v: 28, p: 15, c: 8, t: '19%' }, { n: 'Bruno S.', l: 31, v: 19, p: 11, c: 5, t: '16%' }, { n: 'Carla F.', l: 22, v: 14, p: 7, c: 3, t: '14%' }].map(r => `<tr><td style="padding:4px 10px 4px 0;color:#cbd5e1;font-weight:600;" data-count-to="${r.n}">0</td><td style="padding:4px 10px 4px 0;"><span style="background:rgba(59,130,246,0.12);color:#60a5fa;padding:1px 5px;border-radius:99px;font-weight:700;" data-count-to="${r.l}">0</span></td><td style="padding:4px 10px 4px 0;color:#475569;" data-count-to="${r.v}">0</td><td style="padding:4px 10px 4px 0;color:#475569;" data-count-to="${r.p}">0</td><td style="padding:4px 10px 4px 0;color:#34d399;font-weight:700;" data-count-to="${r.c}">0</td><td style="padding:4px 10px 4px 0;color:#fbbf24;font-weight:700;">${r.t}</td></tr>`).join('')}</tbody>
+                                    <tbody>${[{ n: 'Ana Martins', l: 42, v: 28, p: 15, c: 8, t: '19%' }, { n: 'Bruno S.', l: 31, v: 19, p: 11, c: 5, t: '16%' }, { n: 'Carla F.', l: 22, v: 14, p: 7, c: 3, t: '14%' }].map(r => `<tr><td style="padding:4px 10px 4px 0;color:#cbd5e1;font-weight:600;">${r.n}</td><td style="padding:4px 10px 4px 0;"><span style="background:rgba(59,130,246,0.12);color:#60a5fa;padding:1px 5px;border-radius:99px;font-weight:700;" data-count-to="${r.l}">0</span></td><td style="padding:4px 10px 4px 0;color:#475569;" data-count-to="${r.v}">0</td><td style="padding:4px 10px 4px 0;color:#475569;" data-count-to="${r.p}">0</td><td style="padding:4px 10px 4px 0;color:#34d399;font-weight:700;" data-count-to="${r.c}">0</td><td style="padding:4px 10px 4px 0;color:#fbbf24;font-weight:700;">${r.t}</td></tr>`).join('')}</tbody>
                                 </table>
                             </div>
                         </div>
@@ -481,7 +527,7 @@ UI.renderLandingHero = function () {
     `;
 };
 
-/* â”€â”€â”€ PAIN POINTS â”€â”€â”€ */
+/* --- PAIN POINTS --- */
 UI.renderLandingPainPoints = function () {
     const lang = UI._lpLang || 'pt';
     const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
@@ -520,7 +566,7 @@ UI.renderLandingPainPoints = function () {
     `;
 };
 
-/* â”€â”€â”€ FEATURES â”€â”€â”€ */
+/* --- FEATURES --- */
 UI.renderLandingFeatures = function () {
     const lang = UI._lpLang || 'pt';
     const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
@@ -564,10 +610,10 @@ UI.renderLandingFeatures = function () {
     `;
 };
 
-/* â”€â”€â”€ DOCS (hidden — DB pending) â”€â”€â”€ */
+/* --- DOCS (hidden — DB pending) --- */
 UI.renderLandingDocs = function () { return ''; };
 
-/* â”€â”€â”€ PROFILES â”€â”€â”€ */
+/* --- PROFILES --- */
 UI.renderLandingProfiles = function () {
     const lang = UI._lpLang || 'pt';
     const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
@@ -629,7 +675,7 @@ UI.renderLandingProfiles = function () {
     `;
 };
 
-/* â”€â”€â”€ CTA â”€â”€â”€ */
+/* --- CTA --- */
 UI.renderLandingCTA = function () {
     const lang = UI._lpLang || 'pt';
     const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
@@ -672,7 +718,7 @@ UI.renderLandingCTA = function () {
     `;
 };
 
-/* â”€â”€â”€ FOOTER â”€â”€â”€ */
+/* --- FOOTER --- */
 UI.renderLandingFooter = function () {
     const lang = UI._lpLang || 'pt';
     const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
@@ -705,7 +751,9 @@ UI.initLandingAnimations = function() {
                 if(entry.target.hasAttribute('data-count-to')) {
                     const targetStr = entry.target.getAttribute('data-count-to');
                     const target = parseInt(targetStr, 10);
-                    animateCounter(entry.target, target, targetStr.includes('%'));
+                    if (!isNaN(target)) {
+                        animateCounter(entry.target, target);
+                    }
                     entry.target.removeAttribute('data-count-to');
                 }
             }
@@ -714,7 +762,7 @@ UI.initLandingAnimations = function() {
 
     document.querySelectorAll('.lp-anim-hidden, .lp-fade-hidden, .lp-typing-txt, .lp-bar-fill, [data-count-to]').forEach(el => observer.observe(el));
 
-    function animateCounter(el, target, isPercentage) {
+    function animateCounter(el, target) {
         let current = 0;
         const duration = 1500;
         const stepTime = Math.max(20, Math.floor(duration / target)) || 30;
@@ -724,7 +772,41 @@ UI.initLandingAnimations = function() {
                 current = target;
                 clearInterval(timer);
             }
-            el.innerText = current + (isPercentage ? '%' : '');
+            el.innerText = current;
         }, stepTime);
     }
+
+    // --- Hamburger menu toggle ---
+    const hamburger = document.getElementById('lpNavHamburger');
+    const mobileMenu = document.getElementById('lpMobileMenu');
+    const hamIcon = document.getElementById('lpHamIcon');
+
+    if (hamburger && mobileMenu) {
+        hamburger.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            hamIcon.innerHTML = isOpen
+                ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>'
+                : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>';
+        });
+
+        // Close menu when a link is clicked
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                hamIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>';
+            });
+        });
+    }
+
+    // --- Lang toggle (desktop + mobile) ---
+    function setupLangToggle(btnId) {
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+            const next = UI._lpLang === 'pt' ? 'en' : 'pt';
+            UI.applyLandingTranslation(next);
+        });
+    }
+    setupLangToggle('lpLangToggleBtn');
+    setupLangToggle('lpLangToggleBtnMob');
 };
