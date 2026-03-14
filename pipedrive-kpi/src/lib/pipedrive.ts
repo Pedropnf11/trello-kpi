@@ -10,123 +10,138 @@ export class PipedriveAPI {
         this.token = token;
     }
 
-    private async fetch<T>(endpoint: string, params: Record<string, string | number | boolean> = {}): Promise<T> {
-        const url = new URL(`${API_BASE_URL}${endpoint}`);
-        url.searchParams.append('api_token', this.token);
-
-        // Append extra params
-        Object.entries(params).forEach(([key, value]) => {
-            url.searchParams.append(key, String(value));
-        });
-
-        const response = await fetch(url.toString(), {
+    private get requestOptions(): RequestInit {
+        return {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
+                'x-api-token': this.token,
             },
-        });
+        };
+    }
 
+    private async fetch<T>(endpoint: string, params: Record<string, string | number | boolean> = {}): Promise<T> {
+        const url = new URL(`${API_BASE_URL}${endpoint}`);
+        Object.entries(params).forEach(([key, value]) => {
+            url.searchParams.append(key, String(value));
+        });
+        const response = await globalThis.fetch(url.toString(), this.requestOptions);
         if (!response.ok) {
-            if (response.status === 401) {
-                throw new Error('API Token inválido');
-            }
+            if (response.status === 401) throw new Error('API Token inválido');
             throw new Error(`Pipedrive API Error: ${response.statusText}`);
         }
-
         const data = await response.json();
-        if (!data.success) {
-            throw new Error(data.error || 'Failed to fetch data from Pipedrive');
-        }
-
+        if (!data.success) throw new Error(data.error || 'Failed to fetch data from Pipedrive');
         return data.data;
     }
 
-    // 1. Verify token and get current user details
+    private async fetchPaginated(endpoint: string, params: Record<string, string | number | boolean> = {}): Promise<Deal[]> {
+        let allResults: Deal[] = [];
+        let start = 0;
+        const limit = 500;
+        let hasMore = true;
+        while (hasMore) {
+            const url = new URL(`${API_BASE_URL}${endpoint}`);
+            url.searchParams.append('start', String(start));
+            url.searchParams.append('limit', String(limit));
+            Object.entries(params).forEach(([key, value]) => {
+                url.searchParams.append(key, String(value));
+            });
+            const response = await globalThis.fetch(url.toString(), this.requestOptions);
+            if (!response.ok) throw new Error(`Pipedrive API Error: ${response.statusText}`);
+            const data = await response.json();
+            if (!data.success) throw new Error(data.error || 'Failed to fetch paginated data');
+            if (data.data) allResults = [...allResults, ...data.data];
+            hasMore = data.additional_data?.pagination?.more_items_in_collection || false;
+            start = data.additional_data?.pagination?.next_start ?? start + limit;
+        }
+        return allResults;
+    }
+
     async getCurrentUser(): Promise<PipedriveUser> {
         return this.fetch<PipedriveUser>('/users/me');
     }
 
-    // 2. Get all pipelines
     async getPipelines(): Promise<Pipeline[]> {
         return this.fetch<Pipeline[]>('/pipelines');
     }
 
-    // 3. Get stages for a specific pipeline
     async getStages(pipelineId: number): Promise<Stage[]> {
         return this.fetch<Stage[]>('/stages', { pipeline_id: pipelineId });
     }
 
-    // 4. Get active users in the company
     async getUsers(): Promise<PipedriveUser[]> {
         const users = await this.fetch<PipedriveUser[]>('/users');
         return users.filter(u => u.active_flag);
     }
 
-    // 5. Get all deals for a specific pipeline (handles pagination)
     async getDeals(pipelineId: number, status: 'all_not_deleted' | 'open' | 'won' | 'lost' = 'all_not_deleted'): Promise<Deal[]> {
-        let allDeals: Deal[] = [];
-        let start = 0;
-        const limit = 500; // Max allowed by Pipedrive
-        let hasMore = true;
-
-        while (hasMore) {
-            const response = await fetch(`${API_BASE_URL}/deals?api_token=${this.token}&pipeline_id=${pipelineId}&status=${status}&start=${start}&limit=${limit}`);
-
-            if (!response.ok) throw new Error('Failed to fetch deals');
-
-            const data = await response.json();
-            if (!data.success) throw new Error(data.error);
-
-            if (data.data) {
-                allDeals = [...allDeals, ...data.data];
-            }
-
-            hasMore = data.additional_data?.pagination?.more_items_in_collection || false;
-            start = data.additional_data?.pagination?.next_start;
-        }
-
-        return allDeals;
+        return this.fetchPaginated('/deals', { pipeline_id: pipelineId, status });
     }
 
-    // 6. Get activities (recent and upcoming)
     async getActivities(userId?: number): Promise<Activity[]> {
-        const params: Record<string, string | number> = {
-            limit: 500,
-            user_id: userId || 0 // 0 means all users if admin
-        };
-        return this.fetch<Activity[]>('/activities', params);
+        return this.fetch<Activity[]>('/activities', { limit: 500, user_id: userId || 0 });
     }
 
-    // 7. Get notes (comments)
     async getNotes(userId?: number): Promise<any[]> {
-        const params: Record<string, string | number> = {
-            limit: 500,
-            user_id: userId || 0
-        };
-        return this.fetch<any[]>('/notes', params);
+        return this.fetch<any[]>('/notes', { limit: 500, user_id: userId || 0 });
     }
 
-    // 8. Get all deals across all pipelines
     async getAllDeals(status: string = 'all_not_deleted'): Promise<Deal[]> {
-        let allDeals: Deal[] = [];
-        let start = 0;
-        const limit = 500;
-        let hasMore = true;
+        return this.fetchPaginated('/deals', { status });
+    }
 
-        while (hasMore) {
-            const response = await fetch(`${API_BASE_URL}/deals?api_token=${this.token}&status=${status}&start=${start}&limit=${limit}`);
-            if (!response.ok) throw new Error('Failed to fetch all deals');
-            const data = await response.json();
-            if (!data.success) throw new Error(data.error);
-
-            if (data.data) {
-                allDeals = [...allDeals, ...data.data];
-            }
-
-            hasMore = data.additional_data?.pagination?.more_items_in_collection || false;
-            start = data.additional_data?.pagination?.next_start;
+    // Cria atividade — token no header, nunca na URL
+    async createActivity(payload: {
+        deal_id: number;
+        type: string;
+        subject: string;
+        due_date: string;
+        due_time?: string;
+        note?: string;
+        done?: boolean;
+    }): Promise<Activity> {
+        const response = await globalThis.fetch(`${API_BASE_URL}/activities`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'x-api-token': this.token,
+            },
+            body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+            if (response.status === 401) throw new Error('API Token inválido');
+            throw new Error(`Pipedrive API Error: ${response.statusText}`);
         }
+        const data = await response.json();
+        if (!data.success) throw new Error(data.error || 'Erro ao criar atividade');
+        return data.data;
+    }
 
-        return allDeals;
+    // Actualiza atividade existente (remarcar data, marcar como feita, etc.)
+    async updateActivity(activityId: number, payload: {
+        due_date?: string;
+        due_time?: string;
+        done?: boolean;
+        note?: string;
+        subject?: string;
+    }): Promise<Activity> {
+        const response = await globalThis.fetch(`${API_BASE_URL}/activities/${activityId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'x-api-token': this.token,
+            },
+            body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+            if (response.status === 401) throw new Error('API Token inválido');
+            throw new Error(`Pipedrive API Error: ${response.statusText}`);
+        }
+        const data = await response.json();
+        if (!data.success) throw new Error(data.error || 'Erro ao actualizar atividade');
+        return data.data;
     }
 }

@@ -2,10 +2,32 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { AppState, Role, PipedriveUser } from '@/types/pipedrive';
 
+const getDefaultStartDate = () => {
+    const d = new Date();
+    d.setDate(d.getDate() - 7);
+    return d.toISOString().split('T')[0];
+};
+
+const getDefaultEndDate = () => {
+    return new Date().toISOString().split('T')[0];
+};
+
+// Extendemos AppState localmente para os novos campos de salesDashboardSettings
+type ExtendedSalesDashboardSettings = {
+    showFunnel: boolean;
+    showFocusZone: boolean;
+    showActivityTimeline: boolean;
+    showActivitiesTable: boolean;
+    showPerformanceTable: boolean;
+    // Novos toggles de KPI cards
+    showClosedRevenue: boolean;
+    showWinRate: boolean;
+    showPipelineOpen: boolean;
+};
+
 export const useAppStore = create<AppState>()(
     persist(
         (set) => ({
-            // Initial state
             token: null,
             role: null,
             userId: null,
@@ -16,8 +38,11 @@ export const useAppStore = create<AppState>()(
             webhookUrl: '',
             viewUsers: [],
             selectedUserId: null,
-            startDate: null,
-            endDate: null,
+            // Default: última semana
+            startDate: getDefaultStartDate(),
+            endDate: getDefaultEndDate(),
+
+            // Manager dashboard settings
             dashboardSettings: {
                 showPipelineValue: true,
                 showWinRate: true,
@@ -25,62 +50,44 @@ export const useAppStore = create<AppState>()(
                 defaultModule: 'activities',
             },
 
+            // Sales dashboard settings
+            salesDashboardSettings: {
+                showFunnel: true,
+                showFocusZone: true,
+                showActivityTimeline: true,
+                showActivitiesTable: true,
+                showPerformanceTable: false,
+                // KPI cards — todos visíveis por defeito
+                showClosedRevenue: true,
+                showWinRate: true,
+                showPipelineOpen: true,
+            } as ExtendedSalesDashboardSettings,
+
             // Actions
-            setToken: (token: string) =>
-                set({ token }),
+            setToken: (token) => set({ token }),
+            setUserParams: (userId, userName, isAdmin) => set({ userId, userName, isAdmin }),
+            setRole: (role) => set({ role }),
+            setPipeline: (pipelineId, pipelineName) => set({ selectedPipelineId: pipelineId, selectedPipelineName: pipelineName }),
+            setWebhookUrl: (url) => set({ webhookUrl: url }),
+            setViewUsers: (users) => set({ viewUsers: users }),
+            setSelectedUserId: (userId) => set({ selectedUserId: userId }),
+            setStartDate: (date) => set({ startDate: date }),
+            setEndDate: (date) => set({ endDate: date }),
 
-            setUserParams: (userId: number, userName: string, isAdmin: boolean) =>
-                set({
-                    userId,
-                    userName,
-                    isAdmin,
-                }),
+            updateDashboardSettings: (settings) =>
+                set((state) => ({ dashboardSettings: { ...state.dashboardSettings, ...settings } })),
 
-            setRole: (role: Role) =>
-                set({ role }),
-
-            setPipeline: (pipelineId: number, pipelineName: string) =>
-                set({
-                    selectedPipelineId: pipelineId,
-                    selectedPipelineName: pipelineName
-                }),
-
-            setWebhookUrl: (url: string) =>
-                set({ webhookUrl: url }),
-
-            setViewUsers: (users: PipedriveUser[]) =>
-                set({ viewUsers: users }),
-
-            setSelectedUserId: (userId: number | null) =>
-                set({ selectedUserId: userId }),
-
-            setStartDate: (date: string | null) =>
-                set({ startDate: date }),
-
-            setEndDate: (date: string | null) =>
-                set({ endDate: date }),
-
-            updateDashboardSettings: (settings: Partial<AppState['dashboardSettings']>) =>
-                set((state) => ({
-                    dashboardSettings: { ...state.dashboardSettings, ...settings }
-                })),
+            updateSalesDashboardSettings: (settings) =>
+                set((state) => ({ salesDashboardSettings: { ...state.salesDashboardSettings, ...settings } })),
 
             resetPipelineAndRole: () =>
-                set({
-                    role: null,
-                    selectedPipelineId: null,
-                    selectedPipelineName: null
-                }),
+                set({ role: null, selectedPipelineId: null, selectedPipelineName: null }),
 
             logout: () =>
                 set({
-                    token: null,
-                    role: null,
-                    userId: null,
-                    userName: null,
-                    isAdmin: false,
-                    selectedPipelineId: null,
-                    selectedPipelineName: null,
+                    token: null, role: null, userId: null, userName: null, isAdmin: false,
+                    selectedPipelineId: null, selectedPipelineName: null,
+                    startDate: getDefaultStartDate(), endDate: getDefaultEndDate(),
                 }),
         }),
         {

@@ -50,6 +50,7 @@ export interface Deal {
     rotten_time: string | null;
     stage_order_nr: number;
     weighted_value: number;
+    last_activity_date?: string | null;
 }
 
 export interface Activity {
@@ -58,10 +59,14 @@ export interface Activity {
     subject: string;
     done: boolean;
     due_date: string;
+    due_time?: string;
     deal_id: number | null;
+    deal_title?: string | null;
     user_id: number;
     person_id: number | null;
     add_time: string;
+    marked_as_done_time?: string | null;
+    note?: string | null;
 }
 
 export interface DealSummary {
@@ -85,15 +90,6 @@ export interface VendedorStats {
     avgDaysToClose: number;
 }
 
-export interface StageStats {
-    stageId: number;
-    stageName: string;
-    dealCount: number;
-    totalValue: number;
-    avgDaysInStage: number;
-    conversionRate: number;
-}
-
 // =============================================
 // APP STORE TYPES
 // =============================================
@@ -113,11 +109,20 @@ export interface AppState {
     selectedUserId: number | null;
     startDate: string | null;
     endDate: string | null;
+
     dashboardSettings: {
         showPipelineValue: boolean;
         showWinRate: boolean;
         showLeaderboard: boolean;
         defaultModule: 'leaderboard' | 'activities';
+    };
+
+    salesDashboardSettings: {
+        showFunnel: boolean;
+        showFocusZone: boolean;
+        showActivityTimeline: boolean;
+        showActivitiesTable: boolean;   // compat — unused
+        showPerformanceTable: boolean;  // compat — unused
     };
 
     // Actions
@@ -131,6 +136,7 @@ export interface AppState {
     setStartDate: (date: string | null) => void;
     setEndDate: (date: string | null) => void;
     updateDashboardSettings: (settings: Partial<AppState['dashboardSettings']>) => void;
+    updateSalesDashboardSettings: (settings: Partial<AppState['salesDashboardSettings']>) => void;
     resetPipelineAndRole: () => void;
     logout: () => void;
 }

@@ -1,14 +1,10 @@
 import Sidebar from '@/components/layout/Sidebar';
 
-export default function DashboardLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="flex min-h-screen bg-[#0a0a0b]">
+        <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg-base)' }}>
             <Sidebar />
-            <main className="flex-1 overflow-x-hidden overflow-y-auto">
+            <main className="flex-1 overflow-y-auto overflow-x-hidden">
                 {children}
             </main>
         </div>

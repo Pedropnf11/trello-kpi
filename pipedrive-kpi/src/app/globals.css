@@ -2,58 +2,101 @@
 
 @theme {
     --font-sans: var(--font-inter);
-
-    --color-dark-900: #0a0a0b;
-    --color-dark-800: #121214;
-    --color-dark-700: #1c1c1f;
-
-    --color-brand-blue: #3b82f6;
-    --color-brand-purple: #8b5cf6;
-    --color-brand-green: #10b981;
 }
 
+/* ═══════════════════════════════════════════════
+   DESIGN TOKENS — fonte única de verdade
+   ═══════════════════════════════════════════════ */
 :root {
-    --background: #0a0a0b;
-    --foreground: #fcfcfc;
+    /* Backgrounds */
+    --bg-base:    #080a0f;   /* página / body */
+    --bg-sidebar: #080a0f;   /* sidebar idêntico */
+    --bg-card:    #0e1117;   /* cards e painéis */
+    --bg-surface: #141820;   /* superfícies dentro dos cards (tabelas, inputs) */
+    --bg-hover:   #1a2030;   /* hover genérico */
+
+    /* Borders */
+    --border:     rgba(255,255,255,0.06);
+    --border-mid: rgba(255,255,255,0.10);
+
+    /* Brand */
+    --blue:       #3b82f6;
+    --blue-dim:   rgba(59,130,246,0.12);
+    --blue-glow:  rgba(59,130,246,0.08);
+
+    /* Text */
+    --text-primary:   #f0f2f5;
+    --text-secondary: #8b92a0;
+    --text-muted:     #4a5160;
+
+    /* Accents */
+    --green:   #10b981;
+    --red:     #ef4444;
+    --orange:  #f59e0b;
+    --violet:  #8b5cf6;
+    --rose:    #f43f5e;
+
+    --background: var(--bg-base);
+    --foreground:  var(--text-primary);
 }
 
 body {
     color: var(--foreground);
     background: var(--background);
-    font-family: var(--font-sans), sans-serif;
+    font-family: var(--font-sans), system-ui, sans-serif;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* Glassmorphism Classes */
+/* ═══════════════════════════════════════════════
+   UTILITY CLASSES
+   ═══════════════════════════════════════════════ */
 @layer utilities {
-    .glass-panel {
-        @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl;
+    /* Card padrão */
+    .card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 1rem;
     }
 
-    .glass-card {
-        @apply bg-white/5 backdrop-blur-md border border-white/5 hover:bg-white/10 transition-all duration-300;
+    /* Surface dentro de card */
+    .surface {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
     }
 
     .text-gradient {
-        @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500;
+        background: linear-gradient(135deg, var(--blue), var(--violet));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Anel de accent azul subtil */
+    .ring-brand {
+        box-shadow: 0 0 0 1px var(--blue-dim), 0 0 24px var(--blue-glow);
     }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
+/* ═══════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 99px;
 }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
 
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
+/* ═══════════════════════════════════════════════
+   DATE INPUT — esconde o ícone nativo
+   ═══════════════════════════════════════════════ */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    cursor: pointer;
 }
