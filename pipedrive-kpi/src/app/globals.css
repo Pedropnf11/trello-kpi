@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@theme {
+    --font-sans: var(--font-inter);
+}
+
+/* ═══════════════════════════════════════════════
+   DESIGN TOKENS — fonte única de verdade
+   ═══════════════════════════════════════════════ */
+:root {
+    /* Backgrounds */
+    --bg-base:    #080a0f;   /* página / body */
+    --bg-sidebar: #080a0f;   /* sidebar idêntico */
+    --bg-card:    #0e1117;   /* cards e painéis */
+    --bg-surface: #141820;   /* superfícies dentro dos cards (tabelas, inputs) */
+    --bg-hover:   #1a2030;   /* hover genérico */
+
+    /* Borders */
+    --border:     rgba(255,255,255,0.06);
+    --border-mid: rgba(255,255,255,0.10);
+
+    /* Brand */
+    --blue:       #3b82f6;
+    --blue-dim:   rgba(59,130,246,0.12);
+    --blue-glow:  rgba(59,130,246,0.08);
+
+    /* Text */
+    --text-primary:   #f0f2f5;
+    --text-secondary: #8b92a0;
+    --text-muted:     #4a5160;
+
+    /* Accents */
+    --green:   #10b981;
+    --red:     #ef4444;
+    --orange:  #f59e0b;
+    --violet:  #8b5cf6;
+    --rose:    #f43f5e;
+
+    --background: var(--bg-base);
+    --foreground:  var(--text-primary);
+}
+
+body {
+    color: var(--foreground);
+    background: var(--background);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════════════
+   UTILITY CLASSES
+   ═══════════════════════════════════════════════ */
+@layer utilities {
+    /* Card padrão */
+    .card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 1rem;
+    }
+
+    /* Surface dentro de card */
+    .surface {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+    }
+
+    .text-gradient {
+        background: linear-gradient(135deg, var(--blue), var(--violet));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Anel de accent azul subtil */
+    .ring-brand {
+        box-shadow: 0 0 0 1px var(--blue-dim), 0 0 24px var(--blue-glow);
+    }
+}
+
+/* ═══════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.08);
+    border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+/* ═══════════════════════════════════════════════
+   DATE INPUT — esconde o ícone nativo
+   ═══════════════════════════════════════════════ */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    cursor: pointer;
+}
