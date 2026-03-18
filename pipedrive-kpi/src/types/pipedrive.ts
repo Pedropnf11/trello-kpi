@@ -37,7 +37,7 @@ export interface Deal {
     stage_id: number;
     pipeline_id: number;
     user_id: { id: number; name: string; email: string };
-    person_id: { name: string } | null;
+    person_id: { name: string; phone?: { value: string; primary?: boolean }[]; email?: { value: string; primary?: boolean }[] } | null;
     org_id: { name: string } | null;
     add_time: string;
     update_time: string;

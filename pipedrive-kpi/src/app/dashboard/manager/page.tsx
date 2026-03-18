@@ -1,65 +1,49 @@
 "use client";
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useAppStore } from '@/store/appStore';
 import { PipedriveAPI } from '@/lib/pipedrive';
-import { Deal, Stage, Activity, PipedriveUser } from '@/types/pipedrive';
+import { Deal, Stage, Activity } from '@/types/pipedrive';
 import Header from '@/components/layout/Header';
 import MetricCard from '@/components/dashboard/MetricCard';
 import VisualFunnel from '@/components/dashboard/VisualFunnel';
 import Leaderboard from '@/components/dashboard/Leaderboard';
-import ActiveSalespeople from '@/components/dashboard/ActiveSalespeople';
-import WonLostChart from '@/components/dashboard/WonLostChart';
-import FocusZone from '@/components/dashboard/FocusZone';
 import PerformanceTable from '@/components/dashboard/PerformanceTable';
 import ActivitiesTable from '@/components/dashboard/ActivitiesTable';
-import HeatmapChart from '@/components/dashboard/HeatmapChart';
+import TeamActivityFeed from '@/components/dashboard/manager/TeamActivityFeed';
+import StageSummaryTable from '@/components/dashboard/manager/StageSummaryTable';
+import StuckLeads from '@/components/dashboard/StuckLeads';
 import {
-    TrendingUp,
-    Target,
-    DollarSign,
-    XCircle,
-    Loader2,
-    Calendar,
-    RefreshCw,
-    Settings2,
-    Eye,
-    EyeOff,
-    Filter,
-    Users,
-    Activity as ActivityIcon,
-    Download,
-    FileText,
-    FileSpreadsheet
+    TrendingUp, Target, DollarSign, Loader2,
+    ShieldAlert, Eye, EyeOff, Download,
+    FileText, FileSpreadsheet, Settings2,
 } from 'lucide-react';
 
 export default function ManagerDashboard() {
-    const token = useAppStore(state => state.token);
-    const selectedPipelineId = useAppStore(state => state.selectedPipelineId);
-    const selectedUserId = useAppStore(state => state.selectedUserId);
-    const setSelectedUserId = useAppStore(state => state.setSelectedUserId);
-    const viewUsers = useAppStore(state => state.viewUsers);
-    const { showPipelineValue, showWinRate, showLeaderboard, defaultModule } = useAppStore(state => state.dashboardSettings);
-    const updateSettings = useAppStore(state => state.updateDashboardSettings);
-    const startDate = useAppStore(state => state.startDate);
-    const endDate = useAppStore(state => state.endDate);
+    const token              = useAppStore(s => s.token);
+    const selectedPipelineId = useAppStore(s => s.selectedPipelineId);
+    const selectedUserId     = useAppStore(s => s.selectedUserId);
+    const viewUsers          = useAppStore(s => s.viewUsers);
+    const startDate          = useAppStore(s => s.startDate);
+    const endDate            = useAppStore(s => s.endDate);
+    const { showPipelineValue, showWinRate, showLeaderboard, defaultModule } = useAppStore(s => s.dashboardSettings);
+    const updateSettings     = useAppStore(s => s.updateDashboardSettings);
 
-    const [deals, setDeals] = useState<Deal[]>([]);
-    const [allDeals, setAllDeals] = useState<Deal[]>([]);
-    const [stages, setStages] = useState<Stage[]>([]);
+    const [deals, setDeals]           = useState<Deal[]>([]);
+    const [allDeals, setAllDeals]     = useState<Deal[]>([]);
+    const [stages, setStages]         = useState<Stage[]>([]);
     const [activities, setActivities] = useState<Activity[]>([]);
-    const [notes, setNotes] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [showSettings, setShowSettings] = useState(false);
+    const [notes, setNotes]           = useState<any[]>([]);
+    const [loading, setLoading]       = useState(true);
+    const [isSyncing, setIsSyncing]   = useState(false);
+    const [lastSynced, setLastSynced] = useState<Date | null>(null);
+    const [showSettings, setShowSettings]     = useState(false);
     const [showExportMenu, setShowExportMenu] = useState(false);
-    const [mounted, setMounted] = useState(false);
 
-    useEffect(() => { setMounted(true); }, []);
-
-    const fetchData = async () => {
+    const fetchData = useCallback(async (silent = false) => {
         if (!token || !selectedPipelineId) return;
-        setLoading(true); setError(null);
+        if (silent) setIsSyncing(true);
+        else setLoading(true);
         try {
             const api = new PipedriveAPI(token);
             const [dealsData, allDealsData, stagesData, activitiesData, notesData] = await Promise.all([
@@ -67,19 +51,19 @@ export default function ManagerDashboard() {
                 api.getAllDeals('open'),
                 api.getStages(selectedPipelineId),
                 api.getActivities(),
-                api.getNotes()
+                api.getNotes(),
             ]);
             setDeals(dealsData);
             setAllDeals(allDealsData);
             setStages(stagesData.sort((a, b) => a.order_nr - b.order_nr));
             setActivities(activitiesData);
             setNotes(notesData);
-        } catch (err: any) {
-            setError(err.message || "Erro ao carregar dados");
-        } finally {
-            setLoading(false);
-        }
-    };
+            setLastSynced(new Date());
+        } catch { /**/ }
+        finally { setLoading(false); setIsSyncing(false); }
+    }, [token, selectedPipelineId]);
+
+    useEffect(() => { fetchData(); }, [fetchData]);
 
     const handleExportPDF = async () => {
         setShowExportMenu(false);
@@ -87,338 +71,344 @@ export default function ManagerDashboard() {
         if (!element) return;
         try {
             const html2pdf = (await import('html2pdf.js')).default;
-            const opt = {
+            html2pdf().set({
                 margin: 0.5,
-                filename: `Relatorio-Manager-${new Date().toISOString().split('T')[0]}.pdf`,
+                filename: `Manager-${new Date().toISOString().split('T')[0]}.pdf`,
                 image: { type: 'jpeg' as const, quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#05070a' },
-                jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' as const }
-            };
-            html2pdf().set(opt).from(element).save();
-        } catch (error) {
-            console.error("Failed to generate PDF", error);
-        }
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' as const },
+            }).from(element).save();
+        } catch { /**/ }
     };
 
     const handleExportCSV = () => {
         setShowExportMenu(false);
-        let csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "Métrica,Valor\n";
-        csvContent += `Deals Ativos,${metrics.activeCount}\n`;
-        csvContent += `Valor em Pipeline,${metrics.totalValue}\n`;
-        csvContent += `Win Rate,${metrics.winRate}%\n`;
-        csvContent += `Deals Perdidos,${metrics.lostCount}\n\n`;
-        csvContent += "ID,Negócio,Valor,Status,Adicionado em\n";
-        filteredDeals.forEach(d => {
-            csvContent += `${d.id},"${d.title}",${d.value || 0},${d.status},${d.add_time || ''}\n`;
+        let csv = 'data:text/csv;charset=utf-8,ID,Negócio,Valor,Status\n';
+        filteredDeals.forEach(d => { csv += `${d.id},"${d.title}",${d.value || 0},${d.status}\n`; });
+        const a = Object.assign(document.createElement('a'), {
+            href: encodeURI(csv),
+            download: `Manager-${new Date().toISOString().split('T')[0]}.csv`,
         });
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `Export-Manager-${new Date().toISOString().split('T')[0]}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
     };
 
-    useEffect(() => { fetchData(); }, [token, selectedPipelineId]);
-
-    const isDateInRange = (dateStr: string | null, start: string | null, end: string | null) => {
+    const isInRange = (dateStr: string | null) => {
         if (!dateStr) return false;
-        if (!start && !end) return true;
-        const date = new Date(dateStr); date.setHours(0, 0, 0, 0);
-        if (start) { const s = new Date(start); s.setHours(0, 0, 0, 0); if (date < s) return false; }
-        if (end) { const e = new Date(end); e.setHours(23, 59, 59, 999); if (date > e) return false; }
+        if (!startDate && !endDate) return true;
+        const d = new Date(dateStr); d.setHours(0, 0, 0, 0);
+        if (startDate) { const s = new Date(startDate); s.setHours(0,0,0,0); if (d < s) return false; }
+        if (endDate)   { const e = new Date(endDate);   e.setHours(23,59,59,999); if (d > e) return false; }
         return true;
     };
 
     const filteredDeals = useMemo(() => {
-        let result = deals;
+        let r = deals;
         if (selectedUserId !== null) {
-            result = result.filter(deal => {
-                const uid = typeof deal.user_id === 'object' ? deal.user_id?.id : deal.user_id;
+            r = r.filter(d => {
+                const uid = typeof d.user_id === 'object' ? d.user_id?.id : d.user_id;
                 return Number(uid) === Number(selectedUserId);
             });
         }
-        result = result.filter(deal => {
-            if (deal.status === 'open') return isDateInRange(deal.add_time, startDate, endDate);
-            if (deal.status === 'won') return isDateInRange(deal.won_time, startDate, endDate);
-            if (deal.status === 'lost') return isDateInRange(deal.lost_time, startDate, endDate);
+        return r.filter(d => {
+            if (d.status === 'open')  return isInRange(d.add_time);
+            if (d.status === 'won')   return isInRange(d.won_time);
+            if (d.status === 'lost')  return isInRange(d.lost_time);
             return true;
         });
-        return result;
     }, [deals, selectedUserId, startDate, endDate]);
 
     const metrics = useMemo(() => {
-        const activeDeals = filteredDeals.filter(d => d.status === 'open');
-        const wonDeals = filteredDeals.filter(d => d.status === 'won');
-        const lostDeals = filteredDeals.filter(d => d.status === 'lost');
-        const totalValue = activeDeals.reduce((sum, d) => sum + (d.value || 0), 0);
-        const winRate = (wonDeals.length + lostDeals.length) > 0
-            ? Math.round((wonDeals.length / (wonDeals.length + lostDeals.length)) * 100)
-            : 0;
-        return { activeCount: activeDeals.length, totalValue, wonCount: wonDeals.length, lostCount: lostDeals.length, winRate };
-    }, [filteredDeals]);
-
-    const lostReasons = useMemo(() => {
-        const reasonsMap = new Map();
-        filteredDeals.filter(d => d.status === 'lost').forEach(deal => {
-            const reason = deal.lost_reason || 'Outros';
-            reasonsMap.set(reason, (reasonsMap.get(reason) || 0) + 1);
-        });
-        return Array.from(reasonsMap.entries()).map(([reason, count]) => ({ reason, count })).sort((a, b) => b.count - a.count);
-    }, [filteredDeals]);
-
-    const pipelineVelocity = useMemo(() => stages.map(stage => {
-        const stageDeals = deals.filter(d => d.stage_id === stage.id && d.status === 'open');
-        if (stageDeals.length === 0) return { stageId: stage.id, avgDays: 0 };
-        const totalDays = stageDeals.reduce((sum, deal) => {
-            return sum + Math.floor((new Date().getTime() - new Date(deal.stage_change_time || deal.add_time).getTime()) / 86400000);
-        }, 0);
-        return { stageId: stage.id, avgDays: Math.round(totalDays / stageDeals.length) };
-    }), [stages, deals]);
-
-    const funnelData = useMemo(() => stages.map(stage => {
-        const dealsInStage = filteredDeals.filter(d => d.stage_id === stage.id && d.status === 'open');
-        const velocity = pipelineVelocity.find(v => v.stageId === stage.id);
+        const active = filteredDeals.filter(d => d.status === 'open');
+        const won    = filteredDeals.filter(d => d.status === 'won');
+        const lost   = filteredDeals.filter(d => d.status === 'lost');
+        const criticalCount = allDeals.filter(d => {
+            if (d.status !== 'open') return false;
+            const ref = d.last_activity_date || d.stage_change_time || d.add_time;
+            return Math.floor((Date.now() - new Date(ref).getTime()) / 86400000) >= 14;
+        }).length;
         return {
-            name: stage.name,
-            value: dealsInStage.reduce((sum, d) => sum + (d.value || 0), 0),
-            deals: dealsInStage.length,
-            avgDays: velocity?.avgDays
+            activeCount:  active.length,
+            totalValue:   active.reduce((s, d) => s + (d.value || 0), 0),
+            wonCount:     won.length,
+            lostCount:    lost.length,
+            winRate:      (won.length + lost.length) > 0 ? Math.round((won.length / (won.length + lost.length)) * 100) : 0,
+            criticalCount,
         };
-    }), [stages, filteredDeals, pipelineVelocity]);
+    }, [filteredDeals, allDeals]);
 
-    const formatCurrency = (val: number) =>
-        new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(val);
+    const funnelData = useMemo(() =>
+        stages.map(stage => {
+            const sd    = filteredDeals.filter(d => d.stage_id === stage.id && d.status === 'open');
+            const allSd = deals.filter(d => d.stage_id === stage.id && d.status === 'open');
+            const avgDays = allSd.length
+                ? Math.round(allSd.reduce((s, d) => s + Math.floor((Date.now() - new Date(d.stage_change_time || d.add_time).getTime()) / 86400000), 0) / allSd.length)
+                : 0;
+            return { name: stage.name, value: sd.reduce((s, d) => s + (d.value || 0), 0), deals: sd.length, avgDays };
+        }),
+    [stages, deals, filteredDeals]);
+
+    const fmt = (v: number) =>
+        new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v);
 
     const leaderboardData = useMemo(() => {
-        const wonDeals = filteredDeals.filter(d => d.status === 'won');
-        const usersMap = new Map();
-        wonDeals.forEach(deal => {
-            const dealUserId = typeof deal.user_id === 'object' ? deal.user_id?.id : deal.user_id;
-            const userId = Number(dealUserId);
-            const userName = typeof deal.user_id === 'object' ? deal.user_id?.name : 'Vendedor';
-            const current = usersMap.get(userId) || { id: userId, name: userName, value: 0, deals: 0 };
-            usersMap.set(userId, { ...current, value: current.value + deal.value, deals: current.deals + 1 });
+        const map = new Map<number, { id: number; name: string; value: number; deals: number }>();
+        filteredDeals.filter(d => d.status === 'won').forEach(d => {
+            const uid  = typeof d.user_id === 'object' ? d.user_id?.id : Number(d.user_id);
+            const name = typeof d.user_id === 'object' ? d.user_id?.name : 'Vendedor';
+            const cur  = map.get(uid) || { id: uid, name, value: 0, deals: 0 };
+            map.set(uid, { ...cur, value: cur.value + (d.value || 0), deals: cur.deals + 1 });
         });
-        return Array.from(usersMap.values()).sort((a, b) => b.deals - a.deals);
+        return Array.from(map.values()).sort((a, b) => b.deals - a.deals);
     }, [filteredDeals]);
 
-    const activeSalespeopleData = useMemo(() => {
-        const usersMap = new Map();
-        viewUsers.forEach(u => {
-            usersMap.set(u.id, { id: u.id, name: u.name, totalImpact: 0, breakdown: { calls: 0, meetings: 0, emails: 0, creations: 0, movements: 0, comments: 0 } });
-        });
-        (activities || []).forEach(act => {
-            if (!act.done) return;
-            if (!isDateInRange(act.add_time || act.due_date, startDate, endDate)) return;
-            const userId = act.user_id;
-            if (!usersMap.has(userId)) return;
-            const current = usersMap.get(userId);
-            const type = act.type.toLowerCase();
-            if (type === 'call') current.breakdown.calls += 1;
-            else if (type === 'meeting') current.breakdown.meetings += 1;
-            else if (type === 'email') current.breakdown.emails += 1;
-            current.totalImpact += 1;
-            usersMap.set(userId, current);
-        });
-        (notes || []).forEach(note => {
-            if (!isDateInRange(note.add_time, startDate, endDate)) return;
-            const userId = note.user_id;
-            if (!usersMap.has(userId)) return;
-            const current = usersMap.get(userId);
-            current.breakdown.comments += 1;
-            current.totalImpact += 2;
-            usersMap.set(userId, current);
-        });
-        (allDeals || []).forEach(deal => {
-            const dealUserId = typeof deal.user_id === 'object' ? deal.user_id?.id : deal.user_id;
-            const creatorId = Number(dealUserId);
-            if (isDateInRange(deal.add_time, startDate, endDate) && usersMap.has(creatorId)) {
-                const current = usersMap.get(creatorId);
-                current.breakdown.creations += 1;
-                current.totalImpact += 5;
-                usersMap.set(creatorId, current);
-            }
-            if (deal.stage_change_time && isDateInRange(deal.stage_change_time, startDate, endDate) && usersMap.has(creatorId)) {
-                const current = usersMap.get(creatorId);
-                current.breakdown.movements += 1;
-                current.totalImpact += 3;
-                usersMap.set(creatorId, current);
-            }
-        });
-        return Array.from(usersMap.values()).filter(u => u.totalImpact > 0 || selectedUserId === null);
-    }, [activities, notes, allDeals, viewUsers, selectedUserId, startDate, endDate]);
-
-    const performanceTableData = useMemo(() => {
-        if (!viewUsers) return [];
-        return viewUsers.map(user => {
-            const userDeals = (allDeals || []).filter(d => {
-                const dealUserId = typeof d.user_id === 'object' ? d.user_id?.id : d.user_id;
-                return Number(dealUserId) === Number(user.id);
+    const performanceTableData = useMemo(() =>
+        viewUsers.map(user => {
+            const ud = allDeals.filter(d => {
+                const uid = typeof d.user_id === 'object' ? d.user_id?.id : d.user_id;
+                return Number(uid) === Number(user.id);
             });
             const stageCounts: Record<number, number> = {};
-            (stages || []).forEach(s => { stageCounts[s.id] = userDeals.filter(d => d.stage_id === s.id && d.status === 'open').length; });
-            const wonValue = userDeals.filter(d => d.status === 'won').reduce((sum, d) => sum + (d.value || 0), 0);
-            return { id: user.id, name: user.name, stageCounts, totalDeals: userDeals.length, totalValue: wonValue };
-        });
-    }, [viewUsers, allDeals, stages]);
+            stages.forEach(s => { stageCounts[s.id] = ud.filter(d => d.stage_id === s.id && d.status === 'open').length; });
+            return {
+                id: user.id, name: user.name, stageCounts,
+                totalDeals: ud.length,
+                totalValue: ud.filter(d => d.status === 'won').reduce((s, d) => s + (d.value || 0), 0),
+            };
+        }),
+    [viewUsers, allDeals, stages]);
 
     const activitiesTableData = useMemo(() => {
-        if (!viewUsers) return [];
         const now = new Date();
-        return (activities || []).length > 0 ? viewUsers.map(user => {
-            const ua = (activities || []).filter(a => a.user_id === user.id);
+        return viewUsers.map(user => {
+            const ua = activities.filter(a => a.user_id === user.id);
             return {
                 id: user.id, name: user.name, total: ua.length,
-                onTime: ua.filter(a => a.done || (a.due_date && new Date(a.due_date) >= now)).length,
+                onTime:  ua.filter(a => a.done || (a.due_date && new Date(a.due_date) >= now)).length,
                 overdue: ua.filter(a => !a.done && a.due_date && new Date(a.due_date) < now).length,
-                pending: ua.filter(a => !a.done).length
+                pending: ua.filter(a => !a.done).length,
             };
-        }) : [];
+        });
     }, [viewUsers, activities]);
 
+    const contextLine = useMemo(() => {
+        const todayStr = new Date().toISOString().split('T')[0];
+        const overdueCount  = activities.filter(a => !a.done && a.due_date && a.due_date < todayStr).length;
+        const inactiveUsers = viewUsers.filter(u => !activities.some(a => a.user_id === u.id && a.done)).length;
+        const parts: string[] = [];
+        if (metrics.criticalCount > 0) parts.push(`${metrics.criticalCount} deal${metrics.criticalCount !== 1 ? 's' : ''} crítico${metrics.criticalCount !== 1 ? 's' : ''}`);
+        if (overdueCount > 0) parts.push(`${overdueCount} follow-up${overdueCount !== 1 ? 's' : ''} atrasado${overdueCount !== 1 ? 's' : ''}`);
+        if (inactiveUsers > 0) parts.push(`${inactiveUsers} vendedor${inactiveUsers !== 1 ? 'es' : ''} sem atividade`);
+        return parts.length > 0 ? parts.join(' · ') : null;
+    }, [activities, viewUsers, metrics.criticalCount]);
+
     if (loading) return (
-        <div className="flex flex-col min-h-screen bg-[#05070a] text-white">
-            <Header title="Painel de Controlo" />
-            <div className="flex-1 flex flex-col items-center justify-center">
-                <Loader2 className="w-12 h-12 text-blue-500 animate-spin mb-4" />
-                <p className="text-gray-400 font-black uppercase tracking-widest text-[10px] animate-pulse">Sincronizando Insights do CRM...</p>
-            </div>
+        <div className="flex flex-col flex-1 items-center justify-center gap-4" style={{ background: 'var(--bg-base)' }}>
+            <Loader2 className="w-10 h-10 animate-spin" style={{ color: 'var(--blue)' }} />
+            <p className="text-[10px] font-black uppercase tracking-widest animate-pulse" style={{ color: 'var(--text-muted)' }}>
+                Sincronizando insights do CRM...
+            </p>
         </div>
     );
 
+    const ToggleRow = ({ label, val, fn }: { label: string; val: boolean; fn: () => void }) => (
+        <button onClick={fn} className="flex items-center justify-between w-full py-2 border-b last:border-0"
+            style={{ borderColor: 'var(--border)' }}>
+            <span className="text-xs font-bold" style={{ color: val ? 'var(--text-primary)' : 'var(--text-muted)' }}>{label}</span>
+            {val
+                ? <Eye className="w-4 h-4" style={{ color: 'var(--blue)' }} />
+                : <EyeOff className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
+            }
+        </button>
+    );
+
     return (
-        <div className="flex flex-col min-h-screen bg-[#05070a] text-white overflow-x-hidden">
-            <Header title="Manager Insights" />
+        <div className="flex flex-col flex-1 min-h-0" style={{ background: 'var(--bg-base)' }}>
+            <Header
+                title="Manager Dashboard"
+                onSync={() => fetchData(true)}
+                isSyncing={isSyncing}
+                lastSynced={lastSynced}
+            />
 
-            <main className="p-8 flex-1 space-y-8 max-w-[1600px] mx-auto w-full relative">
+            <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 lg:p-8">
+                <div className="max-w-[1600px] mx-auto space-y-6 relative">
 
-                {/* Settings Panel */}
-                {showSettings && (
-                    <div className="absolute top-24 right-8 z-50 w-72 bg-[#0f1115]/95 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl ring-1 ring-white/10">
-                        <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6 border-b border-white/5 pb-4">Personalizar Vista</h4>
-                        <div className="space-y-5">
-                            {[
-                                { label: 'Valor em Pipeline', val: showPipelineValue, fn: () => updateSettings({ showPipelineValue: !showPipelineValue }) },
-                                { label: 'Win Rate Global',   val: showWinRate,       fn: () => updateSettings({ showWinRate: !showWinRate }) },
-                                { label: 'Ranking Vendas',    val: showLeaderboard,   fn: () => updateSettings({ showLeaderboard: !showLeaderboard }) },
-                            ].map(({ label, val, fn }) => (
-                                <button key={label} onClick={fn} className="flex items-center justify-between w-full">
-                                    <span className={`text-xs font-bold transition-colors ${val ? 'text-white' : 'text-gray-500'}`}>{label}</span>
-                                    {val ? <Eye className="w-4 h-4 text-blue-500" /> : <EyeOff className="w-4 h-4 text-gray-600" />}
-                                </button>
-                            ))}
-                            <div className="pt-4 mt-2 border-t border-white/5">
-                                <span className="text-[9px] font-black text-gray-500 uppercase tracking-tighter mb-4 block">Módulo Lateral Padrão</span>
+                    {/* Settings panel */}
+                    {showSettings && (
+                        <div className="absolute top-0 right-0 z-50 w-64 rounded-2xl p-5 shadow-2xl"
+                            style={{ background: 'var(--bg-card)', border: '1px solid var(--border-mid)' }}>
+                            <p className="text-[9px] font-black uppercase tracking-widest mb-4 pb-3"
+                                style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border)' }}>
+                                Personalizar vista
+                            </p>
+                            <div className="space-y-0.5">
+                                <ToggleRow label="Valor em Pipeline" val={showPipelineValue} fn={() => updateSettings({ showPipelineValue: !showPipelineValue })} />
+                                <ToggleRow label="Win Rate Global"   val={showWinRate}       fn={() => updateSettings({ showWinRate: !showWinRate })} />
+                                <ToggleRow label="Ranking Vendas"    val={showLeaderboard}   fn={() => updateSettings({ showLeaderboard: !showLeaderboard })} />
+                            </div>
+                            <div className="mt-4 pt-3" style={{ borderTop: '1px solid var(--border)' }}>
+                                <p className="text-[9px] font-black uppercase tracking-widest mb-3" style={{ color: 'var(--text-muted)' }}>Módulo lateral</p>
                                 <div className="grid grid-cols-2 gap-2">
                                     {(['activities', 'leaderboard'] as const).map(m => (
                                         <button key={m} onClick={() => updateSettings({ defaultModule: m })}
-                                            className={`px-3 py-2 rounded-xl text-[10px] font-black transition-all border ${defaultModule === m ? 'bg-blue-600 border-blue-500 text-white' : 'bg-white/5 border-white/5 text-gray-500 hover:bg-white/10'}`}>
-                                            {m === 'activities' ? 'ATIVIDADES' : 'RANKING'}
+                                            className="py-1.5 rounded-lg text-[10px] font-black transition-all"
+                                            style={{
+                                                background: defaultModule === m ? 'var(--blue-dim)' : 'var(--bg-surface)',
+                                                color:      defaultModule === m ? 'var(--blue)' : 'var(--text-muted)',
+                                                border:     `1px solid ${defaultModule === m ? 'rgba(59,130,246,0.25)' : 'var(--border)'}`,
+                                            }}>
+                                            {m === 'activities' ? 'Feed equipa' : 'Ranking'}
                                         </button>
                                     ))}
                                 </div>
                             </div>
-                        </div>
-                        <button onClick={() => setShowSettings(false)} className="w-full mt-8 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[10px] font-black text-blue-400 uppercase tracking-widest transition-all">
-                            Fechar
-                        </button>
-                    </div>
-                )}
-
-                {/* Export Menu */}
-                {showExportMenu && (
-                    <div className="absolute top-24 right-48 z-50 w-56 bg-[#0f1115]/95 backdrop-blur-2xl border border-white/10 rounded-3xl p-4 shadow-2xl ring-1 ring-white/10">
-                        <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Exportar Dados</h4>
-                        <div className="space-y-2">
-                            <button onClick={handleExportPDF} className="flex items-center gap-3 w-full p-2 hover:bg-white/5 rounded-xl transition-colors text-sm font-medium text-white group">
-                                <FileText className="w-4 h-4 text-rose-500 group-hover:scale-110 transition-transform" /> Exportar PDF
-                            </button>
-                            <button onClick={handleExportCSV} className="flex items-center gap-3 w-full p-2 hover:bg-white/5 rounded-xl transition-colors text-sm font-medium text-white group">
-                                <FileSpreadsheet className="w-4 h-4 text-emerald-500 group-hover:scale-110 transition-transform" /> Exportar CSV
+                            <button onClick={() => setShowSettings(false)}
+                                className="w-full mt-4 py-2 rounded-xl text-[10px] font-black transition-all"
+                                style={{ background: 'var(--bg-surface)', color: 'var(--blue)', border: '1px solid var(--border)' }}>
+                                Fechar
                             </button>
                         </div>
-                    </div>
-                )}
+                    )}
 
-                {/* Header Bar */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4">
-                    <div>
-                        <h1 className="text-4xl font-black text-white tracking-tighter uppercase italic">Manager Dashboard</h1>
-                        <div className="flex items-center gap-3 mt-2">
-                            <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 bg-blue-500 rounded-full animate-ping"></div>
-                                <span className="text-blue-400 font-black uppercase tracking-widest text-[10px] bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">LIVE OPS</span>
-                            </div>
-                            <span className="text-gray-500 font-bold flex items-center gap-1.5 text-[10px] uppercase tracking-tighter">
-                                <Calendar className="w-3 h-3 text-blue-500/50" />
-                                {mounted ? new Date().toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric' }) : '...'}
-                            </span>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <button onClick={() => { setShowExportMenu(!showExportMenu); setShowSettings(false); }}
-                            className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all border shadow-lg ${showExportMenu ? 'bg-blue-600 border-blue-500 text-white' : 'bg-white/[0.03] hover:bg-white/[0.08] border-white/5 text-gray-400'}`}>
-                            <Download className="w-4 h-4" /> Exportar
-                        </button>
-                        <button onClick={() => { setShowSettings(!showSettings); setShowExportMenu(false); }}
-                            className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all border shadow-lg ${showSettings ? 'bg-blue-600 border-blue-500 text-white' : 'bg-white/[0.03] hover:bg-white/[0.08] border-white/5 text-gray-400'}`}>
-                            <Settings2 className="w-4 h-4" /> Personalizar
-                        </button>
-                        <button onClick={fetchData} className="flex items-center gap-2 px-6 py-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl text-[11px] font-black uppercase tracking-widest text-gray-400 transition-all border border-white/5 active:scale-95">
-                            <RefreshCw className="w-4 h-4" /> Sync
-                        </button>
-                    </div>
-                </div>
-
-                {/* Main content */}
-                <div id="dashboard-content" className="space-y-8">
-
-                    {/* Metric Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <MetricCard title="Deals Ativos" value={metrics.activeCount} icon={Target} color="blue" trend={{ value: 12, isPositive: true }} />
-                        {showPipelineValue && <MetricCard title="Valor em Pipeline" value={formatCurrency(metrics.totalValue)} icon={DollarSign} color="purple" />}
-                        {showWinRate && <MetricCard title="Win Rate Global" value={`${metrics.winRate}%`} icon={TrendingUp} color="green" />}
-                        <MetricCard title="Deals Perdidos" value={metrics.lostCount} icon={XCircle} color="red" />
-                    </div>
-
-                    {/* Main grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-
-                        {/* Left: Funnel + Charts + Tables + Heatmap */}
-                        <div className="lg:col-span-8 space-y-8">
-                            <VisualFunnel data={funnelData} />
-                            <WonLostChart won={metrics.wonCount} lost={metrics.lostCount} lostReasons={lostReasons} />
-
-                            <div className="space-y-8 pt-4">
-                                <div className="bg-[#0f172a] rounded-3xl p-8 border border-white/[0.04] shadow-2xl">
-                                    <ActivitiesTable members={activitiesTableData} />
-                                </div>
-                                <div className="bg-[#0f172a] rounded-3xl p-8 border border-white/[0.04] shadow-2xl">
-                                    <PerformanceTable title="Performance de Equipa por Stage" members={performanceTableData} stages={stages} />
-                                </div>
-
-                                {/* 🆕 Heatmap de Produtividade */}
-                                <HeatmapChart activities={activities} />
+                    {/* Export menu */}
+                    {showExportMenu && (
+                        <div className="absolute top-0 right-40 z-50 w-52 rounded-2xl p-4 shadow-2xl"
+                            style={{ background: 'var(--bg-card)', border: '1px solid var(--border-mid)' }}>
+                            <p className="text-[9px] font-black uppercase tracking-widest mb-3 pb-2"
+                                style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border)' }}>
+                                Exportar dados
+                            </p>
+                            <div className="space-y-1">
+                                {[
+                                    { label: 'Exportar PDF', icon: FileText,       fn: handleExportPDF, accent: '#f43f5e' },
+                                    { label: 'Exportar CSV', icon: FileSpreadsheet, fn: handleExportCSV, accent: '#10b981' },
+                                ].map(({ label, icon: Icon, fn, accent }) => (
+                                    <button key={label} onClick={fn}
+                                        className="flex items-center gap-3 w-full px-3 py-2 rounded-xl text-sm font-medium transition-all hover:opacity-80"
+                                        style={{ color: 'var(--text-primary)' }}>
+                                        <Icon className="w-4 h-4" style={{ color: accent }} />
+                                        {label}
+                                    </button>
+                                ))}
                             </div>
                         </div>
+                    )}
 
-                        {/* Right: FocusZone + Activity/Leaderboard */}
-                        <div className="lg:col-span-4 space-y-8">
-                            <FocusZone deals={allDeals} stages={stages} />
-                            {defaultModule === 'activities' ? (
-                                <ActiveSalespeople data={activeSalespeopleData} />
+                    {/* Cabeçalho */}
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                        <div>
+                            <p className="text-[10px] font-black uppercase tracking-[0.2em]" style={{ color: 'var(--text-muted)' }}>
+                                {new Date().getHours() < 12 ? 'Bom dia' : new Date().getHours() < 19 ? 'Boa tarde' : 'Boa noite'}
+                            </p>
+                            <h1 className="text-2xl font-black tracking-tight mt-0.5" style={{ color: 'var(--text-primary)' }}>
+                                Manager Dashboard
+                            </h1>
+                            {contextLine ? (
+                                <p className="text-[11px] font-bold mt-1.5 flex items-center gap-1.5" style={{ color: 'var(--rose)' }}>
+                                    <ShieldAlert className="w-3.5 h-3.5 shrink-0" /> {contextLine}
+                                </p>
                             ) : (
-                                showLeaderboard && <Leaderboard data={leaderboardData} />
+                                <p className="text-[11px] font-bold mt-1.5" style={{ color: 'var(--green)' }}>Equipa em dia</p>
                             )}
-                            {defaultModule === 'activities' && showLeaderboard && <Leaderboard data={leaderboardData} />}
-                            {defaultModule === 'leaderboard' && !showLeaderboard && <ActiveSalespeople data={activeSalespeopleData} />}
+                        </div>
+                        <div className="flex items-center gap-2 flex-wrap shrink-0">
+                            <button onClick={() => { setShowExportMenu(!showExportMenu); setShowSettings(false); }}
+                                className="flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all"
+                                style={{
+                                    background: showExportMenu ? 'var(--blue-dim)' : 'var(--bg-surface)',
+                                    color:      showExportMenu ? 'var(--blue)' : 'var(--text-secondary)',
+                                    border:     `1px solid ${showExportMenu ? 'rgba(59,130,246,0.25)' : 'var(--border)'}`,
+                                }}>
+                                <Download className="w-3.5 h-3.5" /> Exportar
+                            </button>
+                            <button onClick={() => { setShowSettings(!showSettings); setShowExportMenu(false); }}
+                                className="flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all"
+                                style={{
+                                    background: showSettings ? 'var(--blue-dim)' : 'var(--bg-surface)',
+                                    color:      showSettings ? 'var(--blue)' : 'var(--text-secondary)',
+                                    border:     `1px solid ${showSettings ? 'rgba(59,130,246,0.25)' : 'var(--border)'}`,
+                                }}>
+                                <Settings2 className="w-3.5 h-3.5" /> Personalizar
+                            </button>
                         </div>
                     </div>
+
+                    <div id="dashboard-content" className="space-y-6">
+
+                        {/* Metric cards */}
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                            <MetricCard title="Deals Ativos"   value={metrics.activeCount}   icon={Target}     color="blue" />
+                            {showPipelineValue && <MetricCard title="Valor Pipeline" value={fmt(metrics.totalValue)} icon={DollarSign} color="purple" />}
+                            {showWinRate       && <MetricCard title="Win Rate"       value={`${metrics.winRate}%`}   icon={TrendingUp} color="green" />}
+                            <MetricCard title="Deals Críticos" value={metrics.criticalCount} icon={ShieldAlert}
+                                color={metrics.criticalCount > 0 ? 'red' : 'blue'} subtitle="Parados ≥ 14 dias" />
+                        </div>
+
+                        {/* Funil + Módulo lateral */}
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                            <div className="lg:col-span-8">
+                                <VisualFunnel data={funnelData} />
+                            </div>
+                            <div className="lg:col-span-4 space-y-6">
+                                {defaultModule === 'activities'
+                                    ? <TeamActivityFeed activities={activities} viewUsers={viewUsers} />
+                                    : showLeaderboard && <Leaderboard data={leaderboardData} />
+                                }
+                                {defaultModule === 'activities' && showLeaderboard && <Leaderboard data={leaderboardData} />}
+                                {defaultModule === 'leaderboard' && !showLeaderboard && <TeamActivityFeed activities={activities} viewUsers={viewUsers} />}
+                            </div>
+                        </div>
+
+                        {/* Leads Paradas — filtra por selectedUserId automaticamente */}
+                        <div>
+                            <div className="flex items-center gap-2 mb-3">
+                                <span className="w-1 h-4 rounded-full shrink-0" style={{ background: 'var(--rose)' }} />
+                                <p className="text-[11px] font-black uppercase tracking-[0.12em]" style={{ color: 'var(--text-secondary)' }}>
+                                    Leads Paradas
+                                    {selectedUserId !== null && viewUsers.find(u => u.id === selectedUserId) && (
+                                        <span className="ml-2 font-bold normal-case tracking-normal" style={{ color: 'var(--blue)' }}>
+                                            — {viewUsers.find(u => u.id === selectedUserId)?.name.split(' ')[0]}
+                                        </span>
+                                    )}
+                                    {selectedUserId === null && (
+                                        <span className="ml-2 font-bold normal-case tracking-normal" style={{ color: 'var(--text-muted)' }}>
+                                            — Toda a equipa
+                                        </span>
+                                    )}
+                                </p>
+                            </div>
+                            <StuckLeads
+                                deals={allDeals}
+                                stages={stages}
+                                notes={notes}
+                                userId={selectedUserId}
+                            />
+                        </div>
+
+                        {/* Tabelas — largura total */}
+                        <StageSummaryTable
+                            deals={allDeals}
+                            stages={stages}
+                            activities={activities}
+                            notes={notes}
+                            viewUsers={viewUsers}
+                        />
+
+                        <div className="card p-6">
+                            <ActivitiesTable members={activitiesTableData} />
+                        </div>
+
+                        <div className="card p-6">
+                            <PerformanceTable
+                                title="Performance Individual por Stage"
+                                members={performanceTableData}
+                                stages={stages}
+                            />
+                        </div>
+
+                    </div>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

@@ -46,7 +46,9 @@ export default function Home() {
         return <LoginScreen />;
     }
 
-    // 2. Has token but no role -> Show Role Selector
+    // 2. Has token but no role
+    //    - Admin: mostra RoleSelector para escolher
+    //    - Não-admin: força role 'sales' automaticamente (sem mostrar o ecrã)
     if (!role) {
         return <RoleSelector />;
     }

@@ -72,6 +72,11 @@ export default function StuckLeads({ deals, stages, notes = [], userId, onFollow
                 const ref = localUpdates[d.id] ?? d.last_activity_date ?? d.stage_change_time ?? d.add_time;
                 const daysStuck = Math.floor((now.getTime() - new Date(ref).getTime()) / 86400000);
                 const stage = stages.find(s => s.id === d.stage_id);
+                const primaryPhone = d.person_id?.phone?.find(p => p.primary)?.value
+                    ?? d.person_id?.phone?.[0]?.value;
+                const primaryEmail = d.person_id?.email?.find(e => e.primary)?.value
+                    ?? d.person_id?.email?.[0]?.value;
+                const ownerName = typeof d.user_id === 'object' ? d.user_id?.name : undefined;
                 return {
                     id: d.id,
                     title: d.title,
@@ -79,8 +84,11 @@ export default function StuckLeads({ deals, stages, notes = [], userId, onFollow
                     daysStuck,
                     stageName: stage?.name || 'Pipeline',
                     priority: getPriority(daysStuck),
-                    orgName:    d.org_id?.name,
-                    personName: d.person_id?.name,
+                    orgName:     d.org_id?.name,
+                    personName:  d.person_id?.name,
+                    personPhone: primaryPhone,
+                    personEmail: primaryEmail,
+                    ownerName,
                 };
             })
             .filter(d => d.daysStuck >= minDays)
@@ -114,14 +122,16 @@ export default function StuckLeads({ deals, stages, notes = [], userId, onFollow
 
     const openModal = (item: typeof stuckItems[0]) => {
         setSelectedDeal({
-            id:         item.id,
-            title:      item.title,
-            value:      item.value,
-            stageName:  item.stageName,
-            daysStuck:  item.daysStuck,
-            orgName:    item.orgName,
-            personName: item.personName,
-            lastNote:   lastNoteForDeal(item.id),
+            id:          item.id,
+            title:       item.title,
+            value:       item.value,
+            stageName:   item.stageName,
+            daysStuck:   item.daysStuck,
+            orgName:     item.orgName,
+            personName:  item.personName,
+            personPhone: item.personPhone,
+            personEmail: item.personEmail,
+            lastNote:    lastNoteForDeal(item.id),
         });
     };
 
@@ -218,8 +228,14 @@ export default function StuckLeads({ deals, stages, notes = [], userId, onFollow
                                             <p className="text-[12px] font-bold text-gray-200 group-hover:text-white transition-colors truncate">
                                                 {item.title}
                                             </p>
-                                            <div className="flex items-center gap-2 mt-0.5">
+                                            <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                                                 <p className="text-[10px] text-gray-600 truncate">{item.stageName}</p>
+                                                {!userId && item.ownerName && (
+                                                    <span className="text-[9px] font-black px-1.5 py-0.5 rounded shrink-0"
+                                                        style={{ background: 'rgba(59,130,246,0.12)', color: 'rgb(96,165,250)', border: '1px solid rgba(59,130,246,0.2)' }}>
+                                                        {item.ownerName.split(' ')[0]}
+                                                    </span>
+                                                )}
                                                 {hasFollowUp && (
                                                     <span className="text-[9px] text-green-400/70 font-bold shrink-0">· follow-up ✓</span>
                                                 )}

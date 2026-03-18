@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, Clock, CheckCircle2, AlertCircle, HelpCircle } from 'lucide-react';
+import { Calendar, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
 
 interface MemberActivities {
     id: number;
@@ -16,102 +16,129 @@ interface ActivitiesTableProps {
 }
 
 export default function ActivitiesTable({ members }: ActivitiesTableProps) {
+
+    const ColHeader = ({
+        label, icon: Icon, color,
+    }: {
+        label: string; icon: React.ElementType; color: string;
+    }) => (
+        <th className="px-4 py-4 text-center">
+            <div className="flex items-center justify-center gap-1.5 text-[10px] font-black uppercase tracking-widest" style={{ color }}>
+                <Icon className="w-3 h-3 shrink-0" />
+                {label}
+            </div>
+        </th>
+    );
+
+    const Badge = ({ value, bg, color, border }: { value: number; bg: string; color: string; border: string }) =>
+        value > 0 ? (
+            <span
+                className="inline-flex items-center justify-center min-w-[2.25rem] h-6 px-2 rounded-lg text-xs font-black"
+                style={{ background: bg, color, border: `1px solid ${border}` }}
+            >
+                {value}
+            </span>
+        ) : (
+            <span style={{ color: 'var(--text-muted)' }}>—</span>
+        );
+
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-5">
+            {/* Header */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                    <span className="w-1.5 h-4 rounded-full bg-violet-500"></span>
-                    <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-[0.12em]">Atividades & Follow-ups</h3>
+                    <span className="w-1.5 h-4 rounded-full shrink-0" style={{ background: 'var(--violet)' }} />
+                    <h3 className="text-[11px] font-black uppercase tracking-[0.12em]" style={{ color: 'var(--text-secondary)' }}>
+                        Atividades & Follow-ups
+                    </h3>
                 </div>
-                <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest hidden md:block">
+                <span className="text-[10px] font-bold uppercase tracking-widest hidden md:block" style={{ color: 'var(--text-muted)' }}>
                     Cumprimento de datas e prazos
-                </div>
+                </span>
             </div>
 
-            <div className="overflow-x-auto rounded-2xl border border-white/[0.04] bg-white/[0.01]">
+            {/* Tabela */}
+            <div className="overflow-x-auto rounded-2xl" style={{ border: '1px solid var(--border)' }}>
                 <table className="w-full text-left border-collapse">
                     <thead>
-                        <tr className="border-b border-white/[0.04] bg-white/[0.02]">
-                            <th className="px-6 py-4 text-[10px] font-black text-gray-500 uppercase tracking-widest min-w-[200px]">
+                        <tr style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)' }}>
+                            <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--text-muted)', minWidth: '180px' }}>
                                 Vendedor
                             </th>
-                            <th className="px-4 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">
-                                <div className="flex items-center justify-center gap-1.5">
-                                    <Calendar className="w-3 h-3" />
-                                    Agendados
-                                </div>
-                            </th>
-                            <th className="px-4 py-4 text-[10px] font-black text-emerald-500 uppercase tracking-widest text-center">
-                                <div className="flex items-center justify-center gap-1.5">
-                                    <CheckCircle2 className="w-3 h-3" />
-                                    A Tempo
-                                </div>
-                            </th>
-                            <th className="px-4 py-4 text-[10px] font-black text-rose-500 uppercase tracking-widest text-center">
-                                <div className="flex items-center justify-center gap-1.5">
-                                    <AlertCircle className="w-3 h-3" />
-                                    Atrasados
-                                </div>
-                            </th>
-                            <th className="px-4 py-4 text-[10px] font-black text-amber-500 uppercase tracking-widest text-center">
-                                <div className="flex items-center justify-center gap-1.5">
-                                    <Clock className="w-3 h-3" />
-                                    Pendentes
-                                </div>
-                            </th>
+                            <ColHeader label="Agendados" icon={Calendar}      color="var(--text-secondary)" />
+                            <ColHeader label="A Tempo"   icon={CheckCircle2}  color="var(--green)"  />
+                            <ColHeader label="Atrasados" icon={AlertCircle}   color="var(--rose)"   />
+                            <ColHeader label="Pendentes" icon={Clock}         color="var(--orange)" />
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/[0.03]">
+                    <tbody>
                         {members.length > 0 ? (
-                            members.map((member) => (
-                                <tr key={member.id} className="hover:bg-white/[0.02] transition-colors group">
+                            members.map((member, idx) => (
+                                <tr
+                                    key={member.id}
+                                    style={{ borderBottom: idx < members.length - 1 ? '1px solid var(--border)' : 'none' }}
+                                    onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-hover)')}
+                                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                                >
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/10 flex items-center justify-center text-[11px] font-bold text-gray-400 group-hover:text-white transition-colors">
+                                            <div
+                                                className="w-8 h-8 rounded-lg flex items-center justify-center text-[11px] font-bold shrink-0"
+                                                style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
+                                            >
                                                 {member.name.charAt(0).toUpperCase()}
                                             </div>
-                                            <span className="text-sm font-bold text-gray-300 group-hover:text-white transition-colors truncate">
+                                            <span className="text-sm font-bold truncate" style={{ color: 'var(--text-primary)' }}>
                                                 {member.name}
                                             </span>
                                         </div>
                                     </td>
+
+                                    {/* Agendados — neutro */}
                                     <td className="px-4 py-4 text-center">
-                                        <span className="inline-flex items-center justify-center min-w-[2.25rem] h-6 px-2 rounded-lg bg-white/[0.03] text-gray-400 text-xs font-black border border-white/[0.06]">
-                                            {member.total}
-                                        </span>
+                                        <Badge
+                                            value={member.total}
+                                            bg="var(--bg-surface)"
+                                            color="var(--text-secondary)"
+                                            border="var(--border)"
+                                        />
                                     </td>
+
+                                    {/* A tempo — verde */}
                                     <td className="px-4 py-4 text-center">
-                                        {member.onTime > 0 ? (
-                                            <span className="inline-flex items-center justify-center min-w-[2.25rem] h-6 px-2 rounded-lg bg-emerald-500/10 text-emerald-400 text-xs font-black border border-emerald-500/20">
-                                                {member.onTime}
-                                            </span>
-                                        ) : (
-                                            <span className="text-gray-700 font-medium">—</span>
-                                        )}
+                                        <Badge
+                                            value={member.onTime}
+                                            bg="rgba(16,185,129,0.08)"
+                                            color="var(--green)"
+                                            border="rgba(16,185,129,0.2)"
+                                        />
                                     </td>
+
+                                    {/* Atrasados — rose */}
                                     <td className="px-4 py-4 text-center">
-                                        {member.overdue > 0 ? (
-                                            <span className="inline-flex items-center justify-center min-w-[2.25rem] h-6 px-2 rounded-lg bg-rose-500/10 text-rose-400 text-xs font-black border border-rose-500/20">
-                                                {member.overdue}
-                                            </span>
-                                        ) : (
-                                            <span className="text-gray-700 font-medium">—</span>
-                                        )}
+                                        <Badge
+                                            value={member.overdue}
+                                            bg="rgba(244,63,94,0.08)"
+                                            color="var(--rose)"
+                                            border="rgba(244,63,94,0.2)"
+                                        />
                                     </td>
+
+                                    {/* Pendentes — amber */}
                                     <td className="px-4 py-4 text-center">
-                                        {member.pending > 0 ? (
-                                            <span className="inline-flex items-center justify-center min-w-[2.25rem] h-6 px-2 rounded-lg bg-amber-500/10 text-amber-400 text-xs font-black border border-amber-500/20">
-                                                {member.pending}
-                                            </span>
-                                        ) : (
-                                            <span className="text-gray-700 font-medium">—</span>
-                                        )}
+                                        <Badge
+                                            value={member.pending}
+                                            bg="rgba(245,158,11,0.08)"
+                                            color="var(--orange)"
+                                            border="rgba(245,158,11,0.2)"
+                                        />
                                     </td>
                                 </tr>
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={5} className="px-6 py-12 text-center text-gray-500 text-xs font-bold uppercase tracking-widest">
+                                <td colSpan={5} className="px-6 py-12 text-center text-[11px] font-bold uppercase tracking-widest"
+                                    style={{ color: 'var(--text-muted)' }}>
                                     Sem dados de follow-up para este período
                                 </td>
                             </tr>
