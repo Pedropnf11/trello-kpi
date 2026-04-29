@@ -9,8 +9,8 @@
 
 <body>
   <script>
-    var SITE_URL = 'https://trello-kpi.vercel.app';
-    var POWERUP_URL = 'https://trello-kpi.vercel.app/trello-powerup';
+    var SITE_URL = 'https://kpimaster.vercel.app';
+    var POWERUP_URL = 'https://kpimaster.vercel.app/trello';
 
     TrelloPowerUp.initialize({
 
@@ -21,17 +21,17 @@
               dark:  POWERUP_URL + '/icon.png',
               light: POWERUP_URL + '/icon.png'
             },
-            text: 'KPI Dashboard',
+            text: 'KPI Master',
             callback: function (t) {
               if (!isAuth) {
                 return t.modal({
-                  title: 'Ligar ao KPI Dashboard',
+                  title: 'Ligar ao KPI Master',
                   url:   POWERUP_URL + '/auth.html',
                   height: 420
                 });
               }
               return t.modal({
-                title: 'KPI Dashboard',
+                title: 'KPI Master',
                 url:   POWERUP_URL + '/dashboard.html',
                 height: 620,
                 fullscreen: false
@@ -49,7 +49,7 @@
 
       'show-authorization': function (t) {
         return t.modal({
-          title: 'Ligar ao KPI Dashboard',
+          title: 'Ligar ao KPI Master',
           url:   POWERUP_URL + '/auth.html',
           height: 420
         });
@@ -57,14 +57,14 @@
 
       'show-settings': function (t) {
         return t.modal({
-          title: 'Definições — KPI Dashboard',
+          title: 'Definições — KPI Master',
           url:   POWERUP_URL + '/settings.html',
           height: 420
         });
       }
 
     }, {
-      appName: 'KPI Dashboard',
+      appName: 'KPI Master',
       appKey:  '2506cfe6cf90e4290792e5bec8ace956'
     });
   </script>

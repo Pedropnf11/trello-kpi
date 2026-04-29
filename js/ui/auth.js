@@ -52,9 +52,9 @@ UI.renderConfig = function (state) {
 
                 <div class="mb-12 relative z-10">
                     <div class="bg-gradient-to-br from-blue-600 to-indigo-700 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl transform rotate-3 hover:rotate-6 transition-transform duration-300">
-                        <span class="text-4xl text-white font-black">T</span>
+                        <span class="text-4xl text-white font-black">K</span>
                     </div>
-                    <h1 class="text-4xl font-black text-gray-900 mb-3 tracking-tight">Trello KPI</h1>
+                    <h1 class="text-4xl font-black text-gray-900 mb-3 tracking-tight">KPI Master</h1>
                     <p class="text-gray-500 font-medium text-lg">${(UI._lpLang || 'pt') === 'en' ? 'Performance Dashboard' : 'Dashboard de Performance'}</p>
                 </div>
 

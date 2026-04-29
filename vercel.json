@@ -35,7 +35,7 @@
       ]
     },
     {
-      "source": "/trello-powerup/(.*)",
+      "source": "/trello/(.*)",
       "headers": [
         {
           "key": "X-Frame-Options",
@@ -76,8 +76,12 @@
   ],
   "rewrites": [
     {
-      "source": "/trello-powerup/:file",
-      "destination": "/trello-powerup/:file"
+      "source": "/trello/:file",
+      "destination": "/trello/:file"
+    },
+    {
+      "source": "/pipedrive/(.*)",
+      "destination": "/pipedrive-kpi/$1"
     },
     {
       "source": "/(.*)",

@@ -4,7 +4,7 @@ window.App = window.App || {};
 // Configuração via Vite (.env)
 const TrelloConfig = {
     apiKey: import.meta.env.VITE_TRELLO_API_KEY,
-    appName: 'Trello KPI Dashboard',
+    appName: 'KPI Master Dashboard',
     scope: 'read',
     expiration: '30days'
 };
