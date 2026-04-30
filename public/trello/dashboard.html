@@ -6,100 +6,324 @@
   <title>KPI Master</title>
   <link rel="stylesheet" href="./styles.css">
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
+  <style>
+    /* Ecrãs */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* Role cards */
+    .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+    .role-card {
+      border: 2px solid #dfe1e6; border-radius: 10px; padding: 16px 12px;
+      text-align: center; cursor: pointer; transition: all 0.15s;
+      background: #f4f5f7;
+    }
+    .role-card:hover { border-color: #0052cc; background: #e6f0ff; }
+    .role-card .role-icon { font-size: 28px; margin-bottom: 6px; }
+    .role-card .role-title { font-size: 14px; font-weight: 700; color: #172b4d; }
+    .role-card .role-desc { font-size: 11px; color: #5e6c84; margin-top: 2px; }
+
+    /* Board list */
+    .board-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; max-height: 320px; overflow-y: auto; }
+    .board-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 8px; border: 1px solid #dfe1e6;
+      cursor: pointer; background: #f4f5f7; transition: all 0.15s;
+    }
+    .board-item:hover { border-color: #0052cc; background: #e6f0ff; }
+    .board-color { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+    .board-name { font-size: 13px; font-weight: 600; color: #172b4d; }
+
+    /* KPI Mini Dashboard */
+    .kpi-mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
+    .kpi-mini-card { background: #f4f5f7; border-radius: 8px; padding: 10px; text-align: center; border: 1px solid #dfe1e6; }
+    .kpi-mini-value { display: block; font-size: 20px; font-weight: 700; color: #0052cc; }
+    .kpi-mini-label { display: block; font-size: 10px; color: #5e6c84; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 1px; }
+
+    /* Header do dashboard */
+    .dash-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .dash-title { font-size: 13px; font-weight: 700; color: #172b4d; }
+    .dash-subtitle { font-size: 11px; color: #5e6c84; }
+    .btn-back { background: none; border: none; color: #0052cc; font-size: 12px; cursor: pointer; font-weight: 600; padding: 0; }
+    .btn-back:hover { text-decoration: underline; }
+
+    /* Progress */
+    .progress-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+    .progress-label { font-size: 11px; font-weight: 600; color: #5e6c84; }
+    .progress-value { font-size: 11px; font-weight: 700; color: #0052cc; }
+    .progress-bg { background: #dfe1e6; border-radius: 999px; height: 6px; overflow: hidden; margin-bottom: 12px; }
+    .progress-fill { height: 100%; background: #0052cc; border-radius: 999px; transition: width 0.6s ease; }
+
+    /* Upgrade banner */
+    .upgrade-bar { background: linear-gradient(135deg, #0052cc, #0747a6); border-radius: 8px; padding: 10px 12px; text-align: center; margin-top: 8px; }
+    .upgrade-bar p { color: rgba(255,255,255,0.8); font-size: 11px; margin-bottom: 6px; }
+    .upgrade-bar a { background: #fff; color: #0052cc; font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 6px; text-decoration: none; display: inline-block; }
+    .upgrade-bar a:hover { background: #f0f4ff; }
+
+    /* Role badge */
+    .role-badge { display: inline-flex; align-items: center; gap: 4px; background: #e3fcef; color: #006644; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+  </style>
 </head>
 <body>
 
-  <div id="loading" class="loading">
+  <!-- ECRÃ: Loading -->
+  <div id="screen-loading" class="screen active loading">
     <div class="spinner"></div>
-    <span>A carregar os teus KPIs...</span>
+    <span>A carregar...</span>
   </div>
 
-  <div id="content" style="display:none">
-    <div class="kpi-grid" id="kpi-grid"></div>
-
-    <div style="margin-bottom:14px;">
-      <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-        <span style="font-size:12px; font-weight:600; color:#5e6c84;">TAXA DE CONCLUSÃO</span>
-        <span id="completion-pct" style="font-size:12px; font-weight:700; color:#0052cc;">0%</span>
+  <!-- ECRÃ: Escolher Role -->
+  <div id="screen-role" class="screen">
+    <h2>Como queres entrar?</h2>
+    <p style="font-size:13px; color:#5e6c84; margin-bottom:4px;">Escolhe a tua função para ver os KPIs certos.</p>
+    <div class="role-grid">
+      <div class="role-card" id="role-manager">
+        <div class="role-icon">👔</div>
+        <div class="role-title">Gestor</div>
+        <div class="role-desc">Vista de equipa, leaderboard e análise completa</div>
       </div>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" id="completion-bar" style="width:0%"></div>
+      <div class="role-card" id="role-sales">
+        <div class="role-icon">🎯</div>
+        <div class="role-title">Vendedor</div>
+        <div class="role-desc">Os teus KPIs pessoais e foco do dia</div>
       </div>
-    </div>
-
-    <div style="font-size:12px; color:#5e6c84; margin-bottom:14px;">
-      📋 Board: <strong id="board-name">—</strong>
-    </div>
-
-    <div class="upgrade-banner">
-      <p>Gráficos avançados, export PDF, webhooks e muito mais</p>
-      <a id="full-dashboard-link" href="#" target="_blank" class="btn btn-primary">
-        Ver Dashboard Completo →
-      </a>
     </div>
   </div>
 
-  <div id="error-state" style="display:none">
-    <div class="error-msg" id="error-msg">Ocorreu um erro a carregar os dados.</div>
+  <!-- ECRÃ: Escolher Board -->
+  <div id="screen-boards" class="screen">
+    <div class="dash-header">
+      <div>
+        <div class="dash-title">Seleciona o Board</div>
+        <div class="dash-subtitle" id="boards-role-label">—</div>
+      </div>
+      <button class="btn-back" id="btn-back-role">← Mudar função</button>
+    </div>
+    <div class="board-list" id="board-list">
+      <!-- preenchido via JS -->
+    </div>
+    <div id="boards-empty" class="error-msg" style="display:none; margin-top:12px;">
+      Nenhum board encontrado para esta função.
+    </div>
+  </div>
+
+  <!-- ECRÃ: Dashboard KPIs -->
+  <div id="screen-dashboard" class="screen">
+    <div class="dash-header">
+      <div>
+        <div class="dash-title" id="dash-board-name">—</div>
+        <span class="role-badge" id="dash-role-badge">—</span>
+      </div>
+      <button class="btn-back" id="btn-back-boards">← Boards</button>
+    </div>
+
+    <div class="kpi-mini-grid" id="kpi-grid"></div>
+
+    <div class="progress-row">
+      <span class="progress-label">TAXA DE CONCLUSÃO</span>
+      <span class="progress-value" id="progress-pct">0%</span>
+    </div>
+    <div class="progress-bg">
+      <div class="progress-fill" id="progress-bar" style="width:0%"></div>
+    </div>
+
+    <div class="upgrade-bar">
+      <p>Gráficos avançados, export PDF, filtros e muito mais</p>
+      <a id="link-full-dash" href="#" target="_blank">Ver Dashboard Completo →</a>
+    </div>
+  </div>
+
+  <!-- ECRÃ: Erro -->
+  <div id="screen-error" class="screen">
+    <div class="error-msg" id="error-msg">Ocorreu um erro.</div>
     <br>
-    <button class="btn btn-secondary" onclick="loadData()">Tentar novamente</button>
+    <button class="btn btn-secondary" id="btn-retry">Tentar novamente</button>
   </div>
 
   <script>
-    // ⚠️ appKey e appName são OBRIGATÓRIOS em todos os iframes
-    var t = TrelloPowerUp.iframe({
-      appKey:  '2506cfe6cf90e4290792e5bec8ace956',
-      appName: 'KPI Master'
-    });
+    var APP_KEY    = '2506cfe6cf90e4290792e5bec8ace956';
+    var APP_NAME   = 'KPI Master';
+    var SITE_URL   = 'https://kpismaster.vercel.app';
 
-    var SITE_URL = 'https://kpismaster.vercel.app';
+    var t = TrelloPowerUp.iframe({ appKey: APP_KEY, appName: APP_NAME });
 
-    function showLoading() {
-      document.getElementById('loading').style.display = 'flex';
-      document.getElementById('content').style.display = 'none';
-      document.getElementById('error-state').style.display = 'none';
+    // ── Estado local ──────────────────────────────────────────────────────────
+    var state = {
+      token:     null,
+      role:      null,
+      boardId:   null,
+      boardName: null,
+      boards:    []
+    };
+
+    // ── Ecrãs ─────────────────────────────────────────────────────────────────
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+      document.getElementById('screen-' + id).classList.add('active');
     }
 
     function showError(msg) {
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('content').style.display = 'none';
-      document.getElementById('error-state').style.display = 'block';
-      document.getElementById('error-msg').textContent = msg || 'Erro desconhecido.';
+      document.getElementById('error-msg').textContent = msg || 'Ocorreu um erro.';
+      showScreen('error');
     }
 
-    function showContent() {
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('content').style.display = 'block';
-      document.getElementById('error-state').style.display = 'none';
+    // ── Arrancar ──────────────────────────────────────────────────────────────
+    t.render(function() {
+      showScreen('loading');
+
+      // Ir buscar token e role guardados
+      Promise.all([
+        t.getRestApi().getToken().catch(function() { return null; }),
+        t.get('member', 'private', 'kpi_role').catch(function() { return null; }),
+        t.get('member', 'private', 'kpi_board_id').catch(function() { return null; }),
+        t.get('member', 'private', 'kpi_board_name').catch(function() { return null; })
+      ]).then(function(results) {
+        state.token     = results[0];
+        state.role      = results[1];
+        state.boardId   = results[2];
+        state.boardName = results[3];
+
+        if (!state.token) {
+          // Não autenticado — mostrar ecrã de auth
+          showScreen('error');
+          document.getElementById('error-msg').textContent = 'Sessão expirada. Clica em "Configurações" → "Ligar Conta".';
+          return;
+        }
+
+        if (!state.role) {
+          // Sem role — escolher função
+          showScreen('role');
+          return;
+        }
+
+        if (!state.boardId) {
+          // Sem board — ir buscar boards e escolher
+          fetchBoards();
+          return;
+        }
+
+        // Temos tudo — carregar KPIs diretamente
+        fetchKPIs();
+
+      }).catch(function(err) {
+        console.error('Init error:', err);
+        showError('Erro ao iniciar. Tenta fechar e abrir de novo.');
+      });
+    });
+
+    // ── Escolher Role ─────────────────────────────────────────────────────────
+    document.getElementById('role-manager').addEventListener('click', function() {
+      setRole('manager');
+    });
+
+    document.getElementById('role-sales').addEventListener('click', function() {
+      setRole('sales');
+    });
+
+    function setRole(role) {
+      state.role = role;
+      state.boardId = null;
+      state.boardName = null;
+      // Guardar no storage do Trello (só para este membro)
+      t.set('member', 'private', 'kpi_role', role);
+      t.set('member', 'private', 'kpi_board_id', null);
+      t.set('member', 'private', 'kpi_board_name', null);
+      fetchBoards();
     }
 
-    function kpiCard(value, label) {
-      return '<div class="kpi-card"><span class="kpi-value">' + value + '</span><span class="kpi-label">' + label + '</span></div>';
+    // ── Ir buscar Boards ──────────────────────────────────────────────────────
+    function fetchBoards() {
+      showScreen('loading');
+
+      var label = state.role === 'manager' ? '👔 Gestor — boards onde és admin' : '🎯 Vendedor — boards onde és membro';
+      document.getElementById('boards-role-label').textContent = label;
+
+      fetch('https://api.trello.com/1/members/me/boards?fields=id,name,prefs,memberships&membership_filter=all&key=' + APP_KEY + '&token=' + state.token)
+        .then(function(r) { return r.json(); })
+        .then(function(boards) {
+
+          // Ir buscar o ID do utilizador atual
+          return fetch('https://api.trello.com/1/members/me?fields=id&key=' + APP_KEY + '&token=' + state.token)
+            .then(function(r) { return r.json(); })
+            .then(function(me) {
+
+              var filtered = boards.filter(function(b) {
+                var myMembership = (b.memberships || []).find(function(m) { return m.idMember === me.id; });
+                if (!myMembership) return false;
+                if (state.role === 'manager') return myMembership.memberType === 'admin';
+                if (state.role === 'sales')   return myMembership.memberType !== 'admin';
+                return true;
+              });
+
+              state.boards = filtered;
+
+              if (filtered.length === 0) {
+                showScreen('boards');
+                document.getElementById('board-list').innerHTML = '';
+                document.getElementById('boards-empty').style.display = 'block';
+                return;
+              }
+
+              document.getElementById('boards-empty').style.display = 'none';
+              var html = filtered.map(function(b) {
+                var color = (b.prefs && b.prefs.backgroundColor) ? b.prefs.backgroundColor : '#0052cc';
+                return '<div class="board-item" data-id="' + b.id + '" data-name="' + encodeURIComponent(b.name) + '">' +
+                  '<div class="board-color" style="background:' + color + '"></div>' +
+                  '<span class="board-name">' + b.name + '</span>' +
+                  '</div>';
+              }).join('');
+
+              document.getElementById('board-list').innerHTML = html;
+              showScreen('boards');
+
+              // Eventos de clique nos boards
+              document.querySelectorAll('.board-item').forEach(function(item) {
+                item.addEventListener('click', function() {
+                  var id   = item.getAttribute('data-id');
+                  var name = decodeURIComponent(item.getAttribute('data-name'));
+                  selectBoard(id, name);
+                });
+              });
+
+            });
+        })
+        .catch(function(err) {
+          console.error('Boards error:', err);
+          showError('Erro ao carregar boards. Verifica a ligação.');
+        });
     }
 
-    function loadData() {
-      showLoading();
+    // ── Selecionar Board ──────────────────────────────────────────────────────
+    function selectBoard(id, name) {
+      state.boardId   = id;
+      state.boardName = name;
+      t.set('member', 'private', 'kpi_board_id', id);
+      t.set('member', 'private', 'kpi_board_name', name);
+      fetchKPIs();
+    }
+
+    // ── Ir buscar KPIs ────────────────────────────────────────────────────────
+    function fetchKPIs() {
+      showScreen('loading');
 
       Promise.all([
-        t.getRestApi().getToken(),
-        t.board('id', 'name', 'members', 'lists', 'cards')
+        fetch('https://api.trello.com/1/boards/' + state.boardId + '/lists?key=' + APP_KEY + '&token=' + state.token).then(function(r) { return r.json(); }),
+        fetch('https://api.trello.com/1/boards/' + state.boardId + '/cards?key=' + APP_KEY + '&token=' + state.token).then(function(r) { return r.json(); }),
+        fetch('https://api.trello.com/1/boards/' + state.boardId + '/members?key=' + APP_KEY + '&token=' + state.token).then(function(r) { return r.json(); })
       ]).then(function(results) {
-        var board   = results[1];
-        var cards   = board.cards   || [];
-        var lists   = board.lists   || [];
-        var members = board.members || [];
+        var lists   = results[0];
+        var cards   = results[1];
+        var members = results[2];
 
         var totalCards = cards.length;
 
         var doneKeywords = ['done', 'concluído', 'concluido', 'fechado', 'ganho', 'won', 'closed'];
         var doneLists = lists.filter(function(l) {
-          var lname = l.name.toLowerCase();
-          return doneKeywords.some(function(kw) { return lname.includes(kw); });
+          var n = l.name.toLowerCase();
+          return doneKeywords.some(function(kw) { return n.includes(kw); });
         }).map(function(l) { return l.id; });
 
-        var doneCards = cards.filter(function(c) {
-          return doneLists.includes(c.idList);
-        }).length;
+        var doneCards = cards.filter(function(c) { return doneLists.includes(c.idList); }).length;
 
         var oneWeekAgo = new Date();
         oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
@@ -107,32 +331,60 @@
           return c.dateLastActivity && new Date(c.dateLastActivity) > oneWeekAgo;
         }).length;
 
+        var overdue = cards.filter(function(c) {
+          return c.due && new Date(c.due) < new Date() && !c.dueComplete;
+        }).length;
+
         var completionRate = totalCards > 0 ? Math.round((doneCards / totalCards) * 100) : 0;
 
+        // Preencher dashboard
+        document.getElementById('dash-board-name').textContent = state.boardName || state.boardId;
+        document.getElementById('dash-role-badge').textContent = state.role === 'manager' ? '👔 Gestor' : '🎯 Vendedor';
+
         document.getElementById('kpi-grid').innerHTML =
-          kpiCard(totalCards, 'Total Cards') +
-          kpiCard(doneCards, 'Concluídos') +
-          kpiCard(members.length, 'Membros') +
-          kpiCard(weekCards, 'Esta Semana') +
-          kpiCard(completionRate + '%', 'Conclusão') +
-          kpiCard(totalCards - doneCards, 'Em Aberto');
+          kpiCard(totalCards,               'Total Cards') +
+          kpiCard(doneCards,                'Concluídos') +
+          kpiCard(members.length,           'Membros') +
+          kpiCard(weekCards,                'Esta Semana') +
+          kpiCard(totalCards - doneCards,   'Em Aberto') +
+          kpiCard(overdue,                  'Em Atraso');
 
-        document.getElementById('completion-pct').textContent = completionRate + '%';
-        document.getElementById('completion-bar').style.width = completionRate + '%';
-        document.getElementById('board-name').textContent = board.name || board.id;
-        document.getElementById('full-dashboard-link').href = SITE_URL + '?board=' + board.id;
+        document.getElementById('progress-pct').textContent = completionRate + '%';
+        document.getElementById('progress-bar').style.width = completionRate + '%';
 
-        showContent();
+        document.getElementById('link-full-dash').href = SITE_URL + '#board=' + state.boardId + '&role=' + state.role;
+
+        showScreen('dashboard');
 
       }).catch(function(err) {
-        console.error('KPI Dashboard error:', err);
-        showError('Não foi possível carregar os dados. Verifica as permissões.');
+        console.error('KPIs error:', err);
+        showError('Erro ao carregar KPIs. Tenta novamente.');
       });
     }
 
-    t.render(function() {
-      loadData();
+    function kpiCard(value, label) {
+      return '<div class="kpi-mini-card"><span class="kpi-mini-value">' + value + '</span><span class="kpi-mini-label">' + label + '</span></div>';
+    }
+
+    // ── Navegação ─────────────────────────────────────────────────────────────
+    document.getElementById('btn-back-role').addEventListener('click', function() {
+      state.role = null;
+      t.set('member', 'private', 'kpi_role', null);
+      showScreen('role');
     });
+
+    document.getElementById('btn-back-boards').addEventListener('click', function() {
+      state.boardId = null;
+      state.boardName = null;
+      t.set('member', 'private', 'kpi_board_id', null);
+      fetchBoards();
+    });
+
+    document.getElementById('btn-retry').addEventListener('click', function() {
+      showScreen('loading');
+      setTimeout(function() { t.render(); }, 300);
+    });
+
   </script>
 
 </body>
