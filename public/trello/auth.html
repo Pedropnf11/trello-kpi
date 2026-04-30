@@ -10,38 +10,27 @@
 <body>
 
   <div class="auth-container">
-
-    <!-- Ícone -->
     <img src="./icon.png" alt="KPI Master" width="72" height="72"
          onerror="this.style.display='none'">
-
     <h1>KPI Master</h1>
     <p>Analisa os KPIs do teu board Trello em tempo real — taxa de conclusão, membros ativos, cards por semana e muito mais.</p>
-
-    <!-- Botão de autorização -->
     <div style="width:100%; max-width:280px; display:flex; flex-direction:column; gap:10px; margin-top:8px;">
-      <button id="btn-auth" class="btn btn-primary">
-        🔗 Autorizar Acesso
-      </button>
-      <p style="font-size:11px; color:#97a0af; text-align:center;">
-        Só são lidos dados do board. Nada é alterado.
-      </p>
+      <button id="btn-auth" class="btn btn-primary">🔗 Autorizar Acesso</button>
+      <p style="font-size:11px; color:#97a0af; text-align:center;">Só são lidos dados do board. Nada é alterado.</p>
     </div>
-
-    <!-- Saber mais -->
-    <a href="https://kpismaster.vercel.app" target="_blank" class="link">
-      Saber mais sobre o KPI Master →
-    </a>
-
+    <a href="https://kpismaster.vercel.app" target="_blank" class="link">Saber mais sobre o KPI Master →</a>
   </div>
 
-  <!-- Erro -->
   <div id="auth-error" class="error-msg" style="display:none; margin-top:12px;">
     Erro na autenticação. Tenta novamente.
   </div>
 
   <script>
-    var t = TrelloPowerUp.iframe();
+    // ⚠️ appKey e appName são OBRIGATÓRIOS em todos os iframes
+    var t = TrelloPowerUp.iframe({
+      appKey:  '2506cfe6cf90e4290792e5bec8ace956',
+      appName: 'KPI Master'
+    });
 
     document.getElementById('btn-auth').addEventListener('click', function() {
       var btn = this;
@@ -52,7 +41,6 @@
         scope:      'read',
         expiration: 'never'
       }).then(function() {
-        // Autenticação bem sucedida — fechar modal
         t.closeModal();
       }).catch(function(err) {
         console.error('Auth error:', err);

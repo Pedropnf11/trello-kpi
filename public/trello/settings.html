@@ -10,34 +10,23 @@
 <body>
 
   <div class="settings-container">
-
     <h2>⚙️ Definições</h2>
 
-    <!-- Estado da conta -->
     <div class="settings-row">
       <span class="settings-label">Estado da conta</span>
-      <span id="auth-status-badge">
-        <span class="status-warn">A verificar...</span>
-      </span>
+      <span id="auth-status-badge"><span class="status-warn">A verificar...</span></span>
     </div>
 
-    <!-- Botão desligar (só aparece se estiver autenticado) -->
     <div id="btn-disconnect-wrapper" style="display:none">
-      <button id="btn-disconnect" class="btn btn-danger">
-        🔌 Desligar Conta
-      </button>
+      <button id="btn-disconnect" class="btn btn-danger">🔌 Desligar Conta</button>
     </div>
 
-    <!-- Botão ligar (só aparece se NÃO estiver autenticado) -->
     <div id="btn-connect-wrapper" style="display:none">
-      <button id="btn-connect" class="btn btn-primary">
-        🔗 Ligar Conta
-      </button>
+      <button id="btn-connect" class="btn btn-primary">🔗 Ligar Conta</button>
     </div>
 
     <hr>
 
-    <!-- Link para o site completo -->
     <div style="text-align:center; padding: 4px 0;">
       <a href="https://kpismaster.vercel.app" target="_blank" class="btn btn-outline">
         🚀 Abrir Dashboard Completo
@@ -46,31 +35,28 @@
 
     <hr>
 
-    <!-- Info & suporte -->
     <div style="display:flex; flex-direction:column; gap:6px;">
-      <a href="https://kpismaster.vercel.app/privacy" target="_blank" class="link">
-        🔒 Política de Privacidade
-      </a>
-      <a href="https://kpismaster.vercel.app" target="_blank" class="link">
-        📖 Documentação & Suporte
-      </a>
+      <a href="https://kpismaster.vercel.app/privacy" target="_blank" class="link">🔒 Política de Privacidade</a>
+      <a href="https://kpismaster.vercel.app" target="_blank" class="link">📖 Documentação & Suporte</a>
     </div>
 
-    <!-- Versão -->
     <div style="font-size:11px; color:#97a0af; text-align:center; padding-top:4px;">
       KPI Master v1.0 · Trello Power-Up
     </div>
-
   </div>
 
   <script>
-    var t = TrelloPowerUp.iframe();
+    // ⚠️ appKey e appName são OBRIGATÓRIOS em todos os iframes
+    var t = TrelloPowerUp.iframe({
+      appKey:  '2506cfe6cf90e4290792e5bec8ace956',
+      appName: 'KPI Master'
+    });
 
     t.render(function() {
       t.getRestApi().isAuthorized().then(function(isAuth) {
-        var badge           = document.getElementById('auth-status-badge');
-        var disconnectWrap  = document.getElementById('btn-disconnect-wrapper');
-        var connectWrap     = document.getElementById('btn-connect-wrapper');
+        var badge          = document.getElementById('auth-status-badge');
+        var disconnectWrap = document.getElementById('btn-disconnect-wrapper');
+        var connectWrap    = document.getElementById('btn-connect-wrapper');
 
         if (isAuth) {
           badge.innerHTML = '<span class="status-ok">✅ Conta ligada</span>';
@@ -84,28 +70,18 @@
       });
     });
 
-    // Desligar conta
     document.getElementById('btn-disconnect').addEventListener('click', function() {
       var btn = this;
       btn.disabled = true;
       btn.textContent = 'A desligar...';
-
-      t.getRestApi().clearToken().then(function() {
-        t.closeModal();
-      }).catch(function() {
-        btn.disabled = false;
-        btn.textContent = '🔌 Desligar Conta';
-      });
+      t.getRestApi().clearToken()
+        .then(function() { t.closeModal(); })
+        .catch(function() { btn.disabled = false; btn.textContent = '🔌 Desligar Conta'; });
     });
 
-    // Ligar conta
     document.getElementById('btn-connect').addEventListener('click', function() {
-      t.getRestApi().authorize({
-        scope:      'read',
-        expiration: 'never'
-      }).then(function() {
-        t.closeModal();
-      });
+      t.getRestApi().authorize({ scope: 'read', expiration: 'never' })
+        .then(function() { t.closeModal(); });
     });
   </script>
 
