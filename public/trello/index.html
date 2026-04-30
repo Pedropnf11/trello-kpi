@@ -3,62 +3,70 @@
 
 <head>
   <meta charset="utf-8">
-  <title>KPI Dashboard — Power-Up Connector</title>
+  <title>KPI Master — Power-Up</title>
+  <!-- Forçar HTTPS e sem cache -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
 </head>
 
 <body>
   <script>
-    var SITE_URL = 'https://kpismaster.vercel.app';
     var POWERUP_URL = 'https://kpismaster.vercel.app/trello';
+    var SITE_URL    = 'https://kpismaster.vercel.app';
 
     TrelloPowerUp.initialize({
 
-      'board-buttons': function (t) {
-        return t.getRestApi().isAuthorized().then(function (isAuth) {
-          return [{
-            icon: {
-              dark:  POWERUP_URL + '/icon.png',
-              light: POWERUP_URL + '/icon.png'
-            },
-            text: 'KPI Master',
-            callback: function (t) {
+      // ── Botão na barra do board ───────────────────────────────────────────
+      'board-buttons': function(t) {
+        return [{
+          icon: {
+            dark:  POWERUP_URL + '/icon.png',
+            light: POWERUP_URL + '/icon.png'
+          },
+          text: 'KPI Master',
+          callback: function(t) {
+            return t.getRestApi().isAuthorized().then(function(isAuth) {
               if (!isAuth) {
                 return t.modal({
-                  title: 'Ligar ao KPI Master',
-                  url:   POWERUP_URL + '/auth.html',
+                  title:  'Ligar ao KPI Master',
+                  url:    POWERUP_URL + '/auth.html',
                   height: 420
                 });
               }
               return t.modal({
-                title: 'KPI Master',
-                url:   POWERUP_URL + '/dashboard.html',
-                height: 620,
+                title:      'KPI Master',
+                url:        POWERUP_URL + '/dashboard.html',
+                height:     620,
                 fullscreen: false
               });
-            }
-          }];
-        });
+            });
+          }
+        }];
       },
 
-      'authorization-status': function (t) {
-        return t.getRestApi().isAuthorized().then(function (isAuth) {
+      // ── Estado de autenticação ────────────────────────────────────────────
+      'authorization-status': function(t) {
+        return t.getRestApi().isAuthorized().then(function(isAuth) {
           return { authorized: isAuth };
         });
       },
 
-      'show-authorization': function (t) {
+      // ── Ecrã de login ─────────────────────────────────────────────────────
+      'show-authorization': function(t) {
         return t.modal({
-          title: 'Ligar ao KPI Master',
-          url:   POWERUP_URL + '/auth.html',
+          title:  'Ligar ao KPI Master',
+          url:    POWERUP_URL + '/auth.html',
           height: 420
         });
       },
 
-      'show-settings': function (t) {
+      // ── Ecrã de settings ─────────────────────────────────────────────────
+      'show-settings': function(t) {
         return t.modal({
-          title: 'Definições — KPI Master',
-          url:   POWERUP_URL + '/settings.html',
+          title:  'Definições — KPI Master',
+          url:    POWERUP_URL + '/settings.html',
           height: 420
         });
       }
