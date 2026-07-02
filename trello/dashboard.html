@@ -70,6 +70,20 @@
     <h1 id="title">KPI Master</h1>
     <p id="desc">Open the KPI Master dashboard to view metrics, charts, and team performance reports for this board.</p>
     <a id="btn-open" class="btn-primary" href="https://kpismaster.vercel.app" target="_blank" style="text-decoration: none; display: block; text-align: center;">🚀 Open KPI Master</a>
+
+    <div id="stats-section" style="margin-top: 20px; border-top: 1px solid #dfe1e6; padding-top: 16px; text-align: left; display: none;">
+      <h3 style="font-size: 13px; font-weight: 700; color: #172b4d; margin: 0 0 10px 0;" id="lbl-stats-title">Leads Speed</h3>
+      <div style="font-size: 12px; color: #5e6c84; display: flex; flex-direction: column; gap: 8px;">
+        <div>
+          <span style="font-weight: 600; color: #00875a;" id="lbl-fastest">⚡ Fastest:</span>
+          <span id="val-fastest">—</span>
+        </div>
+        <div>
+          <span style="font-weight: 600; color: #de350b;" id="lbl-slowest">🐢 Slowest:</span>
+          <span id="val-slowest">—</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script type="module">
@@ -85,11 +99,15 @@
     var translations = {
       pt: {
         desc: 'Abre o dashboard do KPI Master para veres métricas, gráficos e relatórios de performance deste quadro.',
-        btnOpen: '🚀 Abrir KPI Master'
+        btnOpen: '🚀 Abrir KPI Master',
+        lblFastest: '⚡ Mais Rápido:',
+        lblSlowest: '🐢 Mais Lento:'
       },
       en: {
         desc: 'Open the KPI Master dashboard to view metrics, charts, and team performance reports for this board.',
-        btnOpen: '🚀 Open KPI Master'
+        btnOpen: '🚀 Open KPI Master',
+        lblFastest: '⚡ Fastest:',
+        lblSlowest: '🐢 Slowest:'
       }
     };
 
@@ -97,17 +115,128 @@
 
     document.getElementById('desc').textContent = tDict.desc;
     document.getElementById('btn-open').textContent = tDict.btnOpen;
+    document.getElementById('lbl-fastest').textContent = tDict.lblFastest;
+    document.getElementById('lbl-slowest').textContent = tDict.lblSlowest;
 
     t.render(function () {
       t.sizeTo(document.body).catch(function () { });
       
       t.board('id').then(function (board) {
-        var boardId = board ? board.id : '';
-        document.getElementById('btn-open').href = SITE + (boardId ? '#board=' + boardId : '');
+        if (!board || !board.id) {
+          document.getElementById('btn-open').href = SITE;
+          return;
+        }
+        document.getElementById('btn-open').href = SITE + '#board=' + board.id;
+
+        // Tentar obter token para carregar estatísticas
+        t.getRestApi().isAuthorized().then(function(isAuth) {
+          if (isAuth) {
+            t.getRestApi().getToken().then(function(token) {
+              if (token) {
+                loadLeadStats(board.id, token);
+              }
+            });
+          }
+        });
       }).catch(function () {
         document.getElementById('btn-open').href = SITE;
       });
     });
+
+    function loadLeadStats(boardId, token) {
+      // 1. Obter listas do quadro (a primeira lista é onde chegam as leads por defeito)
+      fetch('https://api.trello.com/1/boards/' + boardId + '/lists?key=' + KEY + '&token=' + token)
+        .then(function(r) { return r.json(); })
+        .then(function(lists) {
+          if (!lists || lists.length === 0) return;
+          var leadListId = lists[0].id;
+          var leadListName = lists[0].name;
+
+          // 2. Obter cartas do quadro com o respetivo histórico de ações
+          fetch('https://api.trello.com/1/boards/' + boardId + '/cards?actions=updateCard,createCard&key=' + KEY + '&token=' + token)
+            .then(function(r) { return r.json(); })
+            .then(function(cards) {
+              calculateLeadTimes(cards, leadListId, leadListName);
+            })
+            .catch(function(err) { console.error('Erro ao ler cartas:', err); });
+        })
+        .catch(function(err) { console.error('Erro ao ler listas:', err); });
+    }
+
+    function calculateLeadTimes(cards, leadListId, leadListName) {
+      var durations = [];
+
+      cards.forEach(function(card) {
+        var actions = card.actions || [];
+        // Ordenar ações por data (mais antiga primeiro)
+        actions.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+
+        var cardId = card.id;
+        var dateCreated = new Date(parseInt(cardId.substring(0, 8), 16) * 1000);
+
+        var firstMove = actions.find(function(act) {
+          return act.type === 'updateCard' && act.data && act.data.listBefore;
+        });
+
+        if (!firstMove) return;
+
+        var entryDate = null;
+        if (firstMove.data.listBefore.id === leadListId) {
+          entryDate = dateCreated;
+        }
+
+        var currentEntry = entryDate;
+        actions.forEach(function(act) {
+          if (act.type === 'updateCard' && act.data) {
+            // Saída da lista de leads
+            if (act.data.listBefore && act.data.listBefore.id === leadListId && currentEntry) {
+              var exitDate = new Date(act.date);
+              var hours = (exitDate - currentEntry) / (1000 * 60 * 60);
+              if (hours > 0) {
+                durations.push({
+                  cardName: card.name,
+                  hours: hours
+                });
+              }
+              currentEntry = null;
+            }
+            // Entrada/Reentrada na lista de leads
+            if (act.data.listAfter && act.data.listAfter.id === leadListId) {
+              currentEntry = new Date(act.date);
+            }
+          }
+        });
+      });
+
+      if (durations.length === 0) return;
+
+      // Ordenar durações da mais rápida à mais lenta
+      durations.sort(function(a, b) { return a.hours - b.hours; });
+
+      var fastest = durations[0];
+      var slowest = durations[durations.length - 1];
+
+      function formatDuration(hours) {
+        if (hours < 1) {
+          var mins = Math.round(hours * 60);
+          return isPt ? mins + ' min' : mins + ' mins';
+        }
+        if (hours < 24) {
+          var h = Math.round(hours);
+          return isPt ? h + 'h' : h + ' hrs';
+        }
+        var days = Math.round(hours / 24);
+        return isPt ? days + ' dias' : days + ' days';
+      }
+
+      document.getElementById('lbl-stats-title').textContent = (isPt ? 'Velocidade das Leads (' : 'Leads Speed (') + leadListName + ')';
+      document.getElementById('val-fastest').textContent = fastest.cardName + ' (' + formatDuration(fastest.hours) + ')';
+      document.getElementById('val-slowest').textContent = slowest.cardName + ' (' + formatDuration(slowest.hours) + ')';
+      
+      var statsSection = document.getElementById('stats-section');
+      statsSection.style.display = 'block';
+      t.sizeTo(document.body).catch(function () { });
+    }
   </script>
 
 </body>

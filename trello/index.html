@@ -150,6 +150,36 @@
             height: 72
           }
         };
+      },
+
+      // ── Ordenadores de Lista (List Sorters) ──────────────────────────────────
+      'list-sorters': function(t) {
+        var isPt = (t.locale || 'en').startsWith('pt');
+        return [{
+          text: isPt ? 'KPI Master: Mais Antigos' : 'KPI Master: Oldest First',
+          callback: function(t, opts) {
+            var sortedCards = opts.cards.sort(function(a, b) {
+              var tA = parseInt(a.id.substring(0, 8), 16);
+              var tB = parseInt(b.id.substring(0, 8), 16);
+              return tA - tB;
+            });
+            return {
+              sortedCardIds: sortedCards.map(function(c) { return c.id; })
+            };
+          }
+        }, {
+          text: isPt ? 'KPI Master: Mais Recentes' : 'KPI Master: Newest First',
+          callback: function(t, opts) {
+            var sortedCards = opts.cards.sort(function(a, b) {
+              var tA = parseInt(a.id.substring(0, 8), 16);
+              var tB = parseInt(b.id.substring(0, 8), 16);
+              return tB - tA;
+            });
+            return {
+              sortedCardIds: sortedCards.map(function(c) { return c.id; })
+            };
+          }
+        }];
       }
 
     }, {
