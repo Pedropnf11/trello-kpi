@@ -72,15 +72,24 @@
     <a id="btn-open" class="btn-primary" href="https://kpismaster.vercel.app" target="_blank" style="text-decoration: none; display: block; text-align: center;">🚀 Open KPI Master</a>
 
     <div id="stats-section" style="margin-top: 20px; border-top: 1px solid #dfe1e6; padding-top: 16px; text-align: left; display: none;">
-      <h3 style="font-size: 13px; font-weight: 700; color: #172b4d; margin: 0 0 10px 0;" id="lbl-stats-title">Leads Speed</h3>
-      <div style="font-size: 12px; color: #5e6c84; display: flex; flex-direction: column; gap: 8px;">
-        <div>
-          <span style="font-weight: 600; color: #00875a;" id="lbl-fastest">⚡ Fastest:</span>
-          <span id="val-fastest">—</span>
-        </div>
-        <div>
-          <span style="font-weight: 600; color: #de350b;" id="lbl-slowest">🐢 Slowest:</span>
-          <span id="val-slowest">—</span>
+      <!-- Estado 1: Não Autorizado -->
+      <div id="stats-unauth" style="display: none; text-align: center;">
+        <p style="font-size: 11px; color: #5e6c84; margin-bottom: 8px;" id="lbl-stats-auth-desc">Connect account to see Leads Speed here.</p>
+        <button id="btn-stats-auth" class="btn-primary" style="padding: 6px 12px; font-size: 11px; width: auto; display: inline-block;">🔗 Connect Account</button>
+      </div>
+
+      <!-- Estado 2: Autorizado e Carregado -->
+      <div id="stats-data" style="display: none;">
+        <h3 style="font-size: 13px; font-weight: 700; color: #172b4d; margin: 0 0 10px 0;" id="lbl-stats-title">Leads Speed</h3>
+        <div style="font-size: 12px; color: #5e6c84; display: flex; flex-direction: column; gap: 8px;">
+          <div>
+            <span style="font-weight: 600; color: #00875a;" id="lbl-fastest">⚡ Fastest:</span>
+            <span id="val-fastest">—</span>
+          </div>
+          <div>
+            <span style="font-weight: 600; color: #de350b;" id="lbl-slowest">🐢 Slowest:</span>
+            <span id="val-slowest">—</span>
+          </div>
         </div>
       </div>
     </div>
@@ -101,13 +110,17 @@
         desc: 'Abre o dashboard do KPI Master para veres métricas, gráficos e relatórios de performance deste quadro.',
         btnOpen: '🚀 Abrir KPI Master',
         lblFastest: '⚡ Mais Rápido:',
-        lblSlowest: '🐢 Mais Lento:'
+        lblSlowest: '🐢 Mais Lento:',
+        lblStatsAuthDesc: 'Liga a tua conta Trello para veres a velocidade das leads aqui.',
+        btnStatsAuth: '🔗 Ligar Conta'
       },
       en: {
         desc: 'Open the KPI Master dashboard to view metrics, charts, and team performance reports for this board.',
         btnOpen: '🚀 Open KPI Master',
         lblFastest: '⚡ Fastest:',
-        lblSlowest: '🐢 Slowest:'
+        lblSlowest: '🐢 Slowest:',
+        lblStatsAuthDesc: 'Connect your Trello account to see Leads Speed metrics here.',
+        btnStatsAuth: '🔗 Connect Account'
       }
     };
 
@@ -117,6 +130,8 @@
     document.getElementById('btn-open').textContent = tDict.btnOpen;
     document.getElementById('lbl-fastest').textContent = tDict.lblFastest;
     document.getElementById('lbl-slowest').textContent = tDict.lblSlowest;
+    document.getElementById('lbl-stats-auth-desc').textContent = tDict.lblStatsAuthDesc;
+    document.getElementById('btn-stats-auth').textContent = tDict.btnStatsAuth;
 
     t.render(function () {
       t.sizeTo(document.body).catch(function () { });
@@ -128,19 +143,46 @@
         }
         document.getElementById('btn-open').href = SITE + '#board=' + board.id;
 
-        // Tentar obter token para carregar estatísticas
-        t.getRestApi().isAuthorized().then(function(isAuth) {
-          if (isAuth) {
-            t.getRestApi().getToken().then(function(token) {
-              if (token) {
-                loadLeadStats(board.id, token);
-              }
-            });
-          }
-        });
+        // Mostrar secção de estatísticas e verificar autorização
+        document.getElementById('stats-section').style.display = 'block';
+        checkAuthAndLoadStats(board.id);
       }).catch(function () {
         document.getElementById('btn-open').href = SITE;
       });
+    });
+
+    function checkAuthAndLoadStats(boardId) {
+      t.getRestApi().isAuthorized().then(function(isAuth) {
+        if (isAuth) {
+          t.getRestApi().getToken().then(function(token) {
+            if (token) {
+              document.getElementById('stats-unauth').style.display = 'none';
+              loadLeadStats(boardId, token);
+            } else {
+              showUnauth();
+            }
+          });
+        } else {
+          showUnauth();
+        }
+      });
+    }
+
+    function showUnauth() {
+      document.getElementById('stats-data').style.display = 'none';
+      document.getElementById('stats-unauth').style.display = 'block';
+      t.sizeTo(document.body).catch(function () { });
+    }
+
+    document.getElementById('btn-stats-auth').addEventListener('click', function() {
+      t.getRestApi().authorize({ scope: 'read', expiration: 'never' })
+        .then(function() {
+          t.board('id').then(function(board) {
+            if (board && board.id) {
+              checkAuthAndLoadStats(board.id);
+            }
+          });
+        });
     });
 
     function loadLeadStats(boardId, token) {
@@ -246,6 +288,7 @@
       document.getElementById('val-fastest').textContent = fastest.cardName + ' (' + formatDuration(fastest.hours) + ')';
       document.getElementById('val-slowest').textContent = slowest.cardName + ' (' + formatDuration(slowest.hours) + ')';
       
+      document.getElementById('stats-data').style.display = 'block';
       var statsSection = document.getElementById('stats-section');
       statsSection.style.display = 'block';
       t.sizeTo(document.body).catch(function () { });
