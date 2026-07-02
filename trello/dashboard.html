@@ -319,36 +319,20 @@
     </div>
   </div>
 
-  <!-- ECRÃ 4: Escolher Board -->
-  <div id="s-boards" class="screen">
-    <div class="sec-header">
-      <div class="sec-title" id="lbl-boards-title">Select the Board</div>
-      <button class="btn-back" id="btn-back-role">← Change Role</button>
-    </div>
-    <div class="board-list" id="board-list"></div>
-    <div id="boards-empty" class="error-msg" style="display:none;margin-top:10px;">No boards found for this role.</div>
-  </div>
-
-  <!-- ECRÃ 5: Dashboard KPIs -->
+  <!-- ECRÃ 5: Dashboard KPIs (Abrir Site) -->
   <div id="s-dash" class="screen">
     <div class="dash-top">
       <div class="dash-info">
         <div class="dash-board" id="d-board-name">—</div>
         <span class="role-pill" id="d-role-pill">—</span>
       </div>
-      <button class="btn-back" id="btn-back-boards">← Boards</button>
+      <button class="btn-back" id="btn-back-boards">← Change Role</button>
     </div>
-    <div class="kpi-g2" id="d-kpi-grid"></div>
-    <div class="prog-row">
-      <span class="prog-lbl" id="lbl-completion-rate">COMPLETION RATE</span>
-      <span class="prog-val" id="d-prog-pct">0%</span>
-    </div>
-    <div class="prog-bg">
-      <div class="prog-fill" id="d-prog-bar" style="width:0%"></div>
-    </div>
-    <div class="upgrade-bar">
-      <p id="lbl-upgrade-text">Advanced charts, PDF export, filters and much more</p>
-      <a id="d-link" href="#" target="_blank">Open Full Dashboard →</a>
+    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 40px 16px; text-align:center; gap: 16px;">
+        <div style="font-size: 54px; margin-bottom: 4px;">📊</div>
+        <h2 style="font-size: 16px; font-weight:700; color:#172b4d; margin:0;" id="lbl-ready-title">Your Dashboard is Ready!</h2>
+        <p style="font-size: 13px; color:#5e6c84; max-width:280px; margin:0; line-height: 1.5;" id="lbl-ready-desc">View real-time charts, export PDFs, track list times, and analyze all KPIs for this board.</p>
+        <button id="btn-open-site" class="btn btn-primary" style="width:100%; max-width:260px; font-size:14px; padding: 12px; margin-top: 8px;">🚀 Open KPI Master</button>
     </div>
   </div>
 
@@ -390,22 +374,16 @@
         btnBackRole: '← Mudar função',
         boardsEmpty: 'Nenhum board encontrado para esta função.',
         btnBackBoards: '← Boards',
-        completionRate: 'TAXA DE CONCLUSÃO',
-        upgradeText: 'Gráficos avançados, export PDF, filtros e muito mais',
-        openFullDashboard: 'Ver Dashboard Completo →',
+        readyTitle: 'O teu Dashboard está pronto!',
+        readyDesc: 'Vê gráficos em tempo real, exporta PDFs, controla tempos e analisa todos os KPIs deste quadro.',
+        btnOpenSite: '🚀 Abrir KPI Master',
         retry: 'Tentar novamente',
         errDefault: 'Ocorreu um erro.',
         errInit: 'Erro ao iniciar. Fecha e abre de novo.',
         errBoards: 'Erro ao carregar boards.',
         errKPIs: 'Erro ao carregar KPIs.',
         roleLabelMgr: '👔 Gestor',
-        roleLabelSales: '🎯 Vendedor',
-        kpiTotal: 'Total Cards',
-        kpiCompleted: 'Concluídos',
-        kpiMembers: 'Membros',
-        kpiThisWeek: 'Esta Semana',
-        kpiOpen: 'Em Aberto',
-        kpiOverdue: 'Em Atraso'
+        roleLabelSales: '🎯 Vendedor'
       },
       en: {
         loading: 'Loading...',
@@ -424,22 +402,16 @@
         btnBackRole: '← Change Role',
         boardsEmpty: 'No boards found for this role.',
         btnBackBoards: '← Boards',
-        completionRate: 'COMPLETION RATE',
-        upgradeText: 'Advanced charts, PDF export, filters and much more',
-        openFullDashboard: 'Open Full Dashboard →',
+        readyTitle: 'Your Dashboard is Ready!',
+        readyDesc: 'View real-time charts, export PDFs, track list times, and analyze all KPIs for this board.',
+        btnOpenSite: '🚀 Open KPI Master',
         retry: 'Try Again',
         errDefault: 'An error occurred.',
         errInit: 'Error during initialization. Close and open again.',
         errBoards: 'Error loading boards.',
         errKPIs: 'Error loading KPIs.',
         roleLabelMgr: '👔 Manager',
-        roleLabelSales: '🎯 Agent',
-        kpiTotal: 'Total Cards',
-        kpiCompleted: 'Completed',
-        kpiMembers: 'Members',
-        kpiThisWeek: 'This Week',
-        kpiOpen: 'Open',
-        kpiOverdue: 'Overdue'
+        roleLabelSales: '🎯 Agent'
       }
     };
 
@@ -457,13 +429,11 @@
     document.getElementById('lbl-role-mgr-desc').textContent = tDict.roleMgrDesc;
     document.getElementById('lbl-role-sales').textContent = tDict.roleSales;
     document.getElementById('lbl-role-sales-desc').textContent = tDict.roleSalesDesc;
-    document.getElementById('lbl-boards-title').textContent = tDict.boardsTitle;
     document.getElementById('btn-back-role').textContent = tDict.btnBackRole;
-    document.getElementById('boards-empty').textContent = tDict.boardsEmpty;
     document.getElementById('btn-back-boards').textContent = tDict.btnBackRole;
-    document.getElementById('lbl-completion-rate').textContent = tDict.completionRate;
-    document.getElementById('lbl-upgrade-text').textContent = tDict.upgradeText;
-    document.getElementById('d-link').textContent = tDict.openFullDashboard;
+    document.getElementById('lbl-ready-title').textContent = tDict.readyTitle;
+    document.getElementById('lbl-ready-desc').textContent = tDict.readyDesc;
+    document.getElementById('btn-open-site').textContent = tDict.btnOpenSite;
     document.getElementById('btn-retry').textContent = tDict.retry;
 
     // ── Utilitários ────────────────────────────────────────────────────────────
