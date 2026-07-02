@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>KPI Master - Card History</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="https://p.trellocdn.com/power-up.min.js"></script>
+  <style>
+    body {
+      background: #f4f5f7;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 8px 12px;
+      box-sizing: border-box;
+    }
+    .card-history-box {
+      background: white;
+      border: 1px solid #dfe1e6;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .info {
+      flex: 1;
+    }
+    .title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #172b4d;
+      margin-bottom: 4px;
+    }
+    .detail {
+      font-size: 12px;
+      color: #5e6c84;
+      line-height: 1.4;
+    }
+    .btn-link {
+      background: #e2e8f0;
+      color: #172b4d;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn-link:hover {
+      background: #cbd5e1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card-history-box">
+    <div class="info">
+      <div class="title" id="lbl-title">Card Analytics</div>
+      <div class="detail" id="lbl-desc">This card was created on ...</div>
+    </div>
+    <a id="btn-dashboard" class="btn-link" href="#" target="_blank">📈 View Board KPIs</a>
+  </div>
+
+  <script type="module">
+    var KEY = import.meta.env.VITE_TRELLO_API_KEY;
+    var NAME = 'KPI Master';
+    var SITE = 'https://kpismaster.vercel.app';
+
+    var t = TrelloPowerUp.iframe({ appKey: KEY, appName: NAME });
+
+    var locale = t.locale || 'en';
+    var isPt = locale.startsWith('pt');
+
+    var translations = {
+      pt: {
+        title: 'Histórico e Indicadores',
+        desc: 'Este cartão foi criado a {date} ({days} dias atrás).',
+        descToday: 'Este cartão foi criado hoje.',
+        descYesterday: 'Este cartão foi criado ontem.',
+        btnText: '📈 Ver KPIs do Quadro'
+      },
+      en: {
+        title: 'Card Analytics',
+        desc: 'This card was created on {date} ({days} days ago).',
+        descToday: 'This card was created today.',
+        descYesterday: 'This card was created yesterday.',
+        btnText: '📈 View Board KPIs'
+      }
+    };
+
+    var tDict = isPt ? translations.pt : translations.en;
+
+    document.getElementById('lbl-title').textContent = tDict.title;
+    document.getElementById('btn-dashboard').textContent = tDict.btnText;
+
+    t.render(function () {
+      t.sizeTo(document.body).catch(function () { });
+
+      Promise.all([
+        t.card('id'),
+        t.board('id')
+      ]).then(function (res) {
+        var card = res[0];
+        var board = res[1];
+
+        if (card && card.id) {
+          var timestamp = parseInt(card.id.substring(0, 8), 16);
+          var dateCreated = new Date(timestamp * 1000);
+          var diffMs = Date.now() - dateCreated.getTime();
+          var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+          var dateStr = dateCreated.toLocaleDateString(isPt ? 'pt-PT' : 'en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+
+          var descText = '';
+          if (diffDays === 0) {
+            descText = tDict.descToday;
+          } else if (diffDays === 1) {
+            descText = tDict.descYesterday;
+          } else {
+            descText = tDict.desc.replace('{date}', dateStr).replace('{days}', diffDays);
+          }
+
+          document.getElementById('lbl-desc').textContent = descText;
+        }
+
+        if (board && board.id) {
+          document.getElementById('btn-dashboard').href = SITE + '#board=' + board.id;
+        } else {
+          document.getElementById('btn-dashboard').href = SITE;
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

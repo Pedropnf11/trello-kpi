@@ -69,6 +69,87 @@
           url:    POWERUP_URL + '/settings.html',
           height: 420
         });
+      },
+
+      // ── Emblemas nos cartões (Card Badges) ──────────────────────────────────
+      'card-badges': function(t) {
+        return t.card('id')
+          .then(function(card) {
+            if (!card || !card.id) return [];
+            
+            // O ID do Trello contém a data de criação nos primeiros 8 caracteres em hexadecimal
+            var timestamp = parseInt(card.id.substring(0, 8), 16);
+            var dateCreated = new Date(timestamp * 1000);
+            var diffMs = Date.now() - dateCreated.getTime();
+            var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            
+            var text = '';
+            var color = 'light-gray';
+            
+            var isPt = (t.locale || 'en').startsWith('pt');
+            
+            if (diffDays === 0) {
+              text = isPt ? 'Criado hoje' : 'Created today';
+              color = 'green';
+            } else if (diffDays === 1) {
+              text = isPt ? '1 dia' : '1 day old';
+            } else {
+              text = isPt ? diffDays + ' dias' : diffDays + ' days old';
+              if (diffDays > 14) {
+                color = 'yellow';
+              }
+              if (diffDays > 30) {
+                color = 'red';
+              }
+            }
+            
+            return [{
+              text: '🕒 ' + text,
+              color: color
+            }];
+          });
+      },
+
+      // ── Emblemas de Detalhes no Verso (Card Detail Badges) ──────────────────
+      'card-detail-badges': function(t) {
+        return t.card('id')
+          .then(function(card) {
+            if (!card || !card.id) return [];
+            
+            var timestamp = parseInt(card.id.substring(0, 8), 16);
+            var dateCreated = new Date(timestamp * 1000);
+            var diffMs = Date.now() - dateCreated.getTime();
+            var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            
+            var isPt = (t.locale || 'en').startsWith('pt');
+            var text = '';
+            if (diffDays === 0) {
+              text = isPt ? 'Hoje' : 'Today';
+            } else if (diffDays === 1) {
+              text = isPt ? '1 dia' : '1 day';
+            } else {
+              text = isPt ? diffDays + ' dias' : diffDays + ' days';
+            }
+            
+            return [{
+              title: isPt ? 'Idade do Cartão' : 'Card Age',
+              text: text,
+              color: 'light-gray'
+            }];
+          });
+      },
+
+      // ── Secção do Verso do Cartão (Card Back Section) ──────────────────────
+      'card-back-section': function(t) {
+        return {
+          title: 'KPI Master History',
+          icon: POWERUP_URL + '/icon.png',
+          content: {
+            type: 'iframe',
+            url: t.signUrl(POWERUP_URL + '/card-back.html'),
+            height: 72
+          }
+        };
       }
 
     }, {
