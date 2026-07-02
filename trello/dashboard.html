@@ -9,55 +9,123 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
+      padding: 16px;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: #f4f5f7;
+      color: #172b4d;
+      box-sizing: border-box;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      gap: 16px;
+    }
+
+    .header {
       display: flex;
       align-items: center;
+      gap: 8px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #dfe1e6;
+    }
+    
+    .header img {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+    }
+    
+    .header h1 {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0;
+      color: #172b4d;
+    }
+
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
       justify-content: center;
-      height: 100vh;
-      box-sizing: border-box;
+      gap: 12px;
     }
-    .container {
-      text-align: center;
-      padding: 24px;
+
+    /* Retângulos Grandes de Estatísticas */
+    .kpi-card {
       background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(9, 30, 66, 0.15);
-      max-width: 320px;
-      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #dfe1e6;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(9, 30, 66, 0.08);
+      display: flex;
+      flex-direction: column;
     }
-    img {
-      width: 64px;
-      height: 64px;
-      border-radius: 12px;
-      margin-bottom: 12px;
+    
+    .kpi-card.fastest {
+      border-left: 5px solid #00875a;
     }
-    h1 {
-      font-size: 20px;
+    
+    .kpi-card.slowest {
+      border-left: 5px solid #de350b;
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .kpi-label.fastest {
+      color: #00875a;
+    }
+    
+    .kpi-label.slowest {
+      color: #de350b;
+    }
+
+    .kpi-value {
+      font-size: 26px;
       font-weight: 700;
       color: #172b4d;
-      margin: 0 0 8px 0;
+      margin: 6px 0;
     }
-    p {
-      font-size: 13px;
+
+    .kpi-desc {
+      font-size: 12px;
       color: #5e6c84;
-      margin: 0 0 20px 0;
-      line-height: 1.5;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+
+    .footer {
+      padding-top: 12px;
+      border-top: 1px solid #dfe1e6;
+    }
+
     .btn-primary {
       background: #0052cc;
       color: white;
       border: none;
       border-radius: 6px;
-      padding: 12px 24px;
+      padding: 12px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
+      display: block;
       width: 100%;
+      text-align: center;
+      text-decoration: none;
       box-sizing: border-box;
       transition: background 0.15s ease;
     }
+    
     .btn-primary:hover {
       background: #0073e6;
     }
@@ -66,32 +134,50 @@
 <body>
 
   <div class="container">
-    <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
-    <h1 id="title">KPI Master</h1>
-    <p id="desc">Open the KPI Master dashboard to view metrics, charts, and team performance reports for this board.</p>
-    <a id="btn-open" class="btn-primary" href="https://kpismaster.vercel.app" target="_blank" style="text-decoration: none; display: block; text-align: center;">🚀 Open KPI Master</a>
+    <!-- Header -->
+    <div class="header">
+      <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
+      <h1 id="lbl-header-title">KPI Master</h1>
+    </div>
 
-    <div id="stats-section" style="margin-top: 20px; border-top: 1px solid #dfe1e6; padding-top: 16px; text-align: left; display: none;">
+    <!-- Área de Conteúdo Central (Os Retângulos Grandes) -->
+    <div class="content-area">
+      
       <!-- Estado 1: Não Autorizado -->
-      <div id="stats-unauth" style="display: none; text-align: center;">
-        <p style="font-size: 11px; color: #5e6c84; margin-bottom: 8px;" id="lbl-stats-auth-desc">Connect account to see Leads Speed here.</p>
-        <button id="btn-stats-auth" class="btn-primary" style="padding: 6px 12px; font-size: 11px; width: auto; display: inline-block;">🔗 Connect Account</button>
+      <div id="stats-unauth" class="kpi-card" style="display: none; text-align: center; padding: 24px; gap: 8px;">
+        <span style="font-size: 28px;">🔒</span>
+        <p style="font-size: 13px; color: #5e6c84; margin: 0 0 8px 0;" id="lbl-stats-auth-desc">Connect account to see Leads Speed here.</p>
+        <button id="btn-stats-auth" class="btn-primary" style="padding: 8px 16px; width: auto; display: inline-block; margin: 0 auto;">🔗 Connect Account</button>
       </div>
 
-      <!-- Estado 2: Autorizado e Carregado -->
-      <div id="stats-data" style="display: none;">
-        <h3 style="font-size: 13px; font-weight: 700; color: #172b4d; margin: 0 0 10px 0;" id="lbl-stats-title">Leads Speed</h3>
-        <div style="font-size: 12px; color: #5e6c84; display: flex; flex-direction: column; gap: 8px;">
-          <div>
-            <span style="font-weight: 600; color: #00875a;" id="lbl-fastest">⚡ Fastest:</span>
-            <span id="val-fastest">—</span>
-          </div>
-          <div>
-            <span style="font-weight: 600; color: #de350b;" id="lbl-slowest">🐢 Slowest:</span>
-            <span id="val-slowest">—</span>
-          </div>
+      <!-- Estado 2: Sem Dados (Lista sem saídas) -->
+      <div id="stats-empty" class="kpi-card" style="display: none; text-align: center; padding: 24px; gap: 8px;">
+        <span style="font-size: 28px;">📈</span>
+        <p style="font-size: 13px; color: #5e6c84; margin: 0;" id="lbl-stats-empty-desc">Move cards out of your first list to see speed statistics.</p>
+      </div>
+
+      <!-- Estado 3: Dados Autorizados e Prontos (Dois Retângulos Grandes) -->
+      <div id="stats-data" style="display: flex; flex-direction: column; gap: 12px;">
+        <!-- Retângulo Rápido -->
+        <div class="kpi-card fastest">
+          <span class="kpi-label fastest" id="lbl-fastest-title">⚡ Fastest Lead to Leave</span>
+          <div class="kpi-value" id="val-fastest-time">—</div>
+          <div class="kpi-desc" id="val-fastest-name">—</div>
+        </div>
+
+        <!-- Retângulo Lento -->
+        <div class="kpi-card slowest">
+          <span class="kpi-label slowest" id="lbl-slowest-title">🐢 Slowest Lead to Leave</span>
+          <div class="kpi-value" id="val-slowest-time">—</div>
+          <div class="kpi-desc" id="val-slowest-name">—</div>
         </div>
       </div>
+
+    </div>
+
+    <!-- Footer (Retângulo Pequeno no fundo para abrir a dashboard principal) -->
+    <div class="footer">
+      <a id="btn-open" class="btn-primary" href="https://kpismaster.vercel.app" target="_blank">🚀 Open Full Dashboard</a>
     </div>
   </div>
 
@@ -107,31 +193,32 @@
 
     var translations = {
       pt: {
-        desc: 'Abre o dashboard do KPI Master para veres métricas, gráficos e relatórios de performance deste quadro.',
-        btnOpen: '🚀 Abrir KPI Master',
-        lblFastest: '⚡ Mais Rápido:',
-        lblSlowest: '🐢 Mais Lento:',
+        btnOpen: '🚀 Abrir Dashboard Completo',
+        lblFastestTitle: '⚡ Lead Mais Rápido a Sair',
+        lblSlowestTitle: '🐢 Lead Mais Lento a Sair',
         lblStatsAuthDesc: 'Liga a tua conta Trello para veres a velocidade das leads aqui.',
-        btnStatsAuth: '🔗 Ligar Conta'
+        btnStatsAuth: '🔗 Ligar Conta',
+        lblStatsEmptyDesc: 'Move cartões para fora da primeira lista para veres estatísticas de velocidade das leads.'
       },
       en: {
-        desc: 'Open the KPI Master dashboard to view metrics, charts, and team performance reports for this board.',
-        btnOpen: '🚀 Open KPI Master',
-        lblFastest: '⚡ Fastest:',
-        lblSlowest: '🐢 Slowest:',
+        btnOpen: '🚀 Open Full Dashboard',
+        lblFastestTitle: '⚡ Fastest Lead to Leave',
+        lblSlowestTitle: '🐢 Slowest Lead to Leave',
         lblStatsAuthDesc: 'Connect your Trello account to see Leads Speed metrics here.',
-        btnStatsAuth: '🔗 Connect Account'
+        btnStatsAuth: '🔗 Connect Account',
+        lblStatsEmptyDesc: 'Move cards out of your first list to see speed statistics.'
       }
     };
 
     var tDict = isPt ? translations.pt : translations.en;
 
-    document.getElementById('desc').textContent = tDict.desc;
+    // Aplicar Traduções Iniciais
     document.getElementById('btn-open').textContent = tDict.btnOpen;
-    document.getElementById('lbl-fastest').textContent = tDict.lblFastest;
-    document.getElementById('lbl-slowest').textContent = tDict.lblSlowest;
+    document.getElementById('lbl-fastest-title').textContent = tDict.lblFastestTitle;
+    document.getElementById('lbl-slowest-title').textContent = tDict.lblSlowestTitle;
     document.getElementById('lbl-stats-auth-desc').textContent = tDict.lblStatsAuthDesc;
     document.getElementById('btn-stats-auth').textContent = tDict.btnStatsAuth;
+    document.getElementById('lbl-stats-empty-desc').textContent = tDict.lblStatsEmptyDesc;
 
     t.render(function () {
       t.sizeTo(document.body).catch(function () { });
@@ -143,8 +230,6 @@
         }
         document.getElementById('btn-open').href = SITE + '#board=' + board.id;
 
-        // Mostrar secção de estatísticas e verificar autorização
-        document.getElementById('stats-section').style.display = 'block';
         checkAuthAndLoadStats(board.id);
       }).catch(function () {
         document.getElementById('btn-open').href = SITE;
@@ -170,6 +255,7 @@
 
     function showUnauth() {
       document.getElementById('stats-data').style.display = 'none';
+      document.getElementById('stats-empty').style.display = 'none';
       document.getElementById('stats-unauth').style.display = 'block';
       t.sizeTo(document.body).catch(function () { });
     }
@@ -186,12 +272,12 @@
     });
 
     function loadLeadStats(boardId, token) {
-      // 1. Obter listas do quadro (a primeira lista é onde chegam as leads por defeito)
+      // 1. Obter listas do quadro (a primeira lista é a de leads por defeito)
       fetch('https://api.trello.com/1/boards/' + boardId + '/lists?key=' + KEY + '&token=' + token)
         .then(function(r) { 
           if (r.status === 401) {
-            // Chave de API antiga/Token inválido. Limpar autorização para forçar login correto.
             t.getRestApi().clearToken();
+            showUnauth();
             return;
           }
           return r.json(); 
@@ -201,29 +287,32 @@
           var leadListId = lists[0].id;
           var leadListName = lists[0].name;
 
+          // Atualizar o título do cabeçalho com o nome da lista onde as leads chegam
+          document.getElementById('lbl-header-title').textContent = 'KPI Master (' + leadListName + ')';
+
           // 2. Obter cartas do quadro com o respetivo histórico de ações
           fetch('https://api.trello.com/1/boards/' + boardId + '/cards?actions=updateCard,createCard&key=' + KEY + '&token=' + token)
             .then(function(r) {
               if (r.status === 401) {
                 t.getRestApi().clearToken();
+                showUnauth();
                 return;
               }
               return r.json();
             })
             .then(function(cards) {
-              calculateLeadTimes(cards, leadListId, leadListName);
+              calculateLeadTimes(cards, leadListId);
             })
             .catch(function(err) { console.error('Erro ao ler cartas:', err); });
         })
         .catch(function(err) { console.error('Erro ao ler listas:', err); });
     }
 
-    function calculateLeadTimes(cards, leadListId, leadListName) {
+    function calculateLeadTimes(cards, leadListId) {
       var durations = [];
 
       cards.forEach(function(card) {
         var actions = card.actions || [];
-        // Ordenar ações por data (mais antiga primeiro)
         actions.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
 
         var cardId = card.id;
@@ -243,7 +332,6 @@
         var currentEntry = entryDate;
         actions.forEach(function(act) {
           if (act.type === 'updateCard' && act.data) {
-            // Saída da lista de leads
             if (act.data.listBefore && act.data.listBefore.id === leadListId && currentEntry) {
               var exitDate = new Date(act.date);
               var hours = (exitDate - currentEntry) / (1000 * 60 * 60);
@@ -255,7 +343,6 @@
               }
               currentEntry = null;
             }
-            // Entrada/Reentrada na lista de leads
             if (act.data.listAfter && act.data.listAfter.id === leadListId) {
               currentEntry = new Date(act.date);
             }
@@ -263,9 +350,15 @@
         });
       });
 
-      if (durations.length === 0) return;
+      if (durations.length === 0) {
+        // Mostrar ecrã de aviso caso não haja dados
+        document.getElementById('stats-data').style.display = 'none';
+        document.getElementById('stats-unauth').style.display = 'none';
+        document.getElementById('stats-empty').style.display = 'block';
+        t.sizeTo(document.body).catch(function () { });
+        return;
+      }
 
-      // Ordenar durações da mais rápida à mais lenta
       durations.sort(function(a, b) { return a.hours - b.hours; });
 
       var fastest = durations[0];
@@ -284,13 +377,19 @@
         return isPt ? days + ' dias' : days + ' days';
       }
 
-      document.getElementById('lbl-stats-title').textContent = (isPt ? 'Velocidade das Leads (' : 'Leads Speed (') + leadListName + ')';
-      document.getElementById('val-fastest').textContent = fastest.cardName + ' (' + formatDuration(fastest.hours) + ')';
-      document.getElementById('val-slowest').textContent = slowest.cardName + ' (' + formatDuration(slowest.hours) + ')';
+      // Preencher dados rápidos
+      document.getElementById('val-fastest-time').textContent = formatDuration(fastest.hours);
+      document.getElementById('val-fastest-name').textContent = fastest.cardName;
+
+      // Preencher dados lentos
+      document.getElementById('val-slowest-time').textContent = formatDuration(slowest.hours);
+      document.getElementById('val-slowest-name').textContent = slowest.cardName;
+
+      // Exibir secção de dados e esconder outros
+      document.getElementById('stats-unauth').style.display = 'none';
+      document.getElementById('stats-empty').style.display = 'none';
+      document.getElementById('stats-data').style.display = 'flex';
       
-      document.getElementById('stats-data').style.display = 'block';
-      var statsSection = document.getElementById('stats-section');
-      statsSection.style.display = 'block';
       t.sizeTo(document.body).catch(function () { });
     }
   </script>
