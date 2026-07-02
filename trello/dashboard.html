@@ -94,17 +94,25 @@
       background: var(--card-bg);
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      padding: 6px 8px;
-      font-size: 12px;
+      padding: 8px 32px 8px 12px;
+      font-size: 13px;
       color: var(--text-main);
       font-weight: 500;
       cursor: pointer;
       outline: none;
-      transition: border-color 0.15s ease;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%235e6c84" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 18px;
     }
 
     .custom-select:focus {
       border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(0, 82, 204, 0.2);
     }
 
     /* Área Central */
@@ -288,6 +296,9 @@
           </select>
         </div>
       </div>
+      <div id="quick-tip" style="margin-top: 12px; background: rgba(9, 30, 66, 0.04); border-radius: 6px; padding: 10px 12px; font-size: 11px; color: #5e6c84; line-height: 1.4; border-left: 3px solid #0052cc;">
+        <span id="lbl-quick-tip-text">ℹ️ <strong>Leads List</strong> is the list where you measure the speed of incoming leads. <strong>Uninterested</strong> is the list for lost leads or leads with no interest.</span>
+      </div>
     </div>
 
     <!-- Área de Conteúdo Central -->
@@ -364,7 +375,8 @@
         lblSelLeads: 'Lista de Leads',
         lblSelUninterested: 'Sem Interesse',
         lblTotalLeads: 'Leads Ativas',
-        lblTotalUninterested: 'Sem Interesse'
+        lblTotalUninterested: 'Sem Interesse',
+        lblQuickTip: 'ℹ️ <strong>Lista de Leads</strong> é a lista onde quer medir a rapidez das leads. <strong>Sem Interesse</strong> são leads que não têm interesse/leads perdidas.'
       },
       en: {
         btnOpen: '🚀 Open Full Dashboard',
@@ -376,7 +388,8 @@
         lblSelLeads: 'Leads List',
         lblSelUninterested: 'Uninterested',
         lblTotalLeads: 'Active Leads',
-        lblTotalUninterested: 'Uninterested'
+        lblTotalUninterested: 'Uninterested',
+        lblQuickTip: 'ℹ️ <strong>Leads List</strong> is the list where you want to measure the speed of incoming leads. <strong>Uninterested</strong> are leads with no interest/lost leads.'
       }
     };
 
@@ -393,6 +406,7 @@
     document.getElementById('lbl-sel-uninterested').textContent = tDict.lblSelUninterested;
     document.getElementById('lbl-total-leads').textContent = tDict.lblTotalLeads;
     document.getElementById('lbl-total-uninterested').textContent = tDict.lblTotalUninterested;
+    document.getElementById('lbl-quick-tip-text').innerHTML = tDict.lblQuickTip;
 
     var state = { boardId: null, token: null, lists: [], leadsListId: null, uninterestedListId: null };
 
