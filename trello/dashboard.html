@@ -146,7 +146,14 @@
     function loadLeadStats(boardId, token) {
       // 1. Obter listas do quadro (a primeira lista é onde chegam as leads por defeito)
       fetch('https://api.trello.com/1/boards/' + boardId + '/lists?key=' + KEY + '&token=' + token)
-        .then(function(r) { return r.json(); })
+        .then(function(r) { 
+          if (r.status === 401) {
+            // Chave de API antiga/Token inválido. Limpar autorização para forçar login correto.
+            t.getRestApi().clearToken();
+            return;
+          }
+          return r.json(); 
+        })
         .then(function(lists) {
           if (!lists || lists.length === 0) return;
           var leadListId = lists[0].id;
@@ -154,7 +161,13 @@
 
           // 2. Obter cartas do quadro com o respetivo histórico de ações
           fetch('https://api.trello.com/1/boards/' + boardId + '/cards?actions=updateCard,createCard&key=' + KEY + '&token=' + token)
-            .then(function(r) { return r.json(); })
+            .then(function(r) {
+              if (r.status === 401) {
+                t.getRestApi().clearToken();
+                return;
+              }
+              return r.json();
+            })
             .then(function(cards) {
               calculateLeadTimes(cards, leadListId, leadListName);
             })
