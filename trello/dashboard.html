@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,339 +7,69 @@
   <link rel="stylesheet" href="./styles.css">
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
   <style>
-    .screen {
-      display: none;
-    }
-
-    .screen.active {
-      display: block;
-    }
-
-    /* AUTH */
-    .auth-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 28px 16px;
-      gap: 12px;
-    }
-
-    .auth-wrap img {
-      border-radius: 14px;
-      width: 72px;
-      height: 72px;
-    }
-
-    .auth-wrap h1 {
-      font-size: 20px;
-      font-weight: 700;
-      color: #172b4d;
+    body {
       margin: 0;
-    }
-
-    .auth-wrap p {
-      font-size: 13px;
-      color: #5e6c84;
-      max-width: 260px;
-      margin: 0;
-    }
-
-    /* ROLE */
-    .role-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .role-card {
-      border: 2px solid #dfe1e6;
-      border-radius: 10px;
-      padding: 14px 10px;
-      text-align: center;
-      cursor: pointer;
-      background: #f4f5f7;
-      transition: all .15s;
-    }
-
-    .role-card:hover {
-      border-color: #0052cc;
-      background: #e6f0ff;
-    }
-
-    .role-icon {
-      font-size: 28px;
-      margin-bottom: 6px;
-    }
-
-    .role-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: #172b4d;
-    }
-
-    .role-desc {
-      font-size: 11px;
-      color: #5e6c84;
-      margin-top: 2px;
-      line-height: 1.4;
-    }
-
-    /* BOARDS */
-    .sec-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .sec-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #172b4d;
-    }
-
-    .btn-back {
-      background: none;
-      border: none;
-      color: #0052cc;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
       padding: 0;
-    }
-
-    .btn-back:hover {
-      text-decoration: underline;
-    }
-
-    .board-list {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      max-height: 320px;
-      overflow-y: auto;
-    }
-
-    .board-item {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f4f5f7;
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid #dfe1e6;
-      cursor: pointer;
-      background: #f4f5f7;
-      transition: all .15s;
+      justify-content: center;
+      height: 100vh;
+      box-sizing: border-box;
     }
-
-    .board-item:hover {
-      border-color: #0052cc;
-      background: #e6f0ff;
+    .container {
+      text-align: center;
+      padding: 24px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(9, 30, 66, 0.15);
+      max-width: 320px;
+      width: 100%;
     }
-
-    .board-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 3px;
-      flex-shrink: 0;
-      background: #0052cc;
-    }
-
-    .board-name-text {
-      font-size: 13px;
-      font-weight: 600;
-      color: #172b4d;
-    }
-
-    /* DASHBOARD */
-    .dash-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .dash-info .dash-board {
-      font-size: 13px;
-      font-weight: 700;
-      color: #172b4d;
-    }
-
-    .role-pill {
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: #e3fcef;
-      color: #006644;
-      display: inline-block;
-      margin-top: 3px;
-    }
-
-    .kpi-g2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
+    img {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
       margin-bottom: 12px;
     }
-
-    .kpi-b {
-      background: #f4f5f7;
-      border-radius: 8px;
-      padding: 10px 8px;
-      text-align: center;
-      border: 1px solid #dfe1e6;
-    }
-
-    .kpi-v {
-      display: block;
+    h1 {
       font-size: 20px;
       font-weight: 700;
-      color: #0052cc;
+      color: #172b4d;
+      margin: 0 0 8px 0;
     }
-
-    .kpi-l {
-      display: block;
-      font-size: 10px;
+    p {
+      font-size: 13px;
       color: #5e6c84;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-      margin-top: 1px;
+      margin: 0 0 20px 0;
+      line-height: 1.5;
     }
-
-    .prog-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 4px;
-    }
-
-    .prog-lbl {
-      font-size: 11px;
-      font-weight: 600;
-      color: #5e6c84;
-    }
-
-    .prog-val {
-      font-size: 11px;
-      font-weight: 700;
-      color: #0052cc;
-    }
-
-    .prog-bg {
-      background: #dfe1e6;
-      border-radius: 999px;
-      height: 6px;
-      overflow: hidden;
-      margin-bottom: 12px;
-    }
-
-    .prog-fill {
-      height: 100%;
+    .btn-primary {
       background: #0052cc;
-      border-radius: 999px;
-      transition: width .6s ease;
-    }
-
-    .upgrade-bar {
-      background: linear-gradient(135deg, #0052cc, #0747a6);
-      border-radius: 8px;
-      padding: 10px 14px;
-      text-align: center;
-      margin-top: 8px;
-    }
-
-    .upgrade-bar p {
-      color: rgba(255, 255, 255, .8);
-      font-size: 11px;
-      margin-bottom: 6px;
-    }
-
-    .upgrade-bar a {
-      background: #fff;
-      color: #0052cc;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 6px 14px;
+      color: white;
+      border: none;
       border-radius: 6px;
-      text-decoration: none;
-      display: inline-block;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+      transition: background 0.15s ease;
     }
-
-    .upgrade-bar a:hover {
-      background: #f0f4ff;
+    .btn-primary:hover {
+      background: #007ah8;
     }
   </style>
 </head>
-
 <body>
 
-  <!-- ECRÃ 1: Loading -->
-  <div id="s-loading" class="screen active loading">
-    <div class="spinner"></div>
-    <span id="lbl-loading">Loading...</span>
-  </div>
-
-  <!-- ECRÃ 2: Auth (não autenticado) -->
-  <div id="s-auth" class="screen">
-    <div class="auth-wrap">
-      <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
-      <h1>KPI Master</h1>
-      <p id="lbl-auth-desc">Analyze Trello board KPIs in real-time — completion rate, active members, weekly cards, and
-        more.</p>
-      <div style="width:100%;max-width:260px;display:flex;flex-direction:column;gap:8px;">
-        <button id="btn-auth" class="btn btn-primary">🔗 Authorize Access</button>
-        <p id="lbl-auth-tip" style="font-size:11px;color:#97a0af;text-align:center;margin:0;">Only board data is read.
-          Nothing is modified.</p>
-      </div>
-    </div>
-    <div id="auth-err" class="error-msg" style="display:none;margin-top:8px;">Authentication error. Please try again.
-    </div>
-  </div>
-
-  <!-- ECRÃ 3: Escolher Role -->
-  <div id="s-role" class="screen">
-    <h2 id="lbl-role-title">How do you want to login?</h2>
-    <p id="lbl-role-desc" style="font-size:13px;color:#5e6c84;margin-bottom:4px;">Choose your role to see the right
-      KPIs.</p>
-    <div class="role-grid">
-      <div class="role-card" id="role-manager">
-        <div class="role-icon">👔</div>
-        <div class="role-title" id="lbl-role-mgr">Manager</div>
-        <div class="role-desc" id="lbl-role-mgr-desc">Team view, leaderboard and complete analysis</div>
-      </div>
-      <div class="role-card" id="role-sales">
-        <div class="role-icon">🎯</div>
-        <div class="role-title" id="lbl-role-sales">Agent</div>
-        <div class="role-desc" id="lbl-role-sales-desc">Your personal KPIs and focus of the day</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ECRÃ 5: Dashboard KPIs (Abrir Site) -->
-  <div id="s-dash" class="screen">
-    <div class="dash-top">
-      <div class="dash-info">
-        <div class="dash-board" id="d-board-name">—</div>
-        <span class="role-pill" id="d-role-pill">—</span>
-      </div>
-      <button class="btn-back" id="btn-back-boards">← Change Role</button>
-    </div>
-    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 40px 16px; text-align:center; gap: 16px;">
-        <div style="font-size: 54px; margin-bottom: 4px;">📊</div>
-        <h2 style="font-size: 16px; font-weight:700; color:#172b4d; margin:0;" id="lbl-ready-title">Your Dashboard is Ready!</h2>
-        <p style="font-size: 13px; color:#5e6c84; max-width:280px; margin:0; line-height: 1.5;" id="lbl-ready-desc">View real-time charts, export PDFs, track list times, and analyze all KPIs for this board.</p>
-        <button id="btn-open-site" class="btn btn-primary" style="width:100%; max-width:260px; font-size:14px; padding: 12px; margin-top: 8px;">🚀 Open KPI Master</button>
-    </div>
-  </div>
-
-  <!-- ECRÃ 6: Erro -->
-  <div id="s-error" class="screen">
-    <div class="error-msg" id="err-msg">An error occurred.</div>
-    <br>
-    <button class="btn btn-secondary" id="btn-retry">Try Again</button>
+  <div class="container">
+    <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
+    <h1 id="title">KPI Master</h1>
+    <p id="desc">Open the KPI Master dashboard to view metrics, charts, and team performance reports for this board.</p>
+    <button id="btn-open" class="btn-primary">🚀 Open KPI Master</button>
   </div>
 
   <script type="module">
@@ -348,261 +77,41 @@
     var NAME = 'KPI Master';
     var SITE = 'https://kpismaster.vercel.app';
 
-    // Inicializar iframe COM appKey e appName — obrigatório
     var t = TrelloPowerUp.iframe({ appKey: KEY, appName: NAME });
-
-    var S = { token: null, role: null, boardId: null, boardName: null };
 
     var locale = t.locale || 'en';
     var isPt = locale.startsWith('pt');
 
     var translations = {
       pt: {
-        loading: 'A carregar...',
-        authDesc: 'Analisa os KPIs do teu board Trello em tempo real — taxa de conclusão, membros ativos, cards por semana e muito mais.',
-        btnAuth: '🔗 Autorizar Acesso',
-        btnAuthLoading: 'A autorizar...',
-        authTip: 'Só são lidos dados do board. Nada é alterado.',
-        authErr: 'Erro na autenticação. Tenta novamente.',
-        roleTitle: 'Como queres entrar?',
-        roleDesc: 'Escolhe a tua função para ver os KPIs certos.',
-        roleMgr: 'Gestor',
-        roleMgrDesc: 'Vista de equipa, leaderboard e análise completa',
-        roleSales: 'Vendedor',
-        roleSalesDesc: 'Os teus KPIs pessoais e foco do dia',
-        boardsTitle: 'Seleciona o Board',
-        btnBackRole: '← Mudar função',
-        boardsEmpty: 'Nenhum board encontrado para esta função.',
-        btnBackBoards: '← Boards',
-        readyTitle: 'O teu Dashboard está pronto!',
-        readyDesc: 'Vê gráficos em tempo real, exporta PDFs, controla tempos e analisa todos os KPIs deste quadro.',
-        btnOpenSite: '🚀 Abrir KPI Master',
-        retry: 'Tentar novamente',
-        errDefault: 'Ocorreu um erro.',
-        errInit: 'Erro ao iniciar. Fecha e abre de novo.',
-        errBoards: 'Erro ao carregar boards.',
-        errKPIs: 'Erro ao carregar KPIs.',
-        roleLabelMgr: '👔 Gestor',
-        roleLabelSales: '🎯 Vendedor'
+        desc: 'Abre o dashboard do KPI Master para veres métricas, gráficos e relatórios de performance deste quadro.',
+        btnOpen: '🚀 Abrir KPI Master'
       },
       en: {
-        loading: 'Loading...',
-        authDesc: 'Analyze Trello board KPIs in real-time — completion rate, active members, weekly cards, and more.',
-        btnAuth: '🔗 Authorize Access',
-        btnAuthLoading: 'Authorizing...',
-        authTip: 'Only board data is read. Nothing is modified.',
-        authErr: 'Authentication error. Please try again.',
-        roleTitle: 'How do you want to login?',
-        roleDesc: 'Choose your role to see the right KPIs.',
-        roleMgr: 'Manager',
-        roleMgrDesc: 'Team view, leaderboard and complete analysis',
-        roleSales: 'Agent',
-        roleSalesDesc: 'Your personal KPIs and focus of the day',
-        boardsTitle: 'Select the Board',
-        btnBackRole: '← Change Role',
-        boardsEmpty: 'No boards found for this role.',
-        btnBackBoards: '← Boards',
-        readyTitle: 'Your Dashboard is Ready!',
-        readyDesc: 'View real-time charts, export PDFs, track list times, and analyze all KPIs for this board.',
-        btnOpenSite: '🚀 Open KPI Master',
-        retry: 'Try Again',
-        errDefault: 'An error occurred.',
-        errInit: 'Error during initialization. Close and open again.',
-        errBoards: 'Error loading boards.',
-        errKPIs: 'Error loading KPIs.',
-        roleLabelMgr: '👔 Manager',
-        roleLabelSales: '🎯 Agent'
+        desc: 'Open the KPI Master dashboard to view metrics, charts, and team performance reports for this board.',
+        btnOpen: '🚀 Open KPI Master'
       }
     };
 
     var tDict = isPt ? translations.pt : translations.en;
 
-    // Apply static UI text
-    document.getElementById('lbl-loading').textContent = tDict.loading;
-    document.getElementById('lbl-auth-desc').textContent = tDict.authDesc;
-    document.getElementById('btn-auth').textContent = tDict.btnAuth;
-    document.getElementById('lbl-auth-tip').textContent = tDict.authTip;
-    document.getElementById('auth-err').textContent = tDict.authErr;
-    document.getElementById('lbl-role-title').textContent = tDict.roleTitle;
-    document.getElementById('lbl-role-desc').textContent = tDict.roleDesc;
-    document.getElementById('lbl-role-mgr').textContent = tDict.roleMgr;
-    document.getElementById('lbl-role-mgr-desc').textContent = tDict.roleMgrDesc;
-    document.getElementById('lbl-role-sales').textContent = tDict.roleSales;
-    document.getElementById('lbl-role-sales-desc').textContent = tDict.roleSalesDesc;
-    document.getElementById('btn-back-role').textContent = tDict.btnBackRole;
-    document.getElementById('btn-back-boards').textContent = tDict.btnBackRole;
-    document.getElementById('lbl-ready-title').textContent = tDict.readyTitle;
-    document.getElementById('lbl-ready-desc').textContent = tDict.readyDesc;
-    document.getElementById('btn-open-site').textContent = tDict.btnOpenSite;
-    document.getElementById('btn-retry').textContent = tDict.retry;
+    document.getElementById('desc').textContent = tDict.desc;
+    document.getElementById('btn-open').textContent = tDict.btnOpen;
 
-    // ── Utilitários ────────────────────────────────────────────────────────────
-    function show(id) {
-      document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('active'); });
-      document.getElementById('s-' + id).classList.add('active');
-      // Ajustar altura do iframe ao conteúdo
-      t.sizeTo(document.body).catch(function () { });
-    }
-
-    function kpiBox(v, l) {
-      return '<div class="kpi-b"><span class="kpi-v">' + v + '</span><span class="kpi-l">' + l + '</span></div>';
-    }
-
-    // ── Arrancar ───────────────────────────────────────────────────────────────
     t.render(function () {
-      show('loading');
+      t.sizeTo(document.body).catch(function () { });
+    });
 
-      // Ir buscar token, preferências e o board actual do Trello
-      Promise.all([
-        t.getRestApi().isAuthorized(),
-        t.get('member', 'private', 'kpi_role').catch(function () { return null; }),
-        t.board('id', 'name').catch(function () { return null; })
-      ]).then(function (res) {
-        var isAuth = res[0];
-        S.role = res[1];
-        
-        var currentBoard = res[2];
-        if (currentBoard) {
-          S.boardId = currentBoard.id;
-          S.boardName = currentBoard.name;
-        }
-
-        if (!isAuth) {
-          // Não autenticado — mostrar ecrã de auth
-          show('auth');
-          return;
-        }
-
-        // Ir buscar o token para usar nas chamadas API
-        return t.getRestApi().getToken().then(function (token) {
-          S.token = token;
-
-          if (!S.role) {
-            show('role');
-            return;
-          }
-
-          // Temos tudo — ir direto para os KPIs do board atual!
-          fetchKPIs();
-        });
-
-      }).catch(function (err) {
-        showErr(tDict.errInit);
+    document.getElementById('btn-open').addEventListener('click', function () {
+      t.board('id').then(function (board) {
+        var boardId = board ? board.id : '';
+        var url = SITE + (boardId ? '#board=' + boardId : '');
+        t.showNewTab(url);
+      }).catch(function () {
+        t.showNewTab(SITE);
       });
-    });
-
-    // ── Auth ───────────────────────────────────────────────────────────────────
-    document.getElementById('btn-auth').addEventListener('click', function () {
-      var btn = this;
-      btn.disabled = true;
-      btn.textContent = tDict.btnAuthLoading;
-
-      t.getRestApi().authorize({ scope: 'read', expiration: 'never' })
-        .then(function () {
-          return t.getRestApi().getToken();
-        })
-        .then(function (token) {
-          S.token = token;
-          // Autorizado com sucesso — ir para escolha de role
-          show('role');
-        })
-        .catch(function (err) {
-          btn.disabled = false;
-          btn.textContent = tDict.btnAuth;
-          document.getElementById('auth-err').style.display = 'block';
-        });
-    });
-
-    // ── Role ───────────────────────────────────────────────────────────────────
-    document.getElementById('role-manager').addEventListener('click', function () { setRole('manager'); });
-    document.getElementById('role-sales').addEventListener('click', function () { setRole('sales'); });
-
-    function setRole(role) {
-      S.role = role;
-      t.set('member', 'private', 'kpi_role', role);
-      fetchKPIs();
-    }
-
-    document.getElementById('btn-back-role').addEventListener('click', function () {
-      S.role = null;
-      t.set('member', 'private', 'kpi_role', null);
-      show('role');
-    });
-
-    document.getElementById('btn-back-boards').addEventListener('click', function () {
-      S.role = null;
-      t.set('member', 'private', 'kpi_role', null);
-      show('role');
-    });
-
-    // ── KPIs ───────────────────────────────────────────────────────────────────
-    function fetchKPIs() {
-      show('loading');
-
-      Promise.all([
-        fetch('https://api.trello.com/1/boards/' + S.boardId + '/lists?key=' + KEY + '&token=' + S.token).then(function (r) { return r.json(); }),
-        fetch('https://api.trello.com/1/boards/' + S.boardId + '/cards?key=' + KEY + '&token=' + S.token).then(function (r) { return r.json(); }),
-        fetch('https://api.trello.com/1/boards/' + S.boardId + '/members?key=' + KEY + '&token=' + S.token).then(function (r) { return r.json(); })
-      ]).then(function (res) {
-        var lists = res[0];
-        var cards = res[1];
-        var members = res[2];
-
-        var total = cards.length;
-
-        var doneKw = ['done', 'concluído', 'concluido', 'fechado', 'ganho', 'won', 'closed'];
-        var doneIds = lists.filter(function (l) {
-          var n = l.name.toLowerCase();
-          return doneKw.some(function (kw) { return n.includes(kw); });
-        }).map(function (l) { return l.id; });
-
-        var done = cards.filter(function (c) { return doneIds.includes(c.idList); }).length;
-
-        var weekAgo = new Date();
-        weekAgo.setDate(weekAgo.getDate() - 7);
-        var week = cards.filter(function (c) {
-          return c.dateLastActivity && new Date(c.dateLastActivity) > weekAgo;
-        }).length;
-
-        var overdue = cards.filter(function (c) {
-          return c.due && new Date(c.due) < new Date() && !c.dueComplete;
-        }).length;
-
-        var rate = total > 0 ? Math.round((done / total) * 100) : 0;
-
-        document.getElementById('d-board-name').textContent = S.boardName || S.boardId;
-        document.getElementById('d-role-pill').textContent = S.role === 'manager' ? tDict.roleLabelMgr : tDict.roleLabelSales;
-        document.getElementById('d-kpi-grid').innerHTML =
-          kpiBox(total, tDict.kpiTotal) +
-          kpiBox(done, tDict.kpiCompleted) +
-          kpiBox(members.length, tDict.kpiMembers) +
-          kpiBox(week, tDict.kpiThisWeek) +
-          kpiBox(total - done, tDict.kpiOpen) +
-          kpiBox(overdue, tDict.kpiOverdue);
-
-        document.getElementById('d-prog-pct').textContent = rate + '%';
-        document.getElementById('d-prog-bar').style.width = rate + '%';
-        document.getElementById('d-link').href = SITE + '#board=' + S.boardId + '&role=' + S.role;
-
-        show('dash');
-
-      }).catch(function (err) {
-        showErr(tDict.errKPIs);
-      });
-    }
-
-    // ── Erro ───────────────────────────────────────────────────────────────────
-    function showErr(msg) {
-      document.getElementById('err-msg').textContent = msg || tDict.errDefault;
-      show('error');
-    }
-
-    document.getElementById('btn-retry').addEventListener('click', function () {
-      show('loading');
-      t.render();
     });
   </script>
 
 </body>
-
 </html>
