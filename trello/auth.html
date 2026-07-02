@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ligar ao KPI Master</title>
+  <title>Connect to KPI Master</title>
   <link rel="stylesheet" href="./styles.css">
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
 </head>
@@ -12,17 +12,17 @@
   <div class="auth-container">
     <img src="./icon.png" alt="KPI Master" width="72" height="72"
          onerror="this.style.display='none'">
-    <h1>KPI Master</h1>
-    <p>Analisa os KPIs do teu board Trello em tempo real — taxa de conclusão, membros ativos, cards por semana e muito mais.</p>
+    <h1 id="auth-title">KPI Master</h1>
+    <p id="auth-desc">Analyze Trello board KPIs in real-time — completion rate, active members, weekly cards, and more.</p>
     <div style="width:100%; max-width:280px; display:flex; flex-direction:column; gap:10px; margin-top:8px;">
-      <button id="btn-auth" class="btn btn-primary">🔗 Autorizar Acesso</button>
-      <p style="font-size:11px; color:#97a0af; text-align:center;">Só são lidos dados do board. Nada é alterado.</p>
+      <button id="btn-auth" class="btn btn-primary">🔗 Authorize Access</button>
+      <p id="auth-tip" style="font-size:11px; color:#97a0af; text-align:center;">Only board data is read. Nothing is modified.</p>
     </div>
-    <a href="https://kpismaster.vercel.app" target="_blank" class="link">Saber mais sobre o KPI Master →</a>
+    <a id="auth-link" href="https://kpismaster.vercel.app" target="_blank" class="link">Learn more about KPI Master →</a>
   </div>
 
   <div id="auth-error" class="error-msg" style="display:none; margin-top:12px;">
-    Erro na autenticação. Tenta novamente.
+    Authentication error. Please try again.
   </div>
 
   <script type="module">
@@ -32,10 +32,43 @@
       appName: 'KPI Master'
     });
 
+    var locale = t.locale || 'en';
+    var isPt = locale.startsWith('pt');
+
+    var translations = {
+      pt: {
+        title: 'Ligar ao KPI Master',
+        desc: 'Analisa os KPIs do teu board Trello em tempo real — taxa de conclusão, membros ativos, cards por semana e muito mais.',
+        btnAuth: '🔗 Autorizar Acesso',
+        btnAuthLoading: 'A autorizar...',
+        securityTip: 'Só são lidos dados do board. Nada é alterado.',
+        learnMore: 'Saber mais sobre o KPI Master →',
+        authError: 'Erro na autenticação. Tenta novamente.'
+      },
+      en: {
+        title: 'Connect to KPI Master',
+        desc: 'Analyze Trello board KPIs in real-time — completion rate, active members, weekly cards, and more.',
+        btnAuth: '🔗 Authorize Access',
+        btnAuthLoading: 'Authorizing...',
+        securityTip: 'Only board data is read. Nothing is modified.',
+        learnMore: 'Learn more about KPI Master →',
+        authError: 'Authentication error. Please try again.'
+      }
+    };
+
+    var tDict = isPt ? translations.pt : translations.en;
+
+    document.title = tDict.title;
+    document.getElementById('auth-desc').textContent = tDict.desc;
+    document.getElementById('btn-auth').textContent = tDict.btnAuth;
+    document.getElementById('auth-tip').textContent = tDict.securityTip;
+    document.getElementById('auth-link').textContent = tDict.learnMore;
+    document.getElementById('auth-error').textContent = tDict.authError;
+
     document.getElementById('btn-auth').addEventListener('click', function() {
       var btn = this;
       btn.disabled = true;
-      btn.textContent = 'A autorizar...';
+      btn.textContent = tDict.btnAuthLoading;
 
       t.getRestApi().authorize({
         scope:      'read',
@@ -43,9 +76,8 @@
       }).then(function() {
         t.closeModal();
       }).catch(function(err) {
-        console.error('Auth error:', err);
         btn.disabled = false;
-        btn.textContent = '🔗 Autorizar Acesso';
+        btn.textContent = tDict.btnAuth;
         document.getElementById('auth-error').style.display = 'block';
       });
     });

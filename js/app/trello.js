@@ -18,7 +18,6 @@ App.listarBoards = async function () {
             });
             filteredBoards = adminBoards.length > 0 ? adminBoards : boards;
             if (adminBoards.length === 0 && boards.length > 0) {
-                console.warn('memberships não disponível na API — a mostrar todos os quadros como fallback.');
             }
         } else if (this.state.userRole === 'sales') {
             const salesBoards = boards.filter(b => {
@@ -27,7 +26,6 @@ App.listarBoards = async function () {
             });
             filteredBoards = salesBoards.length > 0 ? salesBoards : boards;
             if (salesBoards.length === 0 && boards.length > 0) {
-                console.warn('memberships não disponível na API — a mostrar todos os quadros como fallback.');
             }
         }
 
@@ -100,7 +98,6 @@ App.conectarTrello = async function () {
             const availableBoards = this.state.availableBoards || [];
             const currentBoard = availableBoards.find(b => b.id === boardId);
             if (!currentBoard) {
-                console.warn('Proteção ativada: board não encontrado na lista de admin. A mudar para sales.');
                 this.state.userRole = 'sales';
                 localStorage.setItem('trello_user_role', 'sales');
             }
@@ -110,8 +107,6 @@ App.conectarTrello = async function () {
             const myMember = membros.find(m => m.id === userInfo.id || m.username === userInfo.username);
             if (myMember) {
                 this.state.selectedMemberId = myMember.id;
-            } else {
-                console.warn('Utilizador atual não encontrado na lista de membros deste quadro.');
             }
         }
 

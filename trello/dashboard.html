@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -59,7 +59,7 @@
 <!-- ECRÃ 1: Loading -->
 <div id="s-loading" class="screen active loading">
   <div class="spinner"></div>
-  <span>A carregar...</span>
+  <span id="lbl-loading">Loading...</span>
 </div>
 
 <!-- ECRÃ 2: Auth (não autenticado) -->
@@ -67,29 +67,29 @@
   <div class="auth-wrap">
     <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
     <h1>KPI Master</h1>
-    <p>Analisa os KPIs do teu board Trello em tempo real — taxa de conclusão, membros ativos, cards por semana e muito mais.</p>
+    <p id="lbl-auth-desc">Analyze Trello board KPIs in real-time — completion rate, active members, weekly cards, and more.</p>
     <div style="width:100%;max-width:260px;display:flex;flex-direction:column;gap:8px;">
-      <button id="btn-auth" class="btn btn-primary">🔗 Autorizar Acesso</button>
-      <p style="font-size:11px;color:#97a0af;text-align:center;margin:0;">Só são lidos dados do board. Nada é alterado.</p>
+      <button id="btn-auth" class="btn btn-primary">🔗 Authorize Access</button>
+      <p id="lbl-auth-tip" style="font-size:11px;color:#97a0af;text-align:center;margin:0;">Only board data is read. Nothing is modified.</p>
     </div>
   </div>
-  <div id="auth-err" class="error-msg" style="display:none;margin-top:8px;">Erro na autenticação. Tenta novamente.</div>
+  <div id="auth-err" class="error-msg" style="display:none;margin-top:8px;">Authentication error. Please try again.</div>
 </div>
 
 <!-- ECRÃ 3: Escolher Role -->
 <div id="s-role" class="screen">
-  <h2>Como queres entrar?</h2>
-  <p style="font-size:13px;color:#5e6c84;margin-bottom:4px;">Escolhe a tua função para ver os KPIs certos.</p>
+  <h2 id="lbl-role-title">How do you want to login?</h2>
+  <p id="lbl-role-desc" style="font-size:13px;color:#5e6c84;margin-bottom:4px;">Choose your role to see the right KPIs.</p>
   <div class="role-grid">
     <div class="role-card" id="role-manager">
       <div class="role-icon">👔</div>
-      <div class="role-title">Gestor</div>
-      <div class="role-desc">Vista de equipa, leaderboard e análise completa</div>
+      <div class="role-title" id="lbl-role-mgr">Manager</div>
+      <div class="role-desc" id="lbl-role-mgr-desc">Team view, leaderboard and complete analysis</div>
     </div>
     <div class="role-card" id="role-sales">
       <div class="role-icon">🎯</div>
-      <div class="role-title">Vendedor</div>
-      <div class="role-desc">Os teus KPIs pessoais e focus do dia</div>
+      <div class="role-title" id="lbl-role-sales">Agent</div>
+      <div class="role-desc" id="lbl-role-sales-desc">Your personal KPIs and focus of the day</div>
     </div>
   </div>
 </div>
@@ -97,11 +97,11 @@
 <!-- ECRÃ 4: Escolher Board -->
 <div id="s-boards" class="screen">
   <div class="sec-header">
-    <div class="sec-title">Seleciona o Board</div>
-    <button class="btn-back" id="btn-back-role">← Mudar função</button>
+    <div class="sec-title" id="lbl-boards-title">Select the Board</div>
+    <button class="btn-back" id="btn-back-role">← Change Role</button>
   </div>
   <div class="board-list" id="board-list"></div>
-  <div id="boards-empty" class="error-msg" style="display:none;margin-top:10px;">Nenhum board encontrado para esta função.</div>
+  <div id="boards-empty" class="error-msg" style="display:none;margin-top:10px;">No boards found for this role.</div>
 </div>
 
 <!-- ECRÃ 5: Dashboard KPIs -->
@@ -115,21 +115,21 @@
   </div>
   <div class="kpi-g2" id="d-kpi-grid"></div>
   <div class="prog-row">
-    <span class="prog-lbl">TAXA DE CONCLUSÃO</span>
+    <span class="prog-lbl" id="lbl-completion-rate">COMPLETION RATE</span>
     <span class="prog-val" id="d-prog-pct">0%</span>
   </div>
   <div class="prog-bg"><div class="prog-fill" id="d-prog-bar" style="width:0%"></div></div>
   <div class="upgrade-bar">
-    <p>Gráficos avançados, export PDF, filtros e muito mais</p>
-    <a id="d-link" href="#" target="_blank">Ver Dashboard Completo →</a>
+    <p id="lbl-upgrade-text">Advanced charts, PDF export, filters and much more</p>
+    <a id="d-link" href="#" target="_blank">Open Full Dashboard →</a>
   </div>
 </div>
 
 <!-- ECRÃ 6: Erro -->
 <div id="s-error" class="screen">
-  <div class="error-msg" id="err-msg">Ocorreu um erro.</div>
+  <div class="error-msg" id="err-msg">An error occurred.</div>
   <br>
-  <button class="btn btn-secondary" id="btn-retry">Tentar novamente</button>
+  <button class="btn btn-secondary" id="btn-retry">Try Again</button>
 </div>
 
 <script type="module">
@@ -141,6 +141,103 @@
   var t = TrelloPowerUp.iframe({ appKey: KEY, appName: NAME });
 
   var S = { token: null, role: null, boardId: null, boardName: null };
+
+  var locale = t.locale || 'en';
+  var isPt = locale.startsWith('pt');
+
+  var translations = {
+    pt: {
+      loading: 'A carregar...',
+      authDesc: 'Analisa os KPIs do teu board Trello em tempo real — taxa de conclusão, membros ativos, cards por semana e muito mais.',
+      btnAuth: '🔗 Autorizar Acesso',
+      btnAuthLoading: 'A autorizar...',
+      authTip: 'Só são lidos dados do board. Nada é alterado.',
+      authErr: 'Erro na autenticação. Tenta novamente.',
+      roleTitle: 'Como queres entrar?',
+      roleDesc: 'Escolhe a tua função para ver os KPIs certos.',
+      roleMgr: 'Gestor',
+      roleMgrDesc: 'Vista de equipa, leaderboard e análise completa',
+      roleSales: 'Vendedor',
+      roleSalesDesc: 'Os teus KPIs pessoais e foco do dia',
+      boardsTitle: 'Seleciona o Board',
+      btnBackRole: '← Mudar função',
+      boardsEmpty: 'Nenhum board encontrado para esta função.',
+      btnBackBoards: '← Boards',
+      completionRate: 'TAXA DE CONCLUSÃO',
+      upgradeText: 'Gráficos avançados, export PDF, filtros e muito mais',
+      openFullDashboard: 'Ver Dashboard Completo →',
+      retry: 'Tentar novamente',
+      errDefault: 'Ocorreu um erro.',
+      errInit: 'Erro ao iniciar. Fecha e abre de novo.',
+      errBoards: 'Erro ao carregar boards.',
+      errKPIs: 'Erro ao carregar KPIs.',
+      roleLabelMgr: '👔 Gestor',
+      roleLabelSales: '🎯 Vendedor',
+      kpiTotal: 'Total Cards',
+      kpiCompleted: 'Concluídos',
+      kpiMembers: 'Membros',
+      kpiThisWeek: 'Esta Semana',
+      kpiOpen: 'Em Aberto',
+      kpiOverdue: 'Em Atraso'
+    },
+    en: {
+      loading: 'Loading...',
+      authDesc: 'Analyze Trello board KPIs in real-time — completion rate, active members, weekly cards, and more.',
+      btnAuth: '🔗 Authorize Access',
+      btnAuthLoading: 'Authorizing...',
+      authTip: 'Only board data is read. Nothing is modified.',
+      authErr: 'Authentication error. Please try again.',
+      roleTitle: 'How do you want to login?',
+      roleDesc: 'Choose your role to see the right KPIs.',
+      roleMgr: 'Manager',
+      roleMgrDesc: 'Team view, leaderboard and complete analysis',
+      roleSales: 'Agent',
+      roleSalesDesc: 'Your personal KPIs and focus of the day',
+      boardsTitle: 'Select the Board',
+      btnBackRole: '← Change Role',
+      boardsEmpty: 'No boards found for this role.',
+      btnBackBoards: '← Boards',
+      completionRate: 'COMPLETION RATE',
+      upgradeText: 'Advanced charts, PDF export, filters and much more',
+      openFullDashboard: 'Open Full Dashboard →',
+      retry: 'Try Again',
+      errDefault: 'An error occurred.',
+      errInit: 'Error during initialization. Close and open again.',
+      errBoards: 'Error loading boards.',
+      errKPIs: 'Error loading KPIs.',
+      roleLabelMgr: '👔 Manager',
+      roleLabelSales: '🎯 Agent',
+      kpiTotal: 'Total Cards',
+      kpiCompleted: 'Completed',
+      kpiMembers: 'Members',
+      kpiThisWeek: 'This Week',
+      kpiOpen: 'Open',
+      kpiOverdue: 'Overdue'
+    }
+  };
+
+  var tDict = isPt ? translations.pt : translations.en;
+
+  // Apply static UI text
+  document.getElementById('lbl-loading').textContent = tDict.loading;
+  document.getElementById('lbl-auth-desc').textContent = tDict.authDesc;
+  document.getElementById('btn-auth').textContent = tDict.btnAuth;
+  document.getElementById('lbl-auth-tip').textContent = tDict.authTip;
+  document.getElementById('auth-err').textContent = tDict.authErr;
+  document.getElementById('lbl-role-title').textContent = tDict.roleTitle;
+  document.getElementById('lbl-role-desc').textContent = tDict.roleDesc;
+  document.getElementById('lbl-role-mgr').textContent = tDict.roleMgr;
+  document.getElementById('lbl-role-mgr-desc').textContent = tDict.roleMgrDesc;
+  document.getElementById('lbl-role-sales').textContent = tDict.roleSales;
+  document.getElementById('lbl-role-sales-desc').textContent = tDict.roleSalesDesc;
+  document.getElementById('lbl-boards-title').textContent = tDict.boardsTitle;
+  document.getElementById('btn-back-role').textContent = tDict.btnBackRole;
+  document.getElementById('boards-empty').textContent = tDict.boardsEmpty;
+  document.getElementById('btn-back-boards').textContent = tDict.btnBackBoards;
+  document.getElementById('lbl-completion-rate').textContent = tDict.completionRate;
+  document.getElementById('lbl-upgrade-text').textContent = tDict.upgradeText;
+  document.getElementById('d-link').textContent = tDict.openFullDashboard;
+  document.getElementById('btn-retry').textContent = tDict.retry;
 
   // ── Utilitários ────────────────────────────────────────────────────────────
   function show(id) {
@@ -195,8 +292,7 @@
       });
 
     }).catch(function(err) {
-      console.error('Init error:', err);
-      showErr('Erro ao iniciar. Fecha e abre de novo.');
+      showErr(tDict.errInit);
     });
   });
 
@@ -204,7 +300,7 @@
   document.getElementById('btn-auth').addEventListener('click', function() {
     var btn = this;
     btn.disabled = true;
-    btn.textContent = 'A autorizar...';
+    btn.textContent = tDict.btnAuthLoading;
 
     t.getRestApi().authorize({ scope: 'read', expiration: 'never' })
       .then(function() {
@@ -216,9 +312,8 @@
         show('role');
       })
       .catch(function(err) {
-        console.error('Auth error:', err);
         btn.disabled = false;
-        btn.textContent = '🔗 Autorizar Acesso';
+        btn.textContent = tDict.btnAuth;
         document.getElementById('auth-err').style.display = 'block';
       });
   });
@@ -293,8 +388,7 @@
       show('boards');
 
     }).catch(function(err) {
-      console.error('Boards error:', err);
-      showErr('Erro ao carregar boards.');
+      showErr(tDict.errBoards);
     });
   }
 
@@ -349,14 +443,14 @@
       var rate = total > 0 ? Math.round((done / total) * 100) : 0;
 
       document.getElementById('d-board-name').textContent = S.boardName || S.boardId;
-      document.getElementById('d-role-pill').textContent  = S.role === 'manager' ? '👔 Gestor' : '🎯 Vendedor';
+      document.getElementById('d-role-pill').textContent  = S.role === 'manager' ? tDict.roleLabelMgr : tDict.roleLabelSales;
       document.getElementById('d-kpi-grid').innerHTML =
-        kpiBox(total,            'Total Cards')  +
-        kpiBox(done,             'Concluídos')   +
-        kpiBox(members.length,   'Membros')      +
-        kpiBox(week,             'Esta Semana')  +
-        kpiBox(total - done,     'Em Aberto')    +
-        kpiBox(overdue,          'Em Atraso');
+        kpiBox(total,            tDict.kpiTotal)     +
+        kpiBox(done,             tDict.kpiCompleted) +
+        kpiBox(members.length,   tDict.kpiMembers)   +
+        kpiBox(week,             tDict.kpiThisWeek)  +
+        kpiBox(total - done,     tDict.kpiOpen)      +
+        kpiBox(overdue,          tDict.kpiOverdue);
 
       document.getElementById('d-prog-pct').textContent    = rate + '%';
       document.getElementById('d-prog-bar').style.width    = rate + '%';
@@ -365,14 +459,13 @@
       show('dash');
 
     }).catch(function(err) {
-      console.error('KPIs error:', err);
-      showErr('Erro ao carregar KPIs.');
+      showErr(tDict.errKPIs);
     });
   }
 
   // ── Erro ───────────────────────────────────────────────────────────────────
   function showErr(msg) {
-    document.getElementById('err-msg').textContent = msg || 'Ocorreu um erro.';
+    document.getElementById('err-msg').textContent = msg || tDict.errDefault;
     show('error');
   }
 

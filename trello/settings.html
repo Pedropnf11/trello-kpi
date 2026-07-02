@@ -1,43 +1,43 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Definições — KPI Master</title>
+  <title>Settings — KPI Master</title>
   <link rel="stylesheet" href="./styles.css">
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
 </head>
 <body>
 
   <div class="settings-container">
-    <h2>⚙️ Definições</h2>
+    <h2 id="settings-title">⚙️ Settings</h2>
 
     <div class="settings-row">
-      <span class="settings-label">Estado da conta</span>
-      <span id="auth-status-badge"><span class="status-warn">A verificar...</span></span>
+      <span class="settings-label" id="lbl-status">Account status</span>
+      <span id="auth-status-badge"><span class="status-warn" id="lbl-checking">Checking...</span></span>
     </div>
 
     <div id="btn-disconnect-wrapper" style="display:none">
-      <button id="btn-disconnect" class="btn btn-danger">🔌 Desligar Conta</button>
+      <button id="btn-disconnect" class="btn btn-danger">🔌 Disconnect Account</button>
     </div>
 
     <div id="btn-connect-wrapper" style="display:none">
-      <button id="btn-connect" class="btn btn-primary">🔗 Ligar Conta</button>
+      <button id="btn-connect" class="btn btn-primary">🔗 Connect Account</button>
     </div>
 
     <hr>
 
     <div style="text-align:center; padding: 4px 0;">
-      <a href="https://kpismaster.vercel.app" target="_blank" class="btn btn-outline">
-        🚀 Abrir Dashboard Completo
+      <a id="link-dashboard" href="https://kpismaster.vercel.app" target="_blank" class="btn btn-outline">
+        🚀 Open Full Dashboard
       </a>
     </div>
 
     <hr>
 
     <div style="display:flex; flex-direction:column; gap:6px;">
-      <a href="https://kpismaster.vercel.app/privacy" target="_blank" class="link">🔒 Política de Privacidade</a>
-      <a href="https://kpismaster.vercel.app" target="_blank" class="link">📖 Documentação & Suporte</a>
+      <a id="link-privacy" href="https://kpismaster.vercel.app/privacy" target="_blank" class="link">🔒 Privacy Policy</a>
+      <a id="link-support" href="https://kpismaster.vercel.app" target="_blank" class="link">📖 Documentation & Support</a>
     </div>
 
     <div style="font-size:11px; color:#97a0af; text-align:center; padding-top:4px;">
@@ -52,6 +52,51 @@
       appName: 'KPI Master'
     });
 
+    var locale = t.locale || 'en';
+    var isPt = locale.startsWith('pt');
+
+    var translations = {
+      pt: {
+        title: '⚙️ Definições',
+        status: 'Estado da conta',
+        checking: 'A verificar...',
+        connected: '✅ Conta ligada',
+        disconnected: '⚠️ Conta não ligada',
+        btnDisconnect: '🔌 Desligar Conta',
+        btnDisconnectLoading: 'A desligar...',
+        btnConnect: '🔗 Ligar Conta',
+        openDashboard: '🚀 Abrir Dashboard Completo',
+        privacy: '🔒 Política de Privacidade',
+        support: '📖 Documentação & Suporte'
+      },
+      en: {
+        title: '⚙️ Settings',
+        status: 'Account status',
+        checking: 'Checking...',
+        connected: '✅ Connected',
+        disconnected: '⚠️ Account not connected',
+        btnDisconnect: '🔌 Disconnect Account',
+        btnDisconnectLoading: 'Disconnecting...',
+        btnConnect: '🔗 Connect Account',
+        openDashboard: '🚀 Open Full Dashboard',
+        privacy: '🔒 Privacy Policy',
+        support: '📖 Documentation & Support'
+      }
+    };
+
+    var tDict = isPt ? translations.pt : translations.en;
+
+    // Apply translations
+    document.title = isPt ? 'Definições — KPI Master' : 'Settings — KPI Master';
+    document.getElementById('settings-title').textContent = tDict.title;
+    document.getElementById('lbl-status').textContent = tDict.status;
+    document.getElementById('lbl-checking').textContent = tDict.checking;
+    document.getElementById('btn-disconnect').textContent = tDict.btnDisconnect;
+    document.getElementById('btn-connect').textContent = tDict.btnConnect;
+    document.getElementById('link-dashboard').textContent = tDict.openDashboard;
+    document.getElementById('link-privacy').textContent = tDict.privacy;
+    document.getElementById('link-support').textContent = tDict.support;
+
     t.render(function() {
       t.getRestApi().isAuthorized().then(function(isAuth) {
         var badge          = document.getElementById('auth-status-badge');
@@ -59,11 +104,11 @@
         var connectWrap    = document.getElementById('btn-connect-wrapper');
 
         if (isAuth) {
-          badge.innerHTML = '<span class="status-ok">✅ Conta ligada</span>';
+          badge.innerHTML = '<span class="status-ok">' + tDict.connected + '</span>';
           disconnectWrap.style.display = 'block';
           connectWrap.style.display    = 'none';
         } else {
-          badge.innerHTML = '<span class="status-warn">⚠️ Conta não ligada</span>';
+          badge.innerHTML = '<span class="status-warn">' + tDict.disconnected + '</span>';
           disconnectWrap.style.display = 'none';
           connectWrap.style.display    = 'block';
         }
@@ -73,10 +118,10 @@
     document.getElementById('btn-disconnect').addEventListener('click', function() {
       var btn = this;
       btn.disabled = true;
-      btn.textContent = 'A desligar...';
+      btn.textContent = tDict.btnDisconnectLoading;
       t.getRestApi().clearToken()
         .then(function() { t.closeModal(); })
-        .catch(function() { btn.disabled = false; btn.textContent = '🔌 Desligar Conta'; });
+        .catch(function() { btn.disabled = false; btn.textContent = tDict.btnDisconnect; });
     });
 
     document.getElementById('btn-connect').addEventListener('click', function() {
