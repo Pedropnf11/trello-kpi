@@ -4,15 +4,29 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>KPI Master</title>
-  <link rel="stylesheet" href="./styles.css">
+  <!-- Importar fonte profissional do Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
   <style>
+    :root {
+      --bg-body: #f4f5f7;
+      --card-bg: #ffffff;
+      --border-color: #dfe1e6;
+      --text-main: #172b4d;
+      --text-sub: #5e6c84;
+      --primary: #0052cc;
+      --primary-hover: #0065ff;
+      --gradient-btn: linear-gradient(135deg, #0052cc, #0073e6);
+      --gradient-fast: linear-gradient(135deg, #ffffff, #f3faf6);
+      --gradient-slow: linear-gradient(135deg, #ffffff, #fff5f5);
+    }
+
     body {
       margin: 0;
       padding: 16px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #f4f5f7;
-      color: #172b4d;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
       box-sizing: border-box;
       height: 100vh;
       display: flex;
@@ -26,96 +40,211 @@
       gap: 16px;
     }
 
+    /* Cabeçalho Premium */
     .header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .header-top {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #dfe1e6;
     }
     
-    .header img {
-      width: 24px;
-      height: 24px;
-      border-radius: 4px;
+    .header-top img {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
     }
     
-    .header h1 {
-      font-size: 16px;
+    .header-top h1 {
+      font-size: 17px;
       font-weight: 700;
       margin: 0;
-      color: #172b4d;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
     }
 
+    /* Configuração rápida de listas no topo */
+    .selectors-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .select-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .select-group label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .custom-select {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 12px;
+      color: var(--text-main);
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .custom-select:focus {
+      border-color: var(--primary);
+    }
+
+    /* Área Central */
     .content-area {
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      gap: 14px;
+    }
+
+    /* Ecrã Não Autorizado */
+    .unauth-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(9, 30, 66, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       gap: 12px;
     }
 
-    /* Retângulos Grandes de Estatísticas */
-    .kpi-card {
-      background: white;
-      border-radius: 8px;
-      border: 1px solid #dfe1e6;
-      padding: 16px;
-      box-shadow: 0 1px 3px rgba(9, 30, 66, 0.08);
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .kpi-card.fastest {
-      border-left: 5px solid #00875a;
-    }
-    
-    .kpi-card.slowest {
-      border-left: 5px solid #de350b;
+    .unauth-card p {
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 1.5;
+      margin: 0;
     }
 
-    .kpi-label {
-      font-size: 11px;
+    /* Pequenos Contadores Rápidos */
+    .mini-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mini-stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 1px 3px rgba(9, 30, 66, 0.04);
+    }
+
+    .mini-stat-label {
+      font-size: 10px;
       font-weight: 700;
+      color: var(--text-sub);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-    
-    .kpi-label.fastest {
+
+    .mini-stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 4px;
+    }
+
+    /* Grandes Cartões de Velocidade */
+    .speed-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 18px;
+      box-shadow: 0 2px 6px rgba(9, 30, 66, 0.05);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s ease;
+    }
+
+    .speed-card.fastest {
+      background: var(--gradient-fast);
+      border-left: 5px solid #00875a;
+    }
+
+    .speed-card.slowest {
+      background: var(--gradient-slow);
+      border-left: 5px solid #de350b;
+    }
+
+    .speed-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .speed-label.fastest {
       color: #00875a;
     }
-    
-    .kpi-label.slowest {
+
+    .speed-label.slowest {
       color: #de350b;
     }
 
-    .kpi-value {
-      font-size: 26px;
+    .speed-value {
+      font-size: 28px;
       font-weight: 700;
-      color: #172b4d;
       margin: 6px 0;
+      letter-spacing: -0.02em;
     }
 
-    .kpi-desc {
-      font-size: 12px;
-      color: #5e6c84;
+    .speed-card.fastest .speed-value {
+      color: #006644;
+    }
+
+    .speed-card.slowest .speed-value {
+      color: #b31d00;
+    }
+
+    .speed-desc {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
+    /* Rodapé */
     .footer {
       padding-top: 12px;
-      border-top: 1px solid #dfe1e6;
+      border-top: 1px solid var(--border-color);
     }
 
     .btn-primary {
-      background: #0052cc;
-      color: white;
+      background: var(--gradient-btn);
+      color: #ffffff;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 12px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       display: block;
@@ -123,59 +252,92 @@
       text-align: center;
       text-decoration: none;
       box-sizing: border-box;
-      transition: background 0.15s ease;
+      transition: opacity 0.15s ease, transform 0.1s ease;
+      box-shadow: 0 2px 4px rgba(0, 82, 204, 0.2);
     }
     
     .btn-primary:hover {
-      background: #0073e6;
+      opacity: 0.95;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <!-- Header -->
+    <!-- Header com Selectores -->
     <div class="header">
-      <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
-      <h1 id="lbl-header-title">KPI Master</h1>
+      <div class="header-top">
+        <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
+        <h1>KPI Master</h1>
+      </div>
+      <div class="selectors-row">
+        <div class="select-group">
+          <label id="lbl-sel-leads">Leads List</label>
+          <select id="select-leads" class="custom-select">
+            <option value="">Loading...</option>
+          </select>
+        </div>
+        <div class="select-group">
+          <label id="lbl-sel-uninterested">Uninterested</label>
+          <select id="select-uninterested" class="custom-select">
+            <option value="">Loading...</option>
+          </select>
+        </div>
+      </div>
     </div>
 
-    <!-- Área de Conteúdo Central (Os Retângulos Grandes) -->
+    <!-- Área de Conteúdo Central -->
     <div class="content-area">
       
       <!-- Estado 1: Não Autorizado -->
-      <div id="stats-unauth" class="kpi-card" style="display: none; text-align: center; padding: 24px; gap: 8px;">
-        <span style="font-size: 28px;">🔒</span>
-        <p style="font-size: 13px; color: #5e6c84; margin: 0 0 8px 0;" id="lbl-stats-auth-desc">Connect account to see Leads Speed here.</p>
-        <button id="btn-stats-auth" class="btn-primary" style="padding: 8px 16px; width: auto; display: inline-block; margin: 0 auto;">🔗 Connect Account</button>
+      <div id="stats-unauth" class="unauth-card" style="display: none;">
+        <span style="font-size: 32px;">🔒</span>
+        <p id="lbl-stats-auth-desc">Connect account to see Leads Speed here.</p>
+        <button id="btn-stats-auth" class="btn-primary" style="padding: 8px 20px; width: auto;">🔗 Connect Account</button>
       </div>
 
       <!-- Estado 2: Sem Dados (Lista sem saídas) -->
-      <div id="stats-empty" class="kpi-card" style="display: none; text-align: center; padding: 24px; gap: 8px;">
-        <span style="font-size: 28px;">📈</span>
-        <p style="font-size: 13px; color: #5e6c84; margin: 0;" id="lbl-stats-empty-desc">Move cards out of your first list to see speed statistics.</p>
+      <div id="stats-empty" class="unauth-card" style="display: none;">
+        <span style="font-size: 32px;">📈</span>
+        <p id="lbl-stats-empty-desc">Move cards out of your first list to see speed statistics.</p>
       </div>
 
-      <!-- Estado 3: Dados Autorizados e Prontos (Dois Retângulos Grandes) -->
+      <!-- Estado 3: Dados Autorizados -->
       <div id="stats-data" style="display: flex; flex-direction: column; gap: 12px;">
-        <!-- Retângulo Rápido -->
-        <div class="kpi-card fastest">
-          <span class="kpi-label fastest" id="lbl-fastest-title">⚡ Fastest Lead to Leave</span>
-          <div class="kpi-value" id="val-fastest-time">—</div>
-          <div class="kpi-desc" id="val-fastest-name">—</div>
+        <!-- Pequenos Contadores Rápidos -->
+        <div class="mini-stats-grid">
+          <div class="mini-stat-card">
+            <span class="mini-stat-label" id="lbl-total-leads">Active Leads</span>
+            <div class="mini-stat-value" id="val-total-leads">0</div>
+          </div>
+          <div class="mini-stat-card">
+            <span class="mini-stat-label" id="lbl-total-uninterested">Uninterested</span>
+            <div class="mini-stat-value" id="val-total-uninterested" style="color: #5e6c84;">0</div>
+          </div>
         </div>
 
-        <!-- Retângulo Lento -->
-        <div class="kpi-card slowest">
-          <span class="kpi-label slowest" id="lbl-slowest-title">🐢 Slowest Lead to Leave</span>
-          <div class="kpi-value" id="val-slowest-time">—</div>
-          <div class="kpi-desc" id="val-slowest-name">—</div>
+        <!-- Cartão Rápido -->
+        <div class="speed-card fastest">
+          <span class="speed-label fastest" id="lbl-fastest-title">⚡ Fastest Lead to Leave</span>
+          <div class="speed-value" id="val-fastest-time">—</div>
+          <div class="speed-desc" id="val-fastest-name">—</div>
+        </div>
+
+        <!-- Cartão Lento -->
+        <div class="speed-card slowest">
+          <span class="speed-label slowest" id="lbl-slowest-title">🐢 Slowest Lead to Leave</span>
+          <div class="speed-value" id="val-slowest-time">—</div>
+          <div class="speed-desc" id="val-slowest-name">—</div>
         </div>
       </div>
 
     </div>
 
-    <!-- Footer (Retângulo Pequeno no fundo para abrir a dashboard principal) -->
+    <!-- Footer -->
     <div class="footer">
       <a id="btn-open" class="btn-primary" href="https://kpismaster.vercel.app" target="_blank">🚀 Open Full Dashboard</a>
     </div>
@@ -198,7 +360,11 @@
         lblSlowestTitle: '🐢 Lead Mais Lento a Sair',
         lblStatsAuthDesc: 'Liga a tua conta Trello para veres a velocidade das leads aqui.',
         btnStatsAuth: '🔗 Ligar Conta',
-        lblStatsEmptyDesc: 'Move cartões para fora da primeira lista para veres estatísticas de velocidade das leads.'
+        lblStatsEmptyDesc: 'Move cartões para fora da primeira lista para veres estatísticas de velocidade das leads.',
+        lblSelLeads: 'Lista de Leads',
+        lblSelUninterested: 'Sem Interesse',
+        lblTotalLeads: 'Leads Ativas',
+        lblTotalUninterested: 'Sem Interesse'
       },
       en: {
         btnOpen: '🚀 Open Full Dashboard',
@@ -206,19 +372,29 @@
         lblSlowestTitle: '🐢 Slowest Lead to Leave',
         lblStatsAuthDesc: 'Connect your Trello account to see Leads Speed metrics here.',
         btnStatsAuth: '🔗 Connect Account',
-        lblStatsEmptyDesc: 'Move cards out of your first list to see speed statistics.'
+        lblStatsEmptyDesc: 'Move cards out of your first list to see speed statistics.',
+        lblSelLeads: 'Leads List',
+        lblSelUninterested: 'Uninterested',
+        lblTotalLeads: 'Active Leads',
+        lblTotalUninterested: 'Uninterested'
       }
     };
 
     var tDict = isPt ? translations.pt : translations.en;
 
-    // Aplicar Traduções Iniciais
+    // Aplicar Traduções
     document.getElementById('btn-open').textContent = tDict.btnOpen;
     document.getElementById('lbl-fastest-title').textContent = tDict.lblFastestTitle;
     document.getElementById('lbl-slowest-title').textContent = tDict.lblSlowestTitle;
     document.getElementById('lbl-stats-auth-desc').textContent = tDict.lblStatsAuthDesc;
     document.getElementById('btn-stats-auth').textContent = tDict.btnStatsAuth;
     document.getElementById('lbl-stats-empty-desc').textContent = tDict.lblStatsEmptyDesc;
+    document.getElementById('lbl-sel-leads').textContent = tDict.lblSelLeads;
+    document.getElementById('lbl-sel-uninterested').textContent = tDict.lblSelUninterested;
+    document.getElementById('lbl-total-leads').textContent = tDict.lblTotalLeads;
+    document.getElementById('lbl-total-uninterested').textContent = tDict.lblTotalUninterested;
+
+    var state = { boardId: null, token: null, lists: [], leadsListId: null, uninterestedListId: null };
 
     t.render(function () {
       t.sizeTo(document.body).catch(function () { });
@@ -228,21 +404,32 @@
           document.getElementById('btn-open').href = SITE;
           return;
         }
+        state.boardId = board.id;
         document.getElementById('btn-open').href = SITE + '#board=' + board.id;
 
-        checkAuthAndLoadStats(board.id);
+        checkAuthAndLoadStats();
       }).catch(function () {
         document.getElementById('btn-open').href = SITE;
       });
     });
 
-    function checkAuthAndLoadStats(boardId) {
+    function checkAuthAndLoadStats() {
       t.getRestApi().isAuthorized().then(function(isAuth) {
         if (isAuth) {
           t.getRestApi().getToken().then(function(token) {
             if (token) {
+              state.token = token;
               document.getElementById('stats-unauth').style.display = 'none';
-              loadLeadStats(boardId, token);
+              
+              // Obter as configurações salvas das listas para este board
+              Promise.all([
+                t.get('board', 'shared', 'kpi_lead_list_id').catch(function() { return null; }),
+                t.get('board', 'shared', 'kpi_uninterested_list_id').catch(function() { return null; })
+              ]).then(function(saved) {
+                state.leadsListId = saved[0];
+                state.uninterestedListId = saved[1];
+                loadBoardData();
+              });
             } else {
               showUnauth();
             }
@@ -263,17 +450,13 @@
     document.getElementById('btn-stats-auth').addEventListener('click', function() {
       t.getRestApi().authorize({ scope: 'read', expiration: 'never' })
         .then(function() {
-          t.board('id').then(function(board) {
-            if (board && board.id) {
-              checkAuthAndLoadStats(board.id);
-            }
-          });
+          checkAuthAndLoadStats();
         });
     });
 
-    function loadLeadStats(boardId, token) {
-      // 1. Obter listas do quadro (a primeira lista é a de leads por defeito)
-      fetch('https://api.trello.com/1/boards/' + boardId + '/lists?key=' + KEY + '&token=' + token)
+    function loadBoardData() {
+      // 1. Obter listas do quadro
+      fetch('https://api.trello.com/1/boards/' + state.boardId + '/lists?key=' + KEY + '&token=' + state.token)
         .then(function(r) { 
           if (r.status === 401) {
             t.getRestApi().clearToken();
@@ -284,14 +467,25 @@
         })
         .then(function(lists) {
           if (!lists || lists.length === 0) return;
-          var leadListId = lists[0].id;
-          var leadListName = lists[0].name;
+          state.lists = lists;
 
-          // Atualizar o título do cabeçalho com o nome da lista onde as leads chegam
-          document.getElementById('lbl-header-title').textContent = 'KPI Master (' + leadListName + ')';
+          // Se não houver configuração salva, define as predefinidas:
+          // Leads = primeira lista. Sem interesse = lista com nome "sem interesse" (ou a última)
+          if (!state.leadsListId) {
+            state.leadsListId = lists[0].id;
+          }
+          if (!state.uninterestedListId) {
+            var found = lists.find(function(l) { 
+              var name = l.name.toLowerCase();
+              return name.indexOf('interesse') !== -1 || name.indexOf('descart') !== -1 || name.indexOf('uninterested') !== -1;
+            });
+            state.uninterestedListId = found ? found.id : lists[lists.length - 1].id;
+          }
+
+          populateSelectors();
 
           // 2. Obter cartas do quadro com o respetivo histórico de ações
-          fetch('https://api.trello.com/1/boards/' + boardId + '/cards?actions=updateCard,createCard&key=' + KEY + '&token=' + token)
+          fetch('https://api.trello.com/1/boards/' + state.boardId + '/cards?actions=updateCard,createCard&key=' + KEY + '&token=' + state.token)
             .then(function(r) {
               if (r.status === 401) {
                 t.getRestApi().clearToken();
@@ -301,17 +495,63 @@
               return r.json();
             })
             .then(function(cards) {
-              calculateLeadTimes(cards, leadListId);
+              calculateDashboardMetrics(cards);
             })
             .catch(function(err) { console.error('Erro ao ler cartas:', err); });
         })
         .catch(function(err) { console.error('Erro ao ler listas:', err); });
     }
 
-    function calculateLeadTimes(cards, leadListId) {
+    function populateSelectors() {
+      var selectLeads = document.getElementById('select-leads');
+      var selectUninterested = document.getElementById('select-uninterested');
+
+      selectLeads.innerHTML = '';
+      selectUninterested.innerHTML = '';
+
+      state.lists.forEach(function(l) {
+        var optLeads = document.createElement('option');
+        optLeads.value = l.id;
+        optLeads.textContent = l.name;
+        if (l.id === state.leadsListId) optLeads.selected = true;
+        selectLeads.appendChild(optLeads);
+
+        var optUninterested = document.createElement('option');
+        optUninterested.value = l.id;
+        optUninterested.textContent = l.name;
+        if (l.id === state.uninterestedListId) optUninterested.selected = true;
+        selectUninterested.appendChild(optUninterested);
+      });
+    }
+
+    // Ouvir alterações nos seletores de listas
+    document.getElementById('select-leads').addEventListener('change', function(e) {
+      var val = e.target.value;
+      state.leadsListId = val;
+      t.set('board', 'shared', 'kpi_lead_list_id', val).then(function() {
+        loadBoardData();
+      });
+    });
+
+    document.getElementById('select-uninterested').addEventListener('change', function(e) {
+      var val = e.target.value;
+      state.uninterestedListId = val;
+      t.set('board', 'shared', 'kpi_uninterested_list_id', val).then(function() {
+        loadBoardData();
+      });
+    });
+
+    function calculateDashboardMetrics(cards) {
+      var activeLeadsCount = 0;
+      var uninterestedCount = 0;
       var durations = [];
 
       cards.forEach(function(card) {
+        // Contagem básica nas listas ativas
+        if (card.idList === state.leadsListId) activeLeadsCount++;
+        if (card.idList === state.uninterestedListId) uninterestedCount++;
+
+        // Cálculo de velocidades para a lista de Leads selecionada
         var actions = card.actions || [];
         actions.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
 
@@ -325,14 +565,14 @@
         if (!firstMove) return;
 
         var entryDate = null;
-        if (firstMove.data.listBefore.id === leadListId) {
+        if (firstMove.data.listBefore.id === state.leadsListId) {
           entryDate = dateCreated;
         }
 
         var currentEntry = entryDate;
         actions.forEach(function(act) {
           if (act.type === 'updateCard' && act.data) {
-            if (act.data.listBefore && act.data.listBefore.id === leadListId && currentEntry) {
+            if (act.data.listBefore && act.data.listBefore.id === state.leadsListId && currentEntry) {
               var exitDate = new Date(act.date);
               var hours = (exitDate - currentEntry) / (1000 * 60 * 60);
               if (hours > 0) {
@@ -343,15 +583,18 @@
               }
               currentEntry = null;
             }
-            if (act.data.listAfter && act.data.listAfter.id === leadListId) {
+            if (act.data.listAfter && act.data.listAfter.id === state.leadsListId) {
               currentEntry = new Date(act.date);
             }
           }
         });
       });
 
+      // Atualizar mini contadores
+      document.getElementById('val-total-leads').textContent = activeLeadsCount;
+      document.getElementById('val-total-uninterested').textContent = uninterestedCount;
+
       if (durations.length === 0) {
-        // Mostrar ecrã de aviso caso não haja dados
         document.getElementById('stats-data').style.display = 'none';
         document.getElementById('stats-unauth').style.display = 'none';
         document.getElementById('stats-empty').style.display = 'block';
