@@ -45,10 +45,10 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
     // ⚠️ appKey e appName são OBRIGATÓRIOS em todos os iframes
     var t = TrelloPowerUp.iframe({
-      appKey:  '2506cfe6cf90e4290792e5bec8ace956',
+      appKey:  import.meta.env.VITE_TRELLO_API_KEY,
       appName: 'KPI Master'
     });
 

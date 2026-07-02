@@ -59,7 +59,12 @@ UI.renderSalesDashboard = function (state) {
                         <button id="atualizarBtn" class="p-2 rounded-lg text-gray-400 hover:text-white transition-all" title="${t('Atualizar Dados', 'Refresh Data')}">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                         </button>
-                        
+
+                        <button id="importLeadBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 md:px-4 md:py-2 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all border border-emerald-400/20">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            <span class="hidden md:inline">${t('Importar CSV', 'Import CSV')}</span>
+                        </button>
+                         
                           <div class="relative group z-50 ml-2">
                             <button class="bg-[#1e293b] border border-gray-700 text-gray-200 px-3 py-2 rounded-lg hover:bg-gray-800 text-sm font-bold flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>

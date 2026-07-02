@@ -24,6 +24,13 @@ export default defineConfig({
         },
 
         rollupOptions: {
+            input: {
+                main: 'index.html',
+                'trello/index': 'trello/index.html',
+                'trello/auth': 'trello/auth.html',
+                'trello/dashboard': 'trello/dashboard.html',
+                'trello/settings': 'trello/settings.html'
+            },
             output: {
 
                 entryFileNames: 'assets/[name]-[hash].js',

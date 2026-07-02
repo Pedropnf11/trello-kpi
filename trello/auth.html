@@ -18,17 +18,17 @@
       <button id="btn-auth" class="btn btn-primary">🔗 Autorizar Acesso</button>
       <p style="font-size:11px; color:#97a0af; text-align:center;">Só são lidos dados do board. Nada é alterado.</p>
     </div>
+    <a href="https://kpismaster.vercel.app" target="_blank" class="link">Saber mais sobre o KPI Master →</a>
   </div>
 
   <div id="auth-error" class="error-msg" style="display:none; margin-top:12px;">
     Erro na autenticação. Tenta novamente.
   </div>
 
-  <script>
-    var POWERUP_URL = 'https://kpismaster.vercel.app/trello';
-
+  <script type="module">
+    // ⚠️ appKey e appName são OBRIGATÓRIOS em todos os iframes
     var t = TrelloPowerUp.iframe({
-      appKey:  '2506cfe6cf90e4290792e5bec8ace956',
+      appKey:  import.meta.env.VITE_TRELLO_API_KEY,
       appName: 'KPI Master'
     });
 
@@ -41,14 +41,7 @@
         scope:      'read',
         expiration: 'never'
       }).then(function() {
-        // ✅ Após autorizar — redirecionar diretamente para o dashboard
-        // em vez de fechar o modal (que ia para a LP)
-        t.modal({
-          title:      'KPI Master',
-          url:        POWERUP_URL + '/dashboard.html',
-          height:     620,
-          fullscreen: false
-        });
+        t.closeModal();
       }).catch(function(err) {
         console.error('Auth error:', err);
         btn.disabled = false;

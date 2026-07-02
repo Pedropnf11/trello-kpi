@@ -1,32 +1,24 @@
 UI.renderConfig = function (state) {
-    // Se estivermos a carregar, mostrar spinner
     if (state.loading) {
         return `
             <div class="min-h-screen flex flex-col items-center justify-center bg-[#05070a] relative overflow-hidden">
-                <!-- Decorative Glow -->
                 <div class="absolute w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none"></div>
 
                 <div class="relative z-10 text-center flex flex-col items-center">
-                    <!-- Glowing Icon -->
                     <div class="mb-8 relative">
                         <div class="absolute inset-0 bg-blue-500 blur-xl opacity-50 rounded-full"></div>
                         <img src="favicon.png" alt="Logo" class="w-20 h-20 relative z-10 rounded-2xl shadow-2xl">
                     </div>
 
-                    <!-- Title -->
                     <h2 class="text-3xl font-black text-white tracking-widest mb-2 uppercase drop-shadow-md">KPI Master</h2>
                     
-                    <!-- Subtitle -->
                     <p class="text-sm text-gray-400 font-medium tracking-wide mb-8 animate-pulse">${(UI._lpLang || 'pt') === 'en' ? 'Loading your boards...' : 'A carregar os seus quadros...'}</p>
 
-                    <!-- Progress Bar -->
                     <div class="w-64 h-1 bg-gray-800 rounded-full overflow-hidden relative">
-                         <!-- Indeterminate Loading Animation -->
                         <div class="absolute top-0 left-0 h-full w-1/3 bg-blue-500 rounded-full animate-[slide_1.5s_ease-in-out_infinite]" style="animation: loadingBar 2s infinite ease-in-out;"></div>
                     </div>
                 </div>
 
-                <!-- Custom Animation Style for this specific view -->
                  <style>
                     @keyframes loadingBar {
                         0% { left: -30%; width: 30%; }
@@ -38,16 +30,13 @@ UI.renderConfig = function (state) {
         `;
     }
 
-    // Se já tivermos token mas falta escolher o quadro
     if (state.token && !state.boardId) {
         return UI.renderBoardSelector(state);
     }
 
-    // Line 47
     return `
             <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
                 <div class="bg-white rounded-[2rem] shadow-2xl p-12 max-w-md w-full border border-gray-100 text-center relative overflow-hidden">
-                    <!-- Decorative Background Element -->
                     <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
 
                 <div class="mb-12 relative z-10">
@@ -113,6 +102,12 @@ UI.renderBoardSelector = function (state) {
                     </div>
                 </div>
 
+                ${state.error ? `
+                    <div class="mb-6 bg-red-50 border border-red-100 text-red-700 px-4 py-3 rounded-2xl text-sm font-medium">
+                        ${Utils.escapeHtml(state.error)}
+                    </div>
+                ` : ''}
+
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 overflow-y-auto pr-2 custom-scrollbar flex-1 pb-4">
                     ${boards.length > 0 ? boards.map(board => `
                         <div class="board-card group cursor-pointer bg-white border-2 border-gray-100 p-6 rounded-2xl hover:border-blue-500 hover:shadow-lg transition-all relative overflow-hidden flex flex-col justify-between h-40"
@@ -160,7 +155,7 @@ UI.renderManualConfig = function (state) {
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-1">Token</label>
                         <input type="text" id="token" value="${state.token}" placeholder="${(UI._lpLang || 'pt') === 'en' ? 'Paste your token here' : 'Cola o teu token aqui'}" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
-                            <a href="https://trello.com/1/authorize?expiration=${TrelloConfig?.expiration || '30days'}&scope=read&response_type=token&key=${state.apiKey}" target="_blank" rel="noopener noreferrer" class="text-xs text-blue-600 hover:underline mt-1 inline-block">${(UI._lpLang || 'pt') === 'en' ? 'Generate Token Manually' : 'Gerar Token Manualmente'}</a>
+                            <a href="https://trello.com/1/authorize?expiration=${TrelloConfig?.expiration || '30days'}&scope=${TrelloConfig?.scope || 'read,write'}&response_type=token&key=${state.apiKey}" target="_blank" rel="noopener noreferrer" class="text-xs text-blue-600 hover:underline mt-1 inline-block">${(UI._lpLang || 'pt') === 'en' ? 'Generate Token Manually' : 'Gerar Token Manualmente'}</a>
                     </div>
                     <div>
                         <input type="text" id="boardId" value="${state.boardId}" placeholder="${(UI._lpLang || 'pt') === 'en' ? 'Board ID' : 'ID do Quadro'}" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
@@ -191,7 +186,6 @@ UI.renderRoleSelectorScreen = function () {
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-8">
-                    <!-- Card Gestor -->
                     <button onclick="App.setRole('manager')" class="group relative flex flex-col items-center p-8 bg-white border-2 border-slate-100 rounded-[2rem] hover:border-blue-500 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 w-full text-center">
                         <div class="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-600 mb-6 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
@@ -204,7 +198,6 @@ UI.renderRoleSelectorScreen = function () {
                         </div>
                     </button>
 
-                    <!-- Card Vendedor -->
                     <button onclick="App.setRole('sales')" class="group relative flex flex-col items-center p-8 bg-white border-2 border-slate-100 rounded-[2rem] hover:border-green-500 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 w-full text-center">
                         <div class="w-16 h-16 rounded-2xl bg-green-50 flex items-center justify-center text-green-600 mb-6 group-hover:bg-green-100 transition-colors">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>

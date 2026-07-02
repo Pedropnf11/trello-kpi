@@ -1,15 +1,12 @@
-// Application Core & State Management
 window.App = window.App || {};
 
-// Configuração via Vite (.env)
 const TrelloConfig = {
     apiKey: import.meta.env.VITE_TRELLO_API_KEY,
     appName: 'KPI Master Dashboard',
-    scope: 'read',
+    scope: 'read,write',
     expiration: '30days'
 };
 
-// Helper para prevenir crashes por localStorage corrompido
 function safeJSONParse(key, defaultValue) {
     try {
         const item = localStorage.getItem(key);
@@ -20,28 +17,24 @@ function safeJSONParse(key, defaultValue) {
     }
 }
 
-// Validação de webhooks - apenas Make e Zapier
 function isValidWebhookUrl(url) {
-    if (!url || url.trim() === '') return true; // Permite vazio (webhook opcional)
+    if (!url || url.trim() === '') return true;
 
     try {
         const parsed = new URL(url);
 
-        // Whitelist de domínios permitidos
         const allowedDomains = [
             'hook.make.com',
             'hooks.zapier.com'
         ];
 
-        // Verifica se o hostname é ou termina com um dos domínios permitidos
         const isAllowed = allowedDomains.some(domain =>
             parsed.hostname === domain || parsed.hostname.endsWith('.' + domain)
         );
 
-        // Deve ser HTTPS e domínio permitido
         return isAllowed && parsed.protocol === 'https:';
     } catch {
-        return false; // URL inválido
+        return false;
     }
 }
 
@@ -61,11 +54,11 @@ App.state = {
     chatOpen: false,
     chatHistory: [],
     availableBoards: [],
-    userRole: localStorage.getItem('trello_user_role') || null, // Guardar role no storage
+    userRole: localStorage.getItem('trello_user_role') || null,
     funnelConfig: safeJSONParse('trello_funnel_config', null),
     hiddenFunnelLists: safeJSONParse('trello_hidden_funnel_lists', []),
     timeTrackingLists: safeJSONParse('trello_time_tracking_lists', { left: null, right: null }),
-    viewMode: 'dashboard' // 'dashboard' or 'graphs'
+    viewMode: 'dashboard'
 };
 
 App.init = function () {
@@ -75,17 +68,14 @@ App.init = function () {
         if (token) {
             this.state.token = token;
             localStorage.setItem('trello_token', token);
-            // Limpar hash de forma segura sem deixar no histórico
             window.history.replaceState(null, '', window.location.pathname);
         }
     }
 
     if (this.state.token) {
-        // Se já temos token, verificamos se temos role
         if (!this.state.userRole) {
-            this.render(); // Vai renderizar o seletor de role
+            this.render();
         } else if (this.state.boardId) {
-            // Se já temos boardId guardado, tentamos conectar direto
             this.selecionarBoard(this.state.boardId);
         } else {
             this.listarBoards();
@@ -114,16 +104,17 @@ App.render = function () {
         return;
     }
 
-    // NOVA LÓGICA: Se tem token mas não tem role, mostra seleção de ROLE
     if (this.state.token && !this.state.userRole) {
-        app.innerHTML = UI.renderRoleSelectorScreen(); // Novo ecrã a criar
+        app.innerHTML = UI.renderRoleSelectorScreen();
         return;
     }
 
-    if (!this.state.boardId || (this.state.availableBoards && this.state.availableBoards.length > 0 && !this.state.kpis)) {
-        app.innerHTML = UI.renderConfig(this.state); // Renderiza selector de boards
-        this.attachBoardEvents();
-        return;
+    if (!this.state.boardId || (!this.state.kpis && !this.state.loading)) {
+        if (!this.state.boardId) {
+            app.innerHTML = UI.renderConfig(this.state);
+            this.attachBoardEvents();
+            return;
+        }
     }
 
     if (this.state.kpis) {
@@ -134,11 +125,11 @@ App.render = function () {
         }
         this.attachDashboardEvents();
         this.attachDynamicEvents();
-    } else {
-        app.innerHTML = UI.renderConfig(this.state);
-        if (!this.state.token) this.attachLoginEvents();
-        else this.attachBoardEvents();
+        return;
     }
+
+    app.innerHTML = UI.renderConfig(this.state);
+    this.attachBoardEvents();
 };
 
 App.attachDynamicEvents = function () {
@@ -250,7 +241,7 @@ App.attachLoginEvents = function () {
     const navBtn = document.getElementById('navLoginBtn');
     if (navBtn) navBtn.addEventListener('click', loginHandler);
 
-    // Landing Page: navbar mobile dropdown button  ← FIX
+    // Landing Page: navbar mobile dropdown button
     const navBtnMob = document.getElementById('navLoginBtnMob');
     if (navBtnMob) navBtnMob.addEventListener('click', loginHandler);
 
@@ -306,7 +297,6 @@ App.attachManualEvents = function () {
             this.state.boardId = boardId;
             this.state.webhookUrl = webhookUrl;
 
-            // Persistir configuração
             localStorage.setItem('trello_webhook_url', webhookUrl);
 
             this.conectarTrello();
@@ -319,7 +309,6 @@ App.attachBoardEvents = function () {
     boardCards.forEach(card => {
         card.addEventListener('click', () => {
             const boardId = card.getAttribute('data-id');
-            // AGORA JA SABEMOS O ROLE, ENTRA DIRETO
             this.selecionarBoard(boardId);
         });
     });
@@ -402,7 +391,6 @@ App.attachDashboardEvents = function () {
         saveSettingsBtn.addEventListener('click', () => {
             const newUrl = dashboardWebhookUrl.value.trim();
 
-            // Validar webhook URL antes de guardar
             if (newUrl && !isValidWebhookUrl(newUrl)) {
                 alert('❌ URL de webhook inválido!\n\nApenas são permitidos webhooks de:\n• Make.com (https://hook.make.com/...)\n• Zapier (https://hooks.zapier.com/...)');
                 return;
@@ -411,7 +399,6 @@ App.attachDashboardEvents = function () {
             this.state.webhookUrl = newUrl;
             localStorage.setItem('trello_webhook_url', newUrl);
 
-            // Feedback Visual
             const originalText = saveSettingsBtn.innerHTML;
             saveSettingsBtn.innerHTML = '✔ Guardado!';
             saveSettingsBtn.classList.remove('bg-blue-600', 'hover:bg-blue-500');
@@ -610,7 +597,7 @@ App.attachDashboardEvents = function () {
 
             if (!validation.valid) {
                 alert(validation.message);
-                startDate.value = this.state.startDate; // Reverter
+                startDate.value = this.state.startDate;
                 return;
             }
 
@@ -626,7 +613,7 @@ App.attachDashboardEvents = function () {
 
             if (!validation.valid) {
                 alert(validation.message);
-                endDate.value = this.state.endDate; // Reverter
+                endDate.value = this.state.endDate;
                 return;
             }
 
@@ -651,6 +638,11 @@ App.attachDashboardEvents = function () {
         atualizarBtn.addEventListener('click', () => {
             this.conectarTrello();
         });
+    }
+
+    const importLeadBtn = document.getElementById('importLeadBtn');
+    if (importLeadBtn && this.openLeadImportModal) {
+        importLeadBtn.addEventListener('click', () => this.openLeadImportModal());
     }
 
     const exportarBtn = document.getElementById('exportarBtn');
@@ -687,12 +679,23 @@ App.attachDashboardEvents = function () {
 };
 
 App.setRole = function (role) {
+    this.state.boardId = '';
+    this.state.kpis = null;
+    this.state.availableBoards = [];
+    localStorage.removeItem('trello_board_id');
+
+    if (!role) {
+        this.state.userRole = null;
+        localStorage.removeItem('trello_user_role');
+        this.render();
+        return;
+    }
+
     this.state.userRole = role;
     localStorage.setItem('trello_user_role', role);
-    this.listarBoards(); // Agora que temos role, vamos buscar os boards
+    this.listarBoards();
 };
 
-// Função legacy para compatibilidade, caso algum modal antigo chame
 App.confirmRole = function (boardId, role) {
     this.selecionarBoard(boardId);
 };

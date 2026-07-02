@@ -1,6 +1,5 @@
 // Trello API Interactions
 const TrelloAPI = {
-    // Rate limiting
     _requestCount: 0,
     _lastReset: Date.now(),
     _MAX_REQUESTS_PER_MINUTE: 100,
@@ -8,7 +7,6 @@ const TrelloAPI = {
     _checkRateLimit() {
         const now = Date.now();
 
-        // Reset counter every minute
         if (now - this._lastReset > 60000) {
             this._requestCount = 0;
             this._lastReset = now;
@@ -21,13 +19,11 @@ const TrelloAPI = {
         this._requestCount++;
     },
 
-    // Input validation
     _validateId(id, type = 'ID') {
         if (!id || typeof id !== 'string') {
             throw new Error(`Invalid ${type}: must be a string`);
         }
 
-        // Trello IDs are 24 character alphanumeric
         if (!/^[a-zA-Z0-9]{24}$/.test(id)) {
             throw new Error(`Invalid ${type} format`);
         }
@@ -40,7 +36,14 @@ const TrelloAPI = {
 
         const res = await fetch(url);
         if (!res.ok) {
-            const error = new Error(`Request failed with status ${res.status}`);
+            let details = '';
+            try {
+                details = await res.text();
+            } catch {
+                details = '';
+            }
+
+            const error = new Error(details || `Request failed with status ${res.status}`);
             error.status = res.status;
             throw error;
         }
@@ -48,12 +51,33 @@ const TrelloAPI = {
     },
 
     async fetchBoards(apiKey, token) {
-        // Fetch open boards for the user with memberships to check admin status
-        return this._fetch(`https://api.trello.com/1/members/me/boards?filter=open&fields=id,name,dateLastActivity,memberships&key=${apiKey}&token=${token}`);
+        const params = new URLSearchParams({
+            filter: 'open',
+            fields: 'id,name,dateLastActivity,memberships',
+            lists: 'none',
+            organization: 'false',
+            key: apiKey,
+            token
+        });
+
+        try {
+            return await this._fetch(`https://api.trello.com/1/members/me/boards?${params.toString()}`);
+        } catch (err) {
+            if (err.status !== 400 && err.status !== 401) throw err;
+
+            params.set('fields', 'id,name,dateLastActivity');
+            return this._fetch(`https://api.trello.com/1/members/me/boards?${params.toString()}`);
+        }
     },
 
     async fetchUserInfo(apiKey, token) {
-        return this._fetch(`https://api.trello.com/1/members/me?key=${apiKey}&token=${token}`);
+        const params = new URLSearchParams({
+            fields: 'id,username,fullName',
+            key: apiKey,
+            token
+        });
+
+        return this._fetch(`https://api.trello.com/1/members/me?${params.toString()}`);
     },
 
     async fetchLists(apiKey, token, boardId) {
@@ -71,8 +95,6 @@ const TrelloAPI = {
     async fetchCards(apiKey, token, boardId) {
         const validBoardId = this._validateId(boardId, 'Board ID');
 
-        // Limit increased to 1000 actions to get better history
-        // Corrected actions parameter: 'updateCard:idList' -> 'updateCard' to avoid 403 errors
         return this._fetch(
             `https://api.trello.com/1/boards/${validBoardId}/cards?members=true&actions=commentCard,createCard,updateCard&actions_limit=1000&actions_memberCreator=true&key=${apiKey}&token=${token}`
         );
@@ -86,14 +108,30 @@ const TrelloAPI = {
         );
     },
 
-    async createCard(apiKey, token, listId, name, desc) {
+    async createCard(apiKey, token, listId, name, desc, due = null, memberIds = []) {
         const validListId = this._validateId(listId, 'List ID');
 
         this._checkRateLimit();
 
-        const url = `https://api.trello.com/1/cards?idList=${validListId}&name=${encodeURIComponent(name)}&desc=${encodeURIComponent(desc)}&key=${apiKey}&token=${token}`;
+        let url = `https://api.trello.com/1/cards?idList=${validListId}&name=${encodeURIComponent(name)}&desc=${encodeURIComponent(desc)}&key=${apiKey}&token=${token}`;
+        if (due) url += `&due=${encodeURIComponent(due)}`;
+        if (memberIds.length) {
+            const validMemberIds = memberIds.map(id => this._validateId(id, 'Member ID'));
+            url += `&idMembers=${encodeURIComponent(validMemberIds.join(','))}`;
+        }
         const res = await fetch(url, { method: 'POST' });
-        if (!res.ok) throw new Error('Failed to create card');
+        if (!res.ok) {
+            let details = '';
+            try {
+                details = await res.text();
+            } catch {
+                details = '';
+            }
+
+            const error = new Error(details || 'Failed to create card');
+            error.status = res.status;
+            throw error;
+        }
         return await res.json();
     },
 
@@ -104,10 +142,20 @@ const TrelloAPI = {
 
         const url = `https://api.trello.com/1/cards/${validCardId}/actions/comments?text=${encodeURIComponent(text)}&key=${apiKey}&token=${token}`;
         const res = await fetch(url, { method: 'POST' });
-        if (!res.ok) throw new Error('Failed to add comment');
+        if (!res.ok) {
+            let details = '';
+            try {
+                details = await res.text();
+            } catch {
+                details = '';
+            }
+
+            const error = new Error(details || 'Failed to add comment');
+            error.status = res.status;
+            throw error;
+        }
         return await res.json();
     }
 };
 
-// Expose to window for global access
 window.TrelloAPI = TrelloAPI;

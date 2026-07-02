@@ -12,7 +12,7 @@
 </head>
 
 <body>
-  <script>
+  <script type="module">
     var POWERUP_URL = 'https://kpismaster.vercel.app/trello';
     var SITE_URL    = 'https://kpismaster.vercel.app';
 
@@ -73,7 +73,7 @@
 
     }, {
       appName: 'KPI Master',
-      appKey:  '2506cfe6cf90e4290792e5bec8ace956'
+      appKey:  import.meta.env.VITE_TRELLO_API_KEY
     });
   </script>
 </body>

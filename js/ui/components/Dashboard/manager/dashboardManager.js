@@ -60,6 +60,11 @@ UI.renderManagerDashboard = function (state) {
                         </button>
                         
                         <!-- BOTÃO GRÁFICOS -->
+                        <button id="importLeadBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 md:px-4 md:py-2 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all border border-emerald-400/20">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            <span class="hidden md:inline">${t('Importar CSV', 'Import CSV')}</span>
+                        </button>
+
                         <button id="goToGraphsBtn" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 md:px-4 md:py-2 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all border border-blue-400/20">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
                             <span class="hidden md:inline">Analytics</span>

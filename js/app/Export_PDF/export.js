@@ -58,15 +58,38 @@ App.exportarPDF = async function (returnContent = false) {
                         el.style.webkitBackdropFilter = 'none';
                     }
 
-                    // 2. Remover Gradientes Complexos (Causa do erro addColorStop)
-                    // Se tiver gradient, mete cor sólida segura
-                    if (style.backgroundImage && style.backgroundImage.includes('gradient')) {
+                    // 2. Remover apenas radial-gradients ou outros complexos (deixa linear-gradient padrão)
+                    if (style.backgroundImage && style.backgroundImage.includes('gradient') && style.backgroundImage.includes('radial')) {
                         el.style.backgroundImage = 'none';
-                        // Se não tiver cor de fundo definida (era só gradient), mete um fundo escuro padrão
                         if (style.backgroundColor === 'rgba(0, 0, 0, 0)' || style.backgroundColor === 'transparent') {
                             el.style.backgroundColor = '#1e293b'; // Slate-800 safe fallback
                         }
                     }
+                });
+
+                // Substituir todos os <select> por texto estático para evitar desalinhamento no html2canvas
+                const selects = doc.querySelectorAll('select');
+                selects.forEach(select => {
+                    const selectedText = select.options[select.selectedIndex]?.text || '';
+                    const textSpan = doc.createElement('span');
+                    textSpan.className = select.className;
+                    textSpan.textContent = selectedText;
+                    
+                    // Copiar estilos principais para alinhamento perfeito
+                    textSpan.style.display = 'inline-block';
+                    textSpan.style.fontSize = window.getComputedStyle(select).fontSize;
+                    textSpan.style.fontWeight = window.getComputedStyle(select).fontWeight;
+                    textSpan.style.color = window.getComputedStyle(select).color;
+                    
+                    // Ocultar a seta do select se for um container relativo
+                    const parent = select.parentElement;
+                    if (parent) {
+                        const svg = parent.querySelector('svg');
+                        if (svg) svg.style.display = 'none';
+                    }
+                    
+                    select.parentNode.insertBefore(textSpan, select);
+                    select.style.display = 'none';
                 });
 
                 // 1. INJETAR CABEÇALHO DO RELATÓRIO
@@ -84,7 +107,6 @@ App.exportarPDF = async function (returnContent = false) {
                 if (main) main.insertBefore(headerDiv, main.firstChild);
 
                 // 2. FORÇAR CORES ESCURAS (Correção do fundo branco)
-                // Reaplica a cor de fundo nos cartões que a perderam
                 const cards = doc.querySelectorAll('[class*="bg-[#0f172a]"], [class*="bg-[#111827]"], [class*="bg-[#0d1117]"], [class*="bg-[#080c14]"], .bg-gray-800, .bg-slate-800');
                 cards.forEach(c => {
                     const cls = c.className || '';
@@ -95,14 +117,11 @@ App.exportarPDF = async function (returnContent = false) {
                 });
 
                 // 3. CORREÇÃO DAS BARRAS DO PIPELINE
-                // Remove transições para garantir que a barra é capturada "cheia"
                 const progressBars = doc.querySelectorAll('.transition-all');
                 progressBars.forEach(bar => {
                     bar.style.transition = 'none'; // Remove animação
-                    // Garante que a largura inline é respeitada
                     const w = bar.style.width;
                     if (w) bar.style.width = w;
-                    // Garante cor de fundo se definida inline
                     const bg = bar.style.backgroundColor;
                     if (bg) bar.style.backgroundColor = bg;
                 });
@@ -156,14 +175,26 @@ App.exportarPDF = async function (returnContent = false) {
                     if (el) el.style.display = 'none';
                 });
 
-                // 5. Destruir Limites de Layout
-                const elsToUnlock = doc.querySelectorAll('.h-screen, .overflow-hidden, .overflow-y-auto, .fixed, .absolute, .max-h-full, .custom-scrollbar-dark');
-                elsToUnlock.forEach(el => {
-                    el.classList.remove('h-screen', 'overflow-hidden', 'overflow-y-auto', 'fixed', 'absolute', 'max-h-screen');
-                    el.style.height = 'auto';
-                    el.style.overflow = 'visible';
-                    el.style.position = 'static';
-                });
+                // 5. Destruir Limites de Layout apenas nos containers de scroll principais
+                // Desbloqueia apenas os wrappers de nível superior para que a página expanda na vertical,
+                // sem afetar os widgets internos (como as barras de progresso que usam overflow-hidden e h-2).
+                const mainScroll = doc.querySelector('main > div.overflow-y-auto') || doc.querySelector('.overflow-y-auto');
+                if (mainScroll) {
+                    mainScroll.style.height = 'auto';
+                    mainScroll.style.overflow = 'visible';
+                }
+
+                const mainElement = doc.querySelector('main');
+                if (mainElement) {
+                    mainElement.style.height = 'auto';
+                    mainElement.style.overflow = 'visible';
+                }
+
+                const rootWrapper = doc.querySelector('.flex.h-screen');
+                if (rootWrapper) {
+                    rootWrapper.style.height = 'auto';
+                    rootWrapper.style.overflow = 'visible';
+                }
 
                 // 6. Ajustar Containers Principais
                 if (main) {
@@ -178,14 +209,6 @@ App.exportarPDF = async function (returnContent = false) {
                     appDiv.style.display = 'block';
                     appDiv.style.backgroundColor = '#0f172a';
                 }
-
-                // 7. Layout Vertical - Apenas no container principal se necessário, mas EVITAR partir componentes internos
-                // const grids = doc.querySelectorAll('.grid');
-                // grids.forEach(g => {
-                //    // g.style.display = 'flex';
-                //    // g.style.flexDirection = 'column';
-                //    // g.style.gap = '40px';
-                // });
 
                 // Em vez disso, garantir apenas que o App expanda verticalmente
                 if (appDiv) {
@@ -204,6 +227,8 @@ App.exportarPDF = async function (returnContent = false) {
                 tables.forEach(t => {
                     t.style.overflow = 'visible';
                     t.style.display = 'block';
+                    t.style.width = '100%';
+                    t.style.maxWidth = '100%';
                     t.parentElement.style.marginBottom = '40px';
                 });
             }
