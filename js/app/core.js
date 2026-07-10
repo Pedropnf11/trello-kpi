@@ -76,7 +76,6 @@ App.init = function () {
             if (boardId) {
                 this.state.boardId = boardId;
                 localStorage.setItem('trello_board_id', boardId);
-                localStorage.setItem('trello_from_powerup', 'true');
             }
         }
         if (hash.includes('role=')) {
@@ -93,10 +92,7 @@ App.init = function () {
     }
 
     if (this.state.token) {
-        const isFromPowerUp = localStorage.getItem('trello_from_powerup') === 'true';
-        if (isFromPowerUp && this.state.boardId) {
-            this.selecionarBoard(this.state.boardId);
-        } else if (!this.state.userRole) {
+        if (!this.state.userRole) {
             this.render();
         } else if (this.state.boardId) {
             this.selecionarBoard(this.state.boardId);

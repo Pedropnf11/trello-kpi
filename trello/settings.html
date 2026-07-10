@@ -46,9 +46,12 @@
   </div>
 
   <script type="module">
+    var KEY = import.meta.env.VITE_TRELLO_API_KEY;
+    var SITE = 'https://kpismaster.vercel.app';
+
     // ⚠️ appKey e appName são OBRIGATÓRIOS em todos os iframes
     var t = TrelloPowerUp.iframe({
-      appKey:  import.meta.env.VITE_TRELLO_API_KEY,
+      appKey:  KEY,
       appName: 'KPI Master'
     });
 
@@ -112,6 +115,46 @@
           disconnectWrap.style.display = 'none';
           connectWrap.style.display    = 'block';
         }
+      });
+    });
+
+    document.getElementById('link-dashboard').addEventListener('click', function(e) {
+      e.preventDefault();
+
+      t.board('id').then(function(board) {
+        if (!board || !board.id) {
+          window.open(SITE, '_blank');
+          return;
+        }
+        var boardId = board.id;
+        var context = t.getContext();
+        var memberId = context ? context.member : null;
+
+        t.getRestApi().isAuthorized().then(function(isAuth) {
+          if (isAuth) {
+            return t.getRestApi().getToken();
+          }
+          throw new Error('Not authorized');
+        }).then(function(token) {
+          if (token && memberId) {
+            return fetch('https://api.trello.com/1/boards/' + boardId + '/memberships?key=' + KEY + '&token=' + token)
+              .then(function(res) { return res.json(); })
+              .then(function(memberships) {
+                var role = 'vendedor';
+                if (Array.isArray(memberships)) {
+                  var myMembership = memberships.find(function(m) { return m.idMember === memberId; });
+                  role = (myMembership && myMembership.memberType === 'admin') ? 'gestor' : 'vendedor';
+                }
+                window.open(SITE + '#board=' + boardId + '&role=' + role, '_blank');
+              });
+          } else {
+            window.open(SITE + '#board=' + boardId + '&role=vendedor', '_blank');
+          }
+        }).catch(function() {
+          window.open(SITE + '#board=' + boardId + '&role=vendedor', '_blank');
+        });
+      }).catch(function() {
+        window.open(SITE, '_blank');
       });
     });
 
