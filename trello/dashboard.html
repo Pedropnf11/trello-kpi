@@ -350,6 +350,9 @@
 
     <!-- Footer -->
     <div class="footer">
+      <div id="full-dashboard-notice" style="margin-bottom: 12px; font-size: 11px; color: var(--text-sub); text-align: center; line-height: 1.45;">
+        <span id="lbl-notice-text">💡 This dashboard is simple. In the full dashboard you can get a much wider and detailed view of all your metrics and KPIs!</span>
+      </div>
       <a id="btn-open" class="btn-primary" href="https://kpismaster.vercel.app" target="_blank">🚀 Open Full Dashboard</a>
     </div>
   </div>
@@ -376,7 +379,8 @@
         lblSelUninterested: 'Sem Interesse',
         lblTotalLeads: 'Leads Ativas',
         lblTotalUninterested: 'Sem Interesse',
-        lblQuickTip: 'ℹ️ <strong>Lista de Leads</strong> é a lista onde quer medir a rapidez das leads. <strong>Sem Interesse</strong> são leads que não têm interesse/leads perdidas.'
+        lblQuickTip: 'ℹ️ <strong>Lista de Leads</strong> é a lista onde quer medir a rapidez das leads. <strong>Sem Interesse</strong> são leads que não têm interesse/leads perdidas.',
+        lblNoticeText: '💡 Este dashboard é simples. No dashboard completo consegues ter uma visão muito mais ampla e detalhada de todas as métricas e KPIs!'
       },
       en: {
         btnOpen: '🚀 Open Full Dashboard',
@@ -389,7 +393,8 @@
         lblSelUninterested: 'Uninterested',
         lblTotalLeads: 'Active Leads',
         lblTotalUninterested: 'Uninterested',
-        lblQuickTip: 'ℹ️ <strong>Leads List</strong> is the list where you want to measure the speed of incoming leads. <strong>Uninterested</strong> are leads with no interest/lost leads.'
+        lblQuickTip: 'ℹ️ <strong>Leads List</strong> is the list where you want to measure the speed of incoming leads. <strong>Uninterested</strong> are leads with no interest/lost leads.',
+        lblNoticeText: '💡 This dashboard is simple. In the full dashboard you can get a much wider and detailed view of all your metrics and KPIs!'
       }
     };
 
@@ -407,6 +412,7 @@
     document.getElementById('lbl-total-leads').textContent = tDict.lblTotalLeads;
     document.getElementById('lbl-total-uninterested').textContent = tDict.lblTotalUninterested;
     document.getElementById('lbl-quick-tip-text').innerHTML = tDict.lblQuickTip;
+    document.getElementById('lbl-notice-text').textContent = tDict.lblNoticeText;
 
     var state = { boardId: null, token: null, lists: [], leadsListId: null, uninterestedListId: null };
 

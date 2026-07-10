@@ -1,14 +1,14 @@
 // Landing Page UI Templates — Premium Dark (KPI Master · Real Estate Edition)
 
 // ─────────────────────────────────────────────
-// TRANSLATION ENGINE
-// ─────────────────────────────────────────────
 UI._lpLang = 'en';
 
 UI.landingTranslations = {
     // Navbar
     'nav-features': { pt: 'Features', en: 'Features' },
-       'nav-badge': { pt: 'Sales & Analytics', en: 'Sales & Analytics' },
+    'nav-profiles': { pt: 'Profiles', en: 'Profiles' },
+    'nav-badge': { pt: 'Sales & Analytics', en: 'Sales & Analytics' },
+    'nav-login-btn': { pt: 'Conectar Trello', en: 'Connect Trello' },
     // Hero
     'hero-urgency': { pt: 'Stop losing leads to a slow pipeline.', en: 'Stop losing leads to a slow pipeline.' },
     'hero-h1-1': { pt: 'Your leads are in', en: 'Your leads are in' },
@@ -109,12 +109,12 @@ UI.landingTranslations = {
 };
 
 UI.applyLandingTranslation = function (lang) {
-    UI._lpLang = 'en';
+    UI._lpLang = lang;
     document.querySelectorAll('[data-translate]').forEach(el => {
         const key = el.dataset.translate;
         const map = UI.landingTranslations[key];
-        if (map && map['en'] !== undefined) {
-            el.innerHTML = map['en'];
+        if (map && map[lang] !== undefined) {
+            el.innerHTML = map[lang];
         }
     });
 };

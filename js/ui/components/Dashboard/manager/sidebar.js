@@ -15,7 +15,7 @@ UI.renderSidebarManager = function (state, kpis, filterId) {
             <!-- Logo Header -->
             <div class="h-14 flex items-center justify-between px-5 border-b border-white/[0.04] flex-shrink-0">
                <div class="flex items-center gap-3">
-                   <div class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center text-white text-[12px] font-bold shadow-lg shadow-blue-900/40 ring-1 ring-blue-500/30">K</div>
+                   <img src="favicon.png" alt="Logo" class="w-7 h-7 rounded-lg object-contain flex-shrink-0">
                    <span class="font-bold text-[13px] text-white tracking-wide">KPI Master</span>
                </div>
                <!-- MOBILE CLOSE BUTTON -->
@@ -82,10 +82,14 @@ UI.renderSidebarManager = function (state, kpis, filterId) {
 
             <!-- Bottom nav actions -->
             <div class="p-4 border-t border-white/[0.04] flex flex-col gap-1 flex-shrink-0">
-                <button onclick="document.getElementById('docsComingSoonPopup').classList.remove('hidden')" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:text-amber-400 hover:bg-amber-500/[0.05] transition-all duration-200 font-semibold text-[12px]">
-                    <svg class="w-4 h-4 text-gray-600 group-hover:text-amber-400 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                <button onclick="document.getElementById('bugReportPopup').classList.remove('hidden')" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:text-amber-400 hover:bg-amber-500/[0.05] transition-all duration-200 font-semibold text-[12px]">
+                    <svg class="w-4 h-4 text-gray-600 group-hover:text-amber-400 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    <span>${t('Encontrastes um bug?', 'Found a bug?')}</span>
+                </button>
+                <button onclick="document.getElementById('docsComingSoonPopup').classList.remove('hidden')" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:text-green-400 hover:bg-green-500/[0.05] transition-all duration-200 font-semibold text-[12px]">
+                    <svg class="w-4 h-4 text-gray-600 group-hover:text-green-400 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     <span>${t('Documentos de Ajuda', 'Help Documents')}</span>
-                    <span class="ml-auto text-[8px] font-bold text-amber-500/70 bg-amber-500/[0.08] border border-amber-500/20 px-1.5 py-0.5 rounded-full whitespace-nowrap">${t('Em breve', 'Coming soon')}</span>
+                    <span class="ml-auto text-[8px] font-bold text-green-500/70 bg-green-500/[0.08] border border-green-500/20 px-1.5 py-0.5 rounded-full whitespace-nowrap">${t('Em breve', 'Coming soon')}</span>
                 </button>
                 <button id="tutorialBtn" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:text-blue-400 hover:bg-blue-500/[0.05] transition-all duration-200 font-semibold text-[12px]">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
@@ -103,19 +107,36 @@ UI.renderSidebarManager = function (state, kpis, filterId) {
             </div>
         </aside>
 
+        <!-- BUG REPORT POPUP -->
+        <div id="bugReportPopup" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onclick="if(event.target===this)this.classList.add('hidden')">
+            <div class="bg-[#0b0f19] border border-white/[0.08] rounded-2xl shadow-2xl w-full max-w-sm p-8 text-center relative">
+                <button onclick="document.getElementById('bugReportPopup').classList.add('hidden')" class="absolute top-4 right-4 text-gray-600 hover:text-white transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+                <div class="w-14 h-14 bg-amber-500/[0.08] border border-amber-500/20 rounded-2xl flex items-center justify-center mx-auto mb-5">
+                    <svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+                <h3 class="text-[17px] font-black text-white mb-2">${t('Reportar Bug', 'Report a Bug')}</h3>
+                <p class="text-[13px] text-gray-500 leading-relaxed mb-6">${t('Esta aplicação está em fase de testes (Beta). Se encontraste algum bug, erro ou tens sugestões de melhoria, por favor envia um email para:', 'This app is in its testing phase (Beta). If you found a bug, error or have feedback, please send an email to:')}</p>
+                <div class="bg-amber-500/[0.06] border border-amber-500/10 p-3 rounded-xl">
+                    <a href="mailto:kpismasterpowerup@gmail.com" class="block text-[13px] font-bold text-amber-400 hover:text-amber-300 underline truncate">kpismasterpowerup@gmail.com</a>
+                </div>
+            </div>
+        </div>
+
         <!-- DOCS COMING SOON POPUP -->
         <div id="docsComingSoonPopup" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onclick="if(event.target===this)this.classList.add('hidden')">
             <div class="bg-[#0b0f19] border border-white/[0.08] rounded-2xl shadow-2xl w-full max-w-sm p-8 text-center relative">
                 <button onclick="document.getElementById('docsComingSoonPopup').classList.add('hidden')" class="absolute top-4 right-4 text-gray-600 hover:text-white transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
-                <div class="w-14 h-14 bg-amber-500/[0.08] border border-amber-500/20 rounded-2xl flex items-center justify-center mx-auto mb-5">
-                    <svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <div class="w-14 h-14 bg-[#0d1527] border border-white/[0.06] rounded-2xl flex items-center justify-center mx-auto mb-5">
+                    <svg class="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 </div>
                 <h3 class="text-[17px] font-black text-white mb-2">${t('Scripts e Documentos', 'Scripts & Documents')}</h3>
                 <p class="text-[13px] text-gray-500 leading-relaxed mb-6">${t('Esta funcionalidade está em desenvolvimento. Em breve terás acesso a scripts de reativação, templates de email e guiões de vendas diretamente aqui.', 'This feature is in development. Soon you\'ll have access to reactivation scripts, email templates and sales playbooks directly here.')}</p>
-                <div class="flex items-center justify-center gap-2 text-[11px] text-amber-400 font-semibold">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                <div class="flex items-center justify-center gap-2 text-[11px] text-gray-400 font-semibold">
+                    <span class="w-1.5 h-1.5 rounded-full bg-gray-600 animate-pulse"></span>
                     ${t('Nova funcionalidade a caminho', 'New feature coming soon')}
                 </div>
             </div>
