@@ -419,7 +419,33 @@
           return;
         }
         state.boardId = board.id;
-        document.getElementById('btn-open').href = SITE + '#board=' + board.id;
+
+        var boardId = board.id;
+        var context = t.getContext();
+        var memberId = context ? context.member : null;
+        var defaultHref = SITE + '#board=' + boardId + '&role=vendedor';
+        document.getElementById('btn-open').href = defaultHref;
+
+        t.getRestApi().isAuthorized().then(function(isAuth) {
+          if (isAuth) {
+            return t.getRestApi().getToken();
+          }
+          throw new Error('Not authorized');
+        }).then(function(token) {
+          if (token && memberId) {
+            return fetch('https://api.trello.com/1/boards/' + boardId + '/memberships?key=' + KEY + '&token=' + token)
+              .then(function(res) { return res.json(); })
+              .then(function(memberships) {
+                if (Array.isArray(memberships)) {
+                  var myMembership = memberships.find(function(m) { return m.idMember === memberId; });
+                  var role = (myMembership && myMembership.memberType === 'admin') ? 'gestor' : 'vendedor';
+                  document.getElementById('btn-open').href = SITE + '#board=' + boardId + '&role=' + role;
+                }
+              });
+          }
+        }).catch(function(err) {
+          // Keep default
+        });
 
         checkAuthAndLoadStats();
       }).catch(function () {

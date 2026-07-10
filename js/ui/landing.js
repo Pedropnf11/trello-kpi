@@ -3,132 +3,120 @@
 // ─────────────────────────────────────────────
 // TRANSLATION ENGINE
 // ─────────────────────────────────────────────
-UI._lpLang = localStorage.getItem('kpi_lp_lang') || 'pt';
+UI._lpLang = 'en';
 
 UI.landingTranslations = {
     // Navbar
-    'nav-features': { pt: 'Funcionalidades', en: 'Features' },
-    'nav-docs': { pt: 'Documentos', en: 'Documents' },
-    'nav-profiles': { pt: 'Perfis', en: 'Profiles' },
-    'nav-login-btn': { pt: 'Entrar na plataforma →', en: 'Enter platform →' },
-    'nav-badge': { pt: 'Imobiliário', en: 'Real Estate' },
+    'nav-features': { pt: 'Features', en: 'Features' },
+       'nav-badge': { pt: 'Sales & Analytics', en: 'Sales & Analytics' },
     // Hero
-    'hero-urgency': { pt: 'Consultores imobiliários estão a perder leads todos os dias — sem saber.', en: 'Real estate agents are losing leads every day — without knowing it.' },
-    'hero-h1-1': { pt: 'Os teus leads estão no', en: 'Your leads are in' },
-    'hero-h1-2': { pt: 'Trello. Os teus resultados', en: 'Trello. Your results' },
-    'hero-h1-3': { pt: 'estão a escapar-te.', en: 'are slipping away.' },
-    'hero-desc': { pt: 'O KPI Master liga-se ao teu Trello e mostra-te em tempo real quais os leads a perder tração, quem da equipa está a produzir e o que tens de fazer agora.', en: 'KPI Master connects to your Trello and shows you in real time which leads are losing traction, who on the team is producing, and what you need to do right now.' },
-    'hero-cta-main': { pt: 'Ligar o meu Trello — é grátis', en: 'Connect my Trello — it\'s free' },
-    'hero-cta-secondary': { pt: 'Ver como funciona →', en: 'See how it works →' },
+    'hero-urgency': { pt: 'Stop losing leads to a slow pipeline.', en: 'Stop losing leads to a slow pipeline.' },
+    'hero-h1-1': { pt: 'Your leads are in', en: 'Your leads are in' },
+    'hero-h1-2': { pt: 'Trello. Your results', en: 'Trello. Your results' },
+    'hero-h1-3': { pt: 'are slipping away.', en: 'are slipping away.' },
+    'hero-desc': { pt: 'KPI Master connects to Trello and shows you in real-time which leads are losing traction, which sales agents are closing, and where the bottlenecks are.', en: 'KPI Master connects to Trello and shows you in real-time which leads are losing traction, which sales agents are closing, and where the bottlenecks are.' },
+    'hero-cta-main': { pt: 'Connect my Trello — it\'s free', en: 'Connect my Trello — it\'s free' },
+    'hero-cta-secondary': { pt: 'See how it works →', en: 'See how it works →' },
     // Pain Points
-    'pain-eyebrow': { pt: 'Reconheces algum destes cenários?', en: 'Do any of these sound familiar?' },
-    'pain-h2': { pt: 'Os problemas que custam negócios todos os meses', en: 'The problems costing you deals every month' },
-    'pain-desc': { pt: 'Cada lead parado é dinheiro parado. O KPI Master é a ferramenta que faz o aviso antes de ser tarde.', en: 'Every stalled lead is stalled money. KPI Master is the tool that warns you before it\'s too late.' },
-    'pain-0-pain': { pt: 'Leads parados há semanas que nunca chegaste a reativar', en: 'Leads stalled for weeks that you never managed to reactivate' },
-    'pain-0-fix': { pt: 'A Focus Zone alerta-te automaticamente com prioridade por dias sem contacto', en: 'Focus Zone alerts you automatically, prioritised by days without contact' },
-    'pain-1-pain': { pt: 'Não sabes qual consultor está a produzir e qual está estagnado', en: "You don't know which agent is producing and which is stagnant" },
-    'pain-1-fix': { pt: 'Rankings automáticos com leads, visitas, propostas e contratos por membro', en: 'Automatic rankings with leads, visits, proposals and contracts per member' },
-    'pain-2-pain': { pt: 'Perdes horas a preparar relatórios para reuniões semanais', en: 'You waste hours preparing reports for weekly meetings' },
-    'pain-2-fix': { pt: 'PDF/CSV/Email gerado automaticamente com um clique — em segundos', en: 'PDF/CSV/Email generated automatically with one click — in seconds' },
-    'pain-3-pain': { pt: 'Propostas enviadas que ficam sem follow-up e morrem', en: 'Sent proposals that go without follow-up and die' },
-    'pain-3-fix': { pt: 'Time Tracking mostra quanto tempo cada lead está parado em "Proposta Enviada"', en: 'Time Tracking shows how long each lead has been stuck in "Proposal Sent"' },
+    'pain-eyebrow': { pt: 'Do any of these sound familiar?', en: 'Do any of these sound familiar?' },
+    'pain-h2': { pt: 'The problems costing you sales every month', en: 'The problems costing you sales every month' },
+    'pain-desc': { pt: 'Every stalled lead is lost revenue. KPI Master is the tool that warns you before it\'s too late.', en: 'Every stalled lead is lost revenue. KPI Master is the tool that warns you before it\'s too late.' },
+    'pain-0-pain': { pt: 'Hot leads left untouched in your inbox for days', en: 'Hot leads left untouched in your inbox for days' },
+    'pain-0-fix': { pt: 'Focus Zone alerts you automatically, prioritized by days without activity', en: 'Focus Zone alerts you automatically, prioritized by days without activity' },
+    'pain-1-pain': { pt: 'No idea which sales agent is performing and who is struggling', en: 'No idea which sales agent is performing and who is struggling' },
+    'pain-1-fix': { pt: 'Automated leaderboard tracking leads and sales closed per member', en: 'Automated leaderboard tracking leads and sales closed per member' },
+    'pain-2-pain': { pt: 'Wasting hours compiling CSVs and reports for weekly check-ins', en: 'Wasting hours compiling CSVs and reports for weekly check-ins' },
+    'pain-2-fix': { pt: 'Download professional PDF reports in one click — in seconds', en: 'Download professional PDF reports in one click — in seconds' },
+    'pain-3-pain': { pt: 'Proposals sent to clients that go cold with no follow-up', en: 'Proposals sent to clients that go cold with no follow-up' },
+    'pain-3-fix': { pt: 'Cycle Time tracking shows exactly how long cards sit in your stages', en: 'Cycle Time tracking shows exactly how long cards sit in your stages' },
     // Features
-    'feat-eyebrow': { pt: 'O que inclui', en: 'What\'s included' },
-    'feat-h2-1': { pt: 'Construído para imobiliário.', en: 'Built for real estate.' },
-    'feat-h2-2': { pt: 'Ligado ao teu Trello.', en: 'Connected to your Trello.' },
-    'feat-desc': { pt: 'Todas as funcionalidades que uma agência ou consultor independente precisa para não perder leads — sem mudar o que já usa.', en: 'Every feature an agency or independent agent needs to stop losing leads — without changing what they already use.' },
-    'feat-0-title': { pt: 'Pipeline Imobiliário em Tempo Real', en: 'Real-Time Real Estate Pipeline' },
-    'feat-0-desc': { pt: 'Vê quantos leads estão em cada fase — Contacto, Visita, Proposta, Fecho — e onde estão a perder-se. Atualizado cada vez que mexes no Trello.', en: 'See how many leads are in each stage — Contact, Visit, Proposal, Close — and where they\'re being lost. Updated every time you touch Trello.' },
-    'feat-0-tag': { pt: 'Base', en: 'Base' },
-    'feat-1-title': { pt: 'Alertas de Leads a Arrefecer', en: 'Cooling Lead Alerts' },
-    'feat-1-desc': { pt: 'Quando um lead fica X dias sem movimento, a Focus Zone avisa-te automaticamente. Nunca mais perdes um cliente por falta de follow-up.', en: 'When a lead goes X days without activity, Focus Zone alerts you automatically. Never lose a client to lack of follow-up again.' },
-    'feat-1-tag': { pt: 'Mais Usado', en: 'Most Used' },
-    'feat-2-title': { pt: 'Tempo por Fase do Pipeline', en: 'Time per Pipeline Stage' },
-    'feat-2-desc': { pt: 'Quanto tempo em média fica um lead parado em "Visita Marcada"? O Time Tracking responde. Identifica o gargalo e trata-o antes de perder o cliente.', en: 'How long does a lead sit in "Visit Scheduled" on average? Time Tracking answers that. Spot the bottleneck and fix it before losing the client.' },
-    'feat-3-title': { pt: 'Ranking da Equipa Automático', en: 'Automatic Team Ranking' },
-    'feat-3-desc': { pt: 'Leads, visitas, propostas e contratos por consultor — numa tabela que se atualiza sozinha. Sem perguntar, sem reuniões de acompanhamento.', en: 'Leads, visits, proposals and contracts per agent — in a self-updating table. No asking, no check-in meetings.' },
-    'feat-4-title': { pt: 'Scripts e Documentos de Reativação', en: 'Reactivation Scripts & Documents' },
-    'feat-4-desc': { pt: 'Acesso a guias de reativação de leads frios, scripts de follow-up por fase e templates de email — criados especificamente para o imobiliário.', en: 'Access to cold lead reactivation guides, stage-specific follow-up scripts and email templates — built specifically for real estate.' },
-    'feat-4-tag': { pt: 'Exclusivo', en: 'Exclusive' },
-    'feat-5-title': { pt: 'Relatórios com Um Clique', en: 'One-Click Reports' },
-    'feat-5-desc': { pt: 'PDF para apresentar ao diretor, CSV para análise própria, ou email automático toda a segunda-feira. O fim das tardes de domingo a preparar relatórios.', en: 'PDF for the director, CSV for your own analysis, or auto email every Monday. The end of Sunday afternoons preparing reports.' },
-    'feat-6-title': { pt: 'Login em 30 Segundos', en: 'Login in 30 Seconds' },
-    'feat-6-desc': { pt: 'Ligação direta com a tua conta Trello via OAuth. Sem registos, sem passwords novas, sem IT. Ligas e está pronto.', en: 'Direct connection to your Trello account via OAuth. No sign-ups, no new passwords, no IT. Connect and you\'re ready.' },
-    'feat-7-title': { pt: 'Vista do Consultor Individual', en: 'Individual Agent View' },
-    'feat-7-desc': { pt: 'Cada membro da equipa tem a sua própria vista: só o seu pipeline, os seus leads críticos e as suas métricas. Sem ver o que não é seu.', en: "Each team member has their own view: just their pipeline, their critical leads and their metrics. Without seeing what isn't theirs." },
-    'feat-8-title': { pt: 'Analytics Completo', en: 'Full Analytics' },
-    'feat-8-desc': { pt: 'Taxa de conversão real por fase, evolução semanal e dispersão por consultor. Dados que antes demoravam horas a calcular, agora a um olhar.', en: 'Real conversion rate per stage, weekly evolution and dispersion by agent. Data that used to take hours to calculate, now at a glance.' },
+    'feat-eyebrow': { pt: 'What\'s included', en: 'What\'s included' },
+    'feat-h2-1': { pt: 'Built for sales teams.', en: 'Built for sales teams.' },
+    'feat-h2-2': { pt: 'Connected to Trello.', en: 'Connected to Trello.' },
+    'feat-desc': { pt: 'The ultimate tool sales managers need to optimize cycle times without switching apps.', en: 'The ultimate tool sales managers need to optimize cycle times without switching apps.' },
+    'feat-0-title': { pt: 'Real-Time Sales Pipeline', en: 'Real-Time Sales Pipeline' },
+    'feat-0-desc': { pt: 'Monitor how many cards sit in stages like Lead, Contacted, Proposal, Closed. Updated live.', en: 'Monitor how many cards sit in stages like Lead, Contacted, Proposal, Closed. Updated live.' },
+    'feat-0-tag': { pt: 'Live', en: 'Live' },
+    'feat-1-title': { pt: 'Idle Lead Alerts', en: 'Idle Lead Alerts' },
+    'feat-1-desc': { pt: 'When a card stays inactive for X days, KPI Master warns you immediately to keep deals moving.', en: 'When a card stays inactive for X days, KPI Master warns you immediately to keep deals moving.' },
+    'feat-1-tag': { pt: 'Popular', en: 'Popular' },
+    'feat-2-title': { pt: 'Average Stage Duration', en: 'Average Stage Duration' },
+    'feat-2-desc': { pt: 'Find out how long cards stay in your negotiation list on average. Spot and fix bottlenecks.', en: 'Find out how long cards stay in your negotiation list on average. Spot and fix bottlenecks.' },
+    'feat-3-title': { pt: 'Automatic Agent Leaderboard', en: 'Automatic Agent Leaderboard' },
+    'feat-3-desc': { pt: 'Leads, proposals, and deals closed per agent in a clean, self-updating dashboard.', en: 'Leads, proposals, and deals closed per agent in a clean, self-updating dashboard.' },
+    'feat-4-title': { pt: 'Reactivation Triggers', en: 'Reactivation Triggers' },
+    'feat-4-desc': { pt: 'Access cold lead reactivation tips, stage-specific follow-up templates, and copy-paste email guides.', en: 'Access cold lead reactivation tips, stage-specific follow-up templates, and copy-paste email guides.' },
+    'feat-4-tag': { pt: 'Exclusive', en: 'Exclusive' },
+    'feat-5-title': { pt: 'One-Click PDF Reports', en: 'One-Click PDF Reports' },
+    'feat-5-desc': { pt: 'Generate clean PDF summaries for managers or directors in less than 5 seconds.', en: 'Generate clean PDF summaries for managers or directors in less than 5 seconds.' },
+    'feat-6-title': { pt: 'Setup in 30 Seconds', en: 'Setup in 30 Seconds' },
+    'feat-6-desc': { pt: 'Instant OAuth connection with Trello. No passwords, no credit cards, no IT needed.', en: 'Instant OAuth connection with Trello. No passwords, no credit cards, no IT needed.' },
+    'feat-7-title': { pt: 'Individual Member View', en: 'Individual Member View' },
+    'feat-7-desc': { pt: 'Let each salesperson focus on their own leads, targets, and speed analytics.', en: 'Let each salesperson focus on their own leads, targets, and speed analytics.' },
+    'feat-8-title': { pt: 'Conversion Funnels', en: 'Conversion Funnels' },
+    'feat-8-desc': { pt: 'Track real conversion rate per stage, weekly closed cards progress, and historical performance.', en: 'Track real conversion rate per stage, weekly closed cards progress, and historical performance.' },
     // Audience
-    'aud-eyebrow': { pt: 'Para quem é', en: 'Who it\'s for' },
-    'aud-h2': { pt: 'Ideal para qualquer equipa que use Trello como CRM', en: 'Ideal for any team using Trello as a CRM' },
-    'aud-desc': { pt: 'O KPI Master não substitui o teu Trello — amplifica-o. Se já organizas leads em quadros Trello, estás a um clique de ter os dados a trabalhar para ti.', en: "KPI Master doesn't replace your Trello — it amplifies it. If you already organise leads in Trello boards, you're one click away from your data working for you." },
-    'aud-0-label': { pt: 'Agências Imobiliárias', en: 'Real Estate Agencies' },
-    'aud-0-desc': { pt: 'Equipas de 3 a 20 consultores que gerem leads no Trello e precisam de visibilidade sobre o pipeline sem Excel ou reuniões de acompanhamento.', en: 'Teams of 3 to 20 agents who manage leads in Trello and need pipeline visibility without Excel or check-in meetings.' },
-    'aud-1-label': { pt: 'Consultores Independentes', en: 'Independent Agents' },
-    'aud-1-desc': { pt: 'Mediadores a trabalhar sozinhos que querem saber quais os leads a contactar hoje, quais as propostas paradas e como está a correr o mês.', en: 'Solo brokers who want to know which leads to contact today, which proposals are stalled and how the month is going.' },
-    'aud-2-label': { pt: 'Equipas Comerciais B2B', en: 'B2B Sales Teams' },
-    'aud-2-desc': { pt: 'Startups e PMEs com pipeline de vendas no Trello que precisam de saber qual o lead mais quente, quem está a produzir e qual a taxa de conversão real.', en: 'Startups and SMBs with a Trello sales pipeline who need to know the hottest lead, who\'s producing and the real conversion rate.' },
-    'aud-3-label': { pt: 'Account Managers', en: 'Account Managers' },
-    'aud-3-desc': { pt: 'Profissionais que gerem um portefólio de clientes no Trello e perdem horas a compilar relatórios semanais manualmente para apresentar à chefia.', en: 'Professionals who manage a client portfolio in Trello and waste hours manually compiling weekly reports to present to management.' },
-    'aud-note': { pt: 'Se a tua equipa usa o Trello como CRM informal — listas como "Lead", "Visita Marcada", "Proposta", "Fecho" — o KPI Master lê esses dados e transforma-os num dashboard de performance em tempo real. Sem configurações, sem integrações, sem IT.', en: 'If your team uses Trello as an informal CRM — lists like "Lead", "Visit Scheduled", "Proposal", "Close" — KPI Master reads that data and turns it into a real-time performance dashboard. No setup, no integrations, no IT.' },
+    'aud-eyebrow': { pt: 'Who it\'s for', en: 'Who it\'s for' },
+    'aud-h2': { pt: 'Perfect for sales teams using Trello', en: 'Perfect for sales teams using Trello' },
+    'aud-desc': { pt: 'KPI Master connects instantly to your sales Trello boards to turn cards into closing sales.', en: 'KPI Master connects instantly to your sales Trello boards to turn cards into closing sales.' },
+    'aud-0-label': { pt: 'Sales Managers', en: 'Sales Managers' },
+    'aud-0-desc': { pt: 'Keep full visibility over team progress, pipelines, and performance rankings without spreadsheet clutter.', en: 'Keep full visibility over team progress, pipelines, and performance rankings without spreadsheet clutter.' },
+    'aud-1-label': { pt: 'Account Managers', en: 'Account Managers' },
+    'aud-1-desc': { pt: 'Track response speeds, proposal stages, and compile weekly reports for management in seconds.', en: 'Track response speeds, proposal stages, and compile weekly reports for management in seconds.' },
+    'aud-2-label': { pt: 'B2B Sales Teams', en: 'B2B Sales Teams' },
+    'aud-2-desc': { pt: 'Startups and SMBs who want to optimize sales cycle times and boost agent output.', en: 'Startups and SMBs who want to optimize sales cycle times and boost agent output.' },
+    'aud-3-label': { pt: 'Sales Representatives', en: 'Sales Representatives' },
+    'aud-3-desc': { pt: 'Know exactly which deals to follow up on today, track your performance, and close deals faster.', en: 'Know exactly which deals to follow up on today, track your performance, and close deals faster.' },
+    'aud-note': { pt: 'If your team uses lists like "Lead", "Contacted", "Proposal", or "Won" — KPI Master transforms them into a clean analytics dashboard.', en: 'If your team uses lists like "Lead", "Contacted", "Proposal", or "Won" — KPI Master transforms them into a clean analytics dashboard.' },
     // Profiles
-    'prof-eyebrow': { pt: 'Para quem é', en: 'Who it\'s for' },
-    'prof-h2-1': { pt: 'Feito para o imobiliário.', en: 'Built for real estate.' },
-    'prof-h2-2': { pt: 'Para todos os papéis.', en: 'For every role.' },
-    'prof-desc': { pt: 'O teu cargo define o que vês. Sem informação a mais, sem confusão. Só o que precisas para agir.', en: 'Your role defines what you see. No clutter, no confusion. Just what you need to act.' },
-    'prof-mgr-title': { pt: 'Diretor / Gestor', en: 'Director / Manager' },
-    'prof-mgr-badge': { pt: 'Visão completa da agência', en: 'Full agency overview' },
-    'prof-mgr-desc': { pt: 'Chega de perguntar à equipa como estão os números. Abre o dashboard de manhã e já sabes quem precisa de suporte, qual o lead mais crítico e qual o consultor do mês.', en: "Stop asking the team how the numbers look. Open the dashboard in the morning and you already know who needs support, the most critical lead and the agent of the month." },
-    'prof-mgr-li-0': { pt: 'Pipeline completo da agência por fase e por consultor', en: 'Full agency pipeline by stage and by agent' },
-    'prof-mgr-li-1': { pt: 'Ranking automático — sem Excel, sem cálculos manuais', en: 'Automatic ranking — no Excel, no manual calculations' },
-    'prof-mgr-li-2': { pt: 'Alertas de leads críticos antes de se perderem definitivamente', en: 'Critical lead alerts before they\'re lost for good' },
-    'prof-mgr-li-3': { pt: 'Relatório semanal PDF automático para reuniões', en: 'Automatic weekly PDF report for meetings' },
-    'prof-mgr-li-4': { pt: 'Taxa de conversão real por fase e por elemento da equipa', en: 'Real conversion rate per stage and per team member' },
-    'prof-cons-title': { pt: 'Consultor Imobiliário', en: 'Real Estate Agent' },
-    'prof-cons-badge': { pt: 'Foco nos teus próprios números', en: 'Focus on your own numbers' },
-    'prof-cons-desc': { pt: 'Entras e sabes o que fazer hoje. Quais os leads a contactar, quais as propostas sem resposta e como estás a correr este mês — sem perguntar ao diretor.', en: 'You log in and know what to do today. Which leads to contact, which proposals have no reply and how your month is going — without asking the director.' },
-    'prof-cons-li-0': { pt: 'O teu pipeline pessoal — fase a fase, lead a lead', en: 'Your personal pipeline — stage by stage, lead by lead' },
-    'prof-cons-li-1': { pt: 'Focus Zone: o sistema diz-te quem contactar hoje', en: 'Focus Zone: the system tells you who to contact today' },
-    'prof-cons-li-2': { pt: 'Os teus contratos e taxa de conversão vs. mês anterior', en: 'Your contracts and conversion rate vs. previous month' },
-    'prof-cons-li-3': { pt: 'Alertas para leads que arrefecem dentro do teu portefólio', en: 'Alerts for leads cooling within your portfolio' },
-    'prof-cons-li-4': { pt: 'Acesso direto aos scripts de reativação quando precisas', en: 'Direct access to reactivation scripts when you need them' },
+    'prof-eyebrow': { pt: 'Role Views', en: 'Role Views' },
+    'prof-h2-1': { pt: 'Built for managers.', en: 'Built for managers.' },
+    'prof-h2-2': { pt: 'Optimized for agents.', en: 'Optimized for agents.' },
+    'prof-desc': { pt: 'Your role defines your view. Get key action items without distractions.', en: 'Your role defines your view. Get key action items without distractions.' },
+    'prof-mgr-title': { pt: 'Director / Manager', en: 'Director / Manager' },
+    'prof-mgr-badge': { pt: 'Full Pipeline Overview', en: 'Full Pipeline Overview' },
+    'prof-mgr-desc': { pt: 'Open your dashboard to see who needs help, which deal is critical, and who is the top performer of the month.', en: 'Open your dashboard to see who needs help, which deal is critical, and who is the top performer of the month.' },
+    'prof-mgr-li-0': { pt: 'Complete team pipeline by stage and by agent', en: 'Complete team pipeline by stage and by agent' },
+    'prof-mgr-li-1': { pt: 'Automated leaderboards — no manual calculations', en: 'Automated leaderboards — no manual calculations' },
+    'prof-mgr-li-2': { pt: 'Idle alerts for hot leads before they slip away', en: 'Idle alerts for hot leads before they slip away' },
+    'prof-mgr-li-3': { pt: 'Instant weekly PDF exports for team check-ins', en: 'Instant weekly PDF exports for team check-ins' },
+    'prof-mgr-li-4': { pt: 'Real conversion rates per stage and per team member', en: 'Real conversion rates per stage and per team member' },
+    'prof-cons-title': { pt: 'Sales Agent', en: 'Sales Agent' },
+    'prof-cons-badge': { pt: 'Focus On Your Pipeline', en: 'Focus On Your Pipeline' },
+    'prof-cons-desc': { pt: 'Log in and see your critical deals, which client needs a reply, and how your month is going.', en: 'Log in and see your critical deals, which client needs a reply, and how your month is going.' },
+    'prof-cons-li-0': { pt: 'Your personal pipeline — stage by stage, card by card', en: 'Your personal pipeline — stage by stage, card by card' },
+    'prof-cons-li-1': { pt: 'Focus Zone: clear action list for today\'s follow-ups', en: 'Focus Zone: clear action list for today\'s follow-ups' },
+    'prof-cons-li-2': { pt: 'Personal conversion rates vs. previous periods', en: 'Personal conversion rates vs. previous periods' },
+    'prof-cons-li-3': { pt: 'Warning flags for cooling leads in your inbox', en: 'Warning flags for cooling leads in your inbox' },
+    'prof-cons-li-4': { pt: 'Quick copy-paste follow-up scripts for cold leads', en: 'Quick copy-paste follow-up scripts for cold leads' },
     // CTA
-    'cta-eyebrow': { pt: 'Começa hoje · É grátis', en: 'Start today · It\'s free' },
-    'cta-h2-1': { pt: 'O teu Trello já tem os dados.', en: 'Your Trello already has the data.' },
-    'cta-h2-2': { pt: 'O que falta são os alertas.', en: 'What\'s missing are the alerts.' },
-    'cta-desc': { pt: 'Conecta o teu quadro Trello agora — em menos de 2 minutos tens o pipeline ativo, os leads críticos identificados e os scripts de reativação disponíveis.', en: 'Connect your Trello board now — in under 2 minutes you have an active pipeline, critical leads identified and reactivation scripts available.' },
-    'cta-note': { pt: 'Sem Excel. Sem configurações. Sem IT. Só o teu Trello, transformado numa máquina de não perder leads.', en: 'No Excel. No setup. No IT. Just your Trello, turned into a lead-keeping machine.' },
-    'cta-btn': { pt: 'Ligar o meu Trello — é grátis', en: 'Connect my Trello — it\'s free' },
-    'cta-trust-0': { pt: '100% gratuito', en: '100% free' },
-    'cta-trust-1': { pt: 'Sem cartão de crédito', en: 'No credit card' },
-    'cta-trust-2': { pt: 'Liga em 2 minutos', en: 'Ready in 2 minutes' },
-    'cta-trust-3': { pt: 'Scripts de reativação incluídos', en: 'Reactivation scripts included' },
+    'cta-eyebrow': { pt: 'Get Started · Free', en: 'Get Started · Free' },
+    'cta-h2-1': { pt: 'Your Trello board has the data.', en: 'Your Trello board has the data.' },
+    'cta-h2-2': { pt: 'What\'s missing are the insights.', en: 'What\'s missing are the insights.' },
+    'cta-desc': { pt: 'Connect your Trello board now and view conversion funnels, leaderboard metrics, and lead speeds in seconds.', en: 'Connect your Trello board now and view conversion funnels, leaderboard metrics, and lead speeds in seconds.' },
+    'cta-note': { pt: 'No setups. No IT. Just Trello, converted into a high-speed sales machine.', en: 'No setups. No IT. Just Trello, converted into a high-speed sales machine.' },
+    'cta-btn': { pt: 'Connect Trello — Free', en: 'Connect Trello — Free' },
+    'cta-trust-0': { pt: '100% Free', en: '100% Free' },
+    'cta-trust-1': { pt: 'No credit card required', en: 'No credit card required' },
+    'cta-trust-2': { pt: 'Ready in 30 seconds', en: 'Ready in 30 seconds' },
+    'cta-trust-3': { pt: 'Lead reactivation tools included', en: 'Lead reactivation tools included' },
     // Footer
-    'footer-badge': { pt: 'Imobiliário', en: 'Real Estate' },
-    'footer-copy': { pt: `© ${new Date().getFullYear()} KPI Master. Feito para consultores imobiliários que usam Trello.`, en: `© ${new Date().getFullYear()} KPI Master. Built for real estate agents who use Trello.` },
-    'footer-privacy': { pt: 'Privacidade', en: 'Privacy' },
-    'footer-terms': { pt: 'Termos', en: 'Terms' },
-    'footer-contact': { pt: 'Contacto', en: 'Contact' },
+    'footer-badge': { pt: 'Workflow & Analytics', en: 'Workflow & Analytics' },
+    'footer-copy': { pt: `© ${new Date().getFullYear()} KPI Master. Built for sales teams using Trello.`, en: `© ${new Date().getFullYear()} KPI Master. Built for sales teams using Trello.` },
+    'footer-privacy': { pt: 'Privacy', en: 'Privacy' },
+    'footer-terms': { pt: 'Terms', en: 'Terms' },
+    'footer-contact': { pt: 'Contact', en: 'Contact' },
 };
 
 UI.applyLandingTranslation = function (lang) {
-    UI._lpLang = lang;
-    localStorage.setItem('kpi_lp_lang', lang);
+    UI._lpLang = 'en';
     document.querySelectorAll('[data-translate]').forEach(el => {
         const key = el.dataset.translate;
         const map = UI.landingTranslations[key];
-        if (map && map[lang] !== undefined) {
-            el.innerHTML = map[lang];
+        if (map && map['en'] !== undefined) {
+            el.innerHTML = map['en'];
         }
     });
-    // Update toggle button labels (desktop + mobile)
-    const label = lang === 'pt'
-        ? `<span style="opacity:.4">PT</span> <span style="opacity:.15">|</span> EN`
-        : `PT <span style="opacity:.15">|</span> <span style="opacity:.4">EN</span>`;
-    const btn = document.getElementById('lpLangToggleBtn');
-    if (btn) btn.innerHTML = label;
-    const btnMob = document.getElementById('lpLangToggleBtnMob');
-    if (btnMob) btnMob.innerHTML = label;
 };
 
 
@@ -294,7 +282,7 @@ UI.renderLandingNavbar = function () {
 
             <!-- Logo -->
             <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
-                <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#2563eb,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;letter-spacing:-.02em;box-shadow:0 2px 12px rgba(37,99,235,0.4);">K</div>
+                <img src="./favicon.png" alt="KPI Master Logo" style="width:30px;height:30px;border-radius:8px;object-fit:contain;">
                 <span style="font-size:15px;font-weight:800;color:#fff;letter-spacing:-.03em;white-space:nowrap;">KPI Master</span>
                 <span style="font-size:9px;font-weight:700;color:#93c5fd;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:99px;padding:3px 8px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;" data-translate="nav-badge">${_t('nav-badge')}</span>
             </div>
@@ -306,14 +294,13 @@ UI.renderLandingNavbar = function () {
             </div>
 
             <!-- Desktop: lang + CTA -->
+            <!-- Desktop: lang + CTA -->
             <div class="lp-nav-desktop-cta" style="flex-shrink:0;">
-                <button id="lpLangToggleBtn" style="font-size:11px;font-weight:700;color:var(--muted);background:transparent;border:1px solid var(--border);border-radius:7px;padding:6px 10px;cursor:pointer;letter-spacing:.06em;transition:all .15s;white-space:nowrap;" onmouseover="this.style.color='#f1f5f9';this.style.borderColor='rgba(255,255,255,0.15)'" onmouseout="this.style.color='#64748b';this.style.borderColor='rgba(255,255,255,0.07)'">${langLabel}</button>
                 <button id="navLoginBtn" data-translate="nav-login-btn" class="btn-primary" style="padding:9px 18px;font-size:13px;border-radius:8px;white-space:nowrap;">${_t('nav-login-btn')}</button>
             </div>
 
             <!-- Mobile: lang + hamburger -->
             <div class="lp-nav-hamburger" style="flex-shrink:0;">
-                <button id="lpLangToggleBtnMob" style="font-size:11px;font-weight:700;color:var(--muted);background:transparent;border:1px solid var(--border);border-radius:7px;padding:5px 8px;cursor:pointer;letter-spacing:.06em;transition:all .15s;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'">${langLabel}</button>
                 <button id="lpNavHamburger" style="background:transparent;border:1px solid var(--border);border-radius:7px;padding:6px 8px;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all .15s;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'" aria-label="Menu">
                     <svg id="lpHamIcon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
@@ -379,11 +366,7 @@ UI.renderLandingHero = function () {
     const _t = (key) => (UI.landingTranslations[key] && UI.landingTranslations[key][lang]) || '';
     return `
     <section class="lp-fade-hidden" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:100px 24px 80px;position:relative;overflow:hidden;
-        background:radial-gradient(ellipse 80% 50% at 50% 0%, rgba(37,99,235,0.12) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 30% at 80% 70%, rgba(99,102,241,0.07) 0%, transparent 60%),
-        var(--bg);">
-        <!-- Subtle grid -->
-        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:56px 56px;pointer-events:none;"></div>
+        background: var(--bg);">
 
         <div class="wrap" style="position:relative;text-align:center;max-width:860px;">
 
@@ -397,7 +380,7 @@ UI.renderLandingHero = function () {
             <h1 style="font-size:clamp(40px,6.5vw,80px);font-weight:800;line-height:1.08;letter-spacing:-0.03em;color:#f1f5f9;margin-bottom:24px;">
                 <span data-translate="hero-h1-1" style="display:block;">${_t('hero-h1-1')}</span>
                 <span data-translate="hero-h1-2" style="display:block;">${_t('hero-h1-2')}</span>
-                <span data-translate="hero-h1-3" style="display:block; max-width:100%;" class="lp-typing-txt" background:linear-gradient(135deg,#60a5fa 0%,#818cf8 50%,#c084fc 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" id="lp-hero-typer" class="lp-typing-txt">${_t('hero-h1-3')}</span>
+                <span data-translate="hero-h1-3" style="display:block; max-width:100%;" class="lp-typing-txt" id="lp-hero-typer">${_t('hero-h1-3')}</span>
             </h1>
 
             <!-- Description -->
@@ -415,39 +398,39 @@ UI.renderLandingHero = function () {
             <!-- Trust bar -->
             <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:28px;margin-bottom:64px;">
                 ${[
-            { icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', label: 'OAuth Trello — 30 segundos', c: '#34d399' },
-            { icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', label: 'Sem dados armazenados', c: '#60a5fa' },
-            { icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6', label: 'Tempo real — sempre atualizado', c: '#a78bfa' },
+            { icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', label: 'OAuth Trello — 30 seconds', c: '#34d399' },
+            { icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', label: 'No stored data', c: '#60a5fa' },
+            { icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6', label: 'Real-time — always active', c: '#a78bfa' },
         ].map(i => `<span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#475569;font-weight:500;">
                     <svg width="13" height="13" fill="none" stroke="${i.c}" viewBox="0 0 24 24" style="flex-shrink:0;opacity:.85;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${i.icon}"/></svg>${i.label}</span>`).join('')}
             </div>
 
             <!-- DASHBOARD MOCKUP -->
             <div style="position:relative;border-radius:18px;overflow:hidden;
-                box-shadow:0 0 0 1px rgba(59,130,246,0.18),0 40px 80px rgba(0,0,0,0.65);
+                box-shadow:0 0 0 1px rgba(59,130,246,0.1),0 40px 80px rgba(0,0,0,0.65);
                 background:#0a0f1a;">
                 <!-- Top gradient line -->
-                <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.6),rgba(167,139,250,0.4),transparent);z-index:10;"></div>
+                <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.3),rgba(167,139,250,0.2),transparent);z-index:10;"></div>
 
                 <div style="display:flex;height:480px;overflow:hidden;text-align:left;user-select:none;">
                     <!-- Sidebar -->
                     <div style="width:172px;background:#070b12;border-right:1px solid rgba(255,255,255,0.04);flex-shrink:0;display:flex;flex-direction:column;">
                         <div style="height:38px;display:flex;align-items:center;gap:7px;padding:0 10px;border-bottom:1px solid rgba(255,255,255,0.04);">
-                            <div style="width:18px;height:18px;background:#2563eb;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#fff;">K</div>
+                            <img src="./favicon.png" alt="KPI Master Logo" style="width:18px;height:18px;border-radius:5px;object-fit:contain;">
                             <span style="font-size:11px;font-weight:800;color:#fff;">KPI Master</span>
                         </div>
                         <div style="flex:1;padding:10px 8px;overflow:hidden;display:flex;flex-direction:column;gap:14px;">
                             <div>
-                                <p style="font-size:6.5px;color:#374151;font-weight:700;text-transform:uppercase;letter-spacing:.15em;margin-bottom:6px;padding-left:4px;">Perfil</p>
+                                <p style="font-size:6.5px;color:#374151;font-weight:700;text-transform:uppercase;letter-spacing:.15em;margin-bottom:6px;padding-left:4px;">Profile</p>
                                 <div style="display:flex;align-items:center;gap:7px;padding:7px 8px;background:#0d1117;border-radius:8px;border:1px solid rgba(255,255,255,0.04);">
                                     <div style="width:18px;height:18px;border-radius:5px;background:rgba(37,99,235,0.2);border:1px solid rgba(37,99,235,0.2);display:flex;align-items:center;justify-content:center;font-size:6px;font-weight:700;color:#93c5fd;">RC</div>
-                                    <div><div style="font-size:8px;font-weight:700;color:#fff;">Ricardo C.</div><div style="font-size:6.5px;color:#10b981;font-weight:600;">● Gestor</div></div>
+                                    <div><div style="font-size:8px;font-weight:700;color:#fff;">Ricardo C.</div><div style="font-size:6.5px;color:#10b981;font-weight:600;">● Manager</div></div>
                                 </div>
                             </div>
                             <div>
-                                <p style="font-size:6.5px;color:#374151;font-weight:700;text-transform:uppercase;letter-spacing:.15em;margin-bottom:5px;padding-left:4px;">Consultores</p>
+                                <p style="font-size:6.5px;color:#374151;font-weight:700;text-transform:uppercase;letter-spacing:.15em;margin-bottom:5px;padding-left:4px;">Sales Team</p>
                                 <div style="display:flex;align-items:center;gap:7px;padding:5px 8px;background:rgba(37,99,235,0.15);border-radius:6px;border:1px solid rgba(37,99,235,0.2);margin-bottom:2px;">
-                                    <span style="font-size:8px;font-weight:600;color:#fff;">Todos</span>
+                                    <span style="font-size:8px;font-weight:600;color:#fff;">All</span>
                                 </div>
                                 ${['Ana M.', 'Bruno S.', 'Carla F.'].map(n => `<div style="display:flex;align-items:center;gap:7px;padding:4px 8px;"><span style="font-size:8px;color:#475569;">${n}</span></div>`).join('')}
                             </div>
@@ -458,12 +441,12 @@ UI.renderLandingHero = function () {
                     <div style="flex:1;background:#0f172a;display:flex;flex-direction:column;min-width:0;">
                         <div style="height:38px;background:#0f172a;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:space-between;padding:0 14px;flex-shrink:0;">
                             <div style="display:flex;align-items:center;gap:8px;">
-                                <span style="font-size:11px;font-weight:800;color:#fff;">Dashboard Imobiliário</span>
+                                <span style="font-size:11px;font-weight:800;color:#fff;">Sales Dashboard</span>
                                 <span style="font-size:7px;font-weight:700;color:#60a5fa;background:rgba(37,99,235,0.12);padding:2px 6px;border-radius:4px;">Manager</span>
                             </div>
                             <div style="display:flex;gap:6px;">
                                 <div style="background:#2563eb;border-radius:6px;padding:4px 10px;font-size:8px;font-weight:700;color:#fff;">Analytics</div>
-                                <div style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:4px 10px;font-size:8px;color:#94a3b8;">Exportar PDF</div>
+                                <div style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:4px 10px;font-size:8px;color:#94a3b8;">Export PDF</div>
                             </div>
                         </div>
 
@@ -471,29 +454,29 @@ UI.renderLandingHero = function () {
                             <!-- Row 1: Pipeline + Focus -->
                             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                                 <div style="background:#0a0f1a;border:1px solid rgba(255,255,255,0.04);border-radius:10px;padding:10px;">
-                                    <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;"><div style="width:6px;height:6px;background:#3b82f6;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Pipeline Imob.</span></div>
-                                    ${[{ s: 'Novo Contacto', n: 52, p: 100 }, { s: 'Visita Marcada', n: 35, p: 67 }, { s: 'Proposta Enviada', n: 21, p: 40 }, { s: 'Contrato', n: 8, p: 15 }].map(r => `<div style="display:flex;align-items:center;gap:6px;font-size:7px;margin-bottom:5px;"><span style="width:72px;color:#475569;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.s}</span><div style="flex:1;height:4px;background:rgba(255,255,255,0.04);border-radius:2px;"><div style="height:100%;border-radius:2px;background:${r.n === 8 ? '#10b981' : '#3b82f6'};width:${r.p}%;" class="lp-bar-fill"></div></div><span style="color:#475569;width:14px;text-align:right;" data-count-to="${r.n}">0</span></div>`).join('')}
+                                    <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;"><div style="width:6px;height:6px;background:#3b82f6;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Sales Pipeline</span></div>
+                                    ${[{ s: 'Incoming Leads', n: 52, p: 100 }, { s: 'Contacted', n: 35, p: 67 }, { s: 'Proposal Sent', n: 21, p: 40 }, { s: 'Deals Won', n: 8, p: 15 }].map(r => `<div style="display:flex;align-items:center;gap:6px;font-size:7px;margin-bottom:5px;"><span style="width:72px;color:#475569;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.s}</span><div style="flex:1;height:4px;background:rgba(255,255,255,0.04);border-radius:2px;"><div style="height:100%;border-radius:2px;background:${r.n === 8 ? '#10b981' : '#3b82f6'};width:${r.p}%;" class="lp-bar-fill"></div></div><span style="color:#475569;width:14px;text-align:right;" data-count-to="${r.n}">0</span></div>`).join('')}
                                 </div>
                                 <div style="background:#0a0f1a;border:1px solid rgba(255,255,255,0.04);border-radius:10px;padding:10px;">
                                     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-                                        <div style="display:flex;align-items:center;gap:5px;"><div style="width:6px;height:6px;background:#ef4444;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Leads Críticos</span></div>
+                                        <div style="display:flex;align-items:center;gap:5px;"><div style="width:6px;height:6px;background:#ef4444;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Critical Leads</span></div>
                                         <span style="font-size:6.5px;font-weight:700;color:#f87171;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);padding:1px 5px;border-radius:99px;">⚠ 5</span>
                                     </div>
-                                    ${[{ n: 'Família Mendes — T3 Algés', t: '🔴 14d', bg: 'rgba(239,68,68,0.05)' }, { n: 'Dr. Ferreira — Escritório', t: '🟡 8d', bg: 'rgba(245,158,11,0.05)' }, { n: 'Ana Costa — T2 Cascais', t: '🟡 6d', bg: 'rgba(245,158,11,0.05)' }].map(a => `<div style="background:${a.bg};border:1px solid rgba(255,255,255,0.03);border-radius:7px;padding:5px 8px;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:7px;color:#94a3b8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:130px;">${a.n}</span><span style="font-size:6.5px;color:#475569;flex-shrink:0;">${a.t}</span></div>`).join('')}
+                                    ${[{ n: 'Acme Corp - Enterprise', t: '🔴 14d', bg: 'rgba(239,68,68,0.05)' }, { n: 'Globex Inc - Annual Deal', t: '🟡 8d', bg: 'rgba(245,158,11,0.05)' }, { n: 'Initech - Team Plan', t: '🟡 6d', bg: 'rgba(245,158,11,0.05)' }].map(a => `<div style="background:${a.bg};border:1px solid rgba(255,255,255,0.03);border-radius:7px;padding:5px 8px;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:7px;color:#94a3b8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:130px;">${a.n}</span><span style="font-size:6.5px;color:#475569;flex-shrink:0;">${a.t}</span></div>`).join('')}
                                 </div>
                             </div>
 
                             <!-- Row 2: Tempo + Performance -->
                             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                                 <div style="background:#0a0f1a;border:1px solid rgba(255,255,255,0.04);border-radius:10px;padding:10px;">
-                                    <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;"><div style="width:6px;height:6px;background:#f59e0b;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Tempo Médio por Fase</span></div>
+                                    <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;"><div style="width:6px;height:6px;background:#f59e0b;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Avg. Cycle Time</span></div>
                                     <div style="display:grid;grid-template-columns:auto 1fr;gap:6px;align-items:center;">
                                         <div style="background:#111827;border-radius:8px;padding:8px 10px;border:1px solid rgba(255,255,255,0.04);">
                                             <p style="font-size:22px;font-weight:900;color:#fff;line-height:1;">11d</p>
-                                            <p style="font-size:7px;color:#f87171;margin-top:2px;">↑ acima do ideal</p>
+                                            <p style="font-size:7px;color:#f87171;margin-top:2px;">↑ above target</p>
                                         </div>
                                         <div style="display:flex;flex-direction:column;gap:4px;">
-                                            ${[{ l: 'Visita→Proposta', t: '7d', c: '#f87171' }, { l: 'Proposta→Fecho', t: '18d', c: '#f87171' }, { l: 'Contacto→Visita', t: '4d', c: '#34d399' }].map(r => `<div style="background:#111827;border-radius:5px;padding:4px 7px;border:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:6.5px;color:#475569;">${r.l}</span><span style="font-size:7.5px;font-weight:700;color:${r.c};">${r.t}</span></div>`).join('')}
+                                            ${[{ l: 'Contact→Proposal', t: '7d', c: '#f87171' }, { l: 'Proposal→Won', t: '18d', c: '#f87171' }, { l: 'Lead→Contact', t: '4d', c: '#34d399' }].map(r => `<div style="background:#111827;border-radius:5px;padding:4px 7px;border:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:6.5px;color:#475569;">${r.l}</span><span style="font-size:7.5px;font-weight:700;color:${r.c};">${r.t}</span></div>`).join('')}
                                         </div>
                                     </div>
                                 </div>
@@ -501,8 +484,8 @@ UI.renderLandingHero = function () {
                                     <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;"><div style="width:6px;height:6px;background:#8b5cf6;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Performance</span></div>
                                     <div style="background:#111827;border:1px solid rgba(245,158,11,0.15);border-radius:8px;padding:7px 9px;display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
                                         <div style="display:flex;align-items:center;gap:6px;">
-                                            <div style="width:16px;height:16px;border-radius:4px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:6px;font-weight:700;color:#fcd34d;">AN</div>
-                                            <div><p style="font-size:8px;font-weight:700;color:#fff;">Ana Martins</p><p style="font-size:7px;color:#f59e0b;">🏆 8 contratos</p></div>
+                                            <div style="width:16px;height:16px;border-radius:4px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:6px;font-weight:700;color:#fcd34d;">AM</div>
+                                            <div><p style="font-size:8px;font-weight:700;color:#fff;">Anna M.</p><p style="font-size:7px;color:#f59e0b;">🏆 8 Deals</p></div>
                                         </div>
                                         <span style="font-size:14px;font-weight:900;color:#fff;" data-count-to="42">0</span>
                                     </div>
@@ -512,10 +495,10 @@ UI.renderLandingHero = function () {
 
                             <!-- Row 3: Table -->
                             <div style="background:#0a0f1a;border:1px solid rgba(255,255,255,0.04);border-radius:10px;padding:10px;overflow:hidden;">
-                                <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;"><div style="width:6px;height:6px;background:#6366f1;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Tabela de Performance — Fev</span><span style="margin-left:auto;font-size:7px;font-weight:700;color:#34d399;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.15);padding:1px 6px;border-radius:4px;">8 contratos</span></div>
+                                <div style="display:flex;align-items:center;gap:5px;margin-bottom:8px;"><div style="width:6px;height:6px;background:#6366f1;border-radius:2px;"></div><span style="font-size:7px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em;">Leaderboard — Feb</span><span style="margin-left:auto;font-size:7px;font-weight:700;color:#34d399;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.15);padding:1px 6px;border-radius:4px;">8 Deals</span></div>
                                 <table style="width:100%;font-size:7.5px;border-collapse:collapse;">
-                                    <thead><tr style="border-bottom:1px solid rgba(255,255,255,0.04);">${['Consultor', 'Leads', 'Visitas', 'Propostas', 'Contratos', 'Taxa'].map(h => `<th style="text-align:left;color:#374151;padding-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding-right:10px;">${h}</th>`).join('')}</tr></thead>
-                                    <tbody>${[{ n: 'Ana Martins', l: 42, v: 28, p: 15, c: 8, t: '19%' }, { n: 'Bruno S.', l: 31, v: 19, p: 11, c: 5, t: '16%' }, { n: 'Carla F.', l: 22, v: 14, p: 7, c: 3, t: '14%' }].map(r => `<tr><td style="padding:4px 10px 4px 0;color:#cbd5e1;font-weight:600;">${r.n}</td><td style="padding:4px 10px 4px 0;"><span style="background:rgba(59,130,246,0.12);color:#60a5fa;padding:1px 5px;border-radius:99px;font-weight:700;" data-count-to="${r.l}">0</span></td><td style="padding:4px 10px 4px 0;color:#475569;" data-count-to="${r.v}">0</td><td style="padding:4px 10px 4px 0;color:#475569;" data-count-to="${r.p}">0</td><td style="padding:4px 10px 4px 0;color:#34d399;font-weight:700;" data-count-to="${r.c}">0</td><td style="padding:4px 10px 4px 0;color:#fbbf24;font-weight:700;">${r.t}</td></tr>`).join('')}</tbody>
+                                    <thead><tr style="border-bottom:1px solid rgba(255,255,255,0.04);">${['Agent', 'Leads', 'Calls', 'Proposals', 'Deals', 'Win Rate'].map(h => `<th style="text-align:left;color:#374151;padding-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding-right:10px;">${h}</th>`).join('')}</tr></thead>
+                                    <tbody>${[{ n: 'Anna M.', l: 42, v: 28, p: 15, c: 8, t: '19%' }, { n: 'Bruno S.', l: 31, v: 19, p: 11, c: 5, t: '16%' }, { n: 'Carla F.', l: 22, v: 14, p: 7, c: 3, t: '14%' }].map(r => `<tr><td style="padding:4px 10px 4px 0;color:#cbd5e1;font-weight:600;">${r.n}</td><td style="padding:4px 10px 4px 0;"><span style="background:rgba(59,130,246,0.12);color:#60a5fa;padding:1px 5px;border-radius:99px;font-weight:700;" data-count-to="${r.l}">0</span></td><td style="padding:4px 10px 4px 0;color:#475569;" data-count-to="${r.v}">0</td><td style="padding:4px 10px 4px 0;color:#475569;" data-count-to="${r.p}">0</td><td style="padding:4px 10px 4px 0;color:#34d399;font-weight:700;" data-count-to="${r.c}">0</td><td style="padding:4px 10px 4px 0;color:#fbbf24;font-weight:700;">${r.t}</td></tr>`).join('')}</tbody>
                                 </table>
                             </div>
                         </div>
@@ -726,7 +709,7 @@ UI.renderLandingFooter = function () {
     <footer style="padding:40px 24px;border-top:1px solid var(--border2);background:var(--bg);">
         <div class="wrap" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px;">
             <div style="display:flex;align-items:center;gap:10px;">
-                <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#2563eb,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff;">K</div>
+                <img src="./favicon.png" alt="KPI Master Logo" style="width:28px;height:28px;border-radius:8px;object-fit:contain;">
                 <span style="font-size:14px;font-weight:800;color:#f1f5f9;letter-spacing:-.02em;">KPI Master</span>
                 <span style="font-size:9px;font-weight:700;color:#93c5fd;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:99px;padding:2px 7px;letter-spacing:.06em;text-transform:uppercase;" data-translate="footer-badge">${_t('footer-badge')}</span>
             </div>

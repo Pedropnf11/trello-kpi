@@ -63,13 +63,32 @@ App.state = {
 
 App.init = function () {
     const hash = window.location.hash;
-    if (hash && hash.includes('token=')) {
-        const token = hash.split('token=')[1].split('&')[0];
-        if (token) {
-            this.state.token = token;
-            localStorage.setItem('trello_token', token);
-            window.history.replaceState(null, '', window.location.pathname);
+    if (hash) {
+        if (hash.includes('token=')) {
+            const token = hash.split('token=')[1].split('&')[0];
+            if (token) {
+                this.state.token = token;
+                localStorage.setItem('trello_token', token);
+            }
         }
+        if (hash.includes('board=')) {
+            const boardId = hash.split('board=')[1].split('&')[0];
+            if (boardId) {
+                this.state.boardId = boardId;
+                localStorage.setItem('trello_board_id', boardId);
+            }
+        }
+        if (hash.includes('role=')) {
+            const urlRole = hash.split('role=')[1].split('&')[0];
+            if (urlRole) {
+                let mappedRole = urlRole;
+                if (urlRole === 'gestor') mappedRole = 'manager';
+                if (urlRole === 'vendedor') mappedRole = 'sales';
+                this.state.userRole = mappedRole;
+                localStorage.setItem('trello_user_role', mappedRole);
+            }
+        }
+        window.history.replaceState(null, '', window.location.pathname);
     }
 
     if (this.state.token) {
@@ -155,10 +174,6 @@ App.attachDynamicEvents = function () {
             this.render();
         };
     }
-
-    // 3. Time Tracking Selects
-    const leftSelect = document.getElementById('timeTrackingSelectLeft');
-    const rightSelect = document.getElementById('timeTrackingSelectRight');
 
     if (leftSelect) {
         leftSelect.onchange = (e) => {
