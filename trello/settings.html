@@ -145,10 +145,10 @@
                   var myMembership = memberships.find(function(m) { return m.idMember === memberId; });
                   role = (myMembership && myMembership.memberType === 'admin') ? 'gestor' : 'vendedor';
                 }
-                window.open(SITE + '#board=' + boardId + '&role=' + role, '_blank');
+                window.open(SITE + '#board=' + boardId + '&role=' + role + '&token=' + token, '_blank');
               });
           } else {
-            window.open(SITE + '#board=' + boardId + '&role=vendedor', '_blank');
+            window.open(SITE + '#board=' + boardId + '&role=vendedor' + (token ? '&token=' + token : ''), '_blank');
           }
         }).catch(function() {
           window.open(SITE + '#board=' + boardId + '&role=vendedor', '_blank');
