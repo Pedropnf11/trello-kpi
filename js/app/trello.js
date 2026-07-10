@@ -94,12 +94,48 @@ App.conectarTrello = async function () {
         const userInfo = await TrelloAPI.fetchUserInfo(apiKey, token);
         this.state.currentUser = userInfo;
 
-        if (this.state.userRole === 'manager') {
-            const availableBoards = this.state.availableBoards || [];
-            const currentBoard = availableBoards.find(b => b.id === boardId);
-            if (!currentBoard) {
-                this.state.userRole = 'sales';
-                localStorage.setItem('trello_user_role', 'sales');
+        const isFromPowerUp = localStorage.getItem('trello_from_powerup') === 'true';
+        localStorage.removeItem('trello_from_powerup'); // Consume flag
+
+        if (isFromPowerUp) {
+            try {
+                const boards = await TrelloAPI.fetchBoards(apiKey, token);
+                const currentBoard = boards.find(b => b.id === boardId);
+                if (currentBoard) {
+                    const myMembership = currentBoard.memberships?.find(m => m.idMember === userInfo.id);
+                    const isAdmin = myMembership && myMembership.memberType === 'admin';
+                    const determinedRole = isAdmin ? 'manager' : 'sales';
+                    this.state.userRole = determinedRole;
+                    localStorage.setItem('trello_user_role', determinedRole);
+                } else {
+                    if (!this.state.userRole) {
+                        this.state.userRole = 'sales';
+                        localStorage.setItem('trello_user_role', 'sales');
+                    }
+                }
+            } catch (e) {
+                console.warn('Erro ao verificar permissão do quadro vindo do Power-Up:', e);
+                if (!this.state.userRole) {
+                    this.state.userRole = 'sales';
+                    localStorage.setItem('trello_user_role', 'sales');
+                }
+            }
+        } else {
+            if (this.state.userRole === 'manager') {
+                let availableBoards = this.state.availableBoards || [];
+                if (availableBoards.length === 0) {
+                    try {
+                        availableBoards = await TrelloAPI.fetchBoards(apiKey, token);
+                        this.state.availableBoards = availableBoards;
+                    } catch (e) {
+                        console.warn('Erro ao carregar quadros para validação de gestor:', e);
+                    }
+                }
+                const currentBoard = availableBoards.find(b => b.id === boardId);
+                if (!currentBoard) {
+                    this.state.userRole = 'sales';
+                    localStorage.setItem('trello_user_role', 'sales');
+                }
             }
         }
 
