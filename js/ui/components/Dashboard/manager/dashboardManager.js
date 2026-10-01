@@ -34,14 +34,14 @@ UI.renderManagerDashboard = function (state) {
 
     // LAYOUT DARK PREMIUM - SMART GRID
     return `
-        <div class="flex h-screen w-full bg-[#0f172a] font-sans text-gray-100 overflow-hidden selection:bg-blue-500 selection:text-white relative">
+        <div class="flex h-screen w-full bg-[#080c14] font-sans text-gray-100 overflow-hidden selection:bg-blue-500 selection:text-white relative">
             <!-- SIDEBAR -->
             ${UI.renderSidebarManager(state, kpis, filterId)}
 
             <!-- MAIN CONTENT AREA -->
-            <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-[#0f172a] min-w-0">
+            <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-[#080c14] min-w-0">
                 <!-- Top Glass Bar -->
-                <header class="h-16 bg-[#0f172a]/95 border-b border-gray-800 flex items-center justify-between px-6 z-30 flex-shrink-0">
+                <header class="h-16 bg-[#080c14]/90 backdrop-blur-md border-b border-white/[0.08] flex items-center justify-between px-6 z-30 flex-shrink-0">
                     <div>
                         <h1 class="text-xl font-black text-white tracking-tight flex items-center gap-2">
                            <!-- HAMBURGER BUTTON (Mobile Only) -->
@@ -105,27 +105,27 @@ UI.renderManagerDashboard = function (state) {
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
                             
                             <!-- Tempo Médio -->
-                            <div class="bg-[#0f172a] rounded-2xl p-6 border border-white/[0.04] hover:border-white/[0.07] transition-colors duration-200 flex flex-col">
+                            <div class="bg-[#0d1117] rounded-2xl p-6 border border-white/[0.08] hover:border-white/[0.15] transition-all shadow-xl flex flex-col">
                                 ${UI.renderTimeTracking(temposListas, rawData.listas, state.timeTrackingLists)}
                             </div>
 
                             <!-- Atividade -->
-                            <div class="bg-[#0f172a] rounded-2xl p-6 border border-white/[0.04] hover:border-white/[0.07] transition-colors duration-200 flex flex-col">
+                            <div class="bg-[#0d1117] rounded-2xl p-6 border border-white/[0.08] hover:border-white/[0.15] transition-all shadow-xl flex flex-col">
                                 ${UI.renderActivity(kpis.atividade)}
                             </div>
                         </div>
 
                         <!-- ROW 3: FOLLOW-UPS -->
-                        <div class="bg-[#0f172a] rounded-2xl p-6 border border-white/[0.04] hover:border-white/[0.07] transition-colors duration-200">
+                        <div class="bg-[#0d1117] rounded-2xl p-6 border border-white/[0.08] hover:border-white/[0.15] transition-all shadow-xl">
                             ${UI.renderDueDatesTable(dadosPeriodo)}
                         </div>
 
                         <!-- ROW 4: TABELAS DE PERFORMANCE -->
                         <div class="flex flex-col gap-5">
-                            <div class="bg-[#0f172a] rounded-2xl p-6 border border-white/[0.04] overflow-x-auto hover:border-white/[0.07] transition-colors duration-200">
+                            <div class="bg-[#0d1117] rounded-2xl p-6 border border-white/[0.08] overflow-x-auto hover:border-white/[0.15] transition-all shadow-xl">
                                 ${UI.renderTable(periodoTitulo, dadosPeriodo, listsDef, 'blue')}
                             </div>
-                            <div class="bg-[#0f172a] rounded-2xl p-6 border border-white/[0.04] overflow-x-auto hover:border-white/[0.07] transition-colors duration-200">
+                            <div class="bg-[#0d1117] rounded-2xl p-6 border border-white/[0.08] overflow-x-auto hover:border-white/[0.15] transition-all shadow-xl">
                                 ${UI.renderTable(t('Performance Geral (Acumulado Total)', 'Overall Performance (All-time)'), dadosGeral, listsDef, 'gray')}
                             </div>
                         </div>
@@ -147,7 +147,7 @@ UI.renderFunnel = function (funilData) {
     const maxCount = Math.max(...funilData.map(s => s.count));
 
     return `
-        <div class="bg-[#0f172a] rounded-2xl p-6 border border-white/[0.04] hover:border-white/[0.07] transition-colors h-full flex flex-col w-full">
+        <div class="bg-[#0d1117] rounded-2xl p-6 border border-white/[0.08] hover:border-white/[0.15] transition-all shadow-xl h-full flex flex-col w-full">
             <div class="flex justify-between items-center mb-5 flex-shrink-0">
                 <div class="flex items-center gap-2.5">
                     <span class="w-1.5 h-4 rounded-full bg-blue-500"></span>
@@ -182,7 +182,7 @@ UI.renderActionItems = function (actions) {
     if (!actions) return '';
 
     return `
-        <div class="bg-[#0f172a] rounded-2xl p-6 border border-white/[0.04] hover:border-white/[0.07] transition-colors h-full flex flex-col w-full" id="focusZoneCard">
+        <div class="bg-[#0d1117] rounded-2xl p-6 border border-white/[0.08] hover:border-white/[0.15] transition-all shadow-xl h-full flex flex-col w-full" id="focusZoneCard">
             <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-5 gap-3 cursor-pointer xl:cursor-default" onclick="if(window.innerWidth < 1280) { document.getElementById('actionItemsList').classList.toggle('hidden'); document.getElementById('focusZoneArrow').classList.toggle('rotate-180'); }">
                  <div class="flex items-center justify-between w-full xl:w-auto">
                      <div class="flex items-center gap-2.5">

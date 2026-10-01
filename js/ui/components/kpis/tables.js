@@ -48,7 +48,7 @@ UI.renderTable = function (titulo, dados, listsDef, colorTheme = 'slate') {
                             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors group">
                                 <td class="px-4 py-3">
                                     <div class="flex items-center gap-2.5">
-                                        <div class="w-7 h-7 rounded-lg bg-[#1e293b] flex items-center justify-center text-[11px] font-bold text-gray-300 border border-white/[0.04] flex-shrink-0">
+                                        <div class="w-7 h-7 rounded-lg bg-[#080c14] flex items-center justify-center text-[11px] font-bold text-gray-300 border border-white/[0.06] flex-shrink-0">
                                             ${c.nome.charAt(0).toUpperCase()}
                                         </div>
                                         <span class="text-[13px] font-semibold text-gray-300 group-hover:text-white transition-colors truncate">${Utils.escapeHtml(c.nome)}</span>
@@ -58,7 +58,7 @@ UI.renderTable = function (titulo, dados, listsDef, colorTheme = 'slate') {
                                 ${listsDef.map(l => `
                                     <td class="px-4 py-3 text-center">
                                         ${c.listCounts[l.id] > 0
-            ? `<span class="inline-flex items-center justify-center min-w-[2rem] h-6 px-2 rounded-md bg-[#0f172a] text-white text-[12px] font-bold border border-white/[0.06]">${c.listCounts[l.id]}</span>`
+            ? `<span class="inline-flex items-center justify-center min-w-[2rem] h-6 px-2 rounded-md bg-[#080c14] text-white text-[12px] font-bold border border-white/[0.08]">${c.listCounts[l.id]}</span>`
             : '<span class="text-gray-700 text-[12px]">—</span>'
         }
                                     </td>
@@ -109,7 +109,7 @@ UI.renderDueDatesTable = function (dadosSemanal) {
                             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors group">
                                 <td class="px-4 py-3">
                                     <div class="flex items-center gap-2.5">
-                                        <div class="w-7 h-7 rounded-lg bg-[#1e293b] flex items-center justify-center text-[11px] font-bold text-gray-300 border border-white/[0.04] flex-shrink-0">
+                                        <div class="w-7 h-7 rounded-lg bg-[#080c14] flex items-center justify-center text-[11px] font-bold text-gray-300 border border-white/[0.06] flex-shrink-0">
                                             ${c.nome.charAt(0).toUpperCase()}
                                         </div>
                                         <span class="text-[13px] font-semibold text-gray-300 group-hover:text-white transition-colors">${Utils.escapeHtml(c.nome)}</span>

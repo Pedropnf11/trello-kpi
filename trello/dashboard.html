@@ -3,22 +3,41 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>KPI Master</title>
-  <!-- Importar fonte profissional do Google -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>KPI Master Dashboard</title>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
   <style>
     :root {
-      --bg-body: #f4f5f7;
-      --card-bg: #ffffff;
-      --border-color: #dfe1e6;
-      --text-main: #172b4d;
-      --text-sub: #5e6c84;
-      --primary: #0052cc;
-      --primary-hover: #0065ff;
-      --gradient-btn: linear-gradient(135deg, #0052cc, #0073e6);
-      --gradient-fast: linear-gradient(135deg, #ffffff, #f3faf6);
-      --gradient-slow: linear-gradient(135deg, #ffffff, #fff5f5);
+      --bg-body: #090d16;
+      --card-bg: #111726;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover-border: rgba(255, 255, 255, 0.16);
+      
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --text-muted: #64748b;
+      
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-glow: rgba(59, 130, 246, 0.25);
+      --gradient-btn: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      
+      --fast-bg: #0f1f1d;
+      --fast-border: #10b981;
+      --fast-text: #34d399;
+      --fast-pill: rgba(16, 185, 129, 0.15);
+
+      --slow-bg: #211319;
+      --slow-border: #f43f5e;
+      --slow-text: #fb7185;
+      --slow-pill: rgba(244, 63, 94, 0.15);
+
+      --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
@@ -27,17 +46,17 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg-body);
       color: var(--text-main);
-      box-sizing: border-box;
       height: 100vh;
       display: flex;
       flex-direction: column;
+      -webkit-font-smoothing: antialiased;
     }
     
     .container {
       display: flex;
       flex-direction: column;
       height: 100%;
-      gap: 16px;
+      gap: 14px;
     }
 
     /* Cabeçalho Premium */
@@ -45,41 +64,70 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
     }
     
     .header-top {
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     
-    .header-top img {
+    .brand-left img {
       width: 26px;
       height: 26px;
       border-radius: 6px;
     }
     
-    .header-top h1 {
-      font-size: 17px;
+    .brand-left h1 {
+      font-size: 16px;
       font-weight: 700;
       margin: 0;
       color: var(--text-main);
       letter-spacing: -0.02em;
     }
 
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 6px #10b981;
+    }
+
     /* Configuração rápida de listas no topo */
     .selectors-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
+      gap: 10px;
     }
 
     .select-group {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
     }
 
     .select-group label {
@@ -87,32 +135,49 @@
       font-weight: 700;
       color: var(--text-sub);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
 
     .custom-select {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 8px 32px 8px 12px;
-      font-size: 13px;
+      background: #161e31;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 8px 30px 8px 12px;
+      font-size: 12.5px;
       color: var(--text-main);
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
       outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      transition: all 0.2s ease;
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
-      background-image: url('data:image/svg+xml;utf8,<svg fill="%235e6c84" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%2394a3b8" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
       background-repeat: no-repeat;
       background-position: right 8px center;
-      background-size: 18px;
+      background-size: 16px;
+    }
+
+    .custom-select:hover {
+      border-color: var(--card-hover-border);
+      background-color: #1c273e;
     }
 
     .custom-select:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(0, 82, 204, 0.2);
+      box-shadow: 0 0 0 2px var(--primary-glow);
+    }
+
+    /* Informação rápida */
+    .quick-tip-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-left: 3px solid var(--primary);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 11px;
+      color: var(--text-sub);
+      line-height: 1.45;
     }
 
     /* Área Central */
@@ -121,45 +186,68 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 14px;
+      gap: 12px;
     }
 
-    /* Ecrã Não Autorizado */
+    /* Ecrã Não Autorizado / Sem Dados */
     .unauth-card {
       background: var(--card-bg);
       border-radius: 12px;
-      border: 1px solid var(--border-color);
-      padding: 32px 24px;
+      border: 1px solid var(--card-border);
+      padding: 28px 20px;
       text-align: center;
-      box-shadow: 0 4px 12px rgba(9, 30, 66, 0.08);
+      box-shadow: var(--shadow-card);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 12px;
     }
 
+    .unauth-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-sub);
+    }
+
     .unauth-card p {
-      font-size: 13px;
+      font-size: 12.5px;
       color: var(--text-sub);
       line-height: 1.5;
       margin: 0;
+      max-width: 300px;
     }
 
     /* Pequenos Contadores Rápidos */
     .mini-stats-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 10px;
     }
 
     .mini-stat-card {
       background: var(--card-bg);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--card-border);
       border-radius: 10px;
       padding: 12px 14px;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 1px 3px rgba(9, 30, 66, 0.04);
+      transition: border-color 0.2s ease;
+    }
+
+    .mini-stat-card:hover {
+      border-color: var(--card-hover-border);
+    }
+
+    .mini-stat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .mini-stat-label {
@@ -167,72 +255,111 @@
       font-weight: 700;
       color: var(--text-sub);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
 
     .mini-stat-value {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--primary);
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-main);
       margin-top: 4px;
+      letter-spacing: -0.03em;
     }
 
     /* Grandes Cartões de Velocidade */
     .speed-card {
       background: var(--card-bg);
       border-radius: 12px;
-      border: 1px solid var(--border-color);
-      padding: 18px;
-      box-shadow: 0 2px 6px rgba(9, 30, 66, 0.05);
+      border: 1px solid var(--card-border);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-card);
       display: flex;
       flex-direction: column;
       position: relative;
       overflow: hidden;
-      transition: transform 0.15s ease;
+      transition: border-color 0.2s ease;
     }
 
     .speed-card.fastest {
-      background: var(--gradient-fast);
-      border-left: 5px solid #00875a;
+      background: var(--fast-bg);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-left: 4px solid var(--fast-border);
     }
 
     .speed-card.slowest {
-      background: var(--gradient-slow);
-      border-left: 5px solid #de350b;
+      background: var(--slow-bg);
+      border: 1px solid rgba(244, 63, 94, 0.25);
+      border-left: 4px solid var(--slow-border);
+    }
+
+    .speed-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .speed-label {
-      font-size: 10px;
+      font-size: 10.5px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
     }
 
     .speed-label.fastest {
-      color: #00875a;
+      color: var(--fast-text);
     }
 
     .speed-label.slowest {
-      color: #de350b;
+      color: var(--slow-text);
+    }
+
+    .speed-badge-pill {
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .speed-card.fastest .speed-badge-pill {
+      background: var(--fast-pill);
+      color: var(--fast-text);
+    }
+
+    .speed-card.slowest .speed-badge-pill {
+      background: var(--slow-pill);
+      color: var(--slow-text);
     }
 
     .speed-value {
       font-size: 28px;
-      font-weight: 700;
-      margin: 6px 0;
-      letter-spacing: -0.02em;
+      font-weight: 800;
+      margin: 6px 0 4px 0;
+      letter-spacing: -0.04em;
     }
 
     .speed-card.fastest .speed-value {
-      color: #006644;
+      color: var(--fast-text);
     }
 
     .speed-card.slowest .speed-value {
-      color: #b31d00;
+      color: var(--slow-text);
+    }
+
+    .speed-desc-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 2px;
     }
 
     .speed-desc {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
       color: var(--text-main);
       white-space: nowrap;
@@ -242,8 +369,22 @@
 
     /* Rodapé */
     .footer {
-      padding-top: 12px;
-      border-top: 1px solid var(--border-color);
+      padding-top: 10px;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .notice-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 11px;
+      color: var(--text-sub);
+      text-align: center;
+      line-height: 1.4;
     }
 
     .btn-primary {
@@ -251,21 +392,26 @@
       color: #ffffff;
       border: none;
       border-radius: 8px;
-      padding: 12px;
+      padding: 11px 16px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       width: 100%;
       text-align: center;
       text-decoration: none;
       box-sizing: border-box;
-      transition: opacity 0.15s ease, transform 0.1s ease;
-      box-shadow: 0 2px 4px rgba(0, 82, 204, 0.2);
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
     }
     
     .btn-primary:hover {
-      opacity: 0.95;
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
     }
 
     .btn-primary:active {
@@ -279,9 +425,16 @@
     <!-- Header com Selectores -->
     <div class="header">
       <div class="header-top">
-        <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
-        <h1>KPI Master</h1>
+        <div class="brand-left">
+          <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
+          <h1>KPI Master</h1>
+        </div>
+        <div class="live-badge">
+          <span class="pulse-dot"></span>
+          <span>Analytics</span>
+        </div>
       </div>
+
       <div class="selectors-row">
         <div class="select-group">
           <label id="lbl-sel-leads">Leads List</label>
@@ -296,8 +449,9 @@
           </select>
         </div>
       </div>
-      <div id="quick-tip" style="margin-top: 12px; background: rgba(9, 30, 66, 0.04); border-radius: 6px; padding: 10px 12px; font-size: 11px; color: #5e6c84; line-height: 1.4; border-left: 3px solid #0052cc;">
-        <span id="lbl-quick-tip-text">ℹ️ <strong>Leads List</strong> is the list where you measure the speed of incoming leads. <strong>Uninterested</strong> is the list for lost leads or leads with no interest.</span>
+
+      <div id="quick-tip" class="quick-tip-box">
+        <span id="lbl-quick-tip-text"><strong>Lista de Leads</strong> é a lista onde quer medir a rapidez das leads. <strong>Sem Interesse</strong> são leads descartadas.</span>
       </div>
     </div>
 
@@ -306,43 +460,61 @@
       
       <!-- Estado 1: Não Autorizado -->
       <div id="stats-unauth" class="unauth-card" style="display: none;">
-        <span style="font-size: 32px;">🔒</span>
-        <p id="lbl-stats-auth-desc">Connect account to see Leads Speed here.</p>
-        <button id="btn-stats-auth" class="btn-primary" style="padding: 8px 20px; width: auto;">🔗 Connect Account</button>
+        <div class="unauth-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </div>
+        <p id="lbl-stats-auth-desc">Connect your Trello account to see lead speed metrics.</p>
+        <button id="btn-stats-auth" class="btn-primary" style="padding: 9px 20px; width: auto;">Connect Account</button>
       </div>
 
       <!-- Estado 2: Sem Dados (Lista sem saídas) -->
       <div id="stats-empty" class="unauth-card" style="display: none;">
-        <span style="font-size: 32px;">📈</span>
+        <div class="unauth-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+        </div>
         <p id="lbl-stats-empty-desc">Move cards out of your first list to see speed statistics.</p>
       </div>
 
       <!-- Estado 3: Dados Autorizados -->
-      <div id="stats-data" style="display: flex; flex-direction: column; gap: 12px;">
+      <div id="stats-data" style="display: flex; flex-direction: column; gap: 10px;">
         <!-- Pequenos Contadores Rápidos -->
         <div class="mini-stats-grid">
           <div class="mini-stat-card">
-            <span class="mini-stat-label" id="lbl-total-leads">Active Leads</span>
+            <div class="mini-stat-header">
+              <span class="mini-stat-label" id="lbl-total-leads">Active Leads</span>
+            </div>
             <div class="mini-stat-value" id="val-total-leads">0</div>
           </div>
           <div class="mini-stat-card">
-            <span class="mini-stat-label" id="lbl-total-uninterested">Uninterested</span>
-            <div class="mini-stat-value" id="val-total-uninterested" style="color: #5e6c84;">0</div>
+            <div class="mini-stat-header">
+              <span class="mini-stat-label" id="lbl-total-uninterested">Uninterested</span>
+            </div>
+            <div class="mini-stat-value" id="val-total-uninterested" style="color: #64748b;">0</div>
           </div>
         </div>
 
         <!-- Cartão Rápido -->
         <div class="speed-card fastest">
-          <span class="speed-label fastest" id="lbl-fastest-title">⚡ Fastest Lead to Leave</span>
+          <div class="speed-header">
+            <span class="speed-label fastest" id="lbl-fastest-title">Fastest Lead to Leave</span>
+            <span class="speed-badge-pill">Top Speed</span>
+          </div>
           <div class="speed-value" id="val-fastest-time">—</div>
-          <div class="speed-desc" id="val-fastest-name">—</div>
+          <div class="speed-desc-wrapper">
+            <div class="speed-desc" id="val-fastest-name">—</div>
+          </div>
         </div>
 
         <!-- Cartão Lento -->
         <div class="speed-card slowest">
-          <span class="speed-label slowest" id="lbl-slowest-title">🐢 Slowest Lead to Leave</span>
+          <div class="speed-header">
+            <span class="speed-label slowest" id="lbl-slowest-title">Slowest Lead to Leave</span>
+            <span class="speed-badge-pill">Attention</span>
+          </div>
           <div class="speed-value" id="val-slowest-time">—</div>
-          <div class="speed-desc" id="val-slowest-name">—</div>
+          <div class="speed-desc-wrapper">
+            <div class="speed-desc" id="val-slowest-name">—</div>
+          </div>
         </div>
       </div>
 
@@ -350,10 +522,10 @@
 
     <!-- Footer -->
     <div class="footer">
-      <div id="full-dashboard-notice" style="margin-bottom: 12px; font-size: 11px; color: var(--text-sub); text-align: center; line-height: 1.45;">
-        <span id="lbl-notice-text">💡 This dashboard is simple. In the full dashboard you can get a much wider and detailed view of all your metrics and KPIs!</span>
+      <div id="full-dashboard-notice" class="notice-box">
+        <span id="lbl-notice-text">Este dashboard é simples. No dashboard completo obtém uma visão analítica detalhada de todas as métricas e KPIs.</span>
       </div>
-      <a id="btn-open" class="btn-primary" href="https://kpismaster.vercel.app" target="_blank">🚀 Open Full Dashboard</a>
+      <a id="btn-open" class="btn-primary" href="https://kpismaster.vercel.app" target="_blank">Open Full Dashboard →</a>
     </div>
   </div>
 
@@ -369,32 +541,32 @@
 
     var translations = {
       pt: {
-        btnOpen: '🚀 Abrir Dashboard Completo',
-        lblFastestTitle: '⚡ Lead Mais Rápido a Sair',
-        lblSlowestTitle: '🐢 Lead Mais Lento a Sair',
+        btnOpen: 'Abrir Dashboard Completo →',
+        lblFastestTitle: 'Lead Mais Rápido a Sair',
+        lblSlowestTitle: 'Lead Mais Lento a Sair',
         lblStatsAuthDesc: 'Liga a tua conta Trello para veres a velocidade das leads aqui.',
-        btnStatsAuth: '🔗 Ligar Conta',
+        btnStatsAuth: 'Ligar Conta',
         lblStatsEmptyDesc: 'Move cartões para fora da primeira lista para veres estatísticas de velocidade das leads.',
         lblSelLeads: 'Lista de Leads',
         lblSelUninterested: 'Sem Interesse',
         lblTotalLeads: 'Leads Ativas',
         lblTotalUninterested: 'Sem Interesse',
-        lblQuickTip: 'ℹ️ <strong>Lista de Leads</strong> é a lista onde quer medir a rapidez das leads. <strong>Sem Interesse</strong> são leads que não têm interesse/leads perdidas.',
-        lblNoticeText: '💡 Este dashboard é simples. No dashboard completo consegues ter uma visão muito mais ampla e detalhada de todas as métricas e KPIs!'
+        lblQuickTip: '<strong>Lista de Leads</strong> é a lista onde queres medir a rapidez das leads. <strong>Sem Interesse</strong> são leads descartadas.',
+        lblNoticeText: 'Este dashboard é simples. No dashboard completo obtém uma visão analítica detalhada de todas as métricas e KPIs.'
       },
       en: {
-        btnOpen: '🚀 Open Full Dashboard',
-        lblFastestTitle: '⚡ Fastest Lead to Leave',
-        lblSlowestTitle: '🐢 Slowest Lead to Leave',
+        btnOpen: 'Open Full Dashboard →',
+        lblFastestTitle: 'Fastest Lead to Leave',
+        lblSlowestTitle: 'Slowest Lead to Leave',
         lblStatsAuthDesc: 'Connect your Trello account to see Leads Speed metrics here.',
-        btnStatsAuth: '🔗 Connect Account',
+        btnStatsAuth: 'Connect Account',
         lblStatsEmptyDesc: 'Move cards out of your first list to see speed statistics.',
         lblSelLeads: 'Leads List',
         lblSelUninterested: 'Uninterested',
         lblTotalLeads: 'Active Leads',
         lblTotalUninterested: 'Uninterested',
-        lblQuickTip: 'ℹ️ <strong>Leads List</strong> is the list where you want to measure the speed of incoming leads. <strong>Uninterested</strong> are leads with no interest/lost leads.',
-        lblNoticeText: '💡 This dashboard is simple. In the full dashboard you can get a much wider and detailed view of all your metrics and KPIs!'
+        lblQuickTip: '<strong>Leads List</strong> is the list where you want to measure the speed of incoming leads. <strong>Uninterested</strong> are leads with no interest.',
+        lblNoticeText: 'This dashboard is simple. In the full dashboard you can get a much wider and detailed view of all your metrics and KPIs.'
       }
     };
 
@@ -529,7 +701,7 @@
     function showUnauth() {
       document.getElementById('stats-data').style.display = 'none';
       document.getElementById('stats-empty').style.display = 'none';
-      document.getElementById('stats-unauth').style.display = 'block';
+      document.getElementById('stats-unauth').style.display = 'flex';
       t.sizeTo(document.body).catch(function () { });
     }
 
@@ -556,7 +728,6 @@
           state.lists = lists;
 
           // Se não houver configuração salva, define as predefinidas:
-          // Leads = primeira lista. Sem interesse = lista com nome "sem interesse" (ou a última)
           if (!state.leadsListId) {
             state.leadsListId = lists[0].id;
           }
@@ -683,7 +854,7 @@
       if (durations.length === 0) {
         document.getElementById('stats-data').style.display = 'none';
         document.getElementById('stats-unauth').style.display = 'none';
-        document.getElementById('stats-empty').style.display = 'block';
+        document.getElementById('stats-empty').style.display = 'flex';
         t.sizeTo(document.body).catch(function () { });
         return;
       }

@@ -16,7 +16,7 @@ UI.renderActivity = function (atividade) {
             </div>
 
             <!-- Top Performer highlight -->
-            <div class="bg-[#0f172a] rounded-xl p-4 border border-amber-500/15 relative overflow-hidden flex-shrink-0">
+            <div class="bg-[#080c14] rounded-xl p-4 border border-amber-500/20 relative overflow-hidden flex-shrink-0">
                 <div class="absolute top-0 right-0 text-[9px] font-bold text-amber-500 bg-amber-500/10 border-b border-l border-amber-500/20 px-2.5 py-1 rounded-bl-lg tracking-widest uppercase">TOP</div>
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/20 flex items-center justify-center text-[18px] font-bold text-amber-400 flex-shrink-0">
@@ -31,7 +31,7 @@ UI.renderActivity = function (atividade) {
                     </div>
                     <div class="text-right flex-shrink-0">
                         <p class="text-[22px] font-bold text-white tabular-nums leading-none">${atividade.maisAtivo.acoes}</p>
-                        <p class="text-[10px] text-gray-600 font-semibold uppercase tracking-wider mt-0.5">${(UI._lpLang || 'pt') === 'en' ? 'actions' : 'ações'}</p>
+                        <p class="text-[10px] text-gray-500 font-semibold uppercase tracking-wider mt-0.5">${(UI._lpLang || 'pt') === 'en' ? 'actions' : 'ações'}</p>
                     </div>
                 </div>
             </div>
@@ -46,11 +46,11 @@ UI.renderActivity = function (atividade) {
         return `
                         <div class="flex items-center gap-3 group hover:bg-white/[0.02] rounded-lg px-2 py-1.5 transition-colors">
                             <span class="text-[10px] font-bold text-gray-700 w-4 text-right flex-shrink-0">${idx + 1}</span>
-                            <div class="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold flex-shrink-0 ${isTop ? 'bg-amber-500/15 text-amber-400 border border-amber-500/20' : 'bg-[#1e293b] text-gray-400 border border-white/[0.04]'}">
+                            <div class="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold flex-shrink-0 ${isTop ? 'bg-amber-500/15 text-amber-400 border border-amber-500/20' : 'bg-[#080c14] text-gray-400 border border-white/[0.06]'}">
                                 ${u.nome.charAt(0).toUpperCase()}
                             </div>
                             <span class="text-[12px] font-semibold text-gray-400 w-24 truncate flex-shrink-0 group-hover:text-gray-200 transition-colors ${isLast ? 'text-rose-400/70' : ''}" title="${Utils.escapeHtmlAttribute(u.nome)}">${Utils.escapeHtml(u.nome)}</span>
-                            <div class="flex-1 h-1.5 bg-[#1a2235] rounded-full overflow-hidden">
+                            <div class="flex-1 h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
                                 <div class="h-full rounded-full transition-all duration-700 ${isTop ? 'bg-amber-500/60' : isLast ? 'bg-rose-500/40' : 'bg-blue-500/40'}" style="width:${barW}%;"></div>
                             </div>
                             <span class="text-[13px] font-bold text-gray-400 w-8 text-right flex-shrink-0 tabular-nums">${u.acoes}</span>

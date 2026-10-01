@@ -35,14 +35,14 @@ UI.renderSalesDashboard = function (state) {
 
     // LAYOUT IDÊNTICO AO MANAGER MAS COM TEXTOS PERSONALIZADOS
     return `
-        <div class="flex h-screen w-full bg-[#0f172a] font-sans text-gray-100 overflow-hidden selection:bg-blue-500 selection:text-white relative">
+        <div class="flex h-screen w-full bg-[#080c14] font-sans text-gray-100 overflow-hidden selection:bg-blue-500 selection:text-white relative">
             <!-- SIDEBAR SALES (sem filtro de equipa) -->
             ${UI.renderSidebarSales(state, kpis, filterId)}
 
             <!-- MAIN CONTENT AREA -->
-            <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-[#0f172a] min-w-0">
+            <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-[#080c14] min-w-0">
                 <!-- Top Glass Bar -->
-                <header class="h-16 bg-[#0f172a]/95 border-b border-gray-800 flex items-center justify-between px-6 z-30 flex-shrink-0">
+                <header class="h-16 bg-[#080c14]/90 backdrop-blur-md border-b border-white/[0.08] flex items-center justify-between px-6 z-30 flex-shrink-0">
                     <div>
                         <h1 class="text-xl font-black text-white tracking-tight flex items-center gap-2">
                            <!-- HAMBURGER BUTTON (Mobile Only) -->
@@ -96,7 +96,7 @@ UI.renderSalesDashboard = function (state) {
 
                         <!-- ROW 2: TEMPO (FULL WIDTH) -->
                         <div class="grid grid-cols-1 gap-6 w-full">
-                            <div class="bg-[#1e293b] rounded-2xl p-6 border border-gray-800 flex flex-col h-full">
+                            <div class="bg-[#0d1117] rounded-2xl p-6 border border-gray-800 flex flex-col h-full">
                                 <div class="grid grid-cols-1 md:grid-cols-1 gap-1 flex-1">
                                      ${UI.renderTimeTracking(temposListas, rawData.listas, state.timeTrackingLists)}
                                 </div>
@@ -105,17 +105,17 @@ UI.renderSalesDashboard = function (state) {
 
                         <!-- ROW 3: FOLLOW-UPS -->
                         <div class="grid grid-cols-1 gap-6 w-full">
-                             <div class="bg-[#1e293b] rounded-2xl p-6 w-full overflow-hidden">
+                             <div class="bg-[#0d1117] rounded-2xl p-6 w-full overflow-hidden">
                                  ${UI.renderDueDatesTable(dadosPeriodo)}
                             </div>
                         </div>
 
                          <!-- ROW 4: TABELAS DE PERFORMANCE PESSOAL -->
                         <div class="grid grid-cols-1 gap-6 w-full mt-4">
-                            <div class="bg-[#1e293b] rounded-2xl p-6 border border-gray-800 w-full overflow-x-auto">
+                            <div class="bg-[#0d1117] rounded-2xl p-6 border border-gray-800 w-full overflow-x-auto">
                                 ${UI.renderTable(periodoTitulo, dadosPeriodo, listsDef, 'blue')}
                             </div>
-                            <div class="bg-[#1e293b] rounded-2xl p-6 border border-gray-800 w-full overflow-x-auto">
+                            <div class="bg-[#0d1117] rounded-2xl p-6 border border-gray-800 w-full overflow-x-auto">
                                 ${UI.renderTable(t('A Minha Performance Geral', 'My Overall Performance'), dadosGeral, listsDef, 'gray')}
                             </div>
                         </div>

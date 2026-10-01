@@ -144,6 +144,7 @@ App.render = function () {
         }
         this.attachDashboardEvents();
         this.attachDynamicEvents();
+        this.checkFeedbackFirstTimeOnboarding();
         return;
     }
 
@@ -174,6 +175,9 @@ App.attachDynamicEvents = function () {
             this.render();
         };
     }
+
+    const leftSelect = document.getElementById('timeTrackingSelectLeft');
+    const rightSelect = document.getElementById('timeTrackingSelectRight');
 
     if (leftSelect) {
         leftSelect.onchange = (e) => {
@@ -554,12 +558,22 @@ App.attachDashboardEvents = function () {
         });
     }
 
-    // 2. Date Pickers (COM VALIDAÇÃO)
+    // 2. Date Pickers (Flatpickr Ultra-Premium Dark Theme)
     const startDate = document.getElementById('startDate');
     const endDate = document.getElementById('endDate');
     const clearDates = document.getElementById('clearDates');
 
+    let fpStart = null;
+    let fpEnd = null;
+
     let dateChangeTimeout = null;
+
+    const formatDateLocal = (dateObj) => {
+        const y = dateObj.getFullYear();
+        const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const d = String(dateObj.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    };
 
     // Helper: Validar datas
     const validateDates = (start, end) => {
@@ -571,7 +585,7 @@ App.attachDashboardEvents = function () {
         if (startD > endD) {
             return {
                 valid: false,
-                message: '⚠️ A data inicial não pode ser depois da data final!'
+                message: 'A data inicial não pode ser posterior à data final.'
             };
         }
 
@@ -579,70 +593,108 @@ App.attachDashboardEvents = function () {
         if (diffDays > 365) {
             return {
                 valid: false,
-                message: '⚠️ O período não pode ser superior a 1 ano!'
+                message: 'O período selecionado não pode exceder 1 ano.'
             };
         }
 
         return { valid: true };
     };
 
-    // Helper: Recarregar com debounce e feedback visual
+    // Helper: Recarregar com debounce
     const reloadWithDebounce = () => {
         if (dateChangeTimeout) {
             clearTimeout(dateChangeTimeout);
         }
 
-        // Feedback visual durante loading
-        if (startDate) startDate.classList.add('opacity-50', 'cursor-wait');
-        if (endDate) endDate.classList.add('opacity-50', 'cursor-wait');
-
-        // Debounce de 500ms
         dateChangeTimeout = setTimeout(() => {
-            this.conectarTrello().finally(() => {
-                if (startDate) startDate.classList.remove('opacity-50', 'cursor-wait');
-                if (endDate) endDate.classList.remove('opacity-50', 'cursor-wait');
-            });
-        }, 500);
+            this.conectarTrello();
+        }, 400);
     };
 
-    if (startDate) {
-        startDate.addEventListener('change', (e) => {
-            const newStart = e.target.value;
-            const validation = validateDates(newStart, this.state.endDate);
+    const inputClasses = "w-full bg-[#0d1117] border border-white/[0.08] rounded-xl pl-9 pr-3 py-2 text-[12px] text-gray-200 focus:outline-none focus:border-blue-500/50 cursor-pointer font-semibold transition-all hover:bg-[#111723] hover:border-white/[0.15]";
+    const localePt = (window.flatpickr && window.flatpickr.l10ns && window.flatpickr.l10ns.pt) ? window.flatpickr.l10ns.pt : ((window.flatpickrPt && window.flatpickrPt.pt) ? window.flatpickrPt.pt : 'pt');
 
-            if (!validation.valid) {
-                alert(validation.message);
-                startDate.value = this.state.startDate;
-                return;
+    if (startDate && window.flatpickr) {
+        if (startDate._flatpickr) startDate._flatpickr.destroy();
+        fpStart = window.flatpickr(startDate, {
+            dateFormat: 'Y-m-d',
+            altInput: true,
+            altFormat: 'd/m/Y',
+            altInputClass: inputClasses,
+            locale: localePt,
+            defaultDate: this.state.startDate || null,
+            onChange: (selectedDates, dateStr) => {
+                const validation = validateDates(dateStr, this.state.endDate);
+                if (!validation.valid) {
+                    alert(validation.message);
+                    if (fpStart) fpStart.setDate(this.state.startDate || '', false);
+                    return;
+                }
+                this.state.startDate = dateStr;
+                reloadWithDebounce();
             }
-
-            this.state.startDate = newStart;
-            reloadWithDebounce();
         });
     }
 
-    if (endDate) {
-        endDate.addEventListener('change', (e) => {
-            const newEnd = e.target.value;
-            const validation = validateDates(this.state.startDate, newEnd);
-
-            if (!validation.valid) {
-                alert(validation.message);
-                endDate.value = this.state.endDate;
-                return;
+    if (endDate && window.flatpickr) {
+        if (endDate._flatpickr) endDate._flatpickr.destroy();
+        fpEnd = window.flatpickr(endDate, {
+            dateFormat: 'Y-m-d',
+            altInput: true,
+            altFormat: 'd/m/Y',
+            altInputClass: inputClasses,
+            locale: localePt,
+            defaultDate: this.state.endDate || null,
+            onChange: (selectedDates, dateStr) => {
+                const validation = validateDates(this.state.startDate, dateStr);
+                if (!validation.valid) {
+                    alert(validation.message);
+                    if (fpEnd) fpEnd.setDate(this.state.endDate || '', false);
+                    return;
+                }
+                this.state.endDate = dateStr;
+                reloadWithDebounce();
             }
-
-            this.state.endDate = newEnd;
-            reloadWithDebounce();
         });
     }
+
+    // Handlers para os botões de presets (7D, 30D, Mês)
+    document.querySelectorAll('.date-preset-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const preset = btn.getAttribute('data-preset');
+            const now = new Date();
+            const todayStr = formatDateLocal(now);
+
+            let startStr = '';
+            if (preset === '7d') {
+                const d = new Date(now);
+                d.setDate(d.getDate() - 7);
+                startStr = formatDateLocal(d);
+            } else if (preset === '30d') {
+                const d = new Date(now);
+                d.setDate(d.getDate() - 30);
+                startStr = formatDateLocal(d);
+            } else if (preset === 'month') {
+                startStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`;
+            }
+
+            this.state.startDate = startStr;
+            this.state.endDate = todayStr;
+
+            if (fpStart) fpStart.setDate(startStr, false);
+            if (fpEnd) fpEnd.setDate(todayStr, false);
+
+            this.conectarTrello();
+        });
+    });
 
     if (clearDates) {
         clearDates.addEventListener('click', () => {
             this.state.startDate = '';
             this.state.endDate = '';
-            if (startDate) startDate.value = '';
-            if (endDate) endDate.value = '';
+            if (fpStart) fpStart.clear();
+            if (fpEnd) fpEnd.clear();
             this.conectarTrello();
         });
     }
@@ -722,4 +774,118 @@ App.resetBoardAndRole = function () {
     this.state.userRole = null;
     this.state.kpis = null;
     this.render();
+};
+
+App.checkFeedbackFirstTimeOnboarding = function () {
+    const currentRole = this.state.userRole || 'manager';
+    const storageKey = 'kpi_feedback_onboarding_seen_' + currentRole;
+
+    if (localStorage.getItem(storageKey)) return;
+
+    setTimeout(() => {
+        if (document.getElementById('firstTimeFeedbackOverlay')) return;
+
+        const lang = UI._lpLang || 'pt';
+        const isPt = lang.startsWith('pt');
+
+        const titleText = isPt ? 'Powerup em desenvolvimento!' : 'Powerup under active development!';
+        const subTitleText = isPt ? 'Queremos saber a tua opinião!' : 'We want your feedback!';
+        const descText = isPt
+            ? 'Estamos constantemente a evoluir o KPI Master. A tua opinião e sugestões são fundamentais para nós!'
+            : 'We are constantly improving KPI Master. Your feedback and suggestions are essential to us!';
+        const btnText = isPt ? 'Entendido!' : 'Got it!';
+        const pointerTitle = isPt ? 'Sugestões de Melhoria' : 'Suggestions to Improve';
+        const pointerDesc = isPt ? 'Clica no botão "Enviar Feedback" no menu para nos enviares as tuas sugestões para melhorar a app!' : 'Click "Send Feedback" in the menu to share your suggestions to improve the app!';
+
+        const overlay = document.createElement('div');
+        overlay.id = 'firstTimeFeedbackOverlay';
+        overlay.className = 'fixed inset-0 z-[300] flex flex-col justify-between p-6 bg-black/75 backdrop-blur-sm transition-all duration-300';
+        overlay.innerHTML = `
+            <div class="flex-1 flex flex-col items-center justify-center text-center px-4 max-w-lg mx-auto">
+                <div class="w-16 h-16 bg-blue-500/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mb-6 shadow-2xl shadow-blue-500/20 animate-pulse">
+                    <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight mb-2">${titleText}</h2>
+                <p class="text-lg md:text-xl font-bold text-blue-400 mb-4">${subTitleText}</p>
+                <p class="text-xs md:text-sm text-gray-300 mb-8 max-w-md leading-relaxed">${descText}</p>
+                
+                <button id="closeFeedbackOverlayBtn" class="px-8 py-3.5 rounded-xl font-extrabold text-sm bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-500/30 transition-all hover:scale-105 active:scale-95">
+                    ${btnText}
+                </button>
+            </div>
+
+            <!-- Pointer Card positioned next to the 260px sidebar pointing LEFT at Send Feedback button -->
+            <div class="fixed bottom-6 left-4 md:left-[270px] md:bottom-28 z-[310] flex items-center gap-3 bg-[#0b0f19] border border-blue-500/50 p-4 rounded-2xl shadow-2xl max-w-sm border-l-4 border-l-blue-500 animate-bounce">
+                <svg class="w-7 h-7 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                <div>
+                    <div class="text-xs font-black text-white mb-0.5">${pointerTitle}</div>
+                    <div class="text-[11px] text-gray-300 leading-snug">${pointerDesc}</div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        document.getElementById('closeFeedbackOverlayBtn').onclick = function () {
+            localStorage.setItem(storageKey, 'true');
+            overlay.remove();
+        };
+    }, 100);
+};
+
+// Enviar Feedback para o Webhook do Make.com (JSON auto-parsed pelo Make)
+App.sendFeedback = async function (inputId) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    const feedbackText = input.value.trim();
+    if (!feedbackText) return;
+
+    const popup = document.getElementById('bugReportPopup');
+    const submitBtn = popup ? popup.querySelector('button.bg-blue-600') : null;
+    const originalText = submitBtn ? submitBtn.innerText : 'Enviar Feedback';
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'A enviar...';
+        submitBtn.classList.add('opacity-70', 'cursor-wait');
+    }
+
+    try {
+        const payload = {
+            text: feedbackText
+        };
+
+        await fetch('https://hook.eu1.make.com/5mla3rqp2s362eqa6tspuqykucwycu43', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (submitBtn) {
+            submitBtn.innerText = '✓ Enviado!';
+            submitBtn.classList.remove('bg-blue-600', 'hover:bg-blue-500');
+            submitBtn.classList.add('bg-emerald-600');
+        }
+
+        setTimeout(() => {
+            input.value = '';
+            if (popup) popup.classList.add('hidden');
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalText;
+                submitBtn.classList.remove('opacity-70', 'cursor-wait', 'bg-emerald-600');
+                submitBtn.classList.add('bg-blue-600', 'hover:bg-blue-500');
+            }
+        }, 1200);
+    } catch (err) {
+        console.error('Erro ao enviar feedback:', err);
+        alert('Ocorreu um erro ao enviar o feedback. Por favor tenta novamente.');
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = originalText;
+            submitBtn.classList.remove('opacity-70', 'cursor-wait');
+        }
+    }
 };

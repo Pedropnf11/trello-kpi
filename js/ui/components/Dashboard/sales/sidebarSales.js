@@ -45,9 +45,27 @@ UI.renderSidebarSales = function (state, kpis, filterId) {
                 <div>
                     <p class="text-[9px] text-gray-600 font-bold uppercase tracking-[0.15em] mb-3 pl-1">${t('Período', 'Period')}</p>
                     <div class="space-y-2">
-                        <input type="date" id="startDate" value="${state.startDate || ''}" class="w-full bg-[#0d1117] border border-white/[0.05] rounded-lg px-3 py-2 text-[12px] text-gray-300 focus:outline-none focus:border-blue-500/40 focus:ring-0 transition-colors">
-                        <input type="date" id="endDate" value="${state.endDate || ''}" class="w-full bg-[#0d1117] border border-white/[0.05] rounded-lg px-3 py-2 text-[12px] text-gray-300 focus:outline-none focus:border-blue-500/40 focus:ring-0 transition-colors">
-                        ${(state.startDate || state.endDate) ? `<button id="clearDates" class="w-full text-[11px] text-rose-500/80 hover:text-rose-400 py-1 font-semibold transition-colors">${t('Limpar datas', 'Clear dates')}</button>` : ''}
+                        <div class="relative flex items-center">
+                            <div class="absolute left-3 pointer-events-none text-gray-500 z-10">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2 2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            </div>
+                            <input type="text" id="startDate" placeholder="${t('Data inicial', 'Start date')}" value="${state.startDate || ''}" class="w-full bg-[#0d1117] border border-white/[0.08] rounded-xl pl-9 pr-3 py-2 text-[12px] text-gray-200 focus:outline-none focus:border-blue-500/50 cursor-pointer font-semibold transition-all hover:bg-[#111723] hover:border-white/[0.15]">
+                        </div>
+                        <div class="relative flex items-center">
+                            <div class="absolute left-3 pointer-events-none text-gray-500 z-10">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2 2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            </div>
+                            <input type="text" id="endDate" placeholder="${t('Data final', 'End date')}" value="${state.endDate || ''}" class="w-full bg-[#0d1117] border border-white/[0.08] rounded-xl pl-9 pr-3 py-2 text-[12px] text-gray-200 focus:outline-none focus:border-blue-500/50 cursor-pointer font-semibold transition-all hover:bg-[#111723] hover:border-white/[0.15]">
+                        </div>
+
+                        <!-- PRESETS -->
+                        <div class="grid grid-cols-3 gap-1.5 pt-1">
+                            <button data-preset="7d" class="date-preset-btn text-[10px] font-bold text-gray-400 bg-[#0d1117] hover:bg-blue-600/20 hover:text-blue-300 border border-white/[0.06] hover:border-blue-500/30 rounded-lg py-1.5 transition-all">${t('7 Dias', '7 Days')}</button>
+                            <button data-preset="30d" class="date-preset-btn text-[10px] font-bold text-gray-400 bg-[#0d1117] hover:bg-blue-600/20 hover:text-blue-300 border border-white/[0.06] hover:border-blue-500/30 rounded-lg py-1.5 transition-all">${t('30 Dias', '30 Days')}</button>
+                            <button data-preset="month" class="date-preset-btn text-[10px] font-bold text-gray-400 bg-[#0d1117] hover:bg-blue-600/20 hover:text-blue-300 border border-white/[0.06] hover:border-blue-500/30 rounded-lg py-1.5 transition-all">${t('Mês', 'Month')}</button>
+                        </div>
+
+                        ${(state.startDate || state.endDate) ? `<button id="clearDates" class="w-full text-[11px] text-rose-400/90 hover:text-rose-300 py-1 font-bold transition-colors">${t('Limpar datas', 'Clear dates')}</button>` : ''}
                     </div>
                 </div>
 
@@ -57,9 +75,9 @@ UI.renderSidebarSales = function (state, kpis, filterId) {
             
             <!-- Bottom nav actions -->
             <div class="p-4 border-t border-white/[0.04] flex flex-col gap-1 flex-shrink-0">
-                <button onclick="document.getElementById('bugReportPopup').classList.remove('hidden')" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:text-amber-400 hover:bg-amber-500/[0.05] transition-all duration-200 font-semibold text-[12px]">
-                    <svg class="w-4 h-4 text-gray-600 group-hover:text-amber-400 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                    <span>${t('Encontrastes um bug?', 'Found a bug?')}</span>
+                <button id="sendFeedbackSidebarBtnSales" onclick="document.getElementById('bugReportPopup').classList.remove('hidden')" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:text-blue-400 hover:bg-blue-500/[0.05] transition-all duration-200 font-semibold text-[12px]">
+                    <svg class="w-4 h-4 text-gray-600 group-hover:text-blue-400 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                    <span>${t('Enviar Feedback', 'Send Feedback')}</span>
                 </button>
                 <button onclick="document.getElementById('docsComingSoonPopup').classList.remove('hidden')" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:text-green-400 hover:bg-green-500/[0.05] transition-all duration-200 font-semibold text-[12px]">
                     <svg class="w-4 h-4 text-gray-600 group-hover:text-green-400 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
@@ -82,19 +100,28 @@ UI.renderSidebarSales = function (state, kpis, filterId) {
             </div>
         </aside>
 
-        <!-- BUG REPORT POPUP -->
+        <!-- FEEDBACK POPUP -->
         <div id="bugReportPopup" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onclick="if(event.target===this)this.classList.add('hidden')">
-            <div class="bg-[#0b0f19] border border-white/[0.08] rounded-2xl shadow-2xl w-full max-w-sm p-8 text-center relative">
-                <button onclick="document.getElementById('bugReportPopup').classList.add('hidden')" class="absolute top-4 right-4 text-gray-600 hover:text-white transition-colors">
+            <div class="bg-[#0b0f19] border border-white/[0.08] rounded-2xl shadow-2xl w-full max-w-md p-6 relative">
+                <button onclick="document.getElementById('bugReportPopup').classList.add('hidden')" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
-                <div class="w-14 h-14 bg-amber-500/[0.08] border border-amber-500/20 rounded-2xl flex items-center justify-center mx-auto mb-5">
-                    <svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <div class="w-12 h-12 bg-blue-500/[0.1] border border-blue-500/20 rounded-xl flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
                 </div>
-                <h3 class="text-[17px] font-black text-white mb-2">${t('Reportar Bug', 'Report a Bug')}</h3>
-                <p class="text-[13px] text-gray-500 leading-relaxed mb-6">${t('Esta aplicação está em fase de testes (Beta). Se encontraste algum bug, erro ou tens sugestões de melhoria, por favor envia um email para:', 'This app is in its testing phase (Beta). If you found a bug, error or have feedback, please send an email to:')}</p>
-                <div class="bg-amber-500/[0.06] border border-amber-500/10 p-3 rounded-xl">
-                    <a href="mailto:kpismasterpowerup@gmail.com" class="block text-[13px] font-bold text-amber-400 hover:text-amber-300 underline truncate">kpismasterpowerup@gmail.com</a>
+                <h3 class="text-base font-bold text-white mb-1">${t('Enviar Feedback', 'Send Feedback')}</h3>
+                <p class="text-xs text-gray-400 mb-3">${t('Queremos a tua opinião e sugestões para continuar a melhorar a app.', 'We want your feedback and suggestions to keep improving the app.')}</p>
+                
+                <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-3 mb-4 text-[11px] text-blue-300/90 leading-relaxed flex items-start gap-2">
+                    <span class="text-sm flex-shrink-0">🔒</span>
+                    <span>${t('O feedback é enviado de forma 100% anónima. Se tiveres algum problema que precise de resposta ou resolução, inclui o teu email na caixa de texto para te podermos contactar!', 'Feedback is submitted 100% anonymously. If you have an issue that requires support or a response, please include your email in the text box so we can reach out!')}</span>
+                </div>
+
+                <textarea id="feedbackTextInputSales" rows="4" placeholder="${t('Escreve a tua sugestão ou opinião aqui (inclui o teu email se precisares de resposta)...', 'Write your suggestion or feedback here (include your email if you need a response)...')}" class="w-full bg-[#111726] border border-white/[0.08] rounded-xl p-3 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-blue-500/50 resize-none mb-4"></textarea>
+
+                <div class="flex items-center gap-2 justify-end">
+                    <button onclick="document.getElementById('bugReportPopup').classList.add('hidden')" class="px-4 py-2 rounded-lg text-xs font-semibold text-gray-400 hover:text-white hover:bg-white/[0.05] transition-colors">${t('Cancelar', 'Cancel')}</button>
+                    <button onclick="App.sendFeedback('feedbackTextInputSales')" class="px-4 py-2 rounded-lg text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20 transition-colors">${t('Enviar Feedback', 'Submit Feedback')}</button>
                 </div>
             </div>
         </div>

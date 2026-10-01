@@ -27,6 +27,7 @@ export default defineConfig({
             input: {
                 main: 'index.html',
                 'trello/index': 'trello/index.html',
+                'trello/welcome': 'trello/welcome.html',
                 'trello/auth': 'trello/auth.html',
                 'trello/dashboard': 'trello/dashboard.html',
                 'trello/settings': 'trello/settings.html',

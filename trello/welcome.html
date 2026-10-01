@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bem-vindo ao KPI Master</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://p.trellocdn.com/power-up.min.js"></script>
+  <style>
+    :root {
+      --bg-body: #090d16;
+      --card-bg: #111726;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(255, 255, 255, 0.14);
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #34d399;
+      --accent-purple: #a78bfa;
+      --btn-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      --btn-hover: #1d4ed8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .header-hero {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      padding: 5px 12px;
+      border-radius: 9999px;
+      margin-bottom: 12px;
+    }
+
+    .brand-badge img {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+    }
+
+    .brand-badge span {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .header-hero h1 {
+      font-size: 22px;
+      font-weight: 800;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.03em;
+      color: var(--text-main);
+    }
+
+    .header-hero p {
+      font-size: 12.5px;
+      color: var(--text-sub);
+      margin: 0 auto;
+      max-width: 440px;
+      line-height: 1.5;
+    }
+
+    /* Highlight Banner for Web Platform */
+    .web-banner {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(124, 58, 237, 0.15) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .web-banner-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(37, 99, 235, 0.25);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #60a5fa;
+      flex-shrink: 0;
+    }
+
+    .web-banner-text h4 {
+      margin: 0 0 3px 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+
+    .web-banner-text p {
+      margin: 0;
+      font-size: 11.5px;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transition: border-color 0.2s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--card-hover);
+    }
+
+    .feature-icon-box {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .icon-speed {
+      background: rgba(52, 211, 153, 0.12);
+      color: var(--accent-green);
+    }
+
+    .icon-badges {
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent-blue);
+    }
+
+    .icon-dashboard {
+      background: rgba(167, 139, 250, 0.12);
+      color: var(--accent-purple);
+    }
+
+    .feature-card h3 {
+      font-size: 12px;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+      color: #f1f5f9;
+    }
+
+    .feature-card p {
+      font-size: 10.5px;
+      color: var(--text-sub);
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    /* Actions Footer */
+    .actions-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 13px 18px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--btn-gradient);
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: var(--btn-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: #cbd5e1;
+      border: 1px solid var(--card-border);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+
+    @media (max-width: 480px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      .btn-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div>
+    <!-- Hero Header -->
+    <div class="header-hero">
+      <div class="brand-badge">
+        <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
+        <span>KPI Master Tutorial</span>
+      </div>
+      <h1 id="welcome-title">Bem-vindo ao KPI Master</h1>
+      <p id="welcome-subtitle">A sua solução de análise de velocidade de leads e métricas de desempenho para equipas no Trello.</p>
+    </div>
+
+    <!-- Banner sobre o poder do site -->
+    <div class="web-banner">
+      <div class="web-banner-icon">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+      </div>
+      <div class="web-banner-text">
+        <h4 id="banner-title">O verdadeiro poder está na Plataforma Web</h4>
+        <p id="banner-desc">Enquanto o Power-Up no Trello mostra métricas rápidas, o site completo oferece dashboards interativos, exportação em PDF e relatórios por membro.</p>
+      </div>
+    </div>
+
+    <!-- 3 Core Features -->
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon-box icon-speed">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <h3 id="f1-title">Velocidade de Leads</h3>
+        <p id="f1-desc">Calcula o tempo exato que cada lead leva a sair do funil.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box icon-badges">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 7h10v10H7z"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/></svg>
+        </div>
+        <h3 id="f2-title">Idade dos Cartões</h3>
+        <p id="f2-desc">Emblemas visuais automáticos nos cartões para identificar estagnação.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box icon-dashboard">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        </div>
+        <h3 id="f3-title">Relatórios Completos</h3>
+        <p id="f3-desc">Aceda a análises avançadas e gráficos detalhados no site.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer com Ações -->
+  <div class="actions-footer">
+    <div class="btn-group">
+      <a id="btn-site" href="https://kpismaster.vercel.app" target="_blank" class="btn btn-primary">
+        Abrir Plataforma Web →
+      </a>
+      <button id="btn-close" class="btn btn-secondary">
+        Ver no Trello
+      </button>
+    </div>
+  </div>
+
+  <script type="module">
+    var KEY = import.meta.env.VITE_TRELLO_API_KEY;
+    var NAME = 'KPI Master';
+    var SITE = 'https://kpismaster.vercel.app';
+
+    var t = TrelloPowerUp.iframe({ appKey: KEY, appName: NAME });
+
+    // Guardar marcação de que o utilizador já viu a introdução
+    t.set('member', 'private', 'kpi_welcome_seen', true).catch(function() {});
+
+    var locale = t.locale || 'en';
+    var isPt = locale.startsWith('pt');
+
+    var i18n = {
+      pt: {
+        title: 'Bem-vindo ao KPI Master',
+        subtitle: 'A sua solução de análise de velocidade de leads e métricas de desempenho para equipas no Trello.',
+        bannerTitle: 'O verdadeiro poder está na Plataforma Web',
+        bannerDesc: 'Enquanto o Power-Up no Trello mostra métricas rápidas, o site completo oferece dashboards interativos, exportação em PDF e relatórios por membro.',
+        f1Title: 'Velocidade de Leads',
+        f1Desc: 'Calcula o tempo exato que cada lead leva a sair do funil.',
+        f2Title: 'Idade dos Cartões',
+        f2Desc: 'Emblemas visuais automáticos nos cartões para identificar estagnação.',
+        f3Title: 'Relatórios Completos',
+        f3Desc: 'Aceda a análises avançadas e gráficos detalhados no site.',
+        btnSite: 'Abrir Plataforma Web →',
+        btnClose: 'Ver no Trello'
+      },
+      en: {
+        title: 'Welcome to KPI Master',
+        subtitle: 'Your lead speed analytics and team performance metrics solution for Trello.',
+        bannerTitle: 'The full power is on the Web Platform',
+        bannerDesc: 'While the Trello Power-Up shows quick metrics, the complete website offers interactive charts, PDF exports, and member reports.',
+        f1Title: 'Lead Speed Analytics',
+        f1Desc: 'Measure exact time spent by leads in each stage of your sales funnel.',
+        f2Title: 'Card Age Badges',
+        f2Desc: 'Automatic visual badges on cards to identify bottlenecks in real-time.',
+        f3Title: 'Full Analytics Suite',
+        f3Desc: 'Access advanced analytics and detailed charts on our web portal.',
+        btnSite: 'Open Web Platform →',
+        btnClose: 'View in Trello'
+      }
+    };
+
+    var dict = isPt ? i18n.pt : i18n.en;
+
+    document.getElementById('welcome-title').textContent = dict.title;
+    document.getElementById('welcome-subtitle').textContent = dict.subtitle;
+    document.getElementById('banner-title').textContent = dict.bannerTitle;
+    document.getElementById('banner-desc').textContent = dict.bannerDesc;
+    document.getElementById('f1-title').textContent = dict.f1Title;
+    document.getElementById('f1-desc').textContent = dict.f1Desc;
+    document.getElementById('f2-title').textContent = dict.f2Title;
+    document.getElementById('f2-desc').textContent = dict.f2Desc;
+    document.getElementById('f3-title').textContent = dict.f3Title;
+    document.getElementById('f3-desc').textContent = dict.f3Desc;
+    document.getElementById('btn-site').textContent = dict.btnSite;
+    document.getElementById('btn-close').textContent = dict.btnClose;
+
+    document.getElementById('btn-site').addEventListener('click', function() {
+      t.set('member', 'private', 'kpi_welcome_seen', true).then(function() {
+        window.open(SITE, '_blank');
+      }).catch(function() {
+        window.open(SITE, '_blank');
+      });
+    });
+
+    document.getElementById('btn-close').addEventListener('click', function() {
+      t.set('member', 'private', 'kpi_welcome_seen', true).then(function() {
+        t.closeModal();
+      }).catch(function() {
+        t.closeModal();
+      });
+    });
+  </script>
+</body>
+</html>

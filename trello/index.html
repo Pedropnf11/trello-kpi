@@ -13,10 +13,19 @@
 
 <body>
   <script type="module">
-    var POWERUP_URL = 'https://kpismaster.vercel.app/trello';
+    var POWERUP_URL = window.location.origin + '/trello';
     var SITE_URL    = 'https://kpismaster.vercel.app';
 
     TrelloPowerUp.initialize({
+
+      // ── Instalação / Boas-vindas (on-enable) ─────────────────────────────
+      'on-enable': function(t) {
+        return t.modal({
+          title:  'Bem-vindo ao KPI Master',
+          url:    POWERUP_URL + '/welcome.html',
+          height: 540
+        });
+      },
 
       // ── Botão na barra do board ───────────────────────────────────────────
       'board-buttons': function(t) {
@@ -27,19 +36,28 @@
           },
           text: 'KPI Master',
           callback: function(t) {
-            return t.getRestApi().isAuthorized().then(function(isAuth) {
-              if (!isAuth) {
+            return t.get('member', 'private', 'kpi_welcome_seen').then(function(hasSeenWelcome) {
+              if (!hasSeenWelcome) {
                 return t.modal({
-                  title:  'Ligar ao KPI Master',
-                  url:    POWERUP_URL + '/auth.html',
-                  height: 420
+                  title:  'Bem-vindo ao KPI Master',
+                  url:    POWERUP_URL + '/welcome.html',
+                  height: 540
                 });
               }
-              return t.modal({
-                title:      'KPI Master',
-                url:        POWERUP_URL + '/dashboard.html',
-                height:     620,
-                fullscreen: false
+              return t.getRestApi().isAuthorized().then(function(isAuth) {
+                if (!isAuth) {
+                  return t.modal({
+                    title:  'Ligar ao KPI Master',
+                    url:    POWERUP_URL + '/auth.html',
+                    height: 420
+                  });
+                }
+                return t.modal({
+                  title:      'KPI Master',
+                  url:        POWERUP_URL + '/dashboard.html',
+                  height:     620,
+                  fullscreen: false
+                });
               });
             });
           }

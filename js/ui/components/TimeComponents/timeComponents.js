@@ -50,7 +50,7 @@ UI.renderTimeTracking = function (temposListas, allLists, selectedConfig) {
             <div class="flex gap-4 flex-1 min-h-0">
 
                 <!-- LEFT: Hero Card (primary list) -->
-                <div class="flex-[3] bg-[#111827] rounded-xl p-6 border border-white/[0.04] hover:border-blue-500/10 transition-colors flex flex-col overflow-hidden relative">
+                <div class="flex-[3] bg-[#0d1117] rounded-2xl p-6 border border-white/[0.08] hover:border-white/[0.15] transition-all shadow-xl flex flex-col overflow-hidden relative">
                     <div class="absolute -top-10 -left-10 w-40 h-40 bg-blue-600/5 rounded-full blur-3xl pointer-events-none"></div>
 
                     <!-- Dropdown header -->
@@ -79,19 +79,19 @@ UI.renderTimeTracking = function (temposListas, allLists, selectedConfig) {
 
                     <!-- Rápido / Lento row -->
                     <div class="grid grid-cols-2 gap-2 relative z-10 mt-6">
-                        <div class="bg-[#0a0f1a] rounded-lg p-3 border border-white/[0.03] hover:border-emerald-500/10 transition-colors">
+                        <div class="bg-[#080c14] rounded-xl p-3 border border-white/[0.06] hover:border-emerald-500/20 transition-all">
                             <div class="flex items-center gap-1.5 mb-2">
                                 <svg class="w-3 h-3 text-emerald-500 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                                <span class="text-[9px] font-bold text-gray-600 uppercase tracking-wider">${(UI._lpLang||'pt')==='en'?'Fastest':'Rápido'}</span>
+                                <span class="text-[9px] font-bold text-gray-500 uppercase tracking-wider">${(UI._lpLang||'pt')==='en'?'Fastest':'Rápido'}</span>
                             </div>
                             <div id="timeTrackingSelectLeft-rapido">
                                 ${leftItem.maisRapido ? `
                                     <div class="text-[13px] font-bold text-white">${formatTime(leftItem.maisRapido.tempo)}</div>
-                                    <div class="text-[10px] text-gray-600 truncate mt-0.5" title="${leftItem.maisRapido.cardNome}">${leftItem.maisRapido.cardNome}</div>
+                                    <div class="text-[10px] text-gray-500 truncate mt-0.5" title="${leftItem.maisRapido.cardNome}">${leftItem.maisRapido.cardNome}</div>
                                 ` : '<span class="text-[13px] text-gray-700">—</span>'}
                             </div>
                         </div>
-                        <div class="bg-[#0a0f1a] rounded-lg p-3 border border-white/[0.03] hover:border-rose-500/10 transition-colors">
+                        <div class="bg-[#080c14] rounded-xl p-3 border border-white/[0.06] hover:border-rose-500/20 transition-all">
                             <div class="flex items-center gap-1.5 mb-2">
                                 <svg class="w-3 h-3 text-rose-500 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 <span class="text-[9px] font-bold text-gray-600 uppercase tracking-wider">${(UI._lpLang||'pt')==='en'?'Slowest':'Lento'}</span>
@@ -110,7 +110,7 @@ UI.renderTimeTracking = function (temposListas, allLists, selectedConfig) {
                 <div class="flex-[2] flex flex-col gap-3 min-w-0">
 
                     <!-- Secondary selector card -->
-                    <div class="bg-[#111827] rounded-xl p-4 border border-white/[0.04] hover:border-blue-500/10 transition-colors flex-shrink-0">
+                    <div class="bg-[#0d1117] rounded-xl p-4 border border-white/[0.08] hover:border-white/[0.15] transition-all shadow-lg flex-shrink-0">
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-2 flex-1 min-w-0">
                                 <svg class="w-3.5 h-3.5 text-blue-400/60 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -139,7 +139,7 @@ UI.renderTimeTracking = function (temposListas, allLists, selectedConfig) {
                     </div>
 
                     <!-- All-lists mini ranking -->
-                    <div class="bg-[#111827] rounded-xl p-4 border border-white/[0.04] flex-1 overflow-y-auto custom-scrollbar-dark">
+                    <div class="bg-[#0d1117] rounded-xl p-4 border border-white/[0.08] hover:border-white/[0.15] transition-all shadow-lg flex-1 overflow-y-auto custom-scrollbar-dark">
                         <p class="text-[9px] font-bold text-gray-600 uppercase tracking-[0.15em] mb-3">${(UI._lpLang||'pt')==='en'?'All lists':'Todas as listas'}</p>
                         <div class="flex flex-col gap-2.5">
                             ${allSorted.map((lista, idx) => {
