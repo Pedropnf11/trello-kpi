@@ -728,6 +728,17 @@
     // Force initialization in English by default!
     applyLanguage('en');
 
+    // Immediately record prompt time on load so closing via Trello's X button stores cooldown
+    t.get('member', 'private', 'kpi_feedback_state').then(function(rawState) {
+      var state = rawState ? JSON.parse(rawState) : { ignoredCount: 0 };
+      var now = Date.now();
+      if (!state.lastPromptTime || (now - state.lastPromptTime > 60000)) {
+        state.lastPromptTime = now;
+        state.ignoredCount = (state.ignoredCount || 0) + 1;
+        return t.set('member', 'private', 'kpi_feedback_state', JSON.stringify(state));
+      }
+    }).catch(function(){});
+
     document.getElementById('btn-translate').addEventListener('click', function() {
       applyLanguage(currentLang === 'en' ? 'pt' : 'en');
     });

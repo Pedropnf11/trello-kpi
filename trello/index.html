@@ -110,6 +110,11 @@
               // Se também precisa de dar feedback, aguarda 2 minutos (120.000 ms) antes de abrir o feedback!
               if (needsFeedback) {
                 setTimeout(function () {
+                  var state = rawFeedbackState ? (typeof rawFeedbackState === 'string' ? JSON.parse(rawFeedbackState) : rawFeedbackState) : { ignoredCount: 0 };
+                  state.lastPromptTime = Date.now();
+                  state.ignoredCount = (state.ignoredCount || 0) + 1;
+                  t.set('member', 'private', 'kpi_feedback_state', JSON.stringify(state)).catch(function () { });
+
                   t.modal({
                     title: isPt ? '⭐ A Tua Opinião — KPI Master' : '⭐ Your Feedback — KPI Master',
                     url: POWERUP_URL + '/feedback.html',
@@ -119,6 +124,11 @@
               }
             } else if (needsFeedback) {
               welcomePrompted = true;
+              var state = rawFeedbackState ? (typeof rawFeedbackState === 'string' ? JSON.parse(rawFeedbackState) : rawFeedbackState) : { ignoredCount: 0 };
+              state.lastPromptTime = Date.now();
+              state.ignoredCount = (state.ignoredCount || 0) + 1;
+              t.set('member', 'private', 'kpi_feedback_state', JSON.stringify(state)).catch(function () { });
+
               t.modal({
                 title: isPt ? '⭐ A Tua Opinião — KPI Master' : '⭐ Your Feedback — KPI Master',
                 url: POWERUP_URL + '/feedback.html',
