@@ -516,6 +516,20 @@
             <div class="speed-desc" id="val-slowest-name">—</div>
           </div>
         </div>
+
+        <!-- Cartão de Tempo Ativo da Equipa no Trello -->
+        <div id="active-time-card" style="background: rgba(17, 24, 39, 0.7); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 12px; padding: 12px 14px; margin-top: 6px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: #60a5fa; text-transform: uppercase;">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: #34d399; display: inline-block;"></span>
+              <span id="lbl-active-time-title">⚡ Active Team Time</span>
+            </div>
+            <span id="val-active-time-total" style="font-size: 11px; font-weight: 800; color: #34d399;">0m</span>
+          </div>
+          <div id="active-team-rows" style="display: flex; flex-direction: column; gap: 6px; max-height: 140px; overflow-y: auto;">
+            <!-- Rows rendered dynamically by JS -->
+          </div>
+        </div>
       </div>
 
     </div>
@@ -861,8 +875,131 @@
       document.getElementById('stats-empty').style.display = 'none';
       document.getElementById('stats-data').style.display = 'flex';
       
+      renderActiveTimeWidget();
       t.sizeTo(document.body).catch(function () { });
     }
+
+    function renderActiveTimeWidget() {
+      try {
+        var raw = localStorage.getItem('kpi_user_active_time_data');
+        var data = raw ? JSON.parse(raw) : {};
+        var todayKey = new Date().toISOString().slice(0, 10);
+        var totalSecs = 0;
+        var html = '';
+
+        function formatMinutesOnly(sec) {
+          if (!sec || sec < 60) return '0m';
+          var hrs = Math.floor(sec / 3600);
+          var mins = Math.floor((sec % 3600) / 60);
+          if (hrs > 0) return hrs + 'h ' + mins + 'm';
+          return mins + 'm';
+        }
+
+        var keys = Object.keys(data);
+        if (keys.length === 0) {
+          html = '<div style="font-size: 11px; color: #94a3b8; text-align: center; padding: 6px 0;">' +
+                 (isPt ? 'Sem dados de tempo ativo ainda' : 'No active time data yet') + '</div>';
+        } else {
+          keys.forEach(function(k) {
+            var m = data[k];
+            var sec = m.days ? (m.days[todayKey] || 0) : 0;
+            totalSecs += sec;
+
+            var formatted = formatMinutesOnly(sec);
+            var diffSecs = Math.floor((Date.now() - (m.lastSeen || 0)) / 1000);
+            var statusText = isPt ? 'Offline' : 'Offline';
+            var badgeBg = 'rgba(239, 68, 68, 0.15)';
+            var badgeColor = '#f87171';
+
+            if (diffSecs < 120 && m.isOnline && !m.isIdle) {
+              statusText = isPt ? 'Ativo Agora' : 'Active Now';
+              badgeBg = 'rgba(52, 211, 153, 0.15)';
+              badgeColor = '#34d399';
+            } else if (diffSecs < 300) {
+              statusText = isPt ? 'Inativo' : 'Idle';
+              badgeBg = 'rgba(251, 191, 36, 0.15)';
+              badgeColor = '#fbbf24';
+            }
+
+            html += '<div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); padding: 5px 10px; border-radius: 8px;">' +
+                      '<div style="display: flex; align-items: center; gap: 8px;">' +
+                        '<div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(59,130,246,0.2); color: #60a5fa; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">' +
+                          m.name.charAt(0).toUpperCase() +
+                        '</div>' +
+                        '<span style="font-size: 11px; font-weight: 600; color: #f8fafc;">' + m.name + '</span>' +
+                      '</div>' +
+                      '<div style="display: flex; align-items: center; gap: 8px;">' +
+                        '<span style="font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: ' + badgeBg + '; color: ' + badgeColor + ';">' + statusText + '</span>' +
+                        '<span style="font-size: 11px; font-weight: 800; color: #ffffff; font-variant-numeric: tabular-nums;">' + formatted + '</span>' +
+                      '</div>' +
+                    '</div>';
+          });
+        }
+
+        var totalFormatted = formatMinutesOnly(totalSecs);
+
+        var titleEl = document.getElementById('lbl-active-time-title');
+        var totalEl = document.getElementById('val-active-time-total');
+        var rowsEl = document.getElementById('active-team-rows');
+
+        if (titleEl) titleEl.textContent = isPt ? '⚡ TEMPO ATIVO DA EQUIPA' : '⚡ ACTIVE TEAM TIME';
+        if (totalEl) totalEl.textContent = (isPt ? 'Hoje: ' : 'Today: ') + totalFormatted;
+        if (rowsEl) rowsEl.innerHTML = html;
+      } catch(e) {}
+    }
+
+    // Active User Time Tracker engine inside Trello modal
+    var activeUserName = 'Pedro Nogueira';
+    var lastInputTime = Date.now();
+    var isUserIdle = false;
+
+    function recordUserActivity() {
+      lastInputTime = Date.now();
+      if (isUserIdle) {
+        isUserIdle = false;
+      }
+    }
+
+    ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'click'].forEach(function(evt) {
+      window.addEventListener(evt, recordUserActivity, { passive: true });
+    });
+
+    t.member('fullName').then(function(mem) {
+      if (mem && mem.fullName) {
+        activeUserName = mem.fullName;
+      }
+    }).catch(function(){});
+
+    setInterval(function() {
+      if (document.hidden) return;
+      if (Date.now() - lastInputTime > 60000) {
+        isUserIdle = true;
+        return;
+      }
+
+      // Tick +5 seconds active time
+      try {
+        var raw = localStorage.getItem('kpi_user_active_time_data');
+        var data = raw ? JSON.parse(raw) : {};
+        var todayKey = new Date().toISOString().slice(0, 10);
+        var key = activeUserName;
+
+        if (!data[key]) {
+          data[key] = { id: key, name: key, days: {}, lastSeen: Date.now(), isOnline: true, isIdle: false };
+        }
+        if (!data[key].days) data[key].days = {};
+        data[key].days[todayKey] = (data[key].days[todayKey] || 0) + 5;
+        data[key].lastSeen = Date.now();
+        data[key].isOnline = true;
+        data[key].isIdle = false;
+
+        localStorage.setItem('kpi_user_active_time_data', JSON.stringify(data));
+      } catch(e){}
+
+      renderActiveTimeWidget();
+    }, 5000);
+
+    renderActiveTimeWidget();
   </script>
 
 </body>
