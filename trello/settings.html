@@ -37,11 +37,12 @@
 
     <div style="display:flex; flex-direction:column; gap:6px;">
       <a id="link-privacy" href="https://kpismaster.vercel.app/privacy" target="_blank" class="link">🔒 Privacy Policy</a>
+      <a id="link-updates" href="#" class="link">✨ Novidades & Atualizações (v1.5)</a>
       <a id="link-support" href="https://kpismaster.vercel.app" target="_blank" class="link">📖 Documentation & Support</a>
     </div>
 
     <div style="font-size:11px; color:#97a0af; text-align:center; padding-top:4px;">
-      KPI Master v1.0 · Trello Power-Up
+      KPI Master v1.5 · Trello Power-Up
     </div>
   </div>
 
@@ -115,6 +116,15 @@
           disconnectWrap.style.display = 'none';
           connectWrap.style.display    = 'block';
         }
+      });
+    });
+
+    document.getElementById('link-updates').addEventListener('click', function(e) {
+      e.preventDefault();
+      t.modal({
+        title: isPt ? '✨ Novidades da Versão 1.5 — KPI Master' : '✨ What\'s New in Version 1.5 — KPI Master',
+        url: './updates.html',
+        height: 560
       });
     });
 

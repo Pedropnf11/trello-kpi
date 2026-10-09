@@ -30,28 +30,56 @@
 
       // ── Botão na barra do board + Abertura Automática ao Abrir o Quadro ───
       'board-buttons': function (t) {
-        // Dispara o Welcome automaticamente ao abrir o quadro para utilizadores que ainda não o viram
-        if (!welcomePrompted) {
-          t.get('member', 'private', 'kpi_welcome_seen').then(function (hasSeenWelcome) {
-            if (!hasSeenWelcome && !welcomePrompted) {
+        var CURRENT_VERSION = '1.5';
+        var isPt = (t.locale || 'en').startsWith('pt');
+
+        return Promise.all([
+          t.get('member', 'private', 'kpi_welcome_seen').catch(function () { return false; }),
+          t.get('member', 'private', 'kpi_last_seen_version').catch(function () { return null; })
+        ]).then(function (res) {
+          var hasSeenWelcome = res[0];
+          var lastSeenVersion = res[1];
+          var hasNewUpdate = hasSeenWelcome && (lastSeenVersion !== CURRENT_VERSION);
+
+          // Dispara o Welcome ou Novidades automaticamente se for novo update
+          if (!welcomePrompted) {
+            if (!hasSeenWelcome) {
               welcomePrompted = true;
               t.modal({
                 title: 'Bem-vindo ao KPI Master',
                 url: POWERUP_URL + '/welcome.html',
                 height: 540
               });
+            } else if (hasNewUpdate) {
+              welcomePrompted = true;
+              t.modal({
+                title: isPt ? '✨ Novidades da Versão 1.5 — KPI Master' : '✨ What\'s New in Version 1.5 — KPI Master',
+                url: POWERUP_URL + '/updates.html',
+                height: 560
+              });
             }
-          }).catch(function () { });
-        }
+          }
 
-        return [{
-          icon: {
-            dark: POWERUP_URL + '/icon.png',
-            light: POWERUP_URL + '/icon.png'
-          },
-          text: 'KPI Master',
-          callback: function (t) {
-            return t.get('member', 'private', 'kpi_welcome_seen').then(function (hasSeenWelcome) {
+          var buttonText = 'KPI Master';
+          if (hasNewUpdate) {
+            buttonText = isPt ? '🔴 KPI Master (Novo Update!)' : '🔴 KPI Master (New Update!)';
+          }
+
+          return [{
+            icon: {
+              dark: POWERUP_URL + '/icon.png',
+              light: POWERUP_URL + '/icon.png'
+            },
+            text: buttonText,
+            callback: function (t) {
+              if (hasNewUpdate) {
+                return t.modal({
+                  title: isPt ? '✨ Novidades da Versão 1.5 — KPI Master' : '✨ What\'s New in Version 1.5 — KPI Master',
+                  url: POWERUP_URL + '/updates.html',
+                  height: 560
+                });
+              }
+
               if (!hasSeenWelcome) {
                 return t.modal({
                   title: 'Bem-vindo ao KPI Master',
@@ -59,6 +87,7 @@
                   height: 540
                 });
               }
+
               return t.getRestApi().isAuthorized().then(function (isAuth) {
                 if (!isAuth) {
                   return t.modal({
@@ -74,9 +103,9 @@
                   fullscreen: false
                 });
               });
-            });
-          }
-        }];
+            }
+          }];
+        });
       },
 
       // ── Estado de autenticação ────────────────────────────────────────────
