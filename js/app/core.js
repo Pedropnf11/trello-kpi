@@ -87,6 +87,10 @@ App.init = function () {
                 this.state.userRole = mappedRole;
                 localStorage.setItem('trello_user_role', mappedRole);
             }
+        } else if (hash.includes('board=')) {
+            // When opening via board link without explicit role, force role selection
+            this.state.userRole = null;
+            localStorage.removeItem('trello_user_role');
         }
         window.history.replaceState(null, '', window.location.pathname);
     }
@@ -746,21 +750,27 @@ App.attachDashboardEvents = function () {
 };
 
 App.setRole = function (role) {
-    this.state.boardId = '';
-    this.state.kpis = null;
-    this.state.availableBoards = [];
-    localStorage.removeItem('trello_board_id');
-
     if (!role) {
         this.state.userRole = null;
         localStorage.removeItem('trello_user_role');
+        this.state.boardId = '';
+        this.state.kpis = null;
+        this.state.availableBoards = [];
+        localStorage.removeItem('trello_board_id');
         this.render();
         return;
     }
 
     this.state.userRole = role;
     localStorage.setItem('trello_user_role', role);
-    this.listarBoards();
+
+    if (this.state.boardId) {
+        this.selecionarBoard(this.state.boardId);
+    } else {
+        this.state.kpis = null;
+        this.state.availableBoards = [];
+        this.listarBoards();
+    }
 };
 
 App.confirmRole = function (boardId, role) {
