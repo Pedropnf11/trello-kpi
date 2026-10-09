@@ -41,7 +41,7 @@
           var lastSeenVersion = res[1];
           var hasNewUpdate = hasSeenWelcome && (lastSeenVersion !== CURRENT_VERSION);
 
-          // Dispara o Welcome ou Novidades automaticamente se for novo update
+          // Dispara o Welcome ou Novidades automaticamente APENAS 1 VEZ por utilizador
           if (!welcomePrompted) {
             if (!hasSeenWelcome) {
               welcomePrompted = true;
@@ -52,6 +52,7 @@
               });
             } else if (hasNewUpdate) {
               welcomePrompted = true;
+              t.set('member', 'private', 'kpi_last_seen_version', CURRENT_VERSION).catch(function () { });
               t.modal({
                 title: isPt ? '✨ Novidades da Versão 1.5 — KPI Master' : '✨ What\'s New in Version 1.5 — KPI Master',
                 url: POWERUP_URL + '/updates.html',
@@ -60,26 +61,13 @@
             }
           }
 
-          var buttonText = 'KPI Master';
-          if (hasNewUpdate) {
-            buttonText = isPt ? '🔴 KPI Master (Novo Update!)' : '🔴 KPI Master (New Update!)';
-          }
-
           return [{
             icon: {
               dark: POWERUP_URL + '/icon.png',
               light: POWERUP_URL + '/icon.png'
             },
-            text: buttonText,
+            text: 'KPI Master',
             callback: function (t) {
-              if (hasNewUpdate) {
-                return t.modal({
-                  title: isPt ? '✨ Novidades da Versão 1.5 — KPI Master' : '✨ What\'s New in Version 1.5 — KPI Master',
-                  url: POWERUP_URL + '/updates.html',
-                  height: 560
-                });
-              }
-
               if (!hasSeenWelcome) {
                 return t.modal({
                   title: 'Bem-vindo ao KPI Master',
