@@ -127,7 +127,7 @@
     /* Features Grid */
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 10px;
       margin-bottom: 20px;
     }
@@ -136,7 +136,7 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 10px;
-      padding: 14px 12px;
+      padding: 12px 12px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -148,13 +148,13 @@
     }
 
     .feature-icon-box {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .icon-speed {
@@ -173,17 +173,17 @@
     }
 
     .feature-card h3 {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
-      margin: 0 0 4px 0;
+      margin: 0 0 3px 0;
       color: #f1f5f9;
     }
 
     .feature-card p {
-      font-size: 10.5px;
+      font-size: 10px;
       color: var(--text-sub);
       margin: 0;
-      line-height: 1.4;
+      line-height: 1.35;
     }
 
     /* Actions Footer */
@@ -258,7 +258,7 @@
     <div class="header-hero">
       <div class="brand-badge">
         <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
-        <span>KPI Master Tutorial</span>
+        <span>KPI Master Onboarding</span>
       </div>
       <h1 id="welcome-title">Bem-vindo ao KPI Master</h1>
       <p id="welcome-subtitle">A sua solução de análise de velocidade de leads e métricas de desempenho para equipas no Trello.</p>
@@ -270,35 +270,43 @@
         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
       </div>
       <div class="web-banner-text">
-        <h4 id="banner-title">🚀 Aceda à Visão Completa (Full View)</h4>
-        <p id="banner-desc">Para veres a visão completa com muitos mais detalhes, relatórios e funcionalidades avançadas, clica no botão do Power-Up no teu quadro Trello e seleciona "Open Full Dashboard"!</p>
+        <h4 id="banner-title">🌐 Funcionalidades no Trello + Plataforma Web</h4>
+        <p id="banner-desc">No Trello tens ações nativas rápidas para o dia a dia. Clica no botão abaixo para aceder à Plataforma Web com gráficos avançados, relatórios executivos e exportações!</p>
       </div>
     </div>
 
-    <!-- 3 Core Features -->
+    <!-- 4 Features Grid (Trello Native + Web Platform) -->
     <div class="features-grid">
       <div class="feature-card">
         <div class="feature-icon-box icon-speed">
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         </div>
-        <h3 id="f1-title">Velocidade de Leads</h3>
-        <p id="f1-desc">Calcula o tempo exato que cada lead leva a sair do funil.</p>
+        <h3 id="f1-title">⏩ Mover em 1-Clique</h3>
+        <p id="f1-desc">Avança o cartão para a próxima coluna nos botões do cartão.</p>
       </div>
 
       <div class="feature-card">
         <div class="feature-icon-box icon-badges">
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 7h10v10H7z"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/></svg>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
-        <h3 id="f2-title">Idade dos Cartões</h3>
-        <p id="f2-desc">Emblemas visuais automáticos nos cartões para identificar estagnação.</p>
+        <h3 id="f2-title">⏳ Ordenar por Idade</h3>
+        <p id="f2-desc">No menu (...) da lista, ordena por mais antigos para evitar perdas.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box icon-speed">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </div>
+        <h3 id="f3-title">⏱️ Histórico no Verso</h3>
+        <p id="f3-desc">Exibe o tempo total do ciclo de venda e estado no verso do cartão.</p>
       </div>
 
       <div class="feature-card">
         <div class="feature-icon-box icon-dashboard">
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
         </div>
-        <h3 id="f3-title">Open Full Dashboard</h3>
-        <p id="f3-desc">Clica em "Open Full Dashboard" no Power-Up para abrir a experiência completa com todos os detalhes.</p>
+        <h3 id="f4-title">📊 Plataforma Web</h3>
+        <p id="f4-desc">Gráficos avançados, relatórios por consultor e exportações PDF.</p>
       </div>
     </div>
   </div>
@@ -319,8 +327,27 @@
     var KEY = import.meta.env.VITE_TRELLO_API_KEY;
     var NAME = 'KPI Master';
     var SITE = 'https://kpismaster.vercel.app';
+    var WEBHOOK_URL = 'https://hook.eu1.make.com/nnhynw1t9cabqrpedjnvp1m9t9h3pfv4';
 
     var t = TrelloPowerUp.iframe({ appKey: KEY, appName: NAME });
+
+    function trackEvent(eventName) {
+      try {
+        var url = WEBHOOK_URL + '?event=' + encodeURIComponent(eventName);
+        fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            event: eventName,
+            timestamp: new Date().toISOString(),
+            source: 'trello_welcome_modal'
+          })
+        }).catch(function() {});
+      } catch(e) {}
+    }
+
+    // Registar visualização do ecrã de boas-vindas
+    trackEvent('welcome_viewed');
 
     // Guardar marcação de que o utilizador já viu a introdução
     t.set('member', 'private', 'kpi_welcome_seen', true).catch(function() {});
@@ -331,30 +358,34 @@
     var i18n = {
       pt: {
         title: 'Bem-vindo ao KPI Master',
-        subtitle: 'A sua solução de análise de velocidade de leads e métricas de desempenho para equipas no Trello.',
-        bannerTitle: '🚀 Aceda à Visão Completa (Full View)',
-        bannerDesc: 'Para veres a visão completa com muitos mais detalhes, relatórios e funcionalidades avançadas, clica no botão do Power-Up no teu quadro Trello e seleciona "Open Full Dashboard"!',
-        f1Title: 'Velocidade de Leads',
-        f1Desc: 'Calcula o tempo exato que cada lead leva a sair do funil.',
-        f2Title: 'Idade dos Cartões',
-        f2Desc: 'Emblemas visuais automáticos nos cartões para identificar estagnação.',
-        f3Title: 'Open Full Dashboard',
-        f3Desc: 'Clica em "Open Full Dashboard" no Power-Up para abrir a experiência completa com todos os detalhes.',
-        btnSite: 'Abrir Full Dashboard →',
+        subtitle: 'A sua solução nativa no Trello e plataforma executiva de métricas de vendas.',
+        bannerTitle: '🌐 Funcionalidades Trello + Plataforma Web',
+        bannerDesc: 'No Trello tens ações nativas rápidas para o dia a dia. Clica no botão abaixo para aceder à Plataforma Web com gráficos avançados, relatórios executivos e exportações!',
+        f1Title: '⏩ Mover em 1-Clique',
+        f1Desc: 'Avança o cartão para a próxima coluna nos botões do cartão.',
+        f2Title: '⏳ Ordenar por Idade',
+        f2Desc: 'No menu (...) da lista, ordena por mais antigos para evitar perdas.',
+        f3Title: '⏱️ Histórico no Verso',
+        f3Desc: 'Exibe o tempo total do ciclo de venda e estado no verso do cartão.',
+        f4Title: '📊 Plataforma Web',
+        f4Desc: 'Gráficos avançados, relatórios por consultor e exportações PDF.',
+        btnSite: 'Abrir Plataforma Web →',
         btnClose: 'Ver no Trello'
       },
       en: {
         title: 'Welcome to KPI Master',
-        subtitle: 'Your lead speed analytics and team performance metrics solution for Trello.',
-        bannerTitle: '🚀 Access the Full View',
-        bannerDesc: 'To access the Full View with many more details, advanced reports, and features, click the Power-Up button on your Trello board menu and select "Open Full Dashboard"!',
-        f1Title: 'Lead Speed Analytics',
-        f1Desc: 'Measure exact time spent by leads in each stage of your sales funnel.',
-        f2Title: 'Card Age Badges',
-        f2Desc: 'Automatic visual badges on cards to identify bottlenecks in real-time.',
-        f3Title: 'Open Full Dashboard',
-        f3Desc: 'Click "Open Full Dashboard" on the Power-Up menu to launch the full portal with all features.',
-        btnSite: 'Open Full Dashboard →',
+        subtitle: 'Your native Trello solution and executive sales performance platform.',
+        bannerTitle: '🌐 Trello Features + Web Platform',
+        bannerDesc: 'Right inside Trello you have quick daily actions. Click below to open our Web Platform with advanced charts, executive reports, and exports!',
+        f1Title: '⏩ 1-Click Stage Move',
+        f1Desc: 'Advance cards to the next list instantly from the card buttons.',
+        f2Title: '⏳ Sort Leads by Age',
+        f2Desc: 'In the (...) list menu, sort by oldest leads to prevent losing deals.',
+        f3Title: '⏱️ Card Back History',
+        f3Desc: 'View total sales cycle time and status right on the card back.',
+        f4Title: '📊 Full Web Platform',
+        f4Desc: 'Advanced charts, team performance reports, and PDF exports.',
+        btnSite: 'Open Web Platform →',
         btnClose: 'View in Trello'
       }
     };
@@ -371,10 +402,13 @@
     document.getElementById('f2-desc').textContent = dict.f2Desc;
     document.getElementById('f3-title').textContent = dict.f3Title;
     document.getElementById('f3-desc').textContent = dict.f3Desc;
+    document.getElementById('f4-title').textContent = dict.f4Title;
+    document.getElementById('f4-desc').textContent = dict.f4Desc;
     document.getElementById('btn-site').textContent = dict.btnSite;
     document.getElementById('btn-close').textContent = dict.btnClose;
 
     document.getElementById('btn-site').addEventListener('click', function() {
+      trackEvent('click_site_btn');
       t.set('member', 'private', 'kpi_welcome_seen', true).then(function() {
         window.open(SITE, '_blank');
       }).catch(function() {
@@ -383,6 +417,7 @@
     });
 
     document.getElementById('btn-close').addEventListener('click', function() {
+      trackEvent('click_trello_btn');
       t.set('member', 'private', 'kpi_welcome_seen', true).then(function() {
         t.closeModal();
       }).catch(function() {

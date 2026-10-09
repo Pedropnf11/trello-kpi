@@ -15,6 +15,7 @@
   <script type="module">
     var POWERUP_URL = window.location.origin + '/trello';
     var SITE_URL    = 'https://kpismaster.vercel.app';
+    var welcomePrompted = false;
 
     TrelloPowerUp.initialize({
 
@@ -22,13 +23,27 @@
       'on-enable': function(t) {
         return t.modal({
           title:  'Bem-vindo ao KPI Master',
-          url:    POWERUP_URL + '/welcome.html',
+          url:    './welcome.html',
           height: 540
         });
       },
 
-      // ── Botão na barra do board ───────────────────────────────────────────
+      // ── Botão na barra do board + Abertura Automática ao Abrir o Quadro ───
       'board-buttons': function(t) {
+        // Dispara o Welcome automaticamente ao abrir o quadro para utilizadores que ainda não o viram
+        if (!welcomePrompted) {
+          t.get('member', 'private', 'kpi_welcome_seen').then(function(hasSeenWelcome) {
+            if (!hasSeenWelcome && !welcomePrompted) {
+              welcomePrompted = true;
+              t.modal({
+                title:  'Bem-vindo ao KPI Master',
+                url:    './welcome.html',
+                height: 540
+              });
+            }
+          }).catch(function() {});
+        }
+
         return [{
           icon: {
             dark:  POWERUP_URL + '/icon.png',
@@ -40,7 +55,7 @@
               if (!hasSeenWelcome) {
                 return t.modal({
                   title:  'Bem-vindo ao KPI Master',
-                  url:    POWERUP_URL + '/welcome.html',
+                  url:    './welcome.html',
                   height: 540
                 });
               }
@@ -48,13 +63,13 @@
                 if (!isAuth) {
                   return t.modal({
                     title:  'Ligar ao KPI Master',
-                    url:    POWERUP_URL + '/auth.html',
+                    url:    './auth.html',
                     height: 420
                   });
                 }
                 return t.modal({
                   title:      'KPI Master',
-                  url:        POWERUP_URL + '/dashboard.html',
+                  url:        './dashboard.html',
                   height:     620,
                   fullscreen: false
                 });
@@ -157,15 +172,73 @@
           });
       },
 
+      // ── Botões de Ação no Cartão (Card Buttons) ───────────────────────────
+      'card-buttons': function(t) {
+        var isPt = (t.locale || 'en').startsWith('pt');
+        return [{
+          icon: POWERUP_URL + '/icon.png',
+          text: isPt ? '⏩ Mover para Próxima Etapa' : '⏩ Move to Next Stage',
+          callback: function(t) {
+            return t.card('id', 'idList').then(function(card) {
+              return t.lists('id', 'name').then(function(lists) {
+                var currentIndex = -1;
+                for (var i = 0; i < lists.length; i++) {
+                  if (lists[i].id === card.idList) {
+                    currentIndex = i;
+                    break;
+                  }
+                }
+                if (currentIndex === -1 || currentIndex >= lists.length - 1) {
+                  return t.popup({
+                    title: isPt ? 'Aviso' : 'Notice',
+                    items: [{
+                      text: isPt ? 'Este cartão já está na última coluna!' : 'Card is already in the last list!'
+                    }]
+                  });
+                }
+
+                var nextList = lists[currentIndex + 1];
+
+                return t.getRestApi().isAuthorized().then(function(isAuth) {
+                  if (!isAuth) {
+                    return t.modal({
+                      title: isPt ? 'Ligar ao KPI Master' : 'Connect KPI Master',
+                      url: './auth.html',
+                      height: 420
+                    });
+                  }
+
+                  return t.getRestApi().getToken().then(function(token) {
+                    return fetch('https://api.trello.com/1/cards/' + card.id + '?idList=' + nextList.id + '&key=' + import.meta.env.VITE_TRELLO_API_KEY + '&token=' + token, {
+                      method: 'PUT'
+                    }).then(function(res) {
+                      if (res.ok) {
+                        return t.alert({
+                          message: (isPt ? 'Movido com sucesso para: ' : 'Moved to: ') + nextList.name,
+                          duration: 3
+                        });
+                      } else {
+                        throw new Error('Falha ao mover');
+                      }
+                    });
+                  });
+                });
+              });
+            });
+          }
+        }];
+      },
+
       // ── Secção do Verso do Cartão (Card Back Section) ──────────────────────
       'card-back-section': function(t) {
+        var isPt = (t.locale || 'en').startsWith('pt');
         return {
-          title: 'KPI Master History',
+          title: isPt ? 'Histórico & Velocidade da Lead' : 'Lead Stage & Speed History',
           icon: POWERUP_URL + '/icon.png',
           content: {
             type: 'iframe',
-            url: t.signUrl(POWERUP_URL + '/card-back.html'),
-            height: 72
+            url: t.signUrl('./card-back.html'),
+            height: 155
           }
         };
       },
@@ -174,7 +247,7 @@
       'list-sorters': function(t) {
         var isPt = (t.locale || 'en').startsWith('pt');
         return [{
-          text: isPt ? 'KPI Master: Mais Antigos' : 'KPI Master: Oldest First',
+          text: isPt ? '⏳ Idade da Lead: Mais Antigos Primeiro (Evitar Perdas)' : '⏳ Lead Age: Oldest First (Prevent Loss)',
           callback: function(t, opts) {
             var sortedCards = opts.cards.sort(function(a, b) {
               var tA = parseInt(a.id.substring(0, 8), 16);
@@ -186,7 +259,7 @@
             };
           }
         }, {
-          text: isPt ? 'KPI Master: Mais Recentes' : 'KPI Master: Newest First',
+          text: isPt ? '⚡ Idade da Lead: Mais Recentes Primeiro' : '⚡ Lead Age: Newest First',
           callback: function(t, opts) {
             var sortedCards = opts.cards.sort(function(a, b) {
               var tA = parseInt(a.id.substring(0, 8), 16);
