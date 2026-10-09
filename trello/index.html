@@ -23,7 +23,7 @@
       'on-enable': function(t) {
         return t.modal({
           title:  'Bem-vindo ao KPI Master',
-          url:    './welcome.html',
+          url:    POWERUP_URL + '/welcome.html',
           height: 540
         });
       },
@@ -37,7 +37,7 @@
               welcomePrompted = true;
               t.modal({
                 title:  'Bem-vindo ao KPI Master',
-                url:    './welcome.html',
+                url:    POWERUP_URL + '/welcome.html',
                 height: 540
               });
             }
@@ -55,7 +55,7 @@
               if (!hasSeenWelcome) {
                 return t.modal({
                   title:  'Bem-vindo ao KPI Master',
-                  url:    './welcome.html',
+                  url:    POWERUP_URL + '/welcome.html',
                   height: 540
                 });
               }
@@ -63,13 +63,13 @@
                 if (!isAuth) {
                   return t.modal({
                     title:  'Ligar ao KPI Master',
-                    url:    './auth.html',
+                    url:    POWERUP_URL + '/auth.html',
                     height: 420
                   });
                 }
                 return t.modal({
                   title:      'KPI Master',
-                  url:        './dashboard.html',
+                  url:        POWERUP_URL + '/dashboard.html',
                   height:     620,
                   fullscreen: false
                 });
@@ -237,7 +237,7 @@
           icon: POWERUP_URL + '/icon.png',
           content: {
             type: 'iframe',
-            url: t.signUrl('./card-back.html'),
+            url: t.signUrl(POWERUP_URL + '/card-back.html'),
             height: 155
           }
         };
