@@ -33,15 +33,63 @@
         var CURRENT_VERSION = '1.5';
         var isPt = (t.locale || 'en').startsWith('pt');
 
+        function shouldPromptFeedback(rawState, welcomeSeenVal, firstSeenTimeVal) {
+          var now = Date.now();
+          var DAY = 24 * 60 * 60 * 1000;
+
+          // Regra: Se instalou a app há menos de 3 dias -> NÃO PERGUNTA FEEDBACK
+          var installTime = null;
+          if (typeof firstSeenTimeVal === 'number') installTime = firstSeenTimeVal;
+          else if (typeof welcomeSeenVal === 'number') installTime = welcomeSeenVal;
+
+          if (installTime && (now - installTime < 3 * DAY)) {
+            return false;
+          }
+
+          if (!rawState) {
+            // Se ainda não tem estado de feedback mas já passaram pelo menos 3 dias da instalação
+            return true;
+          }
+
+          try {
+            var state = typeof rawState === 'string' ? JSON.parse(rawState) : rawState;
+
+            // Se enviou feedback nos últimos 30 dias -> NÃO PERGUNTA
+            if (state.lastSubmittedTime && (now - state.lastSubmittedTime < 30 * DAY)) {
+              return false;
+            }
+
+            var lastPrompt = state.lastPromptTime || installTime || 0;
+            var elapsed = now - lastPrompt;
+            var count = state.ignoredCount || 0;
+
+            var requiredCooldown = 7 * DAY;
+            if (count === 1) requiredCooldown = 2 * DAY;      // 1.ª vez que ignorou -> 2 dias
+            else if (count === 2) requiredCooldown = 7 * DAY;  // 2.ª vez que ignorou -> 1 semana (7 dias)
+            else if (count === 3) requiredCooldown = 14 * DAY; // 3.ª vez que ignorou -> 2 semanas (14 dias)
+            else if (count >= 4) requiredCooldown = 30 * DAY;  // 4.ª+ vez que ignorou -> 1 mês (30 dias)
+
+            return elapsed >= requiredCooldown;
+          } catch(e) {
+            return false;
+          }
+        }
+
         return Promise.all([
           t.get('member', 'private', 'kpi_welcome_seen').catch(function () { return false; }),
-          t.get('member', 'private', 'kpi_last_seen_version').catch(function () { return null; })
+          t.get('member', 'private', 'kpi_last_seen_version').catch(function () { return null; }),
+          t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; }),
+          t.get('member', 'private', 'kpi_first_seen_time').catch(function () { return null; })
         ]).then(function (res) {
           var hasSeenWelcome = res[0];
           var lastSeenVersion = res[1];
-          var hasNewUpdate = hasSeenWelcome && (lastSeenVersion !== CURRENT_VERSION);
+          var rawFeedbackState = res[2];
+          var firstSeenTime = res[3];
 
-          // Dispara o Welcome ou Novidades automaticamente APENAS 1 VEZ por utilizador
+          var hasNewUpdate = hasSeenWelcome && (lastSeenVersion !== CURRENT_VERSION);
+          var needsFeedback = hasSeenWelcome && shouldPromptFeedback(rawFeedbackState, hasSeenWelcome, firstSeenTime);
+
+          // Dispara o Welcome, Novidades ou Feedback inteligente
           if (!welcomePrompted) {
             if (!hasSeenWelcome) {
               welcomePrompted = true;
@@ -57,6 +105,24 @@
                 title: isPt ? '✨ Novidades da Versão 1.5 — KPI Master' : '✨ What\'s New in Version 1.5 — KPI Master',
                 url: POWERUP_URL + '/updates.html',
                 height: 560
+              });
+
+              // Se também precisa de dar feedback, aguarda 2 minutos (120.000 ms) antes de abrir o feedback!
+              if (needsFeedback) {
+                setTimeout(function () {
+                  t.modal({
+                    title: isPt ? '⭐ A Tua Opinião — KPI Master' : '⭐ Your Feedback — KPI Master',
+                    url: POWERUP_URL + '/feedback.html',
+                    height: 520
+                  });
+                }, 120000);
+              }
+            } else if (needsFeedback) {
+              welcomePrompted = true;
+              t.modal({
+                title: isPt ? '⭐ A Tua Opinião — KPI Master' : '⭐ Your Feedback — KPI Master',
+                url: POWERUP_URL + '/feedback.html',
+                height: 520
               });
             }
           }

@@ -38,6 +38,7 @@
     <div style="display:flex; flex-direction:column; gap:6px;">
       <a id="link-privacy" href="https://kpismaster.vercel.app/privacy" target="_blank" class="link">🔒 Privacy Policy</a>
       <a id="link-updates" href="#" class="link">✨ Novidades & Atualizações (v1.5)</a>
+      <a id="link-feedback" href="#" class="link">⭐ Enviar Opinião & Avaliação</a>
       <a id="link-support" href="https://kpismaster.vercel.app" target="_blank" class="link">📖 Documentation & Support</a>
     </div>
 
@@ -125,6 +126,15 @@
         title: isPt ? '✨ Novidades da Versão 1.5 — KPI Master' : '✨ What\'s New in Version 1.5 — KPI Master',
         url: './updates.html',
         height: 560
+      });
+    });
+
+    document.getElementById('link-feedback').addEventListener('click', function(e) {
+      e.preventDefault();
+      t.modal({
+        title: isPt ? '⭐ A Tua Opinião — KPI Master' : '⭐ Your Feedback — KPI Master',
+        url: './feedback.html',
+        height: 520
       });
     });
 

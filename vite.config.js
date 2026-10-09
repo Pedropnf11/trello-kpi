@@ -32,7 +32,8 @@ export default defineConfig({
                 'trello/dashboard': 'trello/dashboard.html',
                 'trello/settings': 'trello/settings.html',
                 'trello/card-back': 'trello/card-back.html',
-                'trello/updates': 'trello/updates.html'
+                'trello/updates': 'trello/updates.html',
+                'trello/feedback': 'trello/feedback.html'
             },
             output: {
 

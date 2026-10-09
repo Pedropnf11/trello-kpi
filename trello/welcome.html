@@ -349,8 +349,10 @@
     // Registar visualização do ecrã de boas-vindas
     trackEvent('welcome_viewed');
 
-    // Guardar marcação de que o utilizador já viu a introdução
-    t.set('member', 'private', 'kpi_welcome_seen', true).catch(function() {});
+    // Guardar marcação e data de instalação (timestamp) do utilizador
+    var nowTime = Date.now();
+    t.set('member', 'private', 'kpi_welcome_seen', nowTime).catch(function() {});
+    t.set('member', 'private', 'kpi_first_seen_time', nowTime).catch(function() {});
 
     var locale = t.locale || 'en';
     var isPt = locale.startsWith('pt');

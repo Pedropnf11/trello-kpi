@@ -62,6 +62,9 @@ App.state = {
 };
 
 App.init = function () {
+    if (window.ActiveTracker) {
+        window.ActiveTracker.init({ name: 'Pedro Nogueira' });
+    }
     const hash = window.location.hash;
     if (hash) {
         if (hash.includes('token=')) {
@@ -787,6 +790,7 @@ App.resetBoardAndRole = function () {
 };
 
 App.checkFeedbackFirstTimeOnboarding = function () {
+    if (localStorage.getItem('kpi_feedback_submitted_globally')) return;
     const currentRole = this.state.userRole || 'manager';
     const storageKey = 'kpi_feedback_onboarding_seen_' + currentRole;
 

@@ -4,6 +4,7 @@ inject();
 
 import './js/api.js';
 import './js/utils.js';
+import './js/utils/activeTracker.js';
 import './js/pdf-export.js';
 
 // Logic (agora dentro de components)

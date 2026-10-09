@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feedback — KPI Master</title>
+  <script src="https://p.trellocdn.com/power-up.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #131b2e;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --star-active: #fbbf24;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 20px 18px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .badge-feedback {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(59, 130, 246, 0.15));
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      color: #fbbf24;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .translate-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: #60a5fa;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .translate-btn:hover {
+      background: rgba(59, 130, 246, 0.18);
+      border-color: rgba(59, 130, 246, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1.main-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    p.subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    /* Progress Bar */
+    .progress-wrapper {
+      margin-bottom: 22px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 25%;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    /* Steps Layout */
+    .step-content {
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .step-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2.step-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+
+    p.step-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+
+    /* Star Rating */
+    .stars-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px 20px;
+      margin-bottom: 12px;
+    }
+
+    .star {
+      font-size: 34px;
+      color: #4b5563;
+      cursor: pointer;
+      transition: transform 0.15s ease, color 0.15s ease;
+      user-select: none;
+    }
+
+    .star:hover, .star.active {
+      color: var(--star-active);
+      transform: scale(1.2);
+    }
+
+    .rating-label {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fbbf24;
+      margin-bottom: 20px;
+    }
+
+    /* Choice Options (Pills/Cards) */
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .option-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 13px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .option-card:hover {
+      border-color: rgba(59, 130, 246, 0.4);
+      background: rgba(59, 130, 246, 0.08);
+      transform: translateX(3px);
+    }
+
+    .option-card.selected {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.18);
+      color: #ffffff;
+      box-shadow: 0 0 0 1px #3b82f6;
+    }
+
+    .option-radio {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .option-card.selected .option-radio {
+      border-color: #3b82f6;
+      background: #3b82f6;
+    }
+
+    .option-radio::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0;
+    }
+
+    .option-card.selected .option-radio::after {
+      opacity: 1;
+    }
+
+    /* Inputs */
+    input[type="text"], textarea {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 11px 14px;
+      color: var(--text-main);
+      font-size: 12px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .other-input-container {
+      margin-top: 10px;
+      display: none;
+    }
+
+    .other-input-container.active {
+      display: block;
+    }
+
+    /* Actions Footer */
+    .actions-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 24px;
+      padding-top: 14px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .btn-next, .btn-submit {
+      padding: 11px 22px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-next:hover, .btn-submit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+    }
+
+    .btn-back {
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-back:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+    }
+
+    .btn-skip {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .btn-skip:hover {
+      color: var(--text-main);
+    }
+
+    /* Success Screen */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 30px 10px;
+    }
+
+    .success-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #4ade80;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 28px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="wizard-screen">
+      <div class="header-top">
+        <div class="badge-feedback" id="badge-text">⚡ 30-Second Feedback</div>
+        <button id="btn-translate" class="translate-btn">
+          <span>🇵🇹 Traduzir para Português</span>
+        </button>
+      </div>
+
+      <div class="header">
+        <h1 class="main-title" id="title">Help Us Improve KPI Master</h1>
+        <p class="subtitle" id="subtitle">Share your experience in 30 seconds to help us build a better tool.</p>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-wrapper">
+        <div class="progress-info">
+          <span id="progress-step-text">Step 1 of 4</span>
+          <span id="progress-percent-text">25%</span>
+        </div>
+        <div class="progress-track">
+          <div id="progress-fill" class="progress-fill" style="width: 25%;"></div>
+        </div>
+      </div>
+
+      <!-- STEP 1: Star Rating -->
+      <div id="step-1" class="step-content active">
+        <h2 class="step-title" id="s1-title">How would you rate your overall experience?</h2>
+        <p class="step-desc" id="s1-desc">Select a rating from 1 to 5 stars.</p>
+
+        <div class="stars-container">
+          <span class="star" data-rating="1">★</span>
+          <span class="star" data-rating="2">★</span>
+          <span class="star" data-rating="3">★</span>
+          <span class="star" data-rating="4">★</span>
+          <span class="star" data-rating="5">★</span>
+        </div>
+        <div class="rating-label" id="rating-label">5/5 Excellent!</div>
+
+        <div class="actions-footer">
+          <button type="button" id="btn-cancel-top" class="btn-skip">Not now</button>
+          <button type="button" onclick="goToStep(2)" class="btn-next" id="s1-next-btn">Next →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Use Case -->
+      <div id="step-2" class="step-content">
+        <h2 class="step-title" id="s2-title">What do you primarily use KPI Master for?</h2>
+        <p class="step-desc" id="s2-desc">Select the area that best matches your daily work.</p>
+
+        <div class="options-grid">
+          <div class="option-card" data-step="2" data-value="sales_leads">
+            <span id="s2-opt1">💼 Sales & Lead Management</span>
+            <div class="option-radio"></div>
+          </div>
+          <div class="option-card" data-step="2" data-value="marketing_outreach">
+            <span id="s2-opt2">📣 Marketing & Outreach</span>
+            <div class="option-radio"></div>
+          </div>
+          <div class="option-card" data-step="2" data-value="team_project">
+            <span id="s2-opt3">🚀 Projects & Team Operations</span>
+            <div class="option-radio"></div>
+          </div>
+          <div class="option-card" data-step="2" data-value="other">
+            <span id="s2-opt4">✍️ Other...</span>
+            <div class="option-radio"></div>
+          </div>
+        </div>
+
+        <div id="s2-other-container" class="other-input-container">
+          <input type="text" id="s2-other-input" placeholder="Describe your main use case...">
+        </div>
+
+        <div class="actions-footer">
+          <button type="button" onclick="goToStep(1)" class="btn-back" id="s2-back-btn">← Back</button>
+          <button type="button" onclick="goToStep(3)" class="btn-next" id="s2-next-btn">Next →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Full Dashboard Feedback -->
+      <div id="step-3" class="step-content">
+        <h2 class="step-title" id="s3-title">What do you think of the Full Dashboard web platform?</h2>
+        <p class="step-desc" id="s3-desc">Tell us your opinion about our full analytics web dashboard.</p>
+
+        <div class="options-grid">
+          <div class="option-card" data-step="3" data-value="essential">
+            <span id="s3-opt1">🔥 Essential & Extremely Useful!</span>
+            <div class="option-radio"></div>
+          </div>
+          <div class="option-card" data-step="3" data-value="useful_improve">
+            <span id="s3-opt2">📊 Useful, but could be improved</span>
+            <div class="option-radio"></div>
+          </div>
+          <div class="option-card" data-step="3" data-value="not_explored">
+            <span id="s3-opt3">💡 Haven't explored it enough yet</span>
+            <div class="option-radio"></div>
+          </div>
+          <div class="option-card" data-step="3" data-value="needs_features">
+            <span id="s3-opt4">⚠️ Needs more features for my team</span>
+            <div class="option-radio"></div>
+          </div>
+        </div>
+
+        <div class="actions-footer">
+          <button type="button" onclick="goToStep(2)" class="btn-back" id="s3-back-btn">← Back</button>
+          <button type="button" onclick="goToStep(4)" class="btn-next" id="s3-next-btn">Next →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Open Suggestions -->
+      <div id="step-4" class="step-content">
+        <h2 class="step-title" id="s4-title">Any suggestions or improvements for us?</h2>
+        <p class="step-desc" id="s4-desc">🔒 Feedback is 100% anonymous. If you need support assistance, please include your email address below!</p>
+
+        <textarea id="s4-textarea" placeholder="Type your suggestions here (optional). Include your email if you would like a reply from support..."></textarea>
+
+        <div class="actions-footer">
+          <button type="button" onclick="goToStep(3)" class="btn-back" id="s4-back-btn">← Back</button>
+          <button type="button" id="btn-submit" class="btn-submit">Submit Feedback 🚀</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Screen -->
+    <div id="success-screen" class="success-screen">
+      <div class="success-icon">✓</div>
+      <h2 id="success-title" style="font-size: 20px; font-weight: 800; margin-bottom: 6px;">Thank you for your feedback! 🚀</h2>
+      <p id="success-subtitle" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Your insights directly guide our product roadmap.</p>
+      <button type="button" id="btn-done" class="btn-submit" style="width: auto; padding: 10px 24px;">Back to Trello</button>
+    </div>
+  </div>
+
+  <script type="module">
+    var WEBHOOK_URL = 'https://hook.eu1.make.com/5mla3rqp2s362eqa6tspuqykucwycu43';
+    var t = TrelloPowerUp.iframe();
+
+    var currentStep = 1;
+    var currentRating = 5;
+    var selectedUseCase = 'sales_leads';
+    var selectedDashboardOpinion = 'essential';
+    var currentLang = 'en'; // DEFAULT IS 100% ENGLISH!
+
+    var dictionary = {
+      en: {
+        badge: "⚡ 30-Second Feedback",
+        translateBtn: "🇵🇹 Traduzir para Português",
+        title: "Help Us Improve KPI Master",
+        subtitle: "Share your experience in 30 seconds to help us build a better tool.",
+        stepFormat: "Step {step} of 4",
+        btnSkip: "Not now",
+        btnNext: "Next →",
+        btnBack: "← Back",
+        btnSubmit: "Submit Feedback 🚀",
+        btnSubmitting: "Submitting...",
+        successTitle: "Thank you for your feedback! 🚀",
+        successSubtitle: "Your insights directly guide our product roadmap.",
+        btnDone: "Back to Trello",
+
+        s1Title: "How would you rate your overall experience?",
+        s1Desc: "Select a rating from 1 to 5 stars.",
+        ratings: ["1/5 Poor", "2/5 Fair", "3/5 Good", "4/5 Very Good!", "5/5 Excellent!"],
+
+        s2Title: "What do you primarily use KPI Master for?",
+        s2Desc: "Select the area that best matches your daily work.",
+        s2Opt1: "💼 Sales & Lead Management",
+        s2Opt2: "📣 Marketing & Outreach",
+        s2Opt3: "🚀 Projects & Team Operations",
+        s2Opt4: "✍️ Other...",
+        phS2Other: "Describe your main use case...",
+
+        s3Title: "What do you think of the Full Dashboard web platform?",
+        s3Desc: "Tell us your opinion about our full analytics web dashboard.",
+        s3Opt1: "🔥 Essential & Extremely Useful!",
+        s3Opt2: "📊 Useful, but could be improved",
+        s3Opt3: "💡 Haven't explored it enough yet",
+        s3Opt4: "⚠️ Needs more features for my team",
+
+        s4Title: "Any suggestions or improvements for us?",
+        s4Desc: "🔒 Feedback is 100% anonymous. If you need support assistance, please include your email address below!",
+        phS4Textarea: "Type your suggestions here (optional). Include your email if you would like a reply from support..."
+      },
+      pt: {
+        badge: "⚡ Feedback Rápido (30s)",
+        translateBtn: "🇬🇧 Translate to English",
+        title: "Ajuda-nos a Melhorar o KPI Master",
+        subtitle: "Partilha a tua experiência em 30s para tornarmos a app ainda melhor.",
+        stepFormat: "Passo {step} de 4",
+        btnSkip: "Agora não",
+        btnNext: "Seguinte →",
+        btnBack: "← Voltar",
+        btnSubmit: "Enviar Feedback 🚀",
+        btnSubmitting: "A enviar...",
+        successTitle: "Obrigado pelo teu feedback! 🚀",
+        successSubtitle: "A tua opinião ajuda-nos a evoluir a ferramenta.",
+        btnDone: "Voltar ao Trello",
+
+        s1Title: "Como avalias a tua experiência com o KPI Master?",
+        s1Desc: "Seleciona uma pontuação de 1 a 5 estrelas.",
+        ratings: ["1/5 Fraco", "2/5 Razoável", "3/5 Bom", "4/5 Muito Bom!", "5/5 Excelente!"],
+
+        s2Title: "Para o que usas principalmente o KPI Master?",
+        s2Desc: "Seleciona a área que melhor descreve o teu trabalho.",
+        s2Opt1: "💼 Vendas & Gestão de Leads",
+        s2Opt2: "📣 Marketing & Prospeção",
+        s2Opt3: "🚀 Projetos & Operações de Equipa",
+        s2Opt4: "✍️ Outro...",
+        phS2Other: "Escreve como utilizas a aplicação...",
+
+        s3Title: "O que achas do Painel de KPIs Completo (Full Dashboard)?",
+        s3Desc: "Diz-nos a tua opinião sobre a nossa plataforma web de métricas.",
+        s3Opt1: "🔥 Essencial e Muito Útil!",
+        s3Opt2: "📊 Útil, mas pode melhorar",
+        s3Opt3: "💡 Ainda não explorei o suficiente",
+        s3Opt4: "⚠️ Precisa de mais funcionalidades",
+
+        s4Title: "Tens alguma sugestão de melhoria?",
+        s4Desc: "🔒 Este feedback é 100% anónimo. Se precisares de ajuda do suporte, inclui o teu email nos comentários abaixo!",
+        phS4Textarea: "Escreve as tuas sugestões aqui (opcional). Inclui o teu email se desejares resposta do suporte..."
+      }
+    };
+
+    window.goToStep = function(stepNum) {
+      currentStep = stepNum;
+
+      // Update progress bar
+      var percent = stepNum * 25;
+      document.getElementById('progress-fill').style.width = percent + '%';
+      document.getElementById('progress-percent-text').textContent = percent + '%';
+
+      var d = dictionary[currentLang];
+      document.getElementById('progress-step-text').textContent = d.stepFormat.replace('{step}', stepNum);
+
+      // Toggle active step
+      for (var i = 1; i <= 4; i++) {
+        var el = document.getElementById('step-' + i);
+        if (i === stepNum) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
+        }
+      }
+    };
+
+    function applyLanguage(lang) {
+      currentLang = lang;
+      var d = dictionary[lang];
+
+      document.getElementById('badge-text').textContent = d.badge;
+      document.getElementById('title').textContent = d.title;
+      document.getElementById('subtitle').textContent = d.subtitle;
+      document.getElementById('btn-translate').innerHTML = '<span>' + d.translateBtn + '</span>';
+      document.getElementById('btn-cancel-top').textContent = d.btnSkip;
+      document.getElementById('btn-submit').textContent = d.btnSubmit;
+      document.getElementById('success-title').textContent = d.successTitle;
+      document.getElementById('success-subtitle').textContent = d.successSubtitle;
+      document.getElementById('btn-done').textContent = d.btnDone;
+
+      document.getElementById('s1-title').textContent = d.s1Title;
+      document.getElementById('s1-desc').textContent = d.s1Desc;
+      document.getElementById('s1-next-btn').textContent = d.btnNext;
+
+      document.getElementById('s2-title').textContent = d.s2Title;
+      document.getElementById('s2-desc').textContent = d.s2Desc;
+      document.getElementById('s2-opt1').textContent = d.s2Opt1;
+      document.getElementById('s2-opt2').textContent = d.s2Opt2;
+      document.getElementById('s2-opt3').textContent = d.s2Opt3;
+      document.getElementById('s2-opt4').textContent = d.s2Opt4;
+      document.getElementById('s2-other-input').placeholder = d.phS2Other;
+      document.getElementById('s2-back-btn').textContent = d.btnBack;
+      document.getElementById('s2-next-btn').textContent = d.btnNext;
+
+      document.getElementById('s3-title').textContent = d.s3Title;
+      document.getElementById('s3-desc').textContent = d.s3Desc;
+      document.getElementById('s3-opt1').textContent = d.s3Opt1;
+      document.getElementById('s3-opt2').textContent = d.s3Opt2;
+      document.getElementById('s3-opt3').textContent = d.s3Opt3;
+      document.getElementById('s3-opt4').textContent = d.s3Opt4;
+      document.getElementById('s3-back-btn').textContent = d.btnBack;
+      document.getElementById('s3-next-btn').textContent = d.btnNext;
+
+      document.getElementById('s4-title').textContent = d.s4Title;
+      document.getElementById('s4-desc').textContent = d.s4Desc;
+      document.getElementById('s4-textarea').placeholder = d.phS4Textarea;
+      document.getElementById('s4-back-btn').textContent = d.btnBack;
+
+      updateStarDisplay(currentRating);
+      goToStep(currentStep);
+    }
+
+    function updateStarDisplay(rating) {
+      currentRating = rating;
+      var stars = document.querySelectorAll('.star');
+      var d = dictionary[currentLang];
+
+      stars.forEach(function(s, index) {
+        if (index < rating) {
+          s.classList.add('active');
+        } else {
+          s.classList.remove('active');
+        }
+      });
+      document.getElementById('rating-label').textContent = d.ratings[rating - 1] || (rating + '/5');
+    }
+
+    // Star Click Handlers
+    document.querySelectorAll('.star').forEach(function(star) {
+      star.addEventListener('click', function() {
+        var r = parseInt(this.getAttribute('data-rating'), 10);
+        updateStarDisplay(r);
+        setTimeout(function() {
+          goToStep(2);
+        }, 200);
+      });
+    });
+
+    // Option Cards Handler
+    document.querySelectorAll('.option-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        var step = this.getAttribute('data-step');
+        var val = this.getAttribute('data-value');
+
+        document.querySelectorAll('.option-card[data-step="' + step + '"]').forEach(function(c) {
+          c.classList.remove('selected');
+        });
+        this.classList.add('selected');
+
+        if (step === '2') {
+          selectedUseCase = val;
+          var otherContainer = document.getElementById('s2-other-container');
+          if (val === 'other') {
+            otherContainer.classList.add('active');
+            document.getElementById('s2-other-input').focus();
+          } else {
+            otherContainer.classList.remove('active');
+          }
+        } else if (step === '3') {
+          selectedDashboardOpinion = val;
+        }
+      });
+    });
+
+    // Set Default Selections
+    var defaultStep2Card = document.querySelector('.option-card[data-step="2"][data-value="sales_leads"]');
+    if (defaultStep2Card) defaultStep2Card.classList.add('selected');
+
+    var defaultStep3Card = document.querySelector('.option-card[data-step="3"][data-value="essential"]');
+    if (defaultStep3Card) defaultStep3Card.classList.add('selected');
+
+    // Force initialization in English by default!
+    applyLanguage('en');
+
+    document.getElementById('btn-translate').addEventListener('click', function() {
+      applyLanguage(currentLang === 'en' ? 'pt' : 'en');
+    });
+
+    // Cancel Button Handler
+    document.getElementById('btn-cancel-top').addEventListener('click', function() {
+      t.get('member', 'private', 'kpi_feedback_state').then(function(rawState) {
+        var state = rawState ? JSON.parse(rawState) : { ignoredCount: 0 };
+        state.ignoredCount = (state.ignoredCount || 0) + 1;
+        state.lastPromptTime = Date.now();
+        return t.set('member', 'private', 'kpi_feedback_state', JSON.stringify(state));
+      }).catch(function(){}).finally(function() {
+        t.closeModal();
+      });
+    });
+
+    // Final Submit Handler
+    document.getElementById('btn-submit').addEventListener('click', function() {
+      var submitBtn = this;
+      var d = dictionary[currentLang];
+      submitBtn.disabled = true;
+      submitBtn.textContent = d.btnSubmitting;
+
+      var customUseCaseText = document.getElementById('s2-other-input').value.trim();
+      var finalUseCase = (selectedUseCase === 'other' && customUseCaseText) ? ('Outro: ' + customUseCaseText) : selectedUseCase;
+      var suggestions = document.getElementById('s4-textarea').value.trim();
+
+      var formattedText = '⭐ Rating: ' + currentRating + '/5\n' +
+                          '📌 Use Case: ' + finalUseCase + '\n' +
+                          '📊 Dashboard Opinion: ' + selectedDashboardOpinion + '\n' +
+                          '💡 Suggestions: ' + (suggestions || 'None');
+
+      var payload = {
+        text: formattedText,
+        event: 'user_feedback',
+        rating: currentRating,
+        useCase: finalUseCase,
+        fullDashboardOpinion: selectedDashboardOpinion,
+        suggestions: suggestions,
+        timestamp: new Date().toISOString(),
+        userLocale: t.locale || 'en'
+      };
+
+      fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).catch(function(err) {
+        console.warn('Feedback send warning:', err);
+      }).finally(function() {
+        var state = {
+          lastPromptTime: Date.now(),
+          lastSubmittedTime: Date.now(),
+          ignoredCount: 0
+        };
+        t.set('member', 'private', 'kpi_feedback_state', JSON.stringify(state)).catch(function(){});
+
+        try {
+          localStorage.setItem('kpi_feedback_onboarding_seen_manager', 'true');
+          localStorage.setItem('kpi_feedback_onboarding_seen_sales', 'true');
+          localStorage.setItem('kpi_feedback_submitted_globally', 'true');
+        } catch(e){}
+
+        document.getElementById('wizard-screen').style.display = 'none';
+        document.getElementById('success-screen').style.display = 'block';
+      });
+    });
+
+    document.getElementById('btn-done').addEventListener('click', function() {
+      t.closeModal();
+    });
+  </script>
+</body>
+</html>
+

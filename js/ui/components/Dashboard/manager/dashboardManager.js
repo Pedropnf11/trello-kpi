@@ -102,7 +102,7 @@ UI.renderManagerDashboard = function (state) {
                         </div>
 
                         <!-- ROW 2: TEMPO & ATIVIDADE (2 COLUNAS GRANDES LADO AO LADO) -->
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
                             
                             <!-- Tempo Médio -->
                             <div class="bg-[#0d1117] rounded-2xl p-6 border border-white/[0.08] hover:border-white/[0.15] transition-all shadow-xl flex flex-col">
@@ -112,6 +112,11 @@ UI.renderManagerDashboard = function (state) {
                             <!-- Atividade -->
                             <div class="bg-[#0d1117] rounded-2xl p-6 border border-white/[0.08] hover:border-white/[0.15] transition-all shadow-xl flex flex-col">
                                 ${UI.renderActivity(kpis.atividade)}
+                            </div>
+
+                            <!-- Tempo Ativo Real (Live Tracker) -->
+                            <div class="bg-[#0d1117] rounded-2xl p-6 border border-white/[0.08] hover:border-cyan-500/30 transition-all shadow-xl flex flex-col">
+                                ${UI.renderActiveTeamTime ? UI.renderActiveTeamTime() : ''}
                             </div>
                         </div>
 

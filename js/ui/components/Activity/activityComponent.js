@@ -118,3 +118,69 @@ UI.renderActionList = function (atividade, role = 'manager') {
         </div>
     `;
 };
+
+UI.renderActiveTeamTime = function () {
+    const isEn = (UI._lpLang || 'pt') === 'en';
+    const stats = window.ActiveTracker ? window.ActiveTracker.getStats() : [];
+
+    const totalTodaySecs = stats.reduce((acc, m) => acc + (m.todaySeconds || 0), 0);
+    const totalTodayFormatted = window.ActiveTracker ? window.ActiveTracker.formatTime(totalTodaySecs) : '0m';
+
+    return `
+        <div class="flex flex-col gap-5 h-full">
+            <!-- Header -->
+            <div class="flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-1.5 h-4 rounded-full bg-cyan-400"></span>
+                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.12em]">${isEn ? 'ACTIVE TEAM TIME' : 'TEMPO ATIVO DA EQUIPA'}</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                        ${isEn ? 'Live Tracker' : 'Ao Vivo'}
+                    </span>
+                    <span class="text-[11px] text-gray-400 font-bold">${isEn ? 'Total Today:' : 'Hoje:'} ${totalTodayFormatted}</span>
+                </div>
+            </div>
+
+            <!-- List of members active time -->
+            <div class="flex flex-col gap-3 flex-1 overflow-y-auto custom-scrollbar-dark">
+                ${stats.length > 0 ? stats.map((m) => {
+                    const pctOfWorkDay = Math.min(Math.round((m.todaySeconds / (8 * 3600)) * 100), 100);
+                    return `
+                        <div class="bg-[#080c14] border border-white/[0.06] hover:border-cyan-500/30 rounded-xl p-3.5 transition-all flex flex-col gap-2.5 group shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-600/10 border border-cyan-500/20 flex items-center justify-center text-xs font-bold text-cyan-400 flex-shrink-0">
+                                        ${m.name.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-bold text-white truncate group-hover:text-cyan-300 transition-colors">${Utils.escapeHtml(m.name)}</p>
+                                        <p class="text-[10px] text-gray-500 font-medium">${isEn ? 'Weekly:' : 'Semana:'} ${m.weeklyFormatted}</p>
+                                    </div>
+                                </div>
+                                <div class="text-right flex-shrink-0">
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border ${m.statusColor}">
+                                        <span class="w-1.5 h-1.5 rounded-full ${m.status === 'online' ? 'bg-emerald-400 animate-pulse' : m.status === 'idle' ? 'bg-amber-400' : 'bg-red-400'}"></span>
+                                        ${m.statusText}
+                                    </span>
+                                    <p class="text-xs font-extrabold text-white mt-1 tabular-nums">${m.todayFormatted}</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Progress Bar vs 8h work day -->
+                            <div class="w-full bg-white/[0.05] rounded-full h-1.5 overflow-hidden flex items-center">
+                                <div class="h-full rounded-full transition-all duration-500 ${m.status === 'online' ? 'bg-gradient-to-r from-cyan-500 to-blue-500' : 'bg-gray-600'}" style="width: ${Math.max(pctOfWorkDay, 4)}%;"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('') : `
+                    <div class="p-6 text-center text-xs text-gray-500 bg-[#080c14] border border-white/[0.04] rounded-xl">
+                        ${isEn ? 'Tracking team activity in real-time...' : 'A registar atividade da equipa em tempo real...'}
+                    </div>
+                `}
+            </div>
+        </div>
+    `;
+};
+
