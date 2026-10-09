@@ -12,11 +12,12 @@
       --title-color: #172b4d;
       --desc-color: #5e6c84;
       --accent-blue: #0065ff;
-      --badge-bg: #e6fcff;
-      --badge-text: #006644;
+      --accent-green: #00875a;
       --btn-bg: #091e420f;
       --btn-text: #172b4d;
       --btn-hover: #091e4224;
+      --item-bg: #f4f5f7;
+      --timeline-line: #0065ff;
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -26,11 +27,12 @@
         --title-color: #b6c2cf;
         --desc-color: #9fadbc;
         --accent-blue: #38bdf8;
-        --badge-bg: #1c3326;
-        --badge-text: #4ade80;
+        --accent-green: #4ade80;
         --btn-bg: #2c333f;
         --btn-text: #b6c2cf;
         --btn-hover: #3a4454;
+        --item-bg: #1c2126;
+        --timeline-line: #38bdf8;
       }
     }
 
@@ -66,9 +68,7 @@
       gap: 8px;
     }
 
-    .title-icon {
-      font-size: 16px;
-    }
+    .title-icon { font-size: 16px; }
 
     .title-text {
       font-size: 13px;
@@ -90,7 +90,6 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      margin-top: 2px;
     }
 
     .timeline-step {
@@ -120,6 +119,128 @@
       font-size: 12px;
       font-weight: 700;
       color: var(--title-color);
+    }
+
+    /* Streamed Timeline History Section */
+    .stream-section {
+      border-top: 1px dashed var(--border-box);
+      padding-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .stream-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--desc-color);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stream-timeline {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding-left: 18px;
+    }
+
+    .stream-timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: var(--border-box);
+    }
+
+    .stream-node {
+      position: relative;
+      padding-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .stream-node:last-child {
+      padding-bottom: 0;
+    }
+
+    .stream-dot {
+      position: absolute;
+      left: -18px;
+      top: 3px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--desc-color);
+      border: 2px solid var(--bg-box);
+    }
+
+    .stream-node.latest .stream-dot {
+      background: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+    }
+
+    .stream-node.first .stream-dot {
+      background: var(--accent-green);
+    }
+
+    .stream-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .stream-list-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--title-color);
+    }
+
+    .stream-date {
+      font-size: 11px;
+      color: var(--desc-color);
+    }
+
+    .stream-stay {
+      font-size: 11px;
+      color: var(--desc-color);
+      line-height: 1.4;
+    }
+
+    .stream-stay-highlight {
+      font-weight: 700;
+      color: var(--accent-blue);
+    }
+
+    .auth-banner {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px dashed rgba(56, 189, 248, 0.3);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 11px;
+      color: var(--title-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .auth-btn {
+      background: var(--accent-blue);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 10.5px;
+      font-weight: 700;
+      cursor: pointer;
     }
 
     .footer-row {
@@ -175,6 +296,16 @@
       </div>
     </div>
 
+    <!-- Sequential Stream Timeline Section -->
+    <div class="stream-section">
+      <div class="stream-title">
+        <span>📜 Histórico Corrente de Passagens:</span>
+      </div>
+      <div id="stream-container" class="stream-timeline">
+        <!-- Filled via JS -->
+      </div>
+    </div>
+
     <div class="footer-row">
       <a id="btn-dashboard" class="btn-link" href="#" target="_blank">
         📈 Ver KPIs Completos do Quadro →
@@ -202,7 +333,15 @@
         yesterday: 'Ontem',
         daysAgo: '{days} dias atrás',
         cycleText: 'Ciclo Total: {days} dias',
-        btnText: '📈 Ver KPIs Completos do Quadro →'
+        btnText: '📈 Ver KPIs Completos do Quadro →',
+        entryText: 'Entrou no dia {date} na lista ',
+        movedText: 'Passou para ',
+        stayedText: 'passado ',
+        currentStayText: 'está nesta lista há ',
+        daysUnit: 'dias',
+        hoursUnit: 'horas',
+        authNotice: 'Autorizar Trello para ver histórico detalhado de datas',
+        authBtn: 'Autorizar'
       },
       en: {
         title: 'Lead Stage & Speed History',
@@ -213,7 +352,15 @@
         yesterday: 'Yesterday',
         daysAgo: '{days} days ago',
         cycleText: 'Total Cycle: {days} days',
-        btnText: '📈 View Full Board KPIs →'
+        btnText: '📈 View Full Board KPIs →',
+        entryText: 'Entered on {date} in list ',
+        movedText: 'Moved to ',
+        stayedText: 'after ',
+        currentStayText: 'currently in this list for ',
+        daysUnit: 'days',
+        hoursUnit: 'hours',
+        authNotice: 'Authorize Trello API to view detailed stage history',
+        authBtn: 'Authorize'
       }
     };
 
@@ -259,6 +406,128 @@
           var ageText = diffDays === 0 ? tDict.today : (diffDays === 1 ? tDict.yesterday : diffDays + ' dias');
           document.getElementById('lbl-age-val').textContent = ageText;
           document.getElementById('lbl-cycle').textContent = tDict.cycleText.replace('{days}', diffDays);
+
+          var streamContainer = document.getElementById('stream-container');
+
+          t.getRestApi().isAuthorized().then(function(isAuth) {
+            if (!isAuth) {
+              streamContainer.innerHTML = `
+                <div class="auth-banner">
+                  <span>🔒 ${tDict.authNotice}</span>
+                  <button id="btn-auth-stream" class="auth-btn">${tDict.authBtn}</button>
+                </div>
+              `;
+              var authBtn = document.getElementById('btn-auth-stream');
+              if (authBtn) {
+                authBtn.addEventListener('click', function() {
+                  t.getRestApi().authorize().then(function() {
+                    window.location.reload();
+                  });
+                });
+              }
+              t.sizeTo(document.body).catch(function(){});
+              return;
+            }
+
+            return t.getRestApi().getToken().then(function(token) {
+              var actionsUrl = 'https://api.trello.com/1/cards/' + card.id + '/actions?filter=updateCard:idList,createCard&key=' + KEY + '&token=' + token;
+              return fetch(actionsUrl)
+                .then(function(r) { return r.json(); })
+                .then(function(actions) {
+                  if (!Array.isArray(actions) || actions.length === 0) {
+                    streamContainer.innerHTML = `
+                      <div class="stream-node first latest">
+                        <div class="stream-dot"></div>
+                        <div class="stream-header">
+                          <span class="stream-list-name">📍 ${currentList ? currentList.name : 'Leads'}</span>
+                          <span class="stream-date">${dateStr}</span>
+                        </div>
+                        <div class="stream-stay">
+                          ${tDict.entryText.replace('{date}', dateStr)} <strong>${currentList ? currentList.name : 'Leads'}</strong>. (${tDict.currentStayText}<span class="stream-stay-highlight">${diffDays} ${tDict.daysUnit}</span>)
+                        </div>
+                      </div>
+                    `;
+                    t.sizeTo(document.body).catch(function(){});
+                    return;
+                  }
+
+                  // Chronological order (oldest first)
+                  var chronological = actions.slice().reverse();
+                  var html = '';
+
+                  for (var i = 0; i < chronological.length; i++) {
+                    var act = chronological[i];
+                    var actDate = new Date(act.date);
+                    var formattedDate = actDate.toLocaleDateString(isPt ? 'pt-PT' : 'en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    });
+
+                    var nextDate = (i < chronological.length - 1) ? new Date(chronological[i + 1].date) : new Date();
+                    var stayMs = nextDate.getTime() - actDate.getTime();
+                    var stayDays = Math.floor(stayMs / (1000 * 60 * 60 * 24));
+                    var stayHours = Math.floor((stayMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+                    var durationText = stayDays > 0 
+                      ? (stayDays + ' ' + tDict.daysUnit + (stayHours > 0 ? ' e ' + stayHours + 'h' : ''))
+                      : (stayHours + ' ' + tDict.hoursUnit);
+
+                    var isFirst = (i === 0);
+                    var isLatest = (i === chronological.length - 1);
+
+                    var listName = '';
+                    var nodeText = '';
+
+                    if (act.type === 'createCard') {
+                      listName = (act.data && act.data.list) ? act.data.list.name : 'Leads';
+                      nodeText = `${tDict.entryText.replace('{date}', formattedDate)}<strong>${listName}</strong>.`;
+                    } else if (act.type === 'updateCard' && act.data && act.data.listAfter) {
+                      listName = act.data.listAfter.name;
+                      if (isLatest) {
+                        nodeText = `${tDict.movedText} <strong>${listName}</strong>. (${tDict.currentStayText}<span class="stream-stay-highlight">${durationText}</span>)`;
+                      } else {
+                        nodeText = `${tDict.movedText} <strong>${listName}</strong> ${tDict.stayedText}<span class="stream-stay-highlight">${durationText}</span>.`;
+                      }
+                    }
+
+                    if (listName) {
+                      var nodeClass = 'stream-node' + (isFirst ? ' first' : '') + (isLatest ? ' latest' : '');
+                      html += `
+                        <div class="${nodeClass}">
+                          <div class="stream-dot"></div>
+                          <div class="stream-header">
+                            <span class="stream-list-name">${isFirst ? '📍' : (isLatest ? '🎯' : '➡️')} ${listName}</span>
+                            <span class="stream-date">${formattedDate}</span>
+                          </div>
+                          <div class="stream-stay">${nodeText}</div>
+                        </div>
+                      `;
+                    }
+                  }
+
+                  if (html) {
+                    streamContainer.innerHTML = html;
+                  }
+                  t.sizeTo(document.body).catch(function(){});
+                });
+            });
+          }).catch(function() {
+            streamContainer.innerHTML = `
+              <div class="stream-node first latest">
+                <div class="stream-dot"></div>
+                <div class="stream-header">
+                  <span class="stream-list-name">📍 ${currentList ? currentList.name : 'Leads'}</span>
+                  <span class="stream-date">${dateStr}</span>
+                </div>
+                <div class="stream-stay">
+                  ${tDict.entryText.replace('{date}', dateStr)} <strong>${currentList ? currentList.name : 'Leads'}</strong>.
+                </div>
+              </div>
+            `;
+            t.sizeTo(document.body).catch(function(){});
+          });
         }
 
         if (board && board.id) {
@@ -268,31 +537,29 @@
           var defaultHref = SITE + '#board=' + boardId + '&role=vendedor';
           document.getElementById('btn-dashboard').href = defaultHref;
 
-          t.getRestApi().isAuthorized().then(function(isAuth) {
-            if (isAuth) {
-              return t.getRestApi().getToken();
-            }
+          t.getRestApi().isAuthorized().then(function (isAuth) {
+            if (isAuth) return t.getRestApi().getToken();
             throw new Error('Not authorized');
-          }).then(function(token) {
+          }).then(function (token) {
             if (token && memberId) {
               return fetch('https://api.trello.com/1/boards/' + boardId + '/memberships?key=' + KEY + '&token=' + token)
-                .then(function(res) { return res.json(); })
-                .then(function(memberships) {
+                .then(function (res) { return res.json(); })
+                .then(function (memberships) {
                   if (Array.isArray(memberships)) {
-                    var myMembership = memberships.find(function(m) { return m.idMember === memberId; });
+                    var myMembership = memberships.find(function (m) { return m.idMember === memberId; });
                     var role = (myMembership && myMembership.memberType === 'admin') ? 'gestor' : 'vendedor';
                     document.getElementById('btn-dashboard').href = SITE + '#board=' + boardId + '&role=' + role + '&token=' + token;
                   }
                 });
             }
-          }).catch(function(err) {});
+          }).catch(function (err) { });
         } else {
           document.getElementById('btn-dashboard').href = SITE;
         }
 
-        document.getElementById('btn-dashboard').addEventListener('click', function(e) {
+        document.getElementById('btn-dashboard').addEventListener('click', function (e) {
           e.preventDefault();
-          t.board('id').then(function(board) {
+          t.board('id').then(function (board) {
             if (!board || !board.id) {
               window.open(SITE, '_blank');
               return;
@@ -301,17 +568,17 @@
             var context = t.getContext();
             var memberId = context ? context.member : null;
 
-            t.getRestApi().isAuthorized().then(function(isAuth) {
+            t.getRestApi().isAuthorized().then(function (isAuth) {
               if (isAuth) return t.getRestApi().getToken();
               throw new Error('Not authorized');
-            }).then(function(token) {
+            }).then(function (token) {
               if (token && memberId) {
                 return fetch('https://api.trello.com/1/boards/' + boardId + '/memberships?key=' + KEY + '&token=' + token)
-                  .then(function(res) { return res.json(); })
-                  .then(function(memberships) {
+                  .then(function (res) { return res.json(); })
+                  .then(function (memberships) {
                     var role = 'vendedor';
                     if (Array.isArray(memberships)) {
-                      var myMembership = memberships.find(function(m) { return m.idMember === memberId; });
+                      var myMembership = memberships.find(function (m) { return m.idMember === memberId; });
                       role = (myMembership && myMembership.memberType === 'admin') ? 'gestor' : 'vendedor';
                     }
                     window.open(SITE + '#board=' + boardId + '&role=' + role + '&token=' + token, '_blank');
@@ -319,10 +586,10 @@
               } else {
                 window.open(SITE + '#board=' + boardId + '&role=vendedor' + (token ? '&token=' + token : ''), '_blank');
               }
-            }).catch(function() {
+            }).catch(function () {
               window.open(SITE + '#board=' + boardId + '&role=vendedor', '_blank');
             });
-          }).catch(function() {
+          }).catch(function () {
             window.open(SITE, '_blank');
           });
         });
