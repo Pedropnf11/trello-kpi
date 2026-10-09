@@ -100,7 +100,6 @@
               });
             } else if (hasNewUpdate) {
               welcomePrompted = true;
-              t.set('member', 'private', 'kpi_last_seen_version', CURRENT_VERSION).catch(function () { });
               t.modal({
                 title: isPt ? ('✨ Novidades da Versão ' + CURRENT_VERSION + ' — KPI Master') : ('✨ What\'s New in Version ' + CURRENT_VERSION + ' — KPI Master'),
                 url: POWERUP_URL + '/updates.html',
