@@ -14,63 +14,63 @@
 <body>
   <script type="module">
     var POWERUP_URL = window.location.origin + '/trello';
-    var SITE_URL    = 'https://kpismaster.vercel.app';
+    var SITE_URL = 'https://kpismaster.vercel.app';
     var welcomePrompted = false;
 
     TrelloPowerUp.initialize({
 
       // ── Instalação / Boas-vindas (on-enable) ─────────────────────────────
-      'on-enable': function(t) {
+      'on-enable': function (t) {
         return t.modal({
-          title:  'Bem-vindo ao KPI Master',
-          url:    POWERUP_URL + '/welcome.html',
+          title: 'Bem-vindo ao KPI Master',
+          url: POWERUP_URL + '/welcome.html',
           height: 540
         });
       },
 
       // ── Botão na barra do board + Abertura Automática ao Abrir o Quadro ───
-      'board-buttons': function(t) {
+      'board-buttons': function (t) {
         // Dispara o Welcome automaticamente ao abrir o quadro para utilizadores que ainda não o viram
         if (!welcomePrompted) {
-          t.get('member', 'private', 'kpi_welcome_seen').then(function(hasSeenWelcome) {
+          t.get('member', 'private', 'kpi_welcome_seen').then(function (hasSeenWelcome) {
             if (!hasSeenWelcome && !welcomePrompted) {
               welcomePrompted = true;
               t.modal({
-                title:  'Bem-vindo ao KPI Master',
-                url:    POWERUP_URL + '/welcome.html',
+                title: 'Bem-vindo ao KPI Master',
+                url: POWERUP_URL + '/welcome.html',
                 height: 540
               });
             }
-          }).catch(function() {});
+          }).catch(function () { });
         }
 
         return [{
           icon: {
-            dark:  POWERUP_URL + '/icon.png',
+            dark: POWERUP_URL + '/icon.png',
             light: POWERUP_URL + '/icon.png'
           },
           text: 'KPI Master',
-          callback: function(t) {
-            return t.get('member', 'private', 'kpi_welcome_seen').then(function(hasSeenWelcome) {
+          callback: function (t) {
+            return t.get('member', 'private', 'kpi_welcome_seen').then(function (hasSeenWelcome) {
               if (!hasSeenWelcome) {
                 return t.modal({
-                  title:  'Bem-vindo ao KPI Master',
-                  url:    POWERUP_URL + '/welcome.html',
+                  title: 'Bem-vindo ao KPI Master',
+                  url: POWERUP_URL + '/welcome.html',
                   height: 540
                 });
               }
-              return t.getRestApi().isAuthorized().then(function(isAuth) {
+              return t.getRestApi().isAuthorized().then(function (isAuth) {
                 if (!isAuth) {
                   return t.modal({
-                    title:  'Ligar ao KPI Master',
-                    url:    POWERUP_URL + '/auth.html',
+                    title: 'Ligar ao KPI Master',
+                    url: POWERUP_URL + '/auth.html',
                     height: 420
                   });
                 }
                 return t.modal({
-                  title:      'KPI Master',
-                  url:        POWERUP_URL + '/dashboard.html',
-                  height:     620,
+                  title: 'KPI Master',
+                  url: POWERUP_URL + '/dashboard.html',
+                  height: 620,
                   fullscreen: false
                 });
               });
@@ -80,47 +80,47 @@
       },
 
       // ── Estado de autenticação ────────────────────────────────────────────
-      'authorization-status': function(t) {
-        return t.getRestApi().isAuthorized().then(function(isAuth) {
+      'authorization-status': function (t) {
+        return t.getRestApi().isAuthorized().then(function (isAuth) {
           return { authorized: isAuth };
         });
       },
 
       // ── Ecrã de login ─────────────────────────────────────────────────────
-      'show-authorization': function(t) {
+      'show-authorization': function (t) {
         return t.modal({
-          title:  'Ligar ao KPI Master',
-          url:    POWERUP_URL + '/auth.html',
+          title: 'Ligar ao KPI Master',
+          url: POWERUP_URL + '/auth.html',
           height: 420
         });
       },
 
       // ── Ecrã de settings ─────────────────────────────────────────────────
-      'show-settings': function(t) {
+      'show-settings': function (t) {
         return t.modal({
-          title:  'Definições — KPI Master',
-          url:    POWERUP_URL + '/settings.html',
+          title: 'Definições — KPI Master',
+          url: POWERUP_URL + '/settings.html',
           height: 420
         });
       },
 
       // ── Emblemas nos cartões (Card Badges) ──────────────────────────────────
-      'card-badges': function(t) {
+      'card-badges': function (t) {
         return t.card('id')
-          .then(function(card) {
+          .then(function (card) {
             if (!card || !card.id) return [];
-            
+
             // O ID do Trello contém a data de criação nos primeiros 8 caracteres em hexadecimal
             var timestamp = parseInt(card.id.substring(0, 8), 16);
             var dateCreated = new Date(timestamp * 1000);
             var diffMs = Date.now() - dateCreated.getTime();
             var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-            
+
             var text = '';
             var color = 'light-gray';
-            
+
             var isPt = (t.locale || 'en').startsWith('pt');
-            
+
             if (diffDays === 0) {
               text = isPt ? 'Criado hoje' : 'Created today';
               color = 'green';
@@ -135,7 +135,7 @@
                 color = 'red';
               }
             }
-            
+
             return [{
               text: '🕒 ' + text,
               color: color
@@ -144,16 +144,16 @@
       },
 
       // ── Emblemas de Detalhes no Verso (Card Detail Badges) ──────────────────
-      'card-detail-badges': function(t) {
+      'card-detail-badges': function (t) {
         return t.card('id')
-          .then(function(card) {
+          .then(function (card) {
             if (!card || !card.id) return [];
-            
+
             var timestamp = parseInt(card.id.substring(0, 8), 16);
             var dateCreated = new Date(timestamp * 1000);
             var diffMs = Date.now() - dateCreated.getTime();
             var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-            
+
             var isPt = (t.locale || 'en').startsWith('pt');
             var text = '';
             if (diffDays === 0) {
@@ -163,7 +163,7 @@
             } else {
               text = isPt ? diffDays + ' dias' : diffDays + ' days';
             }
-            
+
             return [{
               title: isPt ? 'Idade do Cartão' : 'Card Age',
               text: text,
@@ -173,14 +173,14 @@
       },
 
       // ── Botões de Ação no Cartão (Card Buttons) ───────────────────────────
-      'card-buttons': function(t) {
+      'card-buttons': function (t) {
         var isPt = (t.locale || 'en').startsWith('pt');
         return [{
           icon: POWERUP_URL + '/icon.png',
           text: isPt ? '⏩ Mover para Próxima Etapa' : '⏩ Move to Next Stage',
-          callback: function(t) {
-            return t.card('id', 'idList').then(function(card) {
-              return t.lists('id', 'name').then(function(lists) {
+          callback: function (t) {
+            return t.card('id', 'idList').then(function (card) {
+              return t.lists('id', 'name').then(function (lists) {
                 var currentIndex = -1;
                 for (var i = 0; i < lists.length; i++) {
                   if (lists[i].id === card.idList) {
@@ -199,7 +199,7 @@
 
                 var nextList = lists[currentIndex + 1];
 
-                return t.getRestApi().isAuthorized().then(function(isAuth) {
+                return t.getRestApi().isAuthorized().then(function (isAuth) {
                   if (!isAuth) {
                     return t.modal({
                       title: isPt ? 'Ligar ao KPI Master' : 'Connect KPI Master',
@@ -208,10 +208,10 @@
                     });
                   }
 
-                  return t.getRestApi().getToken().then(function(token) {
+                  return t.getRestApi().getToken().then(function (token) {
                     return fetch('https://api.trello.com/1/cards/' + card.id + '?idList=' + nextList.id + '&key=' + import.meta.env.VITE_TRELLO_API_KEY + '&token=' + token, {
                       method: 'PUT'
-                    }).then(function(res) {
+                    }).then(function (res) {
                       if (res.ok) {
                         return t.alert({
                           message: (isPt ? 'Movido com sucesso para: ' : 'Moved to: ') + nextList.name,
@@ -230,7 +230,7 @@
       },
 
       // ── Secção do Verso do Cartão (Card Back Section) ──────────────────────
-      'card-back-section': function(t) {
+      'card-back-section': function (t) {
         var isPt = (t.locale || 'en').startsWith('pt');
         return {
           title: isPt ? 'Histórico & Velocidade da Lead' : 'Lead Stage & Speed History',
@@ -238,36 +238,36 @@
           content: {
             type: 'iframe',
             url: t.signUrl(POWERUP_URL + '/card-back.html'),
-            height: 155
+            height: 380
           }
         };
       },
 
       // ── Ordenadores de Lista (List Sorters) ──────────────────────────────────
-      'list-sorters': function(t) {
+      'list-sorters': function (t) {
         var isPt = (t.locale || 'en').startsWith('pt');
         return [{
           text: isPt ? '⏳ Idade da Lead: Mais Antigos Primeiro (Evitar Perdas)' : '⏳ Lead Age: Oldest First (Prevent Loss)',
-          callback: function(t, opts) {
-            var sortedCards = opts.cards.sort(function(a, b) {
+          callback: function (t, opts) {
+            var sortedCards = opts.cards.sort(function (a, b) {
               var tA = parseInt(a.id.substring(0, 8), 16);
               var tB = parseInt(b.id.substring(0, 8), 16);
               return tA - tB;
             });
             return {
-              sortedCardIds: sortedCards.map(function(c) { return c.id; })
+              sortedCardIds: sortedCards.map(function (c) { return c.id; })
             };
           }
         }, {
           text: isPt ? '⚡ Idade da Lead: Mais Recentes Primeiro' : '⚡ Lead Age: Newest First',
-          callback: function(t, opts) {
-            var sortedCards = opts.cards.sort(function(a, b) {
+          callback: function (t, opts) {
+            var sortedCards = opts.cards.sort(function (a, b) {
               var tA = parseInt(a.id.substring(0, 8), 16);
               var tB = parseInt(b.id.substring(0, 8), 16);
               return tB - tA;
             });
             return {
-              sortedCardIds: sortedCards.map(function(c) { return c.id; })
+              sortedCardIds: sortedCards.map(function (c) { return c.id; })
             };
           }
         }];
@@ -275,7 +275,7 @@
 
     }, {
       appName: 'KPI Master',
-      appKey:  import.meta.env.VITE_TRELLO_API_KEY
+      appKey: import.meta.env.VITE_TRELLO_API_KEY
     });
   </script>
 </body>
