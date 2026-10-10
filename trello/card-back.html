@@ -287,134 +287,6 @@
       background: var(--btn-hover);
     }
 
-    /* ── Touchpoints & Feedback Wall Styles ── */
-    .activity-section {
-      background: rgba(59, 130, 246, 0.04);
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      border-radius: 8px;
-      padding: 6px 8px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 5px 8px;
-    }
-
-    .activity-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      grid-column: 1 / -1;
-    }
-
-    .activity-title {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--title-color);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .activity-last-update {
-      font-size: 9px;
-      font-weight: 600;
-      color: var(--accent-blue);
-      background: rgba(59, 130, 246, 0.08);
-      padding: 2px 6px;
-      border-radius: 9999px;
-      white-space: nowrap;
-    }
-
-    .activity-counters-row {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      min-width: 0;
-    }
-
-    .counter-card {
-      background: transparent;
-      border: 0;
-      border-radius: 4px;
-      padding: 2px 5px;
-      text-align: left;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 4px;
-      min-width: 0;
-    }
-
-    .counter-number {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--title-color);
-    }
-
-    .counter-label {
-      font-size: 8px;
-      color: var(--desc-color);
-      font-weight: 500;
-      line-height: 1.1;
-      white-space: nowrap;
-    }
-
-    .activity-actions-row {
-      display: flex;
-      justify-content: flex-end;
-      gap: 4px;
-    }
-
-    .activity-status {
-      grid-column: 1 / -1;
-      min-height: 0;
-      font-size: 9px;
-      color: var(--desc-color);
-    }
-
-    .activity-status:empty {
-      display: none;
-    }
-
-    .activity-status.error {
-      color: #de350b;
-    }
-
-    .btn-activity {
-      flex: 0 0 auto;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      background: var(--bg-box);
-      border: 1px solid var(--border-box);
-      color: var(--title-color);
-      border-radius: 5px;
-      padding: 3px 7px;
-      font-size: 9px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .btn-activity:hover {
-      background: var(--accent-blue);
-      color: #ffffff;
-      border-color: var(--accent-blue);
-    }
-
-    @media (max-width: 420px) {
-      .activity-section {
-        grid-template-columns: 1fr;
-      }
-
-      .activity-counters-row,
-      .activity-actions-row {
-        justify-content: flex-start;
-      }
-    }
-
     .locked-btn {
       position: relative;
       background: rgba(245, 158, 11, 0.06);
@@ -497,25 +369,6 @@
 <body>
 
   <div class="card-history-container">
-    <!-- Contadores de atividade; os Quick Follow-ups ficam nos badges do topo do cartão. -->
-    <div id="activity-container">
-      <div class="activity-section">
-        <div class="activity-header">
-          <div class="activity-title"><span>⚡</span><span id="activity-title">Registo de Atividades da Lead</span></div>
-          <div class="activity-last-update" id="activity-last-update">🕒 —</div>
-        </div>
-        <div class="activity-counters-row">
-          <div class="counter-card"><span class="counter-number" id="counter-emails">0</span><span class="counter-label">✉️ E-mails</span></div>
-          <div class="counter-card"><span class="counter-number" id="counter-calls">0</span><span class="counter-label">📞 Chamadas</span></div>
-        </div>
-        <div class="activity-actions-row">
-          <button id="btn-add-call" class="btn-activity" title="Registar telefonema">📞 +1</button>
-          <button id="btn-add-email" class="btn-activity" title="Registar e-mail">✉️ +1</button>
-        </div>
-        <div id="activity-status" class="activity-status" role="status" aria-live="polite"></div>
-      </div>
-    </div>
-
     <div class="header-row">
       <div class="title-box">
         <span class="title-icon">⏱️</span>
@@ -618,168 +471,14 @@
     t.render(function () {
       t.sizeTo(document.body).catch(function () { });
 
-      var activityContainer = document.getElementById('activity-container');
-      if (activityContainer) {
-        activityContainer.addEventListener('click', function (event) {
-          var button = event.target.closest('#btn-add-call, #btn-add-email');
-          if (!button || !activityContainer.contains(button)) return;
-
-          var type = button.id === 'btn-add-call' ? 'call' : 'email';
-          var status = document.getElementById('activity-status');
-          button.disabled = true;
-          if (status) {
-            status.className = 'activity-status';
-            status.textContent = isPt ? 'A guardar…' : 'Saving…';
-          }
-
-          t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; })
-            .then(function (saved) {
-              var current = saved || {};
-              var updated = {
-                calls: (Number(current.calls) || 0) + (type === 'call' ? 1 : 0),
-                emails: (Number(current.emails) || 0) + (type === 'email' ? 1 : 0),
-                lastUpdated: Date.now()
-              };
-              return t.set('card', 'shared', 'kpi_touchpoints', updated).then(function () {
-                var calls = document.getElementById('counter-calls');
-                var emails = document.getElementById('counter-emails');
-                var lastUpdate = document.querySelector('.activity-last-update');
-                if (calls) calls.textContent = updated.calls;
-                if (emails) emails.textContent = updated.emails;
-                if (lastUpdate) lastUpdate.textContent = isPt ? '🕒 agora' : '🕒 just now';
-                if (status) status.textContent = isPt ? 'Atividade registada.' : 'Activity saved.';
-                return t.alert({
-                  message: type === 'call'
-                    ? (isPt ? '📞 Telefonema registado!' : '📞 Call recorded!')
-                    : (isPt ? '✉️ E-mail registado!' : '✉️ Email recorded!'),
-                  duration: 3
-                });
-              });
-            })
-            .catch(function (err) {
-              var currentStatus = document.getElementById('activity-status');
-              if (currentStatus) {
-                currentStatus.className = 'activity-status error';
-                currentStatus.textContent = isPt
-                  ? 'Não foi possível guardar. Verifica a ligação/permissões do Trello e tenta novamente.'
-                  : 'Could not save. Check Trello connection/permissions and try again.';
-              }
-              console.error('[KPI Master] Could not save quick follow-up:', err);
-            })
-            .then(function () { button.disabled = false; });
-        });
-      }
-
       Promise.all([
         t.card('id', 'name', 'idList', 'dateLastActivity', 'badges'),
         t.list('id', 'name'),
-        t.board('id'),
-        t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; })
+        t.board('id')
       ]).then(function (res) {
         var card = res[0];
         var currentList = res[1];
         var board = res[2];
-        var touchpoints = res[3] || { calls: 0, emails: 0, lastUpdated: null };
-        // Activity tracking is available to every board member.
-        var isUnlocked = true;
-
-        // Renderizar secção de Atividades / Feedback Wall
-        var activityContainer = document.getElementById('activity-container');
-        if (activityContainer) {
-          var callCount = touchpoints.calls || 0;
-          var emailCount = touchpoints.emails || 0;
-          // A última atividade vem do próprio cartão, não dos contadores manuais.
-          var timestamp = parseInt(card.id.substring(0, 8), 16);
-          var lastActivityMs = card.dateLastActivity ? new Date(card.dateLastActivity).getTime() : (timestamp * 1000);
-          var lastUpdateText = new Date(lastActivityMs).toLocaleString(isPt ? 'pt-PT' : 'en-GB', {
-            day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'
-          });
-
-          if (!isUnlocked) {
-            // MODO BLOQUEADO: Os botões e contadores aparecem visíveis, mas com o cadeado amarelo "Unlock for Free"
-            activityContainer.innerHTML = `
-              <div class="activity-section" style="position: relative; overflow: hidden;">
-                <div class="activity-header">
-                  <div class="activity-title">
-                    <span>⚡</span>
-                    <span>${isPt ? 'Registo de Atividades da Lead' : 'Lead Activity Tracker'}</span>
-                  </div>
-                  <div class="activity-last-update">
-                    🕒 ${isPt ? 'Última atualização: ' : 'Last update: '} ${lastUpdateText}
-                  </div>
-                </div>
-
-                <div class="activity-counters-row">
-                  <div class="counter-card">
-                    <span class="counter-number" id="counter-emails">${emailCount}</span>
-                    <span class="counter-label">✉️ ${isPt ? 'E-mails' : 'Emails'}</span>
-                  </div>
-                  <div class="counter-card">
-                    <span class="counter-number" id="counter-calls">${callCount}</span>
-                    <span class="counter-label">📞 ${isPt ? 'Chamadas' : 'Calls'}</span>
-                  </div>
-                </div>
-
-              </div>
-            `;
-
-            function openUnlockModal() {
-              t.popup({
-                title: '🔒 Unlock for Free',
-                items: [{
-                  text: '⭐ Review & Unlock Feature',
-                  callback: function(tPopup) {
-                    tPopup.close();
-                    return t.modal({
-                      title: '⭐ Unlock Feature — Feedback',
-                      url: window.location.origin + '/trello/feedback.html',
-                      height: 520
-                    });
-                  }
-                }]
-              });
-            }
-
-            var lockedCall = document.getElementById('btn-locked-call');
-            if (lockedCall) lockedCall.addEventListener('click', openUnlockModal);
-
-            var lockedEmail = document.getElementById('btn-locked-email');
-            if (lockedEmail) lockedEmail.addEventListener('click', openUnlockModal);
-
-          } else {
-            // DESBLOQUEADO: Exibe Contadores Rápidos e Botões normais ativos
-            activityContainer.innerHTML = `
-              <div class="activity-section">
-                <div class="activity-header">
-                  <div class="activity-title">
-                    <span>⚡</span>
-                    <span>${isPt ? 'Registo de Atividades da Lead' : 'Lead Activity Tracker'}</span>
-                  </div>
-                  <div class="activity-last-update">
-                    🕒 ${isPt ? 'Última atualização: ' : 'Last update: '} ${lastUpdateText}
-                  </div>
-                </div>
-
-                <div class="activity-counters-row">
-                  <div class="counter-card">
-                    <span class="counter-number" id="counter-emails">${emailCount}</span>
-                    <span class="counter-label">✉️ ${isPt ? 'E-mails' : 'Emails'}</span>
-                  </div>
-                  <div class="counter-card">
-                    <span class="counter-number" id="counter-calls">${callCount}</span>
-                    <span class="counter-label">📞 ${isPt ? 'Chamadas' : 'Calls'}</span>
-                  </div>
-                </div>
-
-                <div class="activity-actions-row">
-                  <button id="btn-add-call" class="btn-activity" title="${isPt ? 'Registar telefonema' : 'Log a call'}">📞 +1</button>
-                  <button id="btn-add-email" class="btn-activity" title="${isPt ? 'Registar e-mail' : 'Log an email'}">✉️ +1</button>
-                </div>
-                <div id="activity-status" class="activity-status" role="status" aria-live="polite"></div>
-              </div>
-            `;
-          }
-        }
 
         if (card && card.id) {
           var timestamp = parseInt(card.id.substring(0, 8), 16);
@@ -973,13 +672,6 @@
           t.sizeTo(document.body).catch(function () { });
         }, 100);
       }).catch(function (err) {
-        var status = document.getElementById('activity-status');
-        if (status) {
-          status.className = 'activity-status error';
-          status.textContent = isPt
-            ? 'Não foi possível carregar todos os dados do cartão. Os botões de atividade continuam disponíveis.'
-            : 'Could not load all card data. The activity buttons are still available.';
-        }
         console.error('[KPI Master] Could not load card details:', err);
         t.sizeTo(document.body).catch(function () { });
       });
