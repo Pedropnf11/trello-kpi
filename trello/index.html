@@ -208,17 +208,16 @@
           if (!card || !card.id) return [];
 
           var isPt = (t.locale || 'en').startsWith('pt');
-
           var badges = [];
 
-          // 1. Badge Original: Idade do Cartão
+          // 1. Badge: Idade do Cartão (Card Age)
           var timestamp = parseInt(card.id.substring(0, 8), 16);
           var dateCreated = new Date(timestamp * 1000);
           var diffMs = Date.now() - dateCreated.getTime();
           var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
           var ageText = '';
-          var ageColor = 'light-gray';
+          var ageColor = null;
 
           if (diffDays === 0) {
             ageText = isPt ? 'Criado hoje' : 'Created today';
@@ -236,76 +235,87 @@
             color: ageColor
           });
 
-          // This value changes as Trello activity or Power-Up touchpoints change.
+          // 2. Badge: Última Atividade / Smart Last Update
+          var createdAt = dateCreated.getTime();
+          var lastActivityMs = card.dateLastActivity ? new Date(card.dateLastActivity).getTime() : createdAt;
+          if (touchpoints && touchpoints.lastUpdated && touchpoints.lastUpdated > lastActivityMs) {
+            lastActivityMs = touchpoints.lastUpdated;
+          }
+
+          var ageMs = Math.max(0, Date.now() - lastActivityMs);
+          var days = Math.floor(ageMs / (1000 * 60 * 60 * 24));
+          var hours = Math.floor(ageMs / (1000 * 60 * 60));
+          var updateText = '';
+          var updateColor = 'green';
+
+          if (hours < 24) {
+            updateText = isPt ? 'Atualizado hoje' : 'Updated today';
+            updateColor = 'green';
+          } else if (days === 1) {
+            updateText = isPt ? 'Atualizado ontem' : 'Updated yesterday';
+            updateColor = 'sky';
+          } else if (days < 7) {
+            updateText = isPt ? ('Atualizado há ' + days + 'd') : ('Updated ' + days + 'd ago');
+            updateColor = days >= 3 ? 'yellow' : 'sky';
+          } else {
+            updateText = isPt ? ('Sem atualiz. há ' + days + 'd') : ('No update for ' + days + 'd');
+            updateColor = 'red';
+          }
+
           badges.push({
-            dynamic: function () {
-              return Promise.all([
-                t.card('id', 'dateLastActivity'),
-                t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; })
-              ]).then(function (dynamicData) {
-                var currentCard = dynamicData[0] || card;
-                var currentTouchpoints = dynamicData[1] || touchpoints;
-                var createdAt = parseInt(currentCard.id.substring(0, 8), 16) * 1000;
-                var lastActivityMs = currentCard.dateLastActivity ? new Date(currentCard.dateLastActivity).getTime() : createdAt;
-                if (currentTouchpoints.lastUpdated && currentTouchpoints.lastUpdated > lastActivityMs) {
-                  lastActivityMs = currentTouchpoints.lastUpdated;
-                }
-
-                var ageMs = Math.max(0, Date.now() - lastActivityMs);
-                var days = Math.floor(ageMs / (1000 * 60 * 60 * 24));
-                var hours = Math.floor(ageMs / (1000 * 60 * 60));
-                var text = '';
-                var color = 'green';
-
-                if (hours < 24) {
-                  text = isPt ? 'Atualizado hoje' : 'Updated today';
-                } else if (days === 1) {
-                  text = isPt ? 'Atualizado ontem' : 'Updated yesterday';
-                  color = 'blue';
-                } else if (days < 7) {
-                  text = isPt ? ('Atualizado há ' + days + ' dias') : ('Updated ' + days + ' days ago');
-                  if (days >= 3) color = 'yellow';
-                } else {
-                  text = isPt ? ('Sem atualização há ' + days + ' dias') : ('No update for ' + days + ' days');
-                  color = 'red';
-                }
-
-                return { text: text, color: color, refresh: 60 };
-              });
-            }
+            text: updateText,
+            color: updateColor
           });
 
           return badges;
+        }).catch(function (err) {
+          console.error('[KPI Master] Error in card-badges:', err);
+          return [];
         });
       },
 
       // ── Emblemas de Detalhes no Verso (Card Detail Badges) ──────────────────
       'card-detail-badges': function (t) {
-        return t.card('id')
-          .then(function (card) {
-            if (!card || !card.id) return [];
+        return Promise.all([
+          t.card('id', 'dateLastActivity'),
+          t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; })
+        ]).then(function (res) {
+          var card = res[0];
+          var touchpoints = res[1] || {};
+          if (!card || !card.id) return [];
 
-            var timestamp = parseInt(card.id.substring(0, 8), 16);
-            var dateCreated = new Date(timestamp * 1000);
-            var diffMs = Date.now() - dateCreated.getTime();
-            var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+          var isPt = (t.locale || 'en').startsWith('pt');
+          var timestamp = parseInt(card.id.substring(0, 8), 16);
+          var dateCreated = new Date(timestamp * 1000);
+          var diffMs = Date.now() - dateCreated.getTime();
+          var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-            var isPt = (t.locale || 'en').startsWith('pt');
-            var text = '';
-            if (diffDays === 0) {
-              text = isPt ? 'Hoje' : 'Today';
-            } else if (diffDays === 1) {
-              text = isPt ? '1 dia' : '1 day';
-            } else {
-              text = isPt ? diffDays + ' dias' : diffDays + ' days';
-            }
+          var ageText = diffDays === 0 ? (isPt ? 'Hoje' : 'Today') : (diffDays === 1 ? (isPt ? '1 dia' : '1 day') : (diffDays + (isPt ? ' dias' : ' days')));
 
-            return [{
+          var lastActivityMs = card.dateLastActivity ? new Date(card.dateLastActivity).getTime() : dateCreated.getTime();
+          if (touchpoints && touchpoints.lastUpdated && touchpoints.lastUpdated > lastActivityMs) {
+            lastActivityMs = touchpoints.lastUpdated;
+          }
+          var updateDiffDays = Math.floor(Math.max(0, Date.now() - lastActivityMs) / (1000 * 60 * 60 * 24));
+          var updateText = updateDiffDays === 0 ? (isPt ? 'Hoje' : 'Today') : (updateDiffDays === 1 ? (isPt ? 'Ontem' : 'Yesterday') : (updateDiffDays + (isPt ? ' dias atrás' : ' days ago')));
+          var updateColor = updateDiffDays === 0 ? 'green' : (updateDiffDays === 1 ? 'sky' : (updateDiffDays >= 7 ? 'red' : 'yellow'));
+
+          return [
+            {
               title: isPt ? 'Idade do Cartão' : 'Card Age',
-              text: text,
-              color: 'light-gray'
-            }];
-          });
+              text: ageText,
+              color: null
+            },
+            {
+              title: isPt ? 'Última Atividade' : 'Last Activity',
+              text: updateText,
+              color: updateColor
+            }
+          ];
+        }).catch(function (err) {
+          console.error('[KPI Master] Error in card-detail-badges:', err);
+          return [];
+        });
       },
 
       // ── Botões de Ação no Cartão (Card Buttons) ───────────────────────────
