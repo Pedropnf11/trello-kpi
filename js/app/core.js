@@ -151,7 +151,6 @@ App.render = function () {
         }
         this.attachDashboardEvents();
         this.attachDynamicEvents();
-        this.checkFeedbackFirstTimeOnboarding();
         return;
     }
 
@@ -787,63 +786,6 @@ App.resetBoardAndRole = function () {
     this.state.userRole = null;
     this.state.kpis = null;
     this.render();
-};
-
-App.checkFeedbackFirstTimeOnboarding = function () {
-    if (localStorage.getItem('kpi_feedback_submitted_globally')) return;
-    const currentRole = this.state.userRole || 'manager';
-    const storageKey = 'kpi_feedback_onboarding_seen_' + currentRole;
-
-    if (localStorage.getItem(storageKey)) return;
-
-    setTimeout(() => {
-        if (document.getElementById('firstTimeFeedbackOverlay')) return;
-
-        const lang = UI._lpLang || 'pt';
-        const isPt = lang.startsWith('pt');
-
-        const titleText = isPt ? 'Powerup em desenvolvimento!' : 'Powerup under active development!';
-        const subTitleText = isPt ? 'Queremos saber a tua opinião!' : 'We want your feedback!';
-        const descText = isPt
-            ? 'Estamos constantemente a evoluir o KPI Master. A tua opinião e sugestões são fundamentais para nós!'
-            : 'We are constantly improving KPI Master. Your feedback and suggestions are essential to us!';
-        const btnText = isPt ? 'Entendido!' : 'Got it!';
-        const pointerTitle = isPt ? 'Sugestões de Melhoria' : 'Suggestions to Improve';
-        const pointerDesc = isPt ? 'Clica no botão "Enviar Feedback" no menu para nos enviares as tuas sugestões para melhorar a app!' : 'Click "Send Feedback" in the menu to share your suggestions to improve the app!';
-
-        const overlay = document.createElement('div');
-        overlay.id = 'firstTimeFeedbackOverlay';
-        overlay.className = 'fixed inset-0 z-[300] flex flex-col justify-between p-6 bg-black/75 backdrop-blur-sm transition-all duration-300';
-        overlay.innerHTML = `
-            <div class="flex-1 flex flex-col items-center justify-center text-center px-4 max-w-lg mx-auto">
-                <div class="w-16 h-16 bg-blue-500/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mb-6 shadow-2xl shadow-blue-500/20 animate-pulse">
-                    <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-                </div>
-                <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight mb-2">${titleText}</h2>
-                <p class="text-lg md:text-xl font-bold text-blue-400 mb-4">${subTitleText}</p>
-                <p class="text-xs md:text-sm text-gray-300 mb-8 max-w-md leading-relaxed">${descText}</p>
-                
-                <button id="closeFeedbackOverlayBtn" class="px-8 py-3.5 rounded-xl font-extrabold text-sm bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-500/30 transition-all hover:scale-105 active:scale-95">
-                    ${btnText}
-                </button>
-            </div>
-
-            <!-- Pointer Card positioned next to the 260px sidebar pointing LEFT at Send Feedback button -->
-            <div class="fixed bottom-6 left-4 md:left-[270px] md:bottom-28 z-[310] flex items-center gap-3 bg-[#0b0f19] border border-blue-500/50 p-4 rounded-2xl shadow-2xl max-w-sm border-l-4 border-l-blue-500 animate-bounce">
-                <svg class="w-7 h-7 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                <div>
-                    <div class="text-xs font-black text-white mb-0.5">${pointerTitle}</div>
-                    <div class="text-[11px] text-gray-300 leading-snug">${pointerDesc}</div>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-
-        document.getElementById('closeFeedbackOverlayBtn').onclick = function () {
-            localStorage.setItem(storageKey, 'true');
-            overlay.remove();
-        };
-    }, 100);
 };
 
 // Enviar Feedback para o Webhook do Make.com (JSON auto-parsed pelo Make)

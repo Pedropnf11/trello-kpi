@@ -96,10 +96,14 @@ App.conectarTrello = async function () {
 
         if (this.state.userRole === 'manager') {
             const availableBoards = this.state.availableBoards || [];
-            const currentBoard = availableBoards.find(b => b.id === boardId);
-            if (!currentBoard) {
-                this.state.userRole = 'sales';
-                localStorage.setItem('trello_user_role', 'sales');
+            // Only check board membership if boards were actually loaded
+            // (deep links from Trello skip listarBoards(), so availableBoards is empty)
+            if (availableBoards.length > 0) {
+                const currentBoard = availableBoards.find(b => b.id === boardId);
+                if (!currentBoard) {
+                    this.state.userRole = 'sales';
+                    localStorage.setItem('trello_user_role', 'sales');
+                }
             }
         }
 
