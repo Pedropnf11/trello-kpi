@@ -105,10 +105,21 @@ App.conectarTrello = async function () {
         }
         this.state.isBoardAdmin = isBoardAdmin;
 
-        // The board membership is the source of truth for the dashboard view.
-        // This prevents a saved/selected Agent role from opening an admin board
-        // with the restricted dashboard after following a Trello deep link.
-        this.state.userRole = isBoardAdmin ? 'manager' : 'sales';
+        // Respect the user's chosen role.
+        // If they chose 'manager' but are not a board admin, block with the not-admin warning.
+        const chosenRole = this.state.userRole;
+
+        if (chosenRole === 'manager' && !isBoardAdmin) {
+            // User wants manager but doesn't have admin rights on this board
+            this.updateState({
+                loading: false,
+                refreshing: false,
+                boardNotAdminError: true
+            });
+            return;
+        }
+
+        // Role is valid — keep what the user chose
         localStorage.setItem('trello_user_role', this.state.userRole);
 
         if (window.ActiveTracker) {
