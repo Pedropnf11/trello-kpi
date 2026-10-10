@@ -367,6 +367,34 @@
       border-color: var(--accent-blue);
     }
 
+    .locked-btn {
+      position: relative;
+      background: rgba(245, 158, 11, 0.06);
+      border: 1px dashed rgba(245, 158, 11, 0.45);
+      color: var(--title-color);
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    .locked-btn:hover {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: #f59e0b;
+      color: var(--title-color);
+    }
+
+    .lock-tag {
+      font-size: 10px;
+      font-weight: 700;
+      color: #d97706;
+      background: rgba(245, 158, 11, 0.18);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      padding: 2px 7px;
+      border-radius: 9999px;
+      letter-spacing: 0.02em;
+    }
+
     /* Feedback Wall (Bloqueado) */
     .locked-card {
       background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(59, 130, 246, 0.06));
@@ -555,62 +583,100 @@
         // Renderizar secção de Atividades / Feedback Wall
         var activityContainer = document.getElementById('activity-container');
         if (activityContainer) {
+          var callCount = touchpoints.calls || 0;
+          var emailCount = touchpoints.emails || 0;
+          var commentsCount = (card && card.badges && typeof card.badges.comments === 'number') ? card.badges.comments : 0;
+          var trelloActionsCount = commentsCount;
+          
+          // Última atualização
+          var timestamp = parseInt(card.id.substring(0, 8), 16);
+          var lastActivityMs = card.dateLastActivity ? new Date(card.dateLastActivity).getTime() : (timestamp * 1000);
+          if (touchpoints.lastUpdated && touchpoints.lastUpdated > lastActivityMs) {
+            lastActivityMs = touchpoints.lastUpdated;
+          }
+
+          var updatedDiffMs = Date.now() - lastActivityMs;
+          var updatedDiffDays = Math.floor(updatedDiffMs / (1000 * 60 * 60 * 24));
+          var updatedDiffHours = Math.floor(updatedDiffMs / (1000 * 60 * 60));
+
+          var lastUpdateText = '';
+          if (updatedDiffHours < 1) {
+            lastUpdateText = isPt ? 'há pouco' : 'just now';
+          } else if (updatedDiffDays === 0) {
+            lastUpdateText = isPt ? (updatedDiffHours + 'h atrás') : (updatedDiffHours + 'h ago');
+          } else if (updatedDiffDays === 1) {
+            lastUpdateText = isPt ? 'ontem' : 'yesterday';
+          } else {
+            lastUpdateText = isPt ? (updatedDiffDays + ' dias atrás') : (updatedDiffDays + ' days ago');
+          }
+
           if (!isUnlocked) {
-            // BLOQUEADO: Exibe Teaser / Feedback Wall
+            // MODO BLOQUEADO: Os botões e contadores aparecem visíveis, mas com o cadeado amarelo "Unlock for Free"
             activityContainer.innerHTML = `
-              <div class="locked-card">
-                <div class="locked-header">
-                  <span>🔒</span>
-                  <span>${isPt ? 'Rastreador de Atividades & Follow-ups' : 'Activity & Follow-up Tracker'}</span>
+              <div class="activity-section" style="position: relative; overflow: hidden;">
+                <div class="activity-header">
+                  <div class="activity-title">
+                    <span>⚡</span>
+                    <span>${isPt ? 'Registo de Atividades da Lead' : 'Lead Activity Tracker'}</span>
+                  </div>
+                  <div class="activity-last-update">
+                    🕒 ${isPt ? 'Última ação: ' : 'Last action: '} ${lastUpdateText}
+                  </div>
                 </div>
-                <div class="locked-desc">
-                  ${isPt ? 'Desbloqueie este recurso gratuitamente deixando a sua avaliação sobre o KPI Master.' : 'Unlock this feature for free by leaving your feedback on KPI Master.'}
+
+                <div class="activity-counters-row">
+                  <div class="counter-card">
+                    <span class="counter-number">${emailCount}</span>
+                    <span class="counter-label">✉️ ${isPt ? 'E-mails enviados' : 'Emails sent'}</span>
+                  </div>
+                  <div class="counter-card">
+                    <span class="counter-number">${callCount}</span>
+                    <span class="counter-label">📞 ${isPt ? 'Telefonemas realizados' : 'Calls made'}</span>
+                  </div>
+                  <div class="counter-card">
+                    <span class="counter-number" id="counter-trello-actions">${trelloActionsCount}</span>
+                    <span class="counter-label">💬 ${isPt ? 'Comentários / Ações Trello' : 'Trello Comments & Actions'}</span>
+                  </div>
                 </div>
-                <button id="btn-unlock-feedback" class="btn-unlock">
-                  ⭐ ${isPt ? 'Desbloquear com 1 Avaliação' : 'Unlock with 1 Review'}
-                </button>
+
+                <div class="activity-actions-row">
+                  <button id="btn-locked-call" class="btn-activity locked-btn">
+                    <span>📞 +1 Call</span>
+                    <span class="lock-tag">🔒 Unlock for Free</span>
+                  </button>
+                  <button id="btn-locked-email" class="btn-activity locked-btn">
+                    <span>✉️ +1 Email</span>
+                    <span class="lock-tag">🔒 Unlock for Free</span>
+                  </button>
+                </div>
               </div>
             `;
 
-            var unlockBtn = document.getElementById('btn-unlock-feedback');
-            if (unlockBtn) {
-              unlockBtn.addEventListener('click', function() {
-                t.modal({
-                  title: isPt ? '⭐ Desbloquear Funcionalidade — Feedback' : '⭐ Unlock Feature — Feedback',
-                  url: window.location.origin + '/trello/feedback.html',
-                  height: 520
-                });
+            function openUnlockModal() {
+              t.popup({
+                title: '🔒 Unlock for Free',
+                items: [{
+                  text: '⭐ Review & Unlock Feature',
+                  callback: function(tPopup) {
+                    tPopup.close();
+                    return t.modal({
+                      title: '⭐ Unlock Feature — Feedback',
+                      url: window.location.origin + '/trello/feedback.html',
+                      height: 520
+                    });
+                  }
+                }]
               });
             }
+
+            var lockedCall = document.getElementById('btn-locked-call');
+            if (lockedCall) lockedCall.addEventListener('click', openUnlockModal);
+
+            var lockedEmail = document.getElementById('btn-locked-email');
+            if (lockedEmail) lockedEmail.addEventListener('click', openUnlockModal);
+
           } else {
-            // DESBLOQUEADO: Exibe Contadores Rápidos e Botões
-            var callCount = touchpoints.calls || 0;
-            var emailCount = touchpoints.emails || 0;
-            var commentsCount = (card && card.badges && typeof card.badges.comments === 'number') ? card.badges.comments : 0;
-            var trelloActionsCount = commentsCount;
-            
-            // Última atualização
-            var timestamp = parseInt(card.id.substring(0, 8), 16);
-            var lastActivityMs = card.dateLastActivity ? new Date(card.dateLastActivity).getTime() : (timestamp * 1000);
-            if (touchpoints.lastUpdated && touchpoints.lastUpdated > lastActivityMs) {
-              lastActivityMs = touchpoints.lastUpdated;
-            }
-
-            var updatedDiffMs = Date.now() - lastActivityMs;
-            var updatedDiffDays = Math.floor(updatedDiffMs / (1000 * 60 * 60 * 24));
-            var updatedDiffHours = Math.floor(updatedDiffMs / (1000 * 60 * 60));
-
-            var lastUpdateText = '';
-            if (updatedDiffHours < 1) {
-              lastUpdateText = isPt ? 'há pouco' : 'just now';
-            } else if (updatedDiffDays === 0) {
-              lastUpdateText = isPt ? (updatedDiffHours + 'h atrás') : (updatedDiffHours + 'h ago');
-            } else if (updatedDiffDays === 1) {
-              lastUpdateText = isPt ? 'ontem' : 'yesterday';
-            } else {
-              lastUpdateText = isPt ? (updatedDiffDays + ' dias atrás') : (updatedDiffDays + ' days ago');
-            }
-
+            // DESBLOQUEADO: Exibe Contadores Rápidos e Botões normais ativos
             activityContainer.innerHTML = `
               <div class="activity-section">
                 <div class="activity-header">
