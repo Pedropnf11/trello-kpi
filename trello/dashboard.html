@@ -600,7 +600,7 @@
     document.getElementById('lbl-quick-tip-text').innerHTML = tDict.lblQuickTip;
     document.getElementById('lbl-notice-text').textContent = tDict.lblNoticeText;
 
-    var state = { boardId: null, token: null, lists: [], leadsListId: null, uninterestedListId: null };
+    var state = { boardId: null, token: null, lists: [], leadsListId: null, uninterestedListId: null, memberId: null, memberName: '', isBoardAdmin: false };
 
     t.render(function () {
       t.sizeTo(document.body).catch(function () { });
@@ -623,6 +623,11 @@
             document.getElementById('btn-open').href = SITE + '#board=' + boardId + '&token=' + token;
           }
         }).catch(function(err) { });
+
+        Promise.all([t.member('id'), t.member('fullName')]).then(function(memberData) {
+          state.memberId = memberData[0] && (memberData[0].id || memberData[0]);
+          state.memberName = (memberData[1] && memberData[1].fullName) || '';
+        }).catch(function() {});
 
         checkAuthAndLoadStats();
       }).catch(function () {
@@ -895,7 +900,10 @@
           return mins + 'm';
         }
 
-        var keys = Object.keys(data);
+        var keys = Object.keys(data).filter(function(k) {
+          var item = data[k];
+          return state.isBoardAdmin || (state.memberId && item && item.id === state.memberId);
+        });
         if (keys.length === 0) {
           html = '<div style="font-size: 11px; color: #94a3b8; text-align: center; padding: 6px 0;">' +
                  (isPt ? 'Sem dados de tempo ativo ainda' : 'No active time data yet') + '</div>';
@@ -948,8 +956,7 @@
       } catch(e) {}
     }
 
-    // Active User Time Tracker engine inside Trello modal
-    var activeUserName = 'Pedro Nogueira';
+    // Track activity under the authenticated Trello member ID and full name.
     var lastInputTime = Date.now();
     var isUserIdle = false;
 
@@ -964,11 +971,23 @@
       window.addEventListener(evt, recordUserActivity, { passive: true });
     });
 
-    t.member('fullName').then(function(mem) {
-      if (mem && mem.fullName) {
-        activeUserName = mem.fullName;
-      }
-    }).catch(function(){});
+    function loadMemberRole() {
+      return Promise.all([
+        t.member('id'),
+        t.member('fullName'),
+        fetch('https://api.trello.com/1/boards/' + state.boardId + '?fields=memberships&key=' + KEY + '&token=' + state.token).then(function(r) { return r.ok ? r.json() : null; })
+      ]).then(function(values) {
+        var member = values[0];
+        var profile = values[1];
+        state.memberId = member && (member.id || member);
+        state.memberName = profile && profile.fullName || '';
+        var memberships = values[2] && values[2].memberships || [];
+        state.isBoardAdmin = memberships.some(function(m) { return m.idMember === state.memberId && m.memberType === 'admin'; });
+        renderActiveTimeWidget();
+      }).catch(function() {});
+    }
+
+    loadMemberRole();
 
     setInterval(function() {
       if (document.hidden) return;
@@ -982,11 +1001,13 @@
         var raw = localStorage.getItem('kpi_user_active_time_data');
         var data = raw ? JSON.parse(raw) : {};
         var todayKey = new Date().toISOString().slice(0, 10);
-        var key = activeUserName;
+        if (!state.memberId) return;
+        var key = state.memberId;
 
         if (!data[key]) {
-          data[key] = { id: key, name: key, days: {}, lastSeen: Date.now(), isOnline: true, isIdle: false };
+          data[key] = { id: key, name: state.memberName || key, days: {}, lastSeen: Date.now(), isOnline: true, isIdle: false };
         }
+        data[key].name = state.memberName || data[key].name || key;
         if (!data[key].days) data[key].days = {};
         data[key].days[todayKey] = (data[key].days[todayKey] || 0) + 5;
         data[key].lastSeen = Date.now();

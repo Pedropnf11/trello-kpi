@@ -13,7 +13,7 @@ window.ActiveTracker = (function () {
   var isIdle = false;
   var isTabHidden = false;
   var lastActivityTime = Date.now();
-  var currentUser = { id: 'user_local', name: 'Utilizador' };
+  var currentUser = { id: null, name: 'Utilizador' };
 
   function getTodayKey() {
     var d = new Date();
@@ -49,12 +49,13 @@ window.ActiveTracker = (function () {
   function updateMemberState(isOnline, isIdleState) {
     var data = loadData();
     var todayKey = getTodayKey();
-    var key = currentUser.name || currentUser.id || 'Utilizador';
+    if (!currentUser.id) return;
+    var key = currentUser.id;
 
     if (!data[key]) {
       data[key] = {
         id: currentUser.id || key,
-        name: key,
+        name: currentUser.name || key,
         days: {},
         lastSeen: Date.now(),
         isOnline: isOnline,
@@ -76,12 +77,13 @@ window.ActiveTracker = (function () {
   function addActiveSeconds(seconds) {
     var data = loadData();
     var todayKey = getTodayKey();
-    var key = currentUser.name || currentUser.id || 'Utilizador';
+    if (!currentUser.id) return;
+    var key = currentUser.id;
 
     if (!data[key]) {
       data[key] = {
         id: currentUser.id || key,
-        name: key,
+        name: currentUser.name || key,
         days: {},
         lastSeen: Date.now(),
         isOnline: true,
@@ -160,6 +162,7 @@ window.ActiveTracker = (function () {
   }
 
   function getStats() {
+    if (!currentUser.id) return [];
     var data = loadData();
     var todayKey = getTodayKey();
     var now = Date.now();
@@ -204,7 +207,7 @@ window.ActiveTracker = (function () {
 
       membersList.push({
         id: member.id || name,
-        name: name,
+        name: member.name || name,
         todaySeconds: todaySecs,
         todayFormatted: formatTime(todaySecs),
         weeklySeconds: weeklySecs,
@@ -220,7 +223,10 @@ window.ActiveTracker = (function () {
       return b.todaySeconds - a.todaySeconds;
     });
 
-    return membersList;
+    var isAdmin = !!(window.App && window.App.state && window.App.state.isBoardAdmin);
+    return isAdmin ? membersList : membersList.filter(function (member) {
+      return member.id === currentUser.id;
+    });
   }
 
   return {

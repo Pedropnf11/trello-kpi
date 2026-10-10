@@ -266,3 +266,38 @@ UI.renderRoleSelectionModal = function (boardId, boardName) {
         </div >
         `;
 };
+
+
+UI.renderNotAdminModal = function (boardId) {
+    const lang = UI._lpLang || 'pt';
+    const isEn = lang === 'en';
+
+    return `
+        <div id="notAdminModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300 p-4">
+            <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full border border-gray-100 flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-amber-50 border border-amber-200 rounded-2xl flex items-center justify-center mb-5 text-amber-500 shadow-sm">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+
+                <h3 class="text-2xl font-black text-gray-900 mb-2">${isEn ? 'Admin Access Required' : 'Acesso de Gestor Restrito'}</h3>
+                <p class="text-sm text-gray-500 leading-relaxed mb-6">
+                    ${isEn 
+                        ? 'You cannot enter as Manager on this board because you are not an administrator of this board on Trello. You can enter as Agent or pick another board.' 
+                        : 'Não podes entrar como Gestor neste quadro pois não és administrador do mesmo no Trello. Podes entrar como Vendedor ou escolher outro quadro.'}
+                </p>
+
+                <div class="flex flex-col gap-3 w-full">
+                    <button onclick="App.confirmRole('${boardId}', 'sales')" class="w-full py-3.5 px-4 bg-green-600 hover:bg-green-500 text-white rounded-2xl font-bold text-sm shadow-lg shadow-green-600/20 transition-all flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                        ${isEn ? 'Enter as Agent' : 'Entrar como Vendedor'}
+                    </button>
+
+                    <button onclick="App.chooseAnotherBoard()" class="w-full py-3.5 px-4 bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 rounded-2xl font-bold text-sm transition-all flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
+                        ${isEn ? 'Select Another Board' : 'Selecionar Outro Quadro'}
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+};

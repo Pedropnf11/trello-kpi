@@ -94,17 +94,36 @@ App.conectarTrello = async function () {
         const userInfo = await TrelloAPI.fetchUserInfo(apiKey, token);
         this.state.currentUser = userInfo;
 
+        // Fetch board details to accurately check membership type
+        let isBoardAdmin = false;
+        try {
+            const boardInfo = await TrelloAPI.fetchBoard(apiKey, token, boardId);
+            const myMembership = boardInfo.memberships?.find(m => m.idMember === userInfo.id);
+            isBoardAdmin = myMembership?.memberType === 'admin';
+        } catch (e) {
+            console.warn('Could not verify board admin membership specifically:', e);
+        }
+        this.state.isBoardAdmin = isBoardAdmin;
+
+        if (window.ActiveTracker) {
+            window.ActiveTracker.init({ id: userInfo.id, name: userInfo.fullName || userInfo.username });
+        }
+
+        // Se o utilizador tentou entrar como Manager mas NÃO é admin do quadro:
+        if (this.state.userRole === 'manager' && !isBoardAdmin) {
+            // Se tiver outros quadros ou este quadro, dar erro com opção de entrar como sales ou trocar quadro
+            this.updateState({
+                loading: false,
+                refreshing: false,
+                boardNotAdminError: true,
+                error: 'Não podes entrar como Gestor neste quadro porque não és administrador do mesmo.'
+            });
+            return;
+        }
+
+        // Se for manager, garante que o selectedMemberId é limpo para mostrar dados de todos
         if (this.state.userRole === 'manager') {
-            const availableBoards = this.state.availableBoards || [];
-            // Only check board membership if boards were actually loaded
-            // (deep links from Trello skip listarBoards(), so availableBoards is empty)
-            if (availableBoards.length > 0) {
-                const currentBoard = availableBoards.find(b => b.id === boardId);
-                if (!currentBoard) {
-                    this.state.userRole = 'sales';
-                    localStorage.setItem('trello_user_role', 'sales');
-                }
-            }
+            this.state.selectedMemberId = '';
         }
 
         if (this.state.userRole === 'sales') {
@@ -120,7 +139,7 @@ App.conectarTrello = async function () {
 
         const funil = KPILogic.calcularFunilTodasListas(listas, kpis.geral.listCounts, this.state.hiddenFunnelLists);
 
-        this.state.rawData = { cards, listas, membros, userRole: this.state.userRole };
+        this.state.rawData = { cards, listas, membros, userRole: this.state.userRole, isBoardAdmin: this.state.isBoardAdmin };
         this.state.kpis = { ...kpis, temposListas, atividade, funil };
 
         this.updateState({

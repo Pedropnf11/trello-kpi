@@ -70,6 +70,16 @@ const TrelloAPI = {
         }
     },
 
+    async fetchBoard(apiKey, token, boardId) {
+        const validBoardId = this._validateId(boardId, 'Board ID');
+        const params = new URLSearchParams({
+            fields: 'id,name,memberships',
+            key: apiKey,
+            token
+        });
+        return this._fetch(`https://api.trello.com/1/boards/${validBoardId}?${params.toString()}`);
+    },
+
     async fetchUserInfo(apiKey, token) {
         const params = new URLSearchParams({
             fields: 'id,username,fullName',

@@ -62,9 +62,6 @@ App.state = {
 };
 
 App.init = function () {
-    if (window.ActiveTracker) {
-        window.ActiveTracker.init({ name: 'Pedro Nogueira' });
-    }
     const hash = window.location.hash;
     if (hash) {
         if (hash.includes('token=')) {
@@ -132,6 +129,11 @@ App.render = function () {
 
     if (this.state.token && !this.state.userRole) {
         app.innerHTML = UI.renderRoleSelectorScreen();
+        return;
+    }
+
+    if (this.state.boardNotAdminError && this.state.boardId) {
+        app.innerHTML = UI.renderNotAdminModal(this.state.boardId);
         return;
     }
 
@@ -754,6 +756,7 @@ App.attachDashboardEvents = function () {
 App.setRole = function (role) {
     if (!role) {
         this.state.userRole = null;
+        this.state.boardNotAdminError = false;
         localStorage.removeItem('trello_user_role');
         this.state.boardId = '';
         this.state.kpis = null;
@@ -764,6 +767,7 @@ App.setRole = function (role) {
     }
 
     this.state.userRole = role;
+    this.state.boardNotAdminError = false;
     localStorage.setItem('trello_user_role', role);
 
     if (this.state.boardId) {
@@ -776,7 +780,19 @@ App.setRole = function (role) {
 };
 
 App.confirmRole = function (boardId, role) {
+    this.state.userRole = role;
+    this.state.boardNotAdminError = false;
+    localStorage.setItem('trello_user_role', role);
     this.selecionarBoard(boardId);
+};
+
+App.chooseAnotherBoard = function () {
+    this.state.boardId = '';
+    this.state.boardNotAdminError = false;
+    this.state.kpis = null;
+    this.state.availableBoards = [];
+    localStorage.removeItem('trello_board_id');
+    this.listarBoards();
 };
 
 App.resetBoardAndRole = function () {
@@ -784,6 +800,7 @@ App.resetBoardAndRole = function () {
     localStorage.removeItem('trello_user_role');
     this.state.boardId = '';
     this.state.userRole = null;
+    this.state.boardNotAdminError = false;
     this.state.kpis = null;
     this.render();
 };
