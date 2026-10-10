@@ -105,20 +105,14 @@ App.conectarTrello = async function () {
         }
         this.state.isBoardAdmin = isBoardAdmin;
 
+        // The board membership is the source of truth for the dashboard view.
+        // This prevents a saved/selected Agent role from opening an admin board
+        // with the restricted dashboard after following a Trello deep link.
+        this.state.userRole = isBoardAdmin ? 'manager' : 'sales';
+        localStorage.setItem('trello_user_role', this.state.userRole);
+
         if (window.ActiveTracker) {
             window.ActiveTracker.init({ id: userInfo.id, name: userInfo.fullName || userInfo.username });
-        }
-
-        // Se o utilizador tentou entrar como Manager mas NÃO é admin do quadro:
-        if (this.state.userRole === 'manager' && !isBoardAdmin) {
-            // Se tiver outros quadros ou este quadro, dar erro com opção de entrar como sales ou trocar quadro
-            this.updateState({
-                loading: false,
-                refreshing: false,
-                boardNotAdminError: true,
-                error: 'Não podes entrar como Gestor neste quadro porque não és administrador do mesmo.'
-            });
-            return;
         }
 
         // Se for manager, garante que o selectedMemberId é limpo para mostrar dados de todos
