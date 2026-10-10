@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -212,6 +213,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="container">
@@ -228,8 +230,33 @@
     </div>
 
     <div class="updates-list">
-      <!-- Update 1.6 -->
+      <!-- Update 1.7 -->
       <div class="update-card latest">
+        <div class="update-header">
+          <div class="update-title">🚀 Update 1.7</div>
+          <div class="update-date" id="u17-date">Oct 10, 2026</div>
+        </div>
+        <ul class="update-items">
+          <li class="update-item">
+            <strong id="u17-t1">⚡ Activity Panel & Quick Follow-up (Card Back)</strong>
+            <p id="u17-d1">Real-time counters for calls, emails, and actions with 1-click (+1 Call / +1 Email) buttons
+              and last action indicator.</p>
+          </li>
+          <li class="update-item">
+            <strong id="u17-t2">🕒 Smart "Last Update" Badges (Card Front)</strong>
+            <p id="u17-d2">Dynamic badges directly on board cards with color codes (Green, Blue, Yellow, Red) syncing
+              with all activities.</p>
+          </li>
+          <li class="update-item">
+            <strong id="u17-t3">🐛 Fixed Board KPIs Button Inside Cards</strong>
+            <p id="u17-d3">Fixed seamless redirection and token handling when clicking "View Full Board KPIs" inside
+              card details.</p>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Update 1.6 -->
+      <div class="update-card">
         <div class="update-header">
           <div class="update-title">🚀 Update 1.6</div>
           <div class="update-date" id="u16-date">Oct 09, 2026</div>
@@ -237,11 +264,13 @@
         <ul class="update-items">
           <li class="update-item">
             <strong id="u16-t1">⚡ Live Active Team Time Tracker</strong>
-            <p id="u16-d1">Track real active time spent by each team member in Trello and WebApp, automatically pausing when idle (>60s) or switching tabs.</p>
+            <p id="u16-d1">Track real active time spent by each team member in Trello and WebApp, automatically pausing
+              when idle (>60s) or switching tabs.</p>
           </li>
           <li class="update-item">
             <strong id="u16-t2">⭐ New Interactive 4-Step Feedback Survey</strong>
-            <p id="u16-d2">Share your rating, primary use case, and suggestions through an interactive 4-step survey with smart automated prompts.</p>
+            <p id="u16-d2">Share your rating, primary use case, and suggestions through an interactive 4-step survey
+              with smart automated prompts.</p>
           </li>
         </ul>
       </div>
@@ -255,7 +284,8 @@
         <ul class="update-items">
           <li class="update-item">
             <strong id="u15-t1">👥 Role Selection Experience</strong>
-            <p id="u15-d1">Clicking "View Full Board KPIs" now presents the Role Selection screen to choose between Manager & Sales Agent views before opening the dashboard.</p>
+            <p id="u15-d1">Clicking "View Full Board KPIs" now presents the Role Selection screen to choose between
+              Manager & Sales Agent views before opening the dashboard.</p>
           </li>
         </ul>
       </div>
@@ -269,7 +299,8 @@
         <ul class="update-items">
           <li class="update-item">
             <strong id="u14-t1">📍 New History Timeline in Each Card</strong>
-            <p id="u14-d1">A continuous vertical timeline with connected progress nodes showing lead creation date, list moves, and exact duration spent in each stage.</p>
+            <p id="u14-d1">A continuous vertical timeline with connected progress nodes showing lead creation date, list
+              moves, and exact duration spent in each stage.</p>
           </li>
         </ul>
       </div>
@@ -281,7 +312,7 @@
   </div>
 
   <script type="module">
-    var CURRENT_VERSION = '1.6';
+    var CURRENT_VERSION = '1.7';
     var t = TrelloPowerUp.iframe();
 
     var currentLang = 'en';
@@ -293,6 +324,14 @@
         title: "What's New in KPI Master",
         subtitle: "Explore the latest features and performance updates.",
         btnClose: "Got it! Continue in Trello",
+
+        u17Date: "Oct 10, 2026",
+        u17t1: "⚡ Activity Tracker & Fast Follow-up (Card Back)",
+        u17d1: "Real-time counters for calls, emails, and Trello actions with 1-click (+1 Call / +1 Email) buttons and last action indicator.",
+        u17t2: "🕒 Smart \"Last Update\" Badges (Card Front)",
+        u17d2: "Dynamic badges directly on board cards with color codes (Green, Blue, Yellow, Red) syncing with all activities.",
+        u17t3: "🐛 Fixed Board KPIs Button Inside Cards",
+        u17d3: "Resolved an issue when clicking \"View Full Board KPIs\" inside cards for immediate dashboard access.",
 
         u16Date: "Oct 09, 2026",
         u16t1: "⚡ Live Active Team Time Tracker",
@@ -314,6 +353,14 @@
         title: "O que há de novo no KPI Master",
         subtitle: "Explora as últimas melhorias e novas funcionalidades.",
         btnClose: "Entendido! Continuar no Trello",
+
+        u17Date: "10 de Out. de 2026",
+        u17t1: "⚡ Painel de Atividades & Follow-up Rápido (Dentro do Cartão)",
+        u17d1: "Contadores em tempo real (chamadas, e-mails, ações) e botões de 1 clique (+1 Telefonema / +1 E-mail) com indicador de última intervenção.",
+        u17t2: "🕒 Badge Inteligente de \"Última Atualização\" (Frente do Cartão)",
+        u17d2: "Badge dinâmico no quadro com alertas por cores (Verde ativo, Azul em dia, Amarelo a esfriar, Vermelho 7d+ parado), sincronizado com tudo.",
+        u17t3: "🐛 Correção no Botão \"Ver KPIs do Quadro\"",
+        u17d3: "Corrigido o redirecionamento ao clicar em \"Ver KPIs Completos do Quadro\" dentro dos cartões, garantindo abertura direta sem falhas.",
 
         u16Date: "09 de Out. de 2026",
         u16t1: "⚡ Tracking de Tempo Ativo da Equipa",
@@ -341,6 +388,14 @@
       document.getElementById('subtitle').textContent = d.subtitle;
       document.getElementById('btn-close').textContent = d.btnClose;
 
+      document.getElementById('u17-date').textContent = d.u17Date;
+      document.getElementById('u17-t1').textContent = d.u17t1;
+      document.getElementById('u17-d1').textContent = d.u17d1;
+      document.getElementById('u17-t2').textContent = d.u17t2;
+      document.getElementById('u17-d2').textContent = d.u17d2;
+      document.getElementById('u17-t3').textContent = d.u17t3;
+      document.getElementById('u17-d3').textContent = d.u17d3;
+
       document.getElementById('u16-date').textContent = d.u16Date;
       document.getElementById('u16-t1').textContent = d.u16t1;
       document.getElementById('u16-d1').textContent = d.u16d1;
@@ -359,21 +414,22 @@
     // Default: English, but check if user explicitly toggled PT
     applyLanguage('en');
 
-    document.getElementById('btn-translate').addEventListener('click', function() {
+    document.getElementById('btn-translate').addEventListener('click', function () {
       var nextLang = (currentLang === 'en') ? 'pt' : 'en';
       applyLanguage(nextLang);
     });
 
     // Registar que o utilizador já viu esta versão
-    t.set('member', 'private', 'kpi_last_seen_version', CURRENT_VERSION).catch(function(){});
+    t.set('member', 'private', 'kpi_last_seen_version', CURRENT_VERSION).catch(function () { });
 
-    document.getElementById('btn-close').addEventListener('click', function() {
-      t.set('member', 'private', 'kpi_last_seen_version', CURRENT_VERSION).then(function() {
+    document.getElementById('btn-close').addEventListener('click', function () {
+      t.set('member', 'private', 'kpi_last_seen_version', CURRENT_VERSION).then(function () {
         t.closeModal();
-      }).catch(function() {
+      }).catch(function () {
         t.closeModal();
       });
     });
   </script>
 </body>
+
 </html>

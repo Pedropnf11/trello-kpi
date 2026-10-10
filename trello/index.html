@@ -30,7 +30,7 @@
 
       // ── Botão na barra do board + Abertura Automática ao Abrir o Quadro ───
       'board-buttons': function (t) {
-        var CURRENT_VERSION = '1.6';
+        var CURRENT_VERSION = '1.7';
         var isPt = (t.locale || 'en').startsWith('pt');
 
         function shouldPromptFeedback(rawState, welcomeSeenVal, firstSeenTimeVal) {
@@ -198,41 +198,96 @@
 
       // ── Emblemas nos cartões (Card Badges) ──────────────────────────────────
       'card-badges': function (t) {
-        return t.card('id')
-          .then(function (card) {
-            if (!card || !card.id) return [];
+        return Promise.all([
+          t.card('id', 'dateLastActivity'),
+          t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; }),
+          t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; })
+        ]).then(function (res) {
+          var card = res[0];
+          var touchpoints = res[1] || {};
+          var rawFeedbackState = res[2];
 
-            // O ID do Trello contém a data de criação nos primeiros 8 caracteres em hexadecimal
-            var timestamp = parseInt(card.id.substring(0, 8), 16);
-            var dateCreated = new Date(timestamp * 1000);
-            var diffMs = Date.now() - dateCreated.getTime();
-            var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+          if (!card || !card.id) return [];
 
-            var text = '';
-            var color = 'light-gray';
+          var isPt = (t.locale || 'en').startsWith('pt');
 
-            var isPt = (t.locale || 'en').startsWith('pt');
-
-            if (diffDays === 0) {
-              text = isPt ? 'Criado hoje' : 'Created today';
-              color = 'green';
-            } else if (diffDays === 1) {
-              text = isPt ? '1 dia' : '1 day old';
-            } else {
-              text = isPt ? diffDays + ' dias' : diffDays + ' days old';
-              if (diffDays > 14) {
-                color = 'yellow';
+          // Verifica se desbloqueou dando feedback pelo menos 1 vez
+          var isUnlocked = false;
+          if (rawFeedbackState) {
+            try {
+              var fState = typeof rawFeedbackState === 'string' ? JSON.parse(rawFeedbackState) : rawFeedbackState;
+              if (fState && fState.lastSubmittedTime) {
+                isUnlocked = true;
               }
-              if (diffDays > 30) {
-                color = 'red';
-              }
+            } catch (e) { }
+          }
+
+          var badges = [];
+
+          // 1. Badge Original: Idade do Cartão
+          var timestamp = parseInt(card.id.substring(0, 8), 16);
+          var dateCreated = new Date(timestamp * 1000);
+          var diffMs = Date.now() - dateCreated.getTime();
+          var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+          var ageText = '';
+          var ageColor = 'light-gray';
+
+          if (diffDays === 0) {
+            ageText = isPt ? 'Criado hoje' : 'Created today';
+            ageColor = 'green';
+          } else if (diffDays === 1) {
+            ageText = isPt ? '1 dia' : '1 day old';
+          } else {
+            ageText = isPt ? diffDays + ' dias' : diffDays + ' days old';
+            if (diffDays > 14) ageColor = 'yellow';
+            if (diffDays > 30) ageColor = 'red';
+          }
+
+          badges.push({
+            text: ageText,
+            color: ageColor
+          });
+
+          // 2. Badge de Última Atualização (Se desbloqueado)
+          if (isUnlocked) {
+            var lastActivityMs = card.dateLastActivity ? new Date(card.dateLastActivity).getTime() : (timestamp * 1000);
+            if (touchpoints.lastUpdated && touchpoints.lastUpdated > lastActivityMs) {
+              lastActivityMs = touchpoints.lastUpdated;
             }
 
-            return [{
-              text: '🕒 ' + text,
-              color: color
-            }];
-          });
+            var updatedDiffMs = Date.now() - lastActivityMs;
+            var updatedDiffDays = Math.floor(updatedDiffMs / (1000 * 60 * 60 * 24));
+            var updatedDiffHours = Math.floor(updatedDiffMs / (1000 * 60 * 60));
+
+            var updateText = '';
+            var updateColor = 'green';
+
+            if (updatedDiffHours < 1) {
+              updateText = isPt ? 'Atualizado hoje' : 'Updated today';
+              updateColor = 'green';
+            } else if (updatedDiffDays === 0) {
+              updateText = isPt ? 'Atualizado hoje' : 'Updated today';
+              updateColor = 'green';
+            } else if (updatedDiffDays === 1) {
+              updateText = isPt ? 'Atualizado ontem' : 'Updated yesterday';
+              updateColor = 'blue';
+            } else if (updatedDiffDays < 7) {
+              updateText = isPt ? ('Atualizado há ' + updatedDiffDays + ' dias') : ('Updated ' + updatedDiffDays + ' days ago');
+              if (updatedDiffDays >= 3) updateColor = 'yellow';
+            } else {
+              updateText = isPt ? ('Sem atualização há ' + updatedDiffDays + ' dias') : ('No update for ' + updatedDiffDays + ' days');
+              updateColor = 'red';
+            }
+
+            badges.push({
+              text: updateText,
+              color: updateColor
+            });
+          }
+
+          return badges;
+        });
       },
 
       // ── Emblemas de Detalhes no Verso (Card Detail Badges) ──────────────────
