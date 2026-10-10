@@ -198,12 +198,7 @@
 
       // ── Emblemas nos cartões (Card Badges) ──────────────────────────────────
       'card-badges': function (t) {
-        return Promise.all([
-          t.card('id', 'dateLastActivity'),
-          t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; })
-        ]).then(function (res) {
-          var card = res[0];
-          var touchpoints = res[1] || {};
+        return t.card('id', 'dateLastActivity').then(function (card) {
 
           if (!card || !card.id) return [];
 
@@ -238,29 +233,21 @@
           // 2. Badge: Última Atividade / Smart Last Update
           var createdAt = dateCreated.getTime();
           var lastActivityMs = card.dateLastActivity ? new Date(card.dateLastActivity).getTime() : createdAt;
-          if (touchpoints && touchpoints.lastUpdated && touchpoints.lastUpdated > lastActivityMs) {
-            lastActivityMs = touchpoints.lastUpdated;
-          }
 
           var ageMs = Math.max(0, Date.now() - lastActivityMs);
           var days = Math.floor(ageMs / (1000 * 60 * 60 * 24));
           var hours = Math.floor(ageMs / (1000 * 60 * 60));
-          var updateText = '';
-          var updateColor = 'green';
-
-          if (hours < 24) {
-            updateText = isPt ? 'Atualizado hoje' : 'Updated today';
-            updateColor = 'green';
-          } else if (days === 1) {
-            updateText = isPt ? 'Atualizado ontem' : 'Updated yesterday';
-            updateColor = null;
-          } else if (days < 7) {
-            updateText = isPt ? ('Atualizado há ' + days + 'd') : ('Updated ' + days + 'd ago');
-            updateColor = days >= 3 ? 'yellow' : null;
-          } else {
-            updateText = isPt ? ('Sem atualiz. há ' + days + 'd') : ('No update for ' + days + 'd');
-            updateColor = 'red';
-          }
+          var lastActivityDate = new Date(lastActivityMs);
+          var formattedLastActivity = lastActivityDate.toLocaleString(isPt ? 'pt-PT' : 'en-GB', {
+            day: '2-digit',
+            month: 'short',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+          var updateText = isPt
+            ? 'Última atualização: ' + formattedLastActivity
+            : 'Last update: ' + formattedLastActivity;
+          var updateColor = hours < 24 ? 'green' : (days >= 7 ? 'red' : (days >= 3 ? 'yellow' : null));
 
           badges.push({
             text: updateText,
@@ -276,12 +263,7 @@
 
       // ── Emblemas de Detalhes no Verso (Card Detail Badges) ──────────────────
       'card-detail-badges': function (t) {
-        return Promise.all([
-          t.card('id', 'dateLastActivity'),
-          t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; })
-        ]).then(function (res) {
-          var card = res[0];
-          var touchpoints = res[1] || {};
+        return t.card('id', 'dateLastActivity').then(function (card) {
           if (!card || !card.id) return [];
 
           var isPt = (t.locale || 'en').startsWith('pt');
@@ -293,52 +275,9 @@
           var ageText = diffDays === 0 ? (isPt ? 'Hoje' : 'Today') : (diffDays === 1 ? (isPt ? '1 dia' : '1 day') : (diffDays + (isPt ? ' dias' : ' days')));
 
           var lastActivityMs = card.dateLastActivity ? new Date(card.dateLastActivity).getTime() : dateCreated.getTime();
-          if (touchpoints && touchpoints.lastUpdated && touchpoints.lastUpdated > lastActivityMs) {
-            lastActivityMs = touchpoints.lastUpdated;
-          }
           var updateDiffDays = Math.floor(Math.max(0, Date.now() - lastActivityMs) / (1000 * 60 * 60 * 24));
           var updateText = updateDiffDays === 0 ? (isPt ? 'Hoje' : 'Today') : (updateDiffDays === 1 ? (isPt ? 'Ontem' : 'Yesterday') : (updateDiffDays + (isPt ? ' dias atrás' : ' days ago')));
           var updateColor = updateDiffDays === 0 ? 'green' : (updateDiffDays >= 7 ? 'red' : (updateDiffDays >= 3 ? 'yellow' : null));
-
-          function quickFollowUpBadge(type) {
-            var isCall = type === 'call';
-            return {
-              title: isPt
-                ? (isCall ? 'Registar telefonema' : 'Registar e-mail')
-                : (isCall ? 'Log a call' : 'Log an email'),
-              text: isCall ? '📞 +1' : '✉️ +1',
-              color: null,
-              callback: function (tBadge) {
-                return tBadge.get('card', 'shared', 'kpi_touchpoints')
-                  .catch(function () { return null; })
-                  .then(function (saved) {
-                    var current = saved || {};
-                    var updated = {
-                      calls: (Number(current.calls) || 0) + (isCall ? 1 : 0),
-                      emails: (Number(current.emails) || 0) + (isCall ? 0 : 1),
-                      lastUpdated: Date.now()
-                    };
-                    return tBadge.set('card', 'shared', 'kpi_touchpoints', updated).then(function () {
-                      return tBadge.alert({
-                        message: isCall
-                          ? (isPt ? '📞 Telefonema registado!' : '📞 Call recorded!')
-                          : (isPt ? '✉️ E-mail registado!' : '✉️ Email recorded!'),
-                        duration: 3
-                      });
-                    });
-                  })
-                  .catch(function (err) {
-                    console.error('[KPI Master] Could not save quick follow-up:', err);
-                    return tBadge.alert({
-                      message: isPt
-                        ? 'Não foi possível registar. Verifica as permissões do Trello.'
-                        : 'Could not record activity. Check Trello permissions.',
-                      duration: 5
-                    });
-                  });
-              }
-            };
-          }
 
           return [
             {
@@ -350,9 +289,7 @@
               title: isPt ? 'Última Atividade' : 'Last Activity',
               text: updateText,
               color: updateColor
-            },
-            quickFollowUpBadge('call'),
-            quickFollowUpBadge('email')
+            }
           ];
         }).catch(function (err) {
           console.error('[KPI Master] Error in card-detail-badges:', err);
@@ -363,7 +300,39 @@
       // ── Botões de Ação no Cartão (Card Buttons) ───────────────────────────
       'card-buttons': function (t) {
         var isPt = (t.locale || 'en').startsWith('pt');
+
+        function addTouchpoint(tCard, type) {
+          return tCard.get('card', 'shared', 'kpi_touchpoints')
+            .catch(function () { return null; })
+            .then(function (saved) {
+              var current = saved || {};
+              var updated = {
+                calls: (Number(current.calls) || 0) + (type === 'call' ? 1 : 0),
+                emails: (Number(current.emails) || 0) + (type === 'email' ? 1 : 0),
+                lastUpdated: Date.now()
+              };
+              return tCard.set('card', 'shared', 'kpi_touchpoints', updated).then(function () {
+                return tCard.alert({
+                  message: type === 'call'
+                    ? (isPt ? '📞 Telefonema registado!' : '📞 Call recorded!')
+                    : (isPt ? '✉️ E-mail registado!' : '✉️ Email recorded!'),
+                  duration: 3
+                });
+              });
+            });
+        }
+
         return [
+            {
+              icon: POWERUP_URL + '/icon.png',
+              text: isPt ? '📞 +1 Telefonema' : '📞 +1 Call',
+              callback: function (tCard) { return addTouchpoint(tCard, 'call'); }
+            },
+            {
+              icon: POWERUP_URL + '/icon.png',
+              text: isPt ? '✉️ +1 E-mail' : '✉️ +1 Email',
+              callback: function (tCard) { return addTouchpoint(tCard, 'email'); }
+            },
             {
               icon: POWERUP_URL + '/icon.png',
               text: isPt ? '⏩ Mover para Próxima Etapa' : '⏩ Move to Next Stage',

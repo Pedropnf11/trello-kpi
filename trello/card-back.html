@@ -292,21 +292,23 @@
       background: rgba(59, 130, 246, 0.04);
       border: 1px solid rgba(59, 130, 246, 0.2);
       border-radius: 8px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      padding: 6px 8px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 5px 8px;
     }
 
     .activity-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
+      grid-column: 1 / -1;
     }
 
     .activity-title {
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 700;
       color: var(--title-color);
       display: flex;
@@ -315,57 +317,64 @@
     }
 
     .activity-last-update {
-      font-size: 11px;
+      font-size: 9px;
       font-weight: 600;
       color: var(--accent-blue);
-      background: rgba(59, 130, 246, 0.1);
-      padding: 2px 8px;
+      background: rgba(59, 130, 246, 0.08);
+      padding: 2px 6px;
       border-radius: 9999px;
+      white-space: nowrap;
     }
 
     .activity-counters-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      min-width: 0;
     }
 
     .counter-card {
-      background: var(--bg-box);
-      border: 1px solid var(--border-box);
-      border-radius: 6px;
-      padding: 8px;
-      text-align: center;
+      background: transparent;
+      border: 0;
+      border-radius: 4px;
+      padding: 2px 5px;
+      text-align: left;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
-      gap: 2px;
+      gap: 4px;
+      min-width: 0;
     }
 
     .counter-number {
-      font-size: 16px;
-      font-weight: 800;
+      font-size: 11px;
+      font-weight: 700;
       color: var(--title-color);
     }
 
     .counter-label {
-      font-size: 9.5px;
+      font-size: 8px;
       color: var(--desc-color);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      line-height: 1.25;
-      text-align: center;
+      font-weight: 500;
+      line-height: 1.1;
+      white-space: nowrap;
     }
 
     .activity-actions-row {
       display: flex;
-      gap: 8px;
+      justify-content: flex-end;
+      gap: 4px;
     }
 
     .activity-status {
-      min-height: 14px;
-      font-size: 10px;
+      grid-column: 1 / -1;
+      min-height: 0;
+      font-size: 9px;
       color: var(--desc-color);
+    }
+
+    .activity-status:empty {
+      display: none;
     }
 
     .activity-status.error {
@@ -373,18 +382,18 @@
     }
 
     .btn-activity {
-      flex: 1;
+      flex: 0 0 auto;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 4px;
       background: var(--bg-box);
       border: 1px solid var(--border-box);
       color: var(--title-color);
-      border-radius: 6px;
-      padding: 6px 10px;
-      font-size: 11px;
-      font-weight: 600;
+      border-radius: 5px;
+      padding: 3px 7px;
+      font-size: 9px;
+      font-weight: 500;
       cursor: pointer;
       transition: all 0.15s ease;
     }
@@ -393,6 +402,17 @@
       background: var(--accent-blue);
       color: #ffffff;
       border-color: var(--accent-blue);
+    }
+
+    @media (max-width: 420px) {
+      .activity-section {
+        grid-template-columns: 1fr;
+      }
+
+      .activity-counters-row,
+      .activity-actions-row {
+        justify-content: flex-start;
+      }
     }
 
     .locked-btn {
@@ -485,9 +505,12 @@
           <div class="activity-last-update" id="activity-last-update">🕒 —</div>
         </div>
         <div class="activity-counters-row">
-          <div class="counter-card"><span class="counter-number" id="counter-emails">0</span><span class="counter-label">✉️ E-mails enviados</span></div>
-          <div class="counter-card"><span class="counter-number" id="counter-calls">0</span><span class="counter-label">📞 Telefonemas realizados</span></div>
-          <div class="counter-card"><span class="counter-number" id="counter-trello-actions">0</span><span class="counter-label">💬 Comentários / Ações Trello</span></div>
+          <div class="counter-card"><span class="counter-number" id="counter-emails">0</span><span class="counter-label">✉️ E-mails</span></div>
+          <div class="counter-card"><span class="counter-number" id="counter-calls">0</span><span class="counter-label">📞 Chamadas</span></div>
+        </div>
+        <div class="activity-actions-row">
+          <button id="btn-add-call" class="btn-activity" title="Registar telefonema">📞 +1</button>
+          <button id="btn-add-email" class="btn-activity" title="Registar e-mail">✉️ +1</button>
         </div>
         <div id="activity-status" class="activity-status" role="status" aria-live="polite"></div>
       </div>
@@ -595,6 +618,58 @@
     t.render(function () {
       t.sizeTo(document.body).catch(function () { });
 
+      var activityContainer = document.getElementById('activity-container');
+      if (activityContainer) {
+        activityContainer.addEventListener('click', function (event) {
+          var button = event.target.closest('#btn-add-call, #btn-add-email');
+          if (!button || !activityContainer.contains(button)) return;
+
+          var type = button.id === 'btn-add-call' ? 'call' : 'email';
+          var status = document.getElementById('activity-status');
+          button.disabled = true;
+          if (status) {
+            status.className = 'activity-status';
+            status.textContent = isPt ? 'A guardar…' : 'Saving…';
+          }
+
+          t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; })
+            .then(function (saved) {
+              var current = saved || {};
+              var updated = {
+                calls: (Number(current.calls) || 0) + (type === 'call' ? 1 : 0),
+                emails: (Number(current.emails) || 0) + (type === 'email' ? 1 : 0),
+                lastUpdated: Date.now()
+              };
+              return t.set('card', 'shared', 'kpi_touchpoints', updated).then(function () {
+                var calls = document.getElementById('counter-calls');
+                var emails = document.getElementById('counter-emails');
+                var lastUpdate = document.querySelector('.activity-last-update');
+                if (calls) calls.textContent = updated.calls;
+                if (emails) emails.textContent = updated.emails;
+                if (lastUpdate) lastUpdate.textContent = isPt ? '🕒 agora' : '🕒 just now';
+                if (status) status.textContent = isPt ? 'Atividade registada.' : 'Activity saved.';
+                return t.alert({
+                  message: type === 'call'
+                    ? (isPt ? '📞 Telefonema registado!' : '📞 Call recorded!')
+                    : (isPt ? '✉️ E-mail registado!' : '✉️ Email recorded!'),
+                  duration: 3
+                });
+              });
+            })
+            .catch(function (err) {
+              var currentStatus = document.getElementById('activity-status');
+              if (currentStatus) {
+                currentStatus.className = 'activity-status error';
+                currentStatus.textContent = isPt
+                  ? 'Não foi possível guardar. Verifica a ligação/permissões do Trello e tenta novamente.'
+                  : 'Could not save. Check Trello connection/permissions and try again.';
+              }
+              console.error('[KPI Master] Could not save quick follow-up:', err);
+            })
+            .then(function () { button.disabled = false; });
+        });
+      }
+
       Promise.all([
         t.card('id', 'name', 'idList', 'dateLastActivity', 'badges'),
         t.list('id', 'name'),
@@ -613,30 +688,12 @@
         if (activityContainer) {
           var callCount = touchpoints.calls || 0;
           var emailCount = touchpoints.emails || 0;
-          var commentsCount = (card && card.badges && typeof card.badges.comments === 'number') ? card.badges.comments : 0;
-          var trelloActionsCount = commentsCount;
-          
-          // Última atualização
+          // A última atividade vem do próprio cartão, não dos contadores manuais.
           var timestamp = parseInt(card.id.substring(0, 8), 16);
           var lastActivityMs = card.dateLastActivity ? new Date(card.dateLastActivity).getTime() : (timestamp * 1000);
-          if (touchpoints.lastUpdated && touchpoints.lastUpdated > lastActivityMs) {
-            lastActivityMs = touchpoints.lastUpdated;
-          }
-
-          var updatedDiffMs = Date.now() - lastActivityMs;
-          var updatedDiffDays = Math.floor(updatedDiffMs / (1000 * 60 * 60 * 24));
-          var updatedDiffHours = Math.floor(updatedDiffMs / (1000 * 60 * 60));
-
-          var lastUpdateText = '';
-          if (updatedDiffHours < 1) {
-            lastUpdateText = isPt ? 'há pouco' : 'just now';
-          } else if (updatedDiffDays === 0) {
-            lastUpdateText = isPt ? (updatedDiffHours + 'h atrás') : (updatedDiffHours + 'h ago');
-          } else if (updatedDiffDays === 1) {
-            lastUpdateText = isPt ? 'ontem' : 'yesterday';
-          } else {
-            lastUpdateText = isPt ? (updatedDiffDays + ' dias atrás') : (updatedDiffDays + ' days ago');
-          }
+          var lastUpdateText = new Date(lastActivityMs).toLocaleString(isPt ? 'pt-PT' : 'en-GB', {
+            day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'
+          });
 
           if (!isUnlocked) {
             // MODO BLOQUEADO: Os botões e contadores aparecem visíveis, mas com o cadeado amarelo "Unlock for Free"
@@ -648,22 +705,18 @@
                     <span>${isPt ? 'Registo de Atividades da Lead' : 'Lead Activity Tracker'}</span>
                   </div>
                   <div class="activity-last-update">
-                    🕒 ${isPt ? 'Última ação: ' : 'Last action: '} ${lastUpdateText}
+                    🕒 ${isPt ? 'Última atualização: ' : 'Last update: '} ${lastUpdateText}
                   </div>
                 </div>
 
                 <div class="activity-counters-row">
                   <div class="counter-card">
                     <span class="counter-number" id="counter-emails">${emailCount}</span>
-                    <span class="counter-label">✉️ ${isPt ? 'E-mails enviados' : 'Emails sent'}</span>
+                    <span class="counter-label">✉️ ${isPt ? 'E-mails' : 'Emails'}</span>
                   </div>
                   <div class="counter-card">
                     <span class="counter-number" id="counter-calls">${callCount}</span>
-                    <span class="counter-label">📞 ${isPt ? 'Telefonemas realizados' : 'Calls made'}</span>
-                  </div>
-                  <div class="counter-card">
-                    <span class="counter-number" id="counter-trello-actions">${trelloActionsCount}</span>
-                    <span class="counter-label">💬 ${isPt ? 'Comentários / Ações Trello' : 'Trello Comments & Actions'}</span>
+                    <span class="counter-label">📞 ${isPt ? 'Chamadas' : 'Calls'}</span>
                   </div>
                 </div>
 
@@ -703,25 +756,25 @@
                     <span>${isPt ? 'Registo de Atividades da Lead' : 'Lead Activity Tracker'}</span>
                   </div>
                   <div class="activity-last-update">
-                    🕒 ${isPt ? 'Última ação: ' : 'Last action: '} ${lastUpdateText}
+                    🕒 ${isPt ? 'Última atualização: ' : 'Last update: '} ${lastUpdateText}
                   </div>
                 </div>
 
                 <div class="activity-counters-row">
                   <div class="counter-card">
                     <span class="counter-number" id="counter-emails">${emailCount}</span>
-                    <span class="counter-label">✉️ ${isPt ? 'E-mails enviados' : 'Emails sent'}</span>
+                    <span class="counter-label">✉️ ${isPt ? 'E-mails' : 'Emails'}</span>
                   </div>
                   <div class="counter-card">
                     <span class="counter-number" id="counter-calls">${callCount}</span>
-                    <span class="counter-label">📞 ${isPt ? 'Telefonemas realizados' : 'Calls made'}</span>
-                  </div>
-                  <div class="counter-card">
-                    <span class="counter-number" id="counter-trello-actions">${trelloActionsCount}</span>
-                    <span class="counter-label">💬 ${isPt ? 'Comentários / Ações Trello' : 'Trello Comments & Actions'}</span>
+                    <span class="counter-label">📞 ${isPt ? 'Chamadas' : 'Calls'}</span>
                   </div>
                 </div>
 
+                <div class="activity-actions-row">
+                  <button id="btn-add-call" class="btn-activity" title="${isPt ? 'Registar telefonema' : 'Log a call'}">📞 +1</button>
+                  <button id="btn-add-email" class="btn-activity" title="${isPt ? 'Registar e-mail' : 'Log an email'}">✉️ +1</button>
+                </div>
                 <div id="activity-status" class="activity-status" role="status" aria-live="polite"></div>
               </div>
             `;
@@ -778,12 +831,6 @@
               return fetch(actionsUrl)
                 .then(function(r) { return r.json(); })
                 .then(function(actions) {
-                  if (Array.isArray(actions)) {
-                    var trelloEl = document.getElementById('counter-trello-actions');
-                    if (trelloEl) {
-                      trelloEl.textContent = commentsCount + actions.length;
-                    }
-                  }
                   if (!Array.isArray(actions) || actions.length === 0) {
                     streamContainer.innerHTML = `
                       <div class="stream-node first latest">
