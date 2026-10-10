@@ -924,6 +924,11 @@
             window.open(SITE, '_blank');
           });
         });
+
+        // Garantir que a altura do iframe se expande para mostrar todos os botões e contadores
+        setTimeout(function () {
+          t.sizeTo(document.body).catch(function () { });
+        }, 100);
       });
     });
   </script>
