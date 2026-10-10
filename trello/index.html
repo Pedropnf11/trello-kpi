@@ -300,6 +300,46 @@
           var updateText = updateDiffDays === 0 ? (isPt ? 'Hoje' : 'Today') : (updateDiffDays === 1 ? (isPt ? 'Ontem' : 'Yesterday') : (updateDiffDays + (isPt ? ' dias atrás' : ' days ago')));
           var updateColor = updateDiffDays === 0 ? 'green' : (updateDiffDays >= 7 ? 'red' : (updateDiffDays >= 3 ? 'yellow' : null));
 
+          function quickFollowUpBadge(type) {
+            var isCall = type === 'call';
+            return {
+              title: isPt
+                ? (isCall ? 'Registar telefonema' : 'Registar e-mail')
+                : (isCall ? 'Log a call' : 'Log an email'),
+              text: isCall ? '📞 +1' : '✉️ +1',
+              color: null,
+              callback: function (tBadge) {
+                return tBadge.get('card', 'shared', 'kpi_touchpoints')
+                  .catch(function () { return null; })
+                  .then(function (saved) {
+                    var current = saved || {};
+                    var updated = {
+                      calls: (Number(current.calls) || 0) + (isCall ? 1 : 0),
+                      emails: (Number(current.emails) || 0) + (isCall ? 0 : 1),
+                      lastUpdated: Date.now()
+                    };
+                    return tBadge.set('card', 'shared', 'kpi_touchpoints', updated).then(function () {
+                      return tBadge.alert({
+                        message: isCall
+                          ? (isPt ? '📞 Telefonema registado!' : '📞 Call recorded!')
+                          : (isPt ? '✉️ E-mail registado!' : '✉️ Email recorded!'),
+                        duration: 3
+                      });
+                    });
+                  })
+                  .catch(function (err) {
+                    console.error('[KPI Master] Could not save quick follow-up:', err);
+                    return tBadge.alert({
+                      message: isPt
+                        ? 'Não foi possível registar. Verifica as permissões do Trello.'
+                        : 'Could not record activity. Check Trello permissions.',
+                      duration: 5
+                    });
+                  });
+              }
+            };
+          }
+
           return [
             {
               title: isPt ? 'Idade do Cartão' : 'Card Age',
@@ -310,7 +350,9 @@
               title: isPt ? 'Última Atividade' : 'Last Activity',
               text: updateText,
               color: updateColor
-            }
+            },
+            quickFollowUpBadge('call'),
+            quickFollowUpBadge('email')
           ];
         }).catch(function (err) {
           console.error('[KPI Master] Error in card-detail-badges:', err);
@@ -321,39 +363,7 @@
       // ── Botões de Ação no Cartão (Card Buttons) ───────────────────────────
       'card-buttons': function (t) {
         var isPt = (t.locale || 'en').startsWith('pt');
-
-        return t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; }).then(function (savedTouchpoints) {
-          var touchpoints = savedTouchpoints || { calls: 0, emails: 0 };
-
-          function addTouchpoint(tCard, type) {
-            var updated = {
-              calls: (touchpoints.calls || 0) + (type === 'call' ? 1 : 0),
-              emails: (touchpoints.emails || 0) + (type === 'email' ? 1 : 0),
-              lastUpdated: Date.now()
-            };
-            return tCard.set('card', 'shared', 'kpi_touchpoints', updated).then(function () {
-              return tCard.alert({
-                message: type === 'call' ? '📞 Telefonema registado!' : '✉️ E-mail registado!',
-                duration: 3
-              });
-            });
-          }
-
-          return [
-            {
-              icon: POWERUP_URL + '/icon.png',
-              text: isPt ? '📞 +1 Telefonema' : '📞 +1 Call',
-              callback: function (tCard) {
-                return addTouchpoint(tCard, 'call');
-              }
-            },
-            {
-              icon: POWERUP_URL + '/icon.png',
-              text: isPt ? '✉️ +1 E-mail' : '✉️ +1 Email',
-              callback: function (tCard) {
-                return addTouchpoint(tCard, 'email');
-              }
-            },
+        return [
             {
               icon: POWERUP_URL + '/icon.png',
               text: isPt ? '⏩ Mover para Próxima Etapa' : '⏩ Move to Next Stage',
@@ -406,8 +416,7 @@
                 });
               }
             }
-          ];
-        });
+        ];
       },
 
       // ── Secção do Verso do Cartão (Card Back Section) ──────────────────────

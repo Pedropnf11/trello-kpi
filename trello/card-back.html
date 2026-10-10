@@ -49,10 +49,10 @@
       background: var(--bg-box);
       border: 1px solid var(--border-box);
       border-radius: 10px;
-      padding: 14px 16px;
+      padding: 10px 12px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
     }
 
     .header-row {
@@ -96,7 +96,7 @@
       flex: 1;
       background: var(--btn-bg);
       border-radius: 6px;
-      padding: 8px 10px;
+      padding: 6px 8px;
       display: flex;
       flex-direction: column;
       gap: 2px;
@@ -124,10 +124,28 @@
     /* Streamed Timeline History Section */
     .stream-section {
       border-top: 1px dashed var(--border-box);
-      padding-top: 10px;
+      padding-top: 8px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 7px;
+      max-height: 150px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--desc-color) transparent;
+      padding-right: 5px;
+    }
+
+    .stream-section::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .stream-section::-webkit-scrollbar-thumb {
+      background: var(--desc-color);
+      border-radius: 6px;
+    }
+
+    .stream-section::-webkit-scrollbar-track {
+      background: transparent;
     }
 
     .stream-title {
@@ -344,6 +362,16 @@
       gap: 8px;
     }
 
+    .activity-status {
+      min-height: 14px;
+      font-size: 10px;
+      color: var(--desc-color);
+    }
+
+    .activity-status.error {
+      color: #de350b;
+    }
+
     .btn-activity {
       flex: 1;
       display: inline-flex;
@@ -449,6 +477,22 @@
 <body>
 
   <div class="card-history-container">
+    <!-- Contadores de atividade; os Quick Follow-ups ficam nos badges do topo do cartão. -->
+    <div id="activity-container">
+      <div class="activity-section">
+        <div class="activity-header">
+          <div class="activity-title"><span>⚡</span><span id="activity-title">Registo de Atividades da Lead</span></div>
+          <div class="activity-last-update" id="activity-last-update">🕒 —</div>
+        </div>
+        <div class="activity-counters-row">
+          <div class="counter-card"><span class="counter-number" id="counter-emails">0</span><span class="counter-label">✉️ E-mails enviados</span></div>
+          <div class="counter-card"><span class="counter-number" id="counter-calls">0</span><span class="counter-label">📞 Telefonemas realizados</span></div>
+          <div class="counter-card"><span class="counter-number" id="counter-trello-actions">0</span><span class="counter-label">💬 Comentários / Ações Trello</span></div>
+        </div>
+        <div id="activity-status" class="activity-status" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+
     <div class="header-row">
       <div class="title-box">
         <span class="title-icon">⏱️</span>
@@ -470,11 +514,6 @@
         <span class="step-label" id="lbl-age-label">Idade da Lead</span>
         <span class="step-val" id="lbl-age-val">--</span>
       </div>
-    </div>
-
-    <!-- Activity Tracker & Touchpoints Section -->
-    <div id="activity-container">
-      <!-- Injected via JavaScript (Either Active or Locked Card) -->
     </div>
 
     <!-- Sequential Stream Timeline Section -->
@@ -615,11 +654,11 @@
 
                 <div class="activity-counters-row">
                   <div class="counter-card">
-                    <span class="counter-number">${emailCount}</span>
+                    <span class="counter-number" id="counter-emails">${emailCount}</span>
                     <span class="counter-label">✉️ ${isPt ? 'E-mails enviados' : 'Emails sent'}</span>
                   </div>
                   <div class="counter-card">
-                    <span class="counter-number">${callCount}</span>
+                    <span class="counter-number" id="counter-calls">${callCount}</span>
                     <span class="counter-label">📞 ${isPt ? 'Telefonemas realizados' : 'Calls made'}</span>
                   </div>
                   <div class="counter-card">
@@ -628,16 +667,6 @@
                   </div>
                 </div>
 
-                <div class="activity-actions-row">
-                  <button id="btn-locked-call" class="btn-activity locked-btn">
-                    <span>📞 +1 Call</span>
-                    <span class="lock-tag">🔒 Unlock for Free</span>
-                  </button>
-                  <button id="btn-locked-email" class="btn-activity locked-btn">
-                    <span>✉️ +1 Email</span>
-                    <span class="lock-tag">🔒 Unlock for Free</span>
-                  </button>
-                </div>
               </div>
             `;
 
@@ -680,11 +709,11 @@
 
                 <div class="activity-counters-row">
                   <div class="counter-card">
-                    <span class="counter-number">${emailCount}</span>
+                    <span class="counter-number" id="counter-emails">${emailCount}</span>
                     <span class="counter-label">✉️ ${isPt ? 'E-mails enviados' : 'Emails sent'}</span>
                   </div>
                   <div class="counter-card">
-                    <span class="counter-number">${callCount}</span>
+                    <span class="counter-number" id="counter-calls">${callCount}</span>
                     <span class="counter-label">📞 ${isPt ? 'Telefonemas realizados' : 'Calls made'}</span>
                   </div>
                   <div class="counter-card">
@@ -693,42 +722,9 @@
                   </div>
                 </div>
 
-                <div class="activity-actions-row">
-                  <button id="btn-add-call" class="btn-activity">
-                    📞 ${isPt ? '+1 Telefonema' : '+1 Call'}
-                  </button>
-                  <button id="btn-add-email" class="btn-activity">
-                    ✉️ ${isPt ? '+1 E-mail' : '+1 Email'}
-                  </button>
-                </div>
+                <div id="activity-status" class="activity-status" role="status" aria-live="polite"></div>
               </div>
             `;
-
-            function registerAction(type) {
-              var updated = {
-                calls: (touchpoints.calls || 0) + (type === 'call' ? 1 : 0),
-                emails: (touchpoints.emails || 0) + (type === 'email' ? 1 : 0),
-                lastUpdated: Date.now()
-              };
-              return t.set('card', 'shared', 'kpi_touchpoints', updated).then(function() {
-                touchpoints = updated;
-                window.location.reload();
-              });
-            }
-
-            var btnCall = document.getElementById('btn-add-call');
-            if (btnCall) {
-              btnCall.addEventListener('click', function() {
-                registerAction('call');
-              });
-            }
-
-            var btnEmail = document.getElementById('btn-add-email');
-            if (btnEmail) {
-              btnEmail.addEventListener('click', function() {
-                registerAction('email');
-              });
-            }
           }
         }
 
@@ -929,6 +925,16 @@
         setTimeout(function () {
           t.sizeTo(document.body).catch(function () { });
         }, 100);
+      }).catch(function (err) {
+        var status = document.getElementById('activity-status');
+        if (status) {
+          status.className = 'activity-status error';
+          status.textContent = isPt
+            ? 'Não foi possível carregar todos os dados do cartão. Os botões de atividade continuam disponíveis.'
+            : 'Could not load all card data. The activity buttons are still available.';
+        }
+        console.error('[KPI Master] Could not load card details:', err);
+        t.sizeTo(document.body).catch(function () { });
       });
     });
   </script>
