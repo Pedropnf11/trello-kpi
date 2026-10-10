@@ -560,25 +560,14 @@
         t.card('id', 'name', 'idList', 'dateLastActivity', 'badges'),
         t.list('id', 'name'),
         t.board('id'),
-        t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; }),
-        t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; })
+        t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; })
       ]).then(function (res) {
         var card = res[0];
         var currentList = res[1];
         var board = res[2];
         var touchpoints = res[3] || { calls: 0, emails: 0, lastUpdated: null };
-        var rawFeedbackState = res[4];
-
-        // Determinar se está desbloqueado (se já deu feedback alguma vez)
-        var isUnlocked = false;
-        if (rawFeedbackState) {
-          try {
-            var fState = typeof rawFeedbackState === 'string' ? JSON.parse(rawFeedbackState) : rawFeedbackState;
-            if (fState && fState.lastSubmittedTime) {
-              isUnlocked = true;
-            }
-          } catch(e) {}
-        }
+        // Activity tracking is available to every board member.
+        var isUnlocked = true;
 
         // Renderizar secção de Atividades / Feedback Wall
         var activityContainer = document.getElementById('activity-container');

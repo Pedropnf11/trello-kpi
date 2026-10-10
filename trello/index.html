@@ -200,27 +200,14 @@
       'card-badges': function (t) {
         return Promise.all([
           t.card('id', 'dateLastActivity'),
-          t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; }),
-          t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; })
+          t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; })
         ]).then(function (res) {
           var card = res[0];
           var touchpoints = res[1] || {};
-          var rawFeedbackState = res[2];
 
           if (!card || !card.id) return [];
 
           var isPt = (t.locale || 'en').startsWith('pt');
-
-          // Verifica se desbloqueou dando feedback pelo menos 1 vez
-          var isUnlocked = false;
-          if (rawFeedbackState) {
-            try {
-              var fState = typeof rawFeedbackState === 'string' ? JSON.parse(rawFeedbackState) : rawFeedbackState;
-              if (fState && fState.lastSubmittedTime) {
-                isUnlocked = true;
-              }
-            } catch (e) { }
-          }
 
           var badges = [];
 
@@ -249,42 +236,44 @@
             color: ageColor
           });
 
-          // 2. Badge de Última Atualização (Se desbloqueado)
-          if (isUnlocked) {
-            var lastActivityMs = card.dateLastActivity ? new Date(card.dateLastActivity).getTime() : (timestamp * 1000);
-            if (touchpoints.lastUpdated && touchpoints.lastUpdated > lastActivityMs) {
-              lastActivityMs = touchpoints.lastUpdated;
+          // This value changes as Trello activity or Power-Up touchpoints change.
+          badges.push({
+            dynamic: function () {
+              return Promise.all([
+                t.card('id', 'dateLastActivity'),
+                t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; })
+              ]).then(function (dynamicData) {
+                var currentCard = dynamicData[0] || card;
+                var currentTouchpoints = dynamicData[1] || touchpoints;
+                var createdAt = parseInt(currentCard.id.substring(0, 8), 16) * 1000;
+                var lastActivityMs = currentCard.dateLastActivity ? new Date(currentCard.dateLastActivity).getTime() : createdAt;
+                if (currentTouchpoints.lastUpdated && currentTouchpoints.lastUpdated > lastActivityMs) {
+                  lastActivityMs = currentTouchpoints.lastUpdated;
+                }
+
+                var ageMs = Math.max(0, Date.now() - lastActivityMs);
+                var days = Math.floor(ageMs / (1000 * 60 * 60 * 24));
+                var hours = Math.floor(ageMs / (1000 * 60 * 60));
+                var text = '';
+                var color = 'green';
+
+                if (hours < 24) {
+                  text = isPt ? 'Atualizado hoje' : 'Updated today';
+                } else if (days === 1) {
+                  text = isPt ? 'Atualizado ontem' : 'Updated yesterday';
+                  color = 'blue';
+                } else if (days < 7) {
+                  text = isPt ? ('Atualizado há ' + days + ' dias') : ('Updated ' + days + ' days ago');
+                  if (days >= 3) color = 'yellow';
+                } else {
+                  text = isPt ? ('Sem atualização há ' + days + ' dias') : ('No update for ' + days + ' days');
+                  color = 'red';
+                }
+
+                return { text: text, color: color, refresh: 60 };
+              });
             }
-
-            var updatedDiffMs = Date.now() - lastActivityMs;
-            var updatedDiffDays = Math.floor(updatedDiffMs / (1000 * 60 * 60 * 24));
-            var updatedDiffHours = Math.floor(updatedDiffMs / (1000 * 60 * 60));
-
-            var updateText = '';
-            var updateColor = 'green';
-
-            if (updatedDiffHours < 1) {
-              updateText = isPt ? 'Atualizado hoje' : 'Updated today';
-              updateColor = 'green';
-            } else if (updatedDiffDays === 0) {
-              updateText = isPt ? 'Atualizado hoje' : 'Updated today';
-              updateColor = 'green';
-            } else if (updatedDiffDays === 1) {
-              updateText = isPt ? 'Atualizado ontem' : 'Updated yesterday';
-              updateColor = 'blue';
-            } else if (updatedDiffDays < 7) {
-              updateText = isPt ? ('Atualizado há ' + updatedDiffDays + ' dias') : ('Updated ' + updatedDiffDays + ' days ago');
-              if (updatedDiffDays >= 3) updateColor = 'yellow';
-            } else {
-              updateText = isPt ? ('Sem atualização há ' + updatedDiffDays + ' dias') : ('No update for ' + updatedDiffDays + ' days');
-              updateColor = 'red';
-            }
-
-            badges.push({
-              text: updateText,
-              color: updateColor
-            });
-          }
+          });
 
           return badges;
         });
@@ -323,39 +312,8 @@
       'card-buttons': function (t) {
         var isPt = (t.locale || 'en').startsWith('pt');
 
-        return Promise.all([
-          t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; }),
-          t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; })
-        ]).then(function (res) {
-          var rawFeedbackState = res[0];
-          var touchpoints = res[1] || { calls: 0, emails: 0 };
-          var isUnlocked = false;
-
-          if (rawFeedbackState) {
-            try {
-              var fState = typeof rawFeedbackState === 'string' ? JSON.parse(rawFeedbackState) : rawFeedbackState;
-              if (fState && fState.lastSubmittedTime) {
-                isUnlocked = true;
-              }
-            } catch (e) { }
-          }
-
-          function promptUnlock(tCard) {
-            return tCard.popup({
-              title: '🔒 Unlock for Free',
-              items: [{
-                text: '⭐ Review & Unlock Feature',
-                callback: function (tPop) {
-                  tPop.close();
-                  return tCard.modal({
-                    title: '⭐ Unlock Feature — Feedback',
-                    url: POWERUP_URL + '/feedback.html',
-                    height: 520
-                  });
-                }
-              }]
-            });
-          }
+        return t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; }).then(function (savedTouchpoints) {
+          var touchpoints = savedTouchpoints || { calls: 0, emails: 0 };
 
           function addTouchpoint(tCard, type) {
             var updated = {
@@ -374,21 +332,15 @@
           return [
             {
               icon: POWERUP_URL + '/icon.png',
-              text: isUnlocked ? '📞 +1 Call' : '🔒 +1 Call (Unlock for Free)',
+              text: isPt ? '📞 +1 Telefonema' : '📞 +1 Call',
               callback: function (tCard) {
-                if (!isUnlocked) {
-                  return promptUnlock(tCard);
-                }
                 return addTouchpoint(tCard, 'call');
               }
             },
             {
               icon: POWERUP_URL + '/icon.png',
-              text: isUnlocked ? '✉️ +1 Email' : '🔒 +1 Email (Unlock for Free)',
+              text: isPt ? '✉️ +1 E-mail' : '✉️ +1 Email',
               callback: function (tCard) {
-                if (!isUnlocked) {
-                  return promptUnlock(tCard);
-                }
                 return addTouchpoint(tCard, 'email');
               }
             },
