@@ -230,28 +230,39 @@
             color: ageColor
           });
 
-          // 2. Badge: Última Atividade / Smart Last Update
-          var createdAt = dateCreated.getTime();
-          var lastActivityMs = card.dateLastActivity ? new Date(card.dateLastActivity).getTime() : createdAt;
-
-          var ageMs = Math.max(0, Date.now() - lastActivityMs);
-          var days = Math.floor(ageMs / (1000 * 60 * 60 * 24));
-          var hours = Math.floor(ageMs / (1000 * 60 * 60));
-          var lastActivityDate = new Date(lastActivityMs);
-          var formattedLastActivity = lastActivityDate.toLocaleString(isPt ? 'pt-PT' : 'en-GB', {
-            day: '2-digit',
-            month: 'short',
-            hour: '2-digit',
-            minute: '2-digit'
-          });
-          var updateText = isPt
-            ? 'Última atualização: ' + formattedLastActivity
-            : 'Last update: ' + formattedLastActivity;
-          var updateColor = hours < 24 ? 'green' : (days >= 7 ? 'red' : (days >= 3 ? 'yellow' : null));
-
+          // Dynamic badge rereads Trello activity and touchpoints, so +1 Call/Email updates the front.
           badges.push({
-            text: updateText,
-            color: updateColor
+            dynamic: function () {
+              return Promise.all([
+                t.card('id', 'dateLastActivity'),
+                t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; })
+              ]).then(function (values) {
+                var currentCard = values[0] || card;
+                var touchpoints = values[1] || {};
+                var trelloActivityMs = currentCard.dateLastActivity
+                  ? new Date(currentCard.dateLastActivity).getTime()
+                  : dateCreated.getTime();
+                var touchpointActivityMs = Number(touchpoints.lastUpdated) || 0;
+                var lastActivityMs = Math.max(trelloActivityMs, touchpointActivityMs);
+                var ageMs = Math.max(0, Date.now() - lastActivityMs);
+                var days = Math.floor(ageMs / (1000 * 60 * 60 * 24));
+                var hours = Math.floor(ageMs / (1000 * 60 * 60));
+                var formattedLastActivity = new Date(lastActivityMs).toLocaleString(isPt ? 'pt-PT' : 'en-GB', {
+                  day: '2-digit',
+                  month: 'short',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                });
+
+                return {
+                  text: isPt
+                    ? 'Última atualização: ' + formattedLastActivity
+                    : 'Last update: ' + formattedLastActivity,
+                  color: hours < 24 ? 'green' : (days >= 7 ? 'red' : (days >= 3 ? 'yellow' : null)),
+                  refresh: 10
+                };
+              });
+            }
           });
 
           return badges;
