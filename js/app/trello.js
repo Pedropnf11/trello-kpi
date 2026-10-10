@@ -78,12 +78,12 @@ App.conectarTrello = async function () {
         sessionStorage.setItem('trello_groq_key', this.state.groqApiKey);
     }
 
-    const isRefresh = (this.state.kpis !== null && this.state.kpis !== undefined);
-
     this.updateState({
-        loading: isRefresh ? false : true,
-        refreshing: isRefresh,
-        error: ''
+        loading: true,
+        refreshing: false,
+        error: '',
+        boardNotAdminError: false,
+        isBoardAdmin: false
     });
 
     try {

@@ -768,6 +768,9 @@ App.setRole = function (role) {
 
     this.state.userRole = role;
     this.state.boardNotAdminError = false;
+    this.state.kpis = null;
+    this.state.rawData = null;
+    this.state.selectedMemberId = '';
     localStorage.setItem('trello_user_role', role);
 
     if (this.state.boardId) {
@@ -782,6 +785,9 @@ App.setRole = function (role) {
 App.confirmRole = function (boardId, role) {
     this.state.userRole = role;
     this.state.boardNotAdminError = false;
+    this.state.kpis = null;
+    this.state.rawData = null;
+    this.state.selectedMemberId = '';
     localStorage.setItem('trello_user_role', role);
     this.selecionarBoard(boardId);
 };

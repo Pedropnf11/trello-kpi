@@ -667,6 +667,7 @@
           t.getRestApi().getToken().then(function(token) {
             if (token) {
               state.token = token;
+              loadMemberRole();
               document.getElementById('stats-unauth').style.display = 'none';
               
               // Obter as configurações salvas das listas para este board
