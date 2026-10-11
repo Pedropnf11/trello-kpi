@@ -667,6 +667,7 @@
 
           // ── Stage History: locked or unlocked ───────────────────────────
           var streamWrapper = document.getElementById('stream-section-wrapper');
+          if (!streamWrapper) { t.sizeTo(document.body).catch(function(){}); return; }
 
           if (!isUnlocked) {
             // 🔒 Locked — show padlock overlay
