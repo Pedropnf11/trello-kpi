@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bem-vindo ao KPI Master</title>
+  <title>KPI Master — Welcome & Quick Start</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
   <style>
@@ -11,14 +11,15 @@
       --bg-body: #090d16;
       --card-bg: #111726;
       --card-border: rgba(255, 255, 255, 0.08);
-      --card-hover: rgba(255, 255, 255, 0.14);
+      --card-hover: rgba(255, 255, 255, 0.16);
       --text-main: #f8fafc;
       --text-sub: #94a3b8;
       --accent-blue: #38bdf8;
       --accent-green: #34d399;
       --accent-purple: #a78bfa;
+      --accent-orange: #fb923c;
       --btn-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-      --btn-hover: #1d4ed8;
+      --btn-hover: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     }
 
     * {
@@ -27,11 +28,11 @@
 
     body {
       margin: 0;
-      padding: 24px;
+      padding: 20px 24px;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg-body);
       color: var(--text-main);
-      min-height: 100vh;
+      min-height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -39,9 +40,12 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    .header-hero {
-      text-align: center;
-      margin-bottom: 18px;
+    /* Top Nav: Language & Brand */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
     }
 
     .brand-badge {
@@ -49,98 +53,139 @@
       align-items: center;
       gap: 8px;
       background: rgba(56, 189, 248, 0.08);
-      border: 1px solid rgba(56, 189, 248, 0.2);
-      padding: 5px 12px;
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      padding: 4px 12px;
       border-radius: 9999px;
-      margin-bottom: 12px;
     }
 
     .brand-badge img {
       width: 18px;
       height: 18px;
-      border-radius: 4px;
+      border-radius: 5px;
     }
 
     .brand-badge span {
-      font-size: 10.5px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--accent-blue);
-      letter-spacing: 0.06em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
+    .btn-lang {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-lang:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+
+    /* Header Hero */
+    .header-hero {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
     .header-hero h1 {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 800;
-      margin: 0 0 8px 0;
-      letter-spacing: -0.03em;
-      color: var(--text-main);
+      margin: 0 0 6px 0;
+      letter-spacing: -0.025em;
+      color: #ffffff;
     }
 
     .header-hero p {
       font-size: 12.5px;
       color: var(--text-sub);
       margin: 0 auto;
-      max-width: 440px;
-      line-height: 1.5;
-    }
-
-    /* Highlight Banner for Web Platform */
-    .web-banner {
-      background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(124, 58, 237, 0.15) 100%);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      border-radius: 12px;
-      padding: 14px 16px;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .web-banner-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background: rgba(37, 99, 235, 0.25);
-      border: 1px solid rgba(59, 130, 246, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #60a5fa;
-      flex-shrink: 0;
-    }
-
-    .web-banner-text h4 {
-      margin: 0 0 3px 0;
-      font-size: 13px;
-      font-weight: 700;
-      color: #f1f5f9;
-    }
-
-    .web-banner-text p {
-      margin: 0;
-      font-size: 11.5px;
-      color: #cbd5e1;
+      max-width: 470px;
       line-height: 1.45;
     }
 
-    /* Features Grid */
+    /* 3-Step Interactive Process Guide */
+    .steps-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .step-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 11px;
+      padding: 12px 12px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .step-card:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-1px);
+    }
+
+    .step-num-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      margin-bottom: 2px;
+    }
+
+    .step-card h3 {
+      margin: 0;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .step-card p {
+      margin: 0;
+      font-size: 11px;
+      color: var(--text-sub);
+      line-height: 1.4;
+    }
+
+    /* Live Features Grid (2 columns) */
     .features-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .feature-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 12px 12px;
+      border-radius: 11px;
+      padding: 11px 13px;
       display: flex;
-      flex-direction: column;
+      gap: 10px;
       align-items: flex-start;
-      transition: border-color 0.2s ease;
+      transition: all 0.2s ease;
     }
 
     .feature-card:hover {
@@ -148,50 +193,100 @@
     }
 
     .feature-icon-box {
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 6px;
+      font-size: 16px;
+      flex-shrink: 0;
     }
 
-    .icon-speed {
-      background: rgba(52, 211, 153, 0.12);
-      color: var(--accent-green);
+    .feature-body {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
-    .icon-badges {
-      background: rgba(56, 189, 248, 0.12);
-      color: var(--accent-blue);
-    }
-
-    .icon-dashboard {
-      background: rgba(167, 139, 250, 0.12);
-      color: var(--accent-purple);
-    }
-
-    .feature-card h3 {
-      font-size: 11.5px;
-      font-weight: 700;
-      margin: 0 0 3px 0;
-      color: #f1f5f9;
-    }
-
-    .feature-card p {
-      font-size: 10px;
-      color: var(--text-sub);
+    .feature-body h4 {
       margin: 0;
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .feature-body p {
+      margin: 0;
+      font-size: 10.5px;
+      color: var(--text-sub);
       line-height: 1.35;
+    }
+
+    /* Web Platform Teaser Banner */
+    .web-banner {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.18) 0%, rgba(124, 58, 237, 0.18) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 11px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .web-banner-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .web-banner-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: rgba(37, 99, 235, 0.25);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .web-banner-text h4 {
+      margin: 0 0 2px 0;
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .web-banner-text p {
+      margin: 0;
+      font-size: 10.5px;
+      color: #cbd5e1;
+      line-height: 1.35;
+    }
+
+    .web-banner-tag {
+      background: rgba(16, 185, 129, 0.16);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      color: #34d399;
+      font-size: 9.5px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
     }
 
     /* Actions Footer */
     .actions-footer {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      align-items: center;
+      gap: 8px;
       width: 100%;
     }
 
@@ -203,9 +298,9 @@
 
     .btn {
       flex: 1;
-      padding: 13px 18px;
-      border-radius: 10px;
-      font-size: 13.5px;
+      padding: 11px 16px;
+      border-radius: 9px;
+      font-size: 13px;
       font-weight: 700;
       text-align: center;
       text-decoration: none;
@@ -214,7 +309,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       border: none;
     }
 
@@ -232,16 +327,19 @@
 
     .btn-secondary {
       background: rgba(255, 255, 255, 0.06);
-      color: #cbd5e1;
-      border: 1px solid var(--card-border);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
     .btn-secondary:hover {
       background: rgba(255, 255, 255, 0.12);
-      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.25);
     }
 
     @media (max-width: 480px) {
+      .steps-container {
+        grid-template-columns: 1fr;
+      }
       .features-grid {
         grid-template-columns: 1fr;
       }
@@ -254,76 +352,108 @@
 <body>
 
   <div>
-    <!-- Hero Header -->
-    <div class="header-hero">
+    <!-- Top Bar com Idioma e Identificação -->
+    <div class="top-bar">
       <div class="brand-badge">
         <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
-        <span>KPI Master Onboarding</span>
+        <span>KPI Master · Quick Start</span>
       </div>
-      <h1 id="welcome-title">Bem-vindo ao KPI Master</h1>
-      <p id="welcome-subtitle">A sua solução de análise de velocidade de leads e métricas de desempenho para equipas no Trello.</p>
+      <button id="btn-lang-toggle" class="btn-lang" title="Switch Language / Alternar Idioma">
+        <span id="txt-lang-toggle">🇵🇹 PT</span>
+      </button>
     </div>
 
-    <!-- Banner sobre o poder do site -->
-    <div class="web-banner">
-      <div class="web-banner-icon">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+    <!-- Hero Header -->
+    <div class="header-hero">
+      <h1 id="welcome-title">Como funciona o KPI Master?</h1>
+      <p id="welcome-subtitle">Mede automaticamente a velocidade das tuas leads, reduz gargalos e acompanha contactos em 1 clique direto no Trello.</p>
+    </div>
+
+    <!-- Guia Intuitivo em 3 Passos Simples -->
+    <div class="steps-container">
+      <div class="step-card">
+        <div class="step-num-badge">1</div>
+        <h3 id="step1-title">⚡ Ações nos Cartões</h3>
+        <p id="step1-desc">Clica no verso do cartão para registar <strong>+1 Chamada</strong> ou <strong>+1 Email</strong> e move a lead com 1 clique.</p>
       </div>
-      <div class="web-banner-text">
-        <h4 id="banner-title">🌐 Funcionalidades no Trello + Plataforma Web</h4>
-        <p id="banner-desc">No Trello tens ações nativas rápidas para o dia a dia. Clica no botão abaixo para aceder à Plataforma Web com gráficos avançados, relatórios executivos e exportações!</p>
+
+      <div class="step-card">
+        <div class="step-num-badge">2</div>
+        <h3 id="step2-title">⏱️ Micro Dashboard</h3>
+        <p id="step2-desc">No topo do quadro, clica em <strong>KPI Master</strong> para ver a lead mais rápida, mais lenta e o volume ativo.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num-badge">3</div>
+        <h3 id="step3-title">⚙️ Plug & Play</h3>
+        <p id="step3-desc">No botão de definições ⚙️ podes ativar ou desativar as funcionalidades à medida da tua equipa.</p>
       </div>
     </div>
 
-    <!-- 4 Features Grid (Trello Native + Web Platform) -->
+    <!-- 4 Funcionalidades Prontas a Usar -->
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-icon-box icon-speed">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <div class="feature-icon-box" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">📞</div>
+        <div class="feature-body">
+          <h4 id="f1-title">+1 Chamada & Email</h4>
+          <p id="f1-desc">Registo instantâneo de contactos com histórico cronológico de quem falou com a lead.</p>
         </div>
-        <h3 id="f1-title">⏩ Mover em 1-Clique</h3>
-        <p id="f1-desc">Avança o cartão para a próxima coluna nos botões do cartão.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon-box icon-badges">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div class="feature-icon-box" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">🏷️</div>
+        <div class="feature-body">
+          <h4 id="f2-title">Idade da Lead (Card Age)</h4>
+          <p id="f2-desc">Emblemas coloridos na frente do cartão indicam há quantos dias a lead aguarda resposta.</p>
         </div>
-        <h3 id="f2-title">⏳ Ordenar por Idade</h3>
-        <p id="f2-desc">No menu (...) da lista, ordena por mais antigos para evitar perdas.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon-box icon-speed">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <div class="feature-icon-box" style="background: rgba(251, 146, 60, 0.15); color: #fb923c;">⏩</div>
+        <div class="feature-body">
+          <h4 id="f3-title">Avançar Próxima Etapa</h4>
+          <p id="f3-desc">Avança cartões na pipeline sem precisar de arrastar manualmente de coluna em coluna.</p>
         </div>
-        <h3 id="f3-title">⏱️ Histórico no Verso</h3>
-        <p id="f3-desc">Exibe o tempo total do ciclo de venda e estado no verso do cartão.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon-box icon-dashboard">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        <div class="feature-icon-box" style="background: rgba(167, 139, 250, 0.15); color: #a78bfa;">📊</div>
+        <div class="feature-body">
+          <h4 id="f4-title">Dashboard Web Completa</h4>
+          <p id="f4-desc">Gráficos de funil, tempo médio por lista, relatórios por membro e exportação em PDF.</p>
         </div>
-        <h3 id="f4-title">📊 Plataforma Web</h3>
-        <p id="f4-desc">Gráficos avançados, relatórios por consultor e exportações PDF.</p>
       </div>
+    </div>
+
+    <!-- Banner Plataforma Web -->
+    <div class="web-banner">
+      <div class="web-banner-left">
+        <div class="web-banner-icon">🚀</div>
+        <div class="web-banner-text">
+          <h4 id="banner-title">Queres relatórios executivos avançados?</h4>
+          <p id="banner-desc">Acede gratuitamente à Plataforma Web para ver gráficos interativos e taxas de conversão.</p>
+        </div>
+      </div>
+      <div class="web-banner-tag" id="banner-badge">100% Grátis</div>
     </div>
   </div>
 
   <!-- Footer com Ações -->
   <div class="actions-footer">
     <div class="btn-group">
-      <a id="btn-site" href="https://kpismaster.vercel.app" target="_blank" class="btn btn-primary">
-        Abrir Plataforma Web →
-      </a>
-      <button id="btn-close" class="btn btn-secondary">
-        Ver no Trello
+      <button id="btn-close" class="btn btn-primary">
+        <span id="lbl-btn-close">🚀 Começar a Usar no Trello</span>
       </button>
+      <a id="btn-site" href="https://kpismaster.vercel.app" target="_blank" class="btn btn-secondary">
+        <span id="lbl-btn-site">🌐 Ver Dashboard Web →</span>
+      </a>
     </div>
   </div>
 
   <script type="module">
+    import { Analytics } from '../js/analytics.js';
+    Analytics.init();
+
     var KEY = import.meta.env.VITE_TRELLO_API_KEY;
     var NAME = 'KPI Master';
     var SITE = 'https://kpismaster.vercel.app';
@@ -331,8 +461,9 @@
 
     var t = TrelloPowerUp.iframe({ appKey: KEY, appName: NAME });
 
-    function trackEvent(eventName) {
+    function trackEvent(eventName, extra = {}) {
       try {
+        Analytics.track(eventName, extra);
         var url = WEBHOOK_URL + '?event=' + encodeURIComponent(eventName);
         fetch(url, {
           method: 'POST',
@@ -340,14 +471,17 @@
           body: JSON.stringify({
             event: eventName,
             timestamp: new Date().toISOString(),
-            source: 'trello_welcome_modal'
+            source: 'trello_welcome_modal',
+            ...extra
           })
         }).catch(function() {});
       } catch(e) {}
     }
 
     // Registar visualização do ecrã de boas-vindas
-    trackEvent('welcome_viewed');
+    trackEvent('welcome_popup_viewed', {
+      description: 'Popup de Boas-vindas exibido no Trello'
+    });
 
     // Guardar marcação e data de instalação (timestamp) do utilizador
     var nowTime = Date.now();
@@ -355,62 +489,117 @@
     t.set('member', 'private', 'kpi_first_seen_time', nowTime).catch(function() {});
 
     var locale = t.locale || 'en';
-    var isPt = locale.startsWith('pt');
+    var currentLang = 'en'; // Padrão inglês com alternador para PT
 
     var i18n = {
       pt: {
-        title: 'Bem-vindo ao KPI Master',
-        subtitle: 'A sua solução nativa no Trello e plataforma executiva de métricas de vendas.',
-        bannerTitle: '🌐 Funcionalidades Trello + Plataforma Web',
-        bannerDesc: 'No Trello tens ações nativas rápidas para o dia a dia. Clica no botão abaixo para aceder à Plataforma Web com gráficos avançados, relatórios executivos e exportações!',
-        f1Title: '⏩ Mover em 1-Clique',
-        f1Desc: 'Avança o cartão para a próxima coluna nos botões do cartão.',
-        f2Title: '⏳ Ordenar por Idade',
-        f2Desc: 'No menu (...) da lista, ordena por mais antigos para evitar perdas.',
-        f3Title: '⏱️ Histórico no Verso',
-        f3Desc: 'Exibe o tempo total do ciclo de venda e estado no verso do cartão.',
-        f4Title: '📊 Plataforma Web',
-        f4Desc: 'Gráficos avançados, relatórios por consultor e exportações PDF.',
-        btnSite: 'Abrir Plataforma Web →',
-        btnClose: 'Ver no Trello'
+        title: 'Como funciona o KPI Master?',
+        subtitle: 'Mede automaticamente a velocidade das tuas leads, reduz gargalos e regista contactos em 1 clique direto no Trello.',
+        step1Title: '⚡ Ações nos Cartões',
+        step1Desc: 'No verso do cartão regista <strong>+1 Chamada</strong> ou <strong>+1 Email</strong> e avança a etapa da lead.',
+        step2Title: '⏱️ Micro Dashboard',
+        step2Desc: 'No topo do quadro clica em <strong>KPI Master</strong> para ver a lead mais rápida, mais lenta e gargalos.',
+        step3Title: '⚙️ Plug & Play',
+        step3Desc: 'No botão ⚙️ ativa ou desativa o histórico, idade e ações rápidas quando quiseres.',
+        f1Title: '+1 Chamada & Email',
+        f1Desc: 'Registo instantâneo com histórico de quem realizou cada contacto.',
+        f2Title: 'Idade da Lead (Card Age)',
+        f2Desc: 'Emblemas visuais indicam há quantos dias a lead aguarda resposta.',
+        f3Title: 'Avançar Próxima Etapa',
+        f3Desc: 'Move cartões na pipeline sem precisar de arrastar manualmente.',
+        f4Title: 'Dashboard Web Completa',
+        f4Desc: 'Funil de conversão, tempo por lista e relatórios executivos.',
+        bannerTitle: 'Queres relatórios executivos avançados?',
+        bannerDesc: 'Acede gratuitamente à Plataforma Web para ver gráficos interativos e taxas de conversão.',
+        bannerBadge: '100% Grátis',
+        btnClose: '🚀 Começar a Usar no Trello',
+        btnSite: '🌐 Ver Dashboard Web →',
+        toggleBtn: '🇬🇧 English'
       },
       en: {
-        title: 'Welcome to KPI Master',
-        subtitle: 'Your native Trello solution and executive sales performance platform.',
-        bannerTitle: '🌐 Trello Features + Web Platform',
-        bannerDesc: 'Right inside Trello you have quick daily actions. Click below to open our Web Platform with advanced charts, executive reports, and exports!',
-        f1Title: '⏩ 1-Click Stage Move',
-        f1Desc: 'Advance cards to the next list instantly from the card buttons.',
-        f2Title: '⏳ Sort Leads by Age',
-        f2Desc: 'In the (...) list menu, sort by oldest leads to prevent losing deals.',
-        f3Title: '⏱️ Card Back History',
-        f3Desc: 'View total sales cycle time and status right on the card back.',
-        f4Title: '📊 Full Web Platform',
-        f4Desc: 'Advanced charts, team performance reports, and PDF exports.',
-        btnSite: 'Open Web Platform →',
-        btnClose: 'View in Trello'
+        title: 'How does KPI Master work?',
+        subtitle: 'Automatically measure your lead response speed, eliminate bottlenecks, and log customer touchpoints in 1 click.',
+        step1Title: '⚡ Card Quick Actions',
+        step1Desc: 'Open any card to log <strong>+1 Call</strong> or <strong>+1 Email</strong> and advance stages instantly.',
+        step2Title: '⏱️ Micro Dashboard',
+        step2Desc: 'Click <strong>KPI Master</strong> at the board top to monitor fastest leads, slowest bottlenecks, and counts.',
+        step3Title: '⚙️ Plug & Play',
+        step3Desc: 'Use the ⚙️ settings button to toggle history, card age badges, or quick actions anytime.',
+        f1Title: '+1 Call & Email Logging',
+        f1Desc: 'Instant touchpoint counter with audit log of member timestamps.',
+        f2Title: 'Card Age Badges',
+        f2Desc: 'Visual badges on cards showing how many days leads are waiting.',
+        f3Title: '1-Click Stage Move',
+        f3Desc: 'Advance cards to the next list without dragging across the board.',
+        f4Title: 'Full Web Platform',
+        f4Desc: 'Pipeline funnels, time-in-list breakdown, and executive reports.',
+        bannerTitle: 'Looking for advanced executive reports?',
+        bannerDesc: 'Access our Web Platform for free with interactive charts and funnel analytics.',
+        bannerBadge: '100% Free',
+        btnClose: '🚀 Get Started in Trello',
+        btnSite: '🌐 Open Web Dashboard →',
+        toggleBtn: '🇵🇹 Português'
       }
     };
 
-    var dict = isPt ? i18n.pt : i18n.en;
+    function applyLanguage(lang) {
+      currentLang = lang;
+      var dict = i18n[lang];
 
-    document.getElementById('welcome-title').textContent = dict.title;
-    document.getElementById('welcome-subtitle').textContent = dict.subtitle;
-    document.getElementById('banner-title').textContent = dict.bannerTitle;
-    document.getElementById('banner-desc').textContent = dict.bannerDesc;
-    document.getElementById('f1-title').textContent = dict.f1Title;
-    document.getElementById('f1-desc').textContent = dict.f1Desc;
-    document.getElementById('f2-title').textContent = dict.f2Title;
-    document.getElementById('f2-desc').textContent = dict.f2Desc;
-    document.getElementById('f3-title').textContent = dict.f3Title;
-    document.getElementById('f3-desc').textContent = dict.f3Desc;
-    document.getElementById('f4-title').textContent = dict.f4Title;
-    document.getElementById('f4-desc').textContent = dict.f4Desc;
-    document.getElementById('btn-site').textContent = dict.btnSite;
-    document.getElementById('btn-close').textContent = dict.btnClose;
+      document.getElementById('welcome-title').textContent = dict.title;
+      document.getElementById('welcome-subtitle').textContent = dict.subtitle;
+      document.getElementById('step1-title').innerHTML = dict.step1Title;
+      document.getElementById('step1-desc').innerHTML = dict.step1Desc;
+      document.getElementById('step2-title').innerHTML = dict.step2Title;
+      document.getElementById('step2-desc').innerHTML = dict.step2Desc;
+      document.getElementById('step3-title').innerHTML = dict.step3Title;
+      document.getElementById('step3-desc').innerHTML = dict.step3Desc;
+      document.getElementById('f1-title').textContent = dict.f1Title;
+      document.getElementById('f1-desc').textContent = dict.f1Desc;
+      document.getElementById('f2-title').textContent = dict.f2Title;
+      document.getElementById('f2-desc').textContent = dict.f2Desc;
+      document.getElementById('f3-title').textContent = dict.f3Title;
+      document.getElementById('f3-desc').textContent = dict.f3Desc;
+      document.getElementById('f4-title').textContent = dict.f4Title;
+      document.getElementById('f4-desc').textContent = dict.f4Desc;
+      document.getElementById('banner-title').textContent = dict.bannerTitle;
+      document.getElementById('banner-desc').textContent = dict.bannerDesc;
+      document.getElementById('banner-badge').textContent = dict.bannerBadge;
+      document.getElementById('lbl-btn-close').textContent = dict.btnClose;
+      document.getElementById('lbl-btn-site').textContent = dict.btnSite;
+
+      var txtToggle = document.getElementById('txt-lang-toggle');
+      if (txtToggle) txtToggle.textContent = dict.toggleBtn;
+
+      t.sizeTo(document.body).catch(function () {});
+    }
+
+    // Inicializar idioma padrão
+    applyLanguage(currentLang);
+
+    // Carregar idioma guardado do utilizador
+    t.get('member', 'private', 'kpi_user_lang').then(function(savedLang) {
+      if (savedLang === 'pt' || savedLang === 'en') {
+        applyLanguage(savedLang);
+      }
+    }).catch(function(){});
+
+    // Alternar idioma
+    var btnLangToggle = document.getElementById('btn-lang-toggle');
+    if (btnLangToggle) {
+      btnLangToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        var nextLang = (currentLang === 'pt') ? 'en' : 'pt';
+        applyLanguage(nextLang);
+        t.set('member', 'private', 'kpi_user_lang', nextLang).catch(function(){});
+      });
+    }
 
     document.getElementById('btn-site').addEventListener('click', function() {
-      trackEvent('click_site_btn');
+      trackEvent('welcome_open_web_clicked', {
+        action: 'open_web_platform',
+        description: 'Utilizador clicou em Abrir Plataforma Web no modal de boas-vindas'
+      });
       t.set('member', 'private', 'kpi_welcome_seen', true).then(function() {
         window.open(SITE, '_blank');
       }).catch(function() {
@@ -419,7 +608,10 @@
     });
 
     document.getElementById('btn-close').addEventListener('click', function() {
-      trackEvent('click_trello_btn');
+      trackEvent('welcome_dismissed', {
+        action: 'view_in_trello',
+        description: 'Utilizador fechou as boas-vindas para continuar no Trello'
+      });
       t.set('member', 'private', 'kpi_welcome_seen', true).then(function() {
         t.closeModal();
       }).catch(function() {

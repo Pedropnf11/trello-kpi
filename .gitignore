@@ -24,3 +24,6 @@ dist/
 # Documentação sensível de vendas
 js/docs/
 *.pdf
+
+# Temporários / Testes
+trello/tutorial-pointer.html

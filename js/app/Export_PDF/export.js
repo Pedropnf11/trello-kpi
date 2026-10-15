@@ -25,6 +25,13 @@ App.exportarExcel = function () {
 App.exportarPDF = async function (returnContent = false) {
     if (!this.state.kpis) return;
 
+    if (window.Analytics) {
+        window.Analytics.track('pdf_exported', {
+            role: this.state.userRole || 'manager',
+            description: 'Utilizador exportou o relatório executivo em PDF'
+        });
+    }
+
     const appElement = document.getElementById('app');
     const boardName = this.state.availableBoards?.find(b => b.id === this.state.boardId)?.name || ((UI._lpLang || 'pt') === 'en' ? 'Trello Board' : 'Quadro Trello');
 

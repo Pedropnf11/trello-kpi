@@ -46,10 +46,11 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg-body);
       color: var(--text-main);
-      height: 100vh;
+      min-height: 100%;
       display: flex;
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
     
     .container {
@@ -72,46 +73,187 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      position: relative;
+      padding: 4px 0 2px 0;
+      min-height: 36px;
     }
 
-    .brand-left {
+    .header-actions-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
+      z-index: 2;
+    }
+
+    .brand-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      z-index: 1;
+      pointer-events: none;
     }
     
-    .brand-left img {
+    .brand-center img {
       width: 26px;
       height: 26px;
-      border-radius: 6px;
+      border-radius: 7px;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
     }
     
-    .brand-left h1 {
+    .brand-center h1 {
       font-size: 16px;
-      font-weight: 700;
+      font-weight: 800;
       margin: 0;
-      color: var(--text-main);
-      letter-spacing: -0.02em;
+      color: #ffffff;
+      letter-spacing: -0.025em;
+    }
+
+    .header-actions-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 2;
+    }
+
+    .btn-header-action {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-header-action:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .btn-header-action:active {
+      transform: scale(0.96);
+    }
+
+    /* Botão de Incentivo de Avaliação / Review PRO */
+    .btn-review-pro {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(234, 88, 12, 0.2) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      color: #fbbf24;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+    }
+
+    .btn-review-pro:hover {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.35) 0%, rgba(234, 88, 12, 0.35) 100%);
+      border-color: rgba(245, 158, 11, 0.7);
+      color: #fef08a;
+      transform: translateY(-1px);
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.4);
+    }
+
+    .btn-review-pro.reviewed {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(234, 88, 12, 0.22) 100%);
+      border-color: rgba(245, 158, 11, 0.55);
+      color: #fbbf24;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+      cursor: pointer;
+    }
+
+    .btn-review-pro.reviewed:hover {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.35) 0%, rgba(234, 88, 12, 0.35) 100%);
+      border-color: rgba(245, 158, 11, 0.7);
+      color: #fef08a;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.4);
+    }
+
+    .btn-new-features {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+      border: 1px solid rgba(147, 197, 253, 0.4);
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+      white-space: nowrap;
+    }
+
+    .btn-new-features:hover {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.35) 0%, rgba(139, 92, 246, 0.35) 100%);
+      border-color: rgba(147, 197, 253, 0.7);
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 0 14px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-icon-setting {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-icon-setting:hover {
+      background: rgba(59, 130, 246, 0.18);
+      border-color: rgba(59, 130, 246, 0.4);
+      color: #ffffff;
+      transform: rotate(45deg);
+    }
+
+    .btn-icon-setting:active {
+      transform: scale(0.92);
     }
 
     .live-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 3px 8px;
+      gap: 5px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      padding: 2.5px 8px;
       border-radius: 9999px;
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--text-sub);
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #34d399;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
 
     .pulse-dot {
-      width: 6px;
-      height: 6px;
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
       background: #10b981;
       box-shadow: 0 0 6px #10b981;
@@ -133,7 +275,7 @@
     .select-group label {
       font-size: 10px;
       font-weight: 700;
-      color: var(--text-sub);
+      color: #f8fafc;
       text-transform: uppercase;
       letter-spacing: 0.06em;
     }
@@ -170,14 +312,19 @@
 
     /* Informação rápida */
     .quick-tip-box {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--card-border);
       border-left: 3px solid var(--primary);
       border-radius: 6px;
       padding: 8px 12px;
       font-size: 11px;
-      color: var(--text-sub);
+      color: #f8fafc;
       line-height: 1.45;
+    }
+
+    .quick-tip-box strong {
+      color: #ffffff;
+      font-weight: 700;
     }
 
     /* Área Central */
@@ -227,21 +374,24 @@
     .mini-stats-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 12px;
     }
 
     .mini-stat-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 12px 14px;
+      background: linear-gradient(145deg, rgba(22, 30, 49, 0.7) 0%, rgba(13, 19, 32, 0.9) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 12px 16px;
       display: flex;
       flex-direction: column;
-      transition: border-color 0.2s ease;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
+      position: relative;
     }
 
     .mini-stat-card:hover {
-      border-color: var(--card-hover-border);
+      border-color: rgba(59, 130, 246, 0.3);
+      transform: translateY(-1px);
     }
 
     .mini-stat-header {
@@ -251,71 +401,100 @@
     }
 
     .mini-stat-label {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
-      color: var(--text-sub);
+      color: #94a3b8;
       text-transform: uppercase;
       letter-spacing: 0.06em;
     }
 
+    .mini-stat-indicator {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .mini-stat-indicator.live {
+      background: #3b82f6;
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+    }
+
+    .mini-stat-indicator.muted {
+      background: #64748b;
+      opacity: 0.7;
+    }
+
     .mini-stat-value {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 800;
-      color: var(--text-main);
+      color: #ffffff;
       margin-top: 4px;
       letter-spacing: -0.03em;
     }
 
-    /* Grandes Cartões de Velocidade */
+    .mini-stat-value.muted {
+      color: #94a3b8;
+    }
+
+    /* Grelha de Velocidade Lado a Lado (Ultra-Premium SaaS Design) */
+    .speed-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
     .speed-card {
-      background: var(--card-bg);
       border-radius: 12px;
-      border: 1px solid var(--card-border);
-      padding: 16px 18px;
-      box-shadow: var(--shadow-card);
+      padding: 14px 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
       display: flex;
       flex-direction: column;
       position: relative;
       overflow: hidden;
-      transition: border-color 0.2s ease;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .speed-card:hover {
+      transform: translateY(-1px);
     }
 
     .speed-card.fastest {
-      background: var(--fast-bg);
+      background: linear-gradient(145deg, rgba(6, 40, 33, 0.5) 0%, rgba(10, 25, 23, 0.85) 100%);
       border: 1px solid rgba(16, 185, 129, 0.25);
-      border-left: 4px solid var(--fast-border);
+      border-top: 3px solid #10b981;
     }
 
     .speed-card.slowest {
-      background: var(--slow-bg);
+      background: linear-gradient(145deg, rgba(50, 15, 25, 0.45) 0%, rgba(25, 10, 16, 0.85) 100%);
       border: 1px solid rgba(244, 63, 94, 0.25);
-      border-left: 4px solid var(--slow-border);
+      border-top: 3px solid #f43f5e;
     }
 
     .speed-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 6px;
     }
 
     .speed-label {
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
     }
 
     .speed-label.fastest {
-      color: var(--fast-text);
+      color: #34d399;
     }
 
     .speed-label.slowest {
-      color: var(--slow-text);
+      color: #fb7185;
     }
 
     .speed-badge-pill {
-      font-size: 9.5px;
-      font-weight: 700;
+      font-size: 9px;
+      font-weight: 800;
       padding: 2px 7px;
       border-radius: 9999px;
       text-transform: uppercase;
@@ -323,78 +502,239 @@
     }
 
     .speed-card.fastest .speed-badge-pill {
-      background: var(--fast-pill);
-      color: var(--fast-text);
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
     .speed-card.slowest .speed-badge-pill {
-      background: var(--slow-pill);
-      color: var(--slow-text);
+      background: rgba(244, 63, 94, 0.15);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.2);
     }
 
     .speed-value {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 800;
       margin: 6px 0 4px 0;
-      letter-spacing: -0.04em;
+      letter-spacing: -0.03em;
     }
 
     .speed-card.fastest .speed-value {
-      color: var(--fast-text);
+      color: #34d399;
+      text-shadow: 0 0 16px rgba(52, 211, 153, 0.2);
     }
 
     .speed-card.slowest .speed-value {
-      color: var(--slow-text);
+      color: #fb7185;
+      text-shadow: 0 0 16px rgba(251, 113, 133, 0.2);
     }
 
     .speed-desc-wrapper {
       display: flex;
       align-items: center;
       gap: 6px;
-      background: rgba(0, 0, 0, 0.25);
-      padding: 5px 10px;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 6px 10px;
       border-radius: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      margin-top: 2px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      margin-top: 4px;
     }
 
     .speed-desc {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-main);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #f1f5f9;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    /* Rodapé */
+    /* Teaser / Banner da Full Dashboard (Valoriza o site) */
+    /* Teaser / Banner da Full Dashboard (Valoriza o site com as features reais da Web) */
+    .dashboard-teaser-card {
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.25) 0%, rgba(15, 23, 42, 0.75) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.28);
+      border-radius: 11px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .teaser-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .teaser-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .teaser-badge {
+      font-size: 9.5px;
+      font-weight: 800;
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.16);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      padding: 3px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
+    }
+
+    .teaser-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .teaser-pill {
+      font-size: 11px;
+      font-weight: 600;
+      color: #ffffff;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 7px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1.25;
+    }
+
+    .teaser-pill span:first-child {
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    /* Rodapé & Botão de Alta Conversão */
+    .user-time-card {
+      background: linear-gradient(145deg, rgba(20, 27, 45, 0.85) 0%, rgba(11, 16, 28, 0.95) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-radius: 10px;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .user-time-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .user-avatar-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      flex-shrink: 0;
+    }
+
+    .user-info-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .user-info-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-info-status {
+      font-size: 10px;
+      font-weight: 600;
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .user-time-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .time-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 7px;
+      padding: 4px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .time-chip.gold {
+      border-color: rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.08);
+    }
+
+    .time-chip-label {
+      font-size: 8.5px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #94a3b8;
+      letter-spacing: 0.04em;
+    }
+
+    .time-chip.gold .time-chip-label {
+      color: #fbbf24;
+    }
+
+    .time-chip-value {
+      font-size: 13px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .time-chip.gold .time-chip-value {
+      color: #fef08a;
+    }
+
     .footer {
       padding-top: 10px;
       border-top: 1px solid var(--card-border);
       display: flex;
       flex-direction: column;
-      gap: 10px;
-    }
-
-    .notice-box {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--card-border);
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 11px;
-      color: var(--text-sub);
-      text-align: center;
-      line-height: 1.4;
+      gap: 8px;
     }
 
     .btn-primary {
-      background: var(--gradient-btn);
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
       color: #ffffff;
-      border: none;
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 8px;
-      padding: 11px 16px;
+      padding: 12px 16px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -405,17 +745,258 @@
       text-decoration: none;
       box-sizing: border-box;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
     }
     
     .btn-primary:hover {
-      background: var(--primary-hover);
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
       transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
     }
 
     .btn-primary:active {
       transform: scale(0.98);
+    }
+
+    /* Drawer / Modal de Configurações Plug & Play */
+    .settings-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(4, 7, 13, 0.78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+      animation: fadeInOverlay 0.2s ease-out;
+    }
+
+    .settings-overlay.active {
+      display: flex;
+    }
+
+    @keyframes fadeInOverlay {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .settings-modal {
+      background: #0f1626;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(59, 130, 246, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: zoomModalIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes zoomModalIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .settings-modal-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .settings-modal-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-close-modal {
+      background: transparent;
+      border: none;
+      color: #ffffff !important;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-close-modal:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff !important;
+    }
+
+    .settings-modal-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .setting-feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .setting-feature-card.is-locked {
+      border-color: rgba(245, 158, 11, 0.25);
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.04) 0%, rgba(15, 23, 42, 0.4) 100%);
+      cursor: pointer;
+    }
+
+    .setting-feature-card.is-locked:hover {
+      border-color: rgba(245, 158, 11, 0.5);
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(15, 23, 42, 0.6) 100%);
+    }
+
+    .settings-review-banner {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(234, 88, 12, 0.1) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .lock-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fbbf24;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      letter-spacing: 0.03em;
+      margin-left: 4px;
+    }
+
+    .setting-feature-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .setting-feature-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .setting-feature-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .setting-feature-desc {
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.35;
+    }
+
+    /* Switch iOS-Style Toggle */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .switch-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #334155;
+      transition: .25s ease;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .switch-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .25s ease;
+      border-radius: 50%;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    input:checked + .switch-slider {
+      background-color: #3b82f6;
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+    }
+
+    input:checked + .switch-slider:before {
+      transform: translateX(20px);
+    }
+
+    .settings-modal-footer {
+      padding: 12px 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.02);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .settings-saved-note {
+      font-size: 11px;
+      color: #10b981;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .settings-saved-note.visible {
+      opacity: 1;
     }
   </style>
 </head>
@@ -425,13 +1006,30 @@
     <!-- Header com Selectores -->
     <div class="header">
       <div class="header-top">
-        <div class="brand-left">
+        <div class="header-actions-left">
+          <button id="btn-lang-toggle" class="btn-header-action" title="Alternar Idioma / Switch Language">
+            <span id="txt-lang-toggle">🇵🇹 PT</span>
+          </button>
+          <button id="btn-review-incentive" class="btn-review-pro" title="Give us a new feedback!">
+            <span>⭐</span>
+            <span id="lbl-review-incentive">Give us a new feedback!</span>
+          </button>
+        </div>
+        <div class="brand-center">
           <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
           <h1>KPI Master</h1>
         </div>
-        <div class="live-badge">
-          <span class="pulse-dot"></span>
-          <span>Analytics</span>
+        <div class="header-actions-right">
+          <button id="btn-see-updates" class="btn-new-features" title="See what's new in KPI Master">
+            <span>✨</span>
+            <span id="lbl-btn-see-updates">See the new Features add!</span>
+          </button>
+          <button id="btn-open-settings" class="btn-icon-setting" title="Configurações Plug & Play / Settings">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -476,74 +1074,211 @@
       </div>
 
       <!-- Estado 3: Dados Autorizados -->
-      <div id="stats-data" style="display: flex; flex-direction: column; gap: 10px;">
-        <!-- Pequenos Contadores Rápidos -->
+      <div id="stats-data" style="display: flex; flex-direction: column; gap: 14px;">
+        <!-- Pequenos Contadores Rápidos (2 Colunas Top) -->
         <div class="mini-stats-grid">
           <div class="mini-stat-card">
             <div class="mini-stat-header">
               <span class="mini-stat-label" id="lbl-total-leads">Active Leads</span>
+              <span class="mini-stat-indicator live"></span>
             </div>
             <div class="mini-stat-value" id="val-total-leads">0</div>
           </div>
           <div class="mini-stat-card">
             <div class="mini-stat-header">
               <span class="mini-stat-label" id="lbl-total-uninterested">Uninterested</span>
+              <span class="mini-stat-indicator muted"></span>
             </div>
-            <div class="mini-stat-value" id="val-total-uninterested" style="color: #64748b;">0</div>
+            <div class="mini-stat-value muted" id="val-total-uninterested">0</div>
           </div>
         </div>
 
-        <!-- Cartão Rápido -->
-        <div class="speed-card fastest">
-          <div class="speed-header">
-            <span class="speed-label fastest" id="lbl-fastest-title">Fastest Lead to Leave</span>
-            <span class="speed-badge-pill">Top Speed</span>
-          </div>
-          <div class="speed-value" id="val-fastest-time">—</div>
-          <div class="speed-desc-wrapper">
-            <div class="speed-desc" id="val-fastest-name">—</div>
-          </div>
-        </div>
-
-        <!-- Cartão Lento -->
-        <div class="speed-card slowest">
-          <div class="speed-header">
-            <span class="speed-label slowest" id="lbl-slowest-title">Slowest Lead to Leave</span>
-            <span class="speed-badge-pill">Attention</span>
-          </div>
-          <div class="speed-value" id="val-slowest-time">—</div>
-          <div class="speed-desc-wrapper">
-            <div class="speed-desc" id="val-slowest-name">—</div>
-          </div>
-        </div>
-
-        <!-- Cartão de Tempo Ativo da Equipa no Trello -->
-        <div id="active-time-card" style="background: rgba(17, 24, 39, 0.7); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 12px; padding: 12px 14px; margin-top: 6px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-            <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: #60a5fa; text-transform: uppercase;">
-              <span style="width: 6px; height: 6px; border-radius: 50%; background: #34d399; display: inline-block;"></span>
-              <span id="lbl-active-time-title">⚡ Active Team Time</span>
+        <!-- Velocidade das Leads Lado a Lado (Premium Layout) -->
+        <div class="speed-grid">
+          <!-- Cartão Rápido -->
+          <div class="speed-card fastest">
+            <div class="speed-header">
+              <span class="speed-label fastest" id="lbl-fastest-title">Fastest Lead</span>
+              <span class="speed-badge-pill">Top</span>
             </div>
-            <span id="val-active-time-total" style="font-size: 11px; font-weight: 800; color: #34d399;">0m</span>
+            <div class="speed-value" id="val-fastest-time">—</div>
+            <div class="speed-desc-wrapper">
+              <div class="speed-desc" id="val-fastest-name">—</div>
+            </div>
           </div>
-          <div id="active-team-rows" style="display: flex; flex-direction: column; gap: 6px; max-height: 140px; overflow-y: auto;">
-            <!-- Rows rendered dynamically by JS -->
+
+          <!-- Cartão Lento -->
+          <div class="speed-card slowest">
+            <div class="speed-header">
+              <span class="speed-label slowest" id="lbl-slowest-title">Slowest Lead</span>
+              <span class="speed-badge-pill">Gargalo</span>
+            </div>
+            <div class="speed-value" id="val-slowest-time">—</div>
+            <div class="speed-desc-wrapper">
+              <div class="speed-desc" id="val-slowest-name">—</div>
+            </div>
           </div>
         </div>
       </div>
 
     </div>
 
-    <!-- Footer -->
+    <!-- Footer com Tempo do Utilizador & Teaser da Full Dashboard -->
     <div class="footer">
-      <div id="full-dashboard-notice" class="notice-box">
-        <span id="lbl-notice-text">Este dashboard é simples. No dashboard completo obtém uma visão analítica detalhada de todas as métricas e KPIs.</span>
+      <!-- Cartão de Tempo Gasto pelo Utilizador Atual (Hoje + Esta Semana) -->
+      <div class="user-time-card" id="card-user-time">
+        <div class="user-time-left">
+          <div class="user-avatar-badge" id="val-user-avatar">👤</div>
+          <div class="user-info-text">
+            <span class="user-info-name" id="val-user-name">Loading user...</span>
+            <span class="user-info-status">
+              <span class="pulse-dot"></span> <span id="lbl-status-active">Active now</span>
+            </span>
+          </div>
+        </div>
+        <div class="user-time-badges">
+          <div class="time-chip" title="Tempo ativo gasto hoje nesta app">
+            <span class="time-chip-label" id="lbl-time-today">Hoje</span>
+            <span class="time-chip-value" id="val-user-today-time">0m</span>
+          </div>
+          <div class="time-chip gold" title="Tempo total gasto nesta app durante esta semana">
+            <span class="time-chip-label" id="lbl-time-week">Semanal</span>
+            <span class="time-chip-value" id="val-user-week-time">0m</span>
+          </div>
+        </div>
       </div>
-      <a id="btn-open" class="btn-primary" href="https://kpismaster.vercel.app" target="_blank">Open Full Dashboard →</a>
+
+      <div class="dashboard-teaser-card">
+        <div class="teaser-header">
+          <div class="teaser-title">
+            <span class="teaser-icon">📊</span>
+            <span id="lbl-teaser-title">Recursos Exclusivos na Dashboard Web</span>
+          </div>
+          <span id="lbl-teaser-badge" class="teaser-badge">🎁 100% Grátis</span>
+        </div>
+        <div class="teaser-features">
+          <div class="teaser-pill"><span>📈</span> <span id="lbl-pill-funnel">Funil & Pipeline</span></div>
+          <div class="teaser-pill"><span>⏱️</span> <span id="lbl-pill-time">Tempo por Lista</span></div>
+          <div class="teaser-pill"><span>📊</span> <span id="lbl-pill-charts">Gráficos & Tendências</span></div>
+          <div class="teaser-pill"><span>👥</span> <span id="lbl-pill-team">Filtro por Membro</span></div>
+          <div class="teaser-pill"><span>⚡</span> <span id="lbl-pill-actions">Ações & Prazos</span></div>
+          <div class="teaser-pill"><span>📑</span> <span id="lbl-pill-export">Exportar PDF & CSV</span></div>
+        </div>
+      </div>
+      <a id="btn-open" class="btn-primary" href="https://kpismaster.vercel.app" target="_blank">
+        <span id="lbl-btn-open-text">🚀 Abrir Dashboard Web (Grátis) →</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Modal / Overlay de Configurações Plug & Play -->
+  <div id="settings-overlay" class="settings-overlay">
+    <div class="settings-modal">
+      <div class="settings-modal-header">
+        <div class="settings-modal-title">
+          <span>⚙️</span>
+          <span id="lbl-settings-modal-title">Configurações Plug & Play</span>
+        </div>
+        <button id="btn-close-settings" class="btn-close-modal" title="Fechar">✕</button>
+      </div>
+
+      <div class="settings-modal-body">
+        <!-- Banner de Desbloqueio com Review Grátis (só aparece se ainda não deu review) -->
+        <div id="settings-review-banner" class="settings-review-banner" style="display:none;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:18px;">🎁</span>
+            <div>
+              <div style="font-size:12px; font-weight:800; color:#fbbf24;" id="lbl-banner-review-title">Avaliação Grátis = 2 Funcionalidades Desbloqueadas</div>
+              <div style="font-size:11px; color:#cbd5e1;" id="lbl-banner-review-desc">Deixa uma avaliação rápida para desbloquear os botões e usar sem restrições.</div>
+            </div>
+          </div>
+          <button id="btn-banner-unlock" class="btn-review-pro" style="padding:4px 10px; font-size:10.5px; white-space:nowrap;">
+            ⭐ <span id="lbl-btn-banner-unlock">Avaliar Agora</span>
+          </button>
+        </div>
+
+        <!-- Feature 1: Ações Rápidas (Chamadas & Emails) -->
+        <div class="setting-feature-card" id="card-feat-actions">
+          <div class="setting-feature-info">
+            <div class="setting-feature-name">
+              <span>⚡</span>
+              <span id="lbl-feat-actions-name">Ações Rápidas nos Cartões</span>
+              <span id="badge-lock-actions" class="lock-badge" style="display:none;">🔒 Review</span>
+            </div>
+            <div class="setting-feature-desc" id="lbl-feat-actions-desc">Botões de +1 Chamada e +1 Email direto no verso do cartão para registar contactos com um clique.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-feat-actions" checked>
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+
+        <!-- Feature 2: Histórico de Chamadas & Contactos -->
+        <div class="setting-feature-card" id="card-feat-history">
+          <div class="setting-feature-info">
+            <div class="setting-feature-name">
+              <span>📋</span>
+              <span id="lbl-feat-history-name">Histórico de Chamadas & Contactos</span>
+              <span id="badge-lock-history" class="lock-badge" style="display:none;">🔒 Review</span>
+            </div>
+            <div class="setting-feature-desc" id="lbl-feat-history-desc">Permite consultar a lista cronológica de quem realizou cada contacto, com data e hora exatas.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-feat-history" checked>
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+
+        <!-- Feature 3: Idade do Cartão (Card Age Badges) -->
+        <div class="setting-feature-card">
+          <div class="setting-feature-info">
+            <div class="setting-feature-name">
+              <span>⏱️</span>
+              <span id="lbl-feat-card-age-name">Idade do Cartão (Card Age)</span>
+            </div>
+            <div class="setting-feature-desc" id="lbl-feat-card-age-desc">Exibe emblemas na frente do cartão indicando há quantos dias a lead foi criada ou está sem atualização.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-feat-card-age" checked>
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+
+        <!-- Feature 4: Tempo Ativo do Utilizador (User Time Tracker) -->
+        <div class="setting-feature-card">
+          <div class="setting-feature-info">
+            <div class="setting-feature-name">
+              <span>⏳</span>
+              <span id="lbl-feat-time-tracker-name">Tempo Ativo (Hoje & Semanal)</span>
+            </div>
+            <div class="setting-feature-desc" id="lbl-feat-time-tracker-desc">Mostra a barra inferior com o tempo gasto na app hoje e nesta semana pelo membro atual.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-feat-time-tracker" checked>
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="settings-modal-footer">
+        <span id="settings-saved-note" class="settings-saved-note">✓ Guardado automaticamente</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button id="btn-done-settings" class="btn-header-action" style="padding: 6px 14px; background: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.4); color: #93c5fd;">
+            <span id="lbl-btn-done-settings">Concluído</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
   <script type="module">
+    import { Analytics } from '../js/analytics.js';
+    Analytics.init();
+    Analytics.track('trello_popup_opened', {
+      section: 'lead_speed_and_exclusive_features',
+      description: 'Popup do Trello aberto (Velocidade de Leads e Features Web)'
+    });
+
     var KEY = import.meta.env.VITE_TRELLO_API_KEY;
     var NAME = 'KPI Master';
     var SITE = 'https://kpismaster.vercel.app';
@@ -551,13 +1286,13 @@
     var t = TrelloPowerUp.iframe({ appKey: KEY, appName: NAME });
 
     var locale = t.locale || 'en';
-    var isPt = locale.startsWith('pt');
+    var currentLang = 'en'; // 100% English por defeito!
 
     var translations = {
       pt: {
-        btnOpen: 'Abrir Dashboard Completo →',
-        lblFastestTitle: 'Lead Mais Rápido a Sair',
-        lblSlowestTitle: 'Lead Mais Lento a Sair',
+        btnOpen: '🚀 Abrir Full Dashboard Web →',
+        lblFastestTitle: 'Lead Mais Rápido',
+        lblSlowestTitle: 'Lead Mais Lento',
         lblStatsAuthDesc: 'Liga a tua conta Trello para veres a velocidade das leads aqui.',
         btnStatsAuth: 'Ligar Conta',
         lblStatsEmptyDesc: 'Move cartões para fora da primeira lista para veres estatísticas de velocidade das leads.',
@@ -565,13 +1300,38 @@
         lblSelUninterested: 'Sem Interesse',
         lblTotalLeads: 'Leads Ativas',
         lblTotalUninterested: 'Sem Interesse',
+        lblTimeSpent: 'Tempo Semanal',
         lblQuickTip: '<strong>Lista de Leads</strong> é a lista onde queres medir a rapidez das leads. <strong>Sem Interesse</strong> são leads descartadas.',
-        lblNoticeText: 'Este dashboard é simples. No dashboard completo obtém uma visão analítica detalhada de todas as métricas e KPIs.'
+        lblTeaserTitle: 'Recursos Exclusivos na Dashboard Web',
+        lblTeaserBadge: '🎁 Grátis por Agora',
+        lblPillFunnel: 'Funil & Pipeline',
+        lblPillTime: 'Tempo por Lista',
+        lblPillCharts: 'Gráficos & Tendências',
+        lblPillTeam: 'Filtro por Membro',
+        lblPillActions: 'Ações & Prazos',
+        lblPillExport: 'Exportar PDF & CSV',
+        toggleBtn: '🇬🇧 English',
+        settingsTitle: 'Configurações Plug & Play',
+        featActionsName: 'Ações Rápidas nos Cartões',
+        featActionsDesc: 'Botões de +1 Chamada e +1 Email direto no verso do cartão para registar contactos com um clique.',
+        featHistoryName: 'Histórico de Chamadas & Contactos',
+        featHistoryDesc: 'Permite consultar a lista cronológica de quem realizou cada contacto, com data e hora exatas.',
+        featCardAgeName: 'Idade do Cartão (Card Age)',
+        featCardAgeDesc: 'Exibe emblemas na frente do cartão indicando há quantos dias a lead foi criada ou está sem atualização.',
+        featTimeTrackerName: 'Tempo Ativo (Hoje & Semanal)',
+        featTimeTrackerDesc: 'Mostra a barra inferior com o tempo gasto na app hoje e nesta semana pelo membro atual.',
+        settingsSaved: '✓ Guardado automaticamente',
+        btnDoneSettings: 'Concluído',
+        btnReviewPrompt: 'Give us a new feedback!',
+        btnReviewDone: 'Give us a new feedback!',
+        bannerReviewTitle: 'Avaliação Grátis = 2 Funcionalidades Desbloqueadas',
+        bannerReviewDesc: 'Deixa uma avaliação rápida para desbloquear os botões e usar sem restrições.',
+        btnBannerUnlock: 'Avaliar Agora'
       },
       en: {
-        btnOpen: 'Open Full Dashboard →',
-        lblFastestTitle: 'Fastest Lead to Leave',
-        lblSlowestTitle: 'Slowest Lead to Leave',
+        btnOpen: '🚀 Open Web Dashboard (Free) →',
+        lblFastestTitle: 'Fastest Lead',
+        lblSlowestTitle: 'Slowest Lead',
         lblStatsAuthDesc: 'Connect your Trello account to see Leads Speed metrics here.',
         btnStatsAuth: 'Connect Account',
         lblStatsEmptyDesc: 'Move cards out of your first list to see speed statistics.',
@@ -579,26 +1339,210 @@
         lblSelUninterested: 'Uninterested',
         lblTotalLeads: 'Active Leads',
         lblTotalUninterested: 'Uninterested',
+        lblTimeSpent: 'Weekly Time',
         lblQuickTip: '<strong>Leads List</strong> is the list where you want to measure the speed of incoming leads. <strong>Uninterested</strong> are leads with no interest.',
-        lblNoticeText: 'This dashboard is simple. In the full dashboard you can get a much wider and detailed view of all your metrics and KPIs.'
+        lblTeaserTitle: 'Exclusive Web Dashboard Features',
+        lblTeaserBadge: '🎁 Free for Now',
+        lblPillFunnel: 'Pipeline Funnel',
+        lblPillTime: 'Time per List',
+        lblPillCharts: 'Trend & Donut Charts',
+        lblPillTeam: 'Filter by Member',
+        lblPillActions: 'Actions & Overdue',
+        lblPillExport: 'Export PDF & CSV',
+        toggleBtn: '🇵🇹 Português',
+        settingsTitle: 'Plug & Play Settings',
+        featActionsName: 'Quick Actions on Cards',
+        featActionsDesc: 'Direct +1 Call and +1 Email buttons on card back to register contact touchpoints in 1 click.',
+        featHistoryName: 'Call & Contact History',
+        featHistoryDesc: 'View chronological audit log of who contacted each lead, with exact dates and timestamps.',
+        featCardAgeName: 'Card Age Badges',
+        featCardAgeDesc: 'Display visual badges on card fronts showing lead age and days since last update.',
+        featTimeTrackerName: 'Active Time (Today & Weekly)',
+        featTimeTrackerDesc: 'Displays the bottom tracker showing active time spent today and this week.',
+        settingsSaved: '✓ Automatically saved',
+        btnDoneSettings: 'Done',
+        btnReviewPrompt: 'Give us a new feedback!',
+        btnReviewDone: 'Give us a new feedback!',
+        bannerReviewTitle: 'Free Review = 2 Features Unlocked',
+        bannerReviewDesc: 'Leave a quick review to unlock the buttons and use without restrictions.',
+        btnBannerUnlock: 'Review Now'
       }
     };
 
-    var tDict = isPt ? translations.pt : translations.en;
+    var isPt = (currentLang === 'pt');
+    var hasReviewed = false;
 
-    // Aplicar Traduções
-    document.getElementById('btn-open').textContent = tDict.btnOpen;
-    document.getElementById('lbl-fastest-title').textContent = tDict.lblFastestTitle;
-    document.getElementById('lbl-slowest-title').textContent = tDict.lblSlowestTitle;
-    document.getElementById('lbl-stats-auth-desc').textContent = tDict.lblStatsAuthDesc;
-    document.getElementById('btn-stats-auth').textContent = tDict.btnStatsAuth;
-    document.getElementById('lbl-stats-empty-desc').textContent = tDict.lblStatsEmptyDesc;
-    document.getElementById('lbl-sel-leads').textContent = tDict.lblSelLeads;
-    document.getElementById('lbl-sel-uninterested').textContent = tDict.lblSelUninterested;
-    document.getElementById('lbl-total-leads').textContent = tDict.lblTotalLeads;
-    document.getElementById('lbl-total-uninterested').textContent = tDict.lblTotalUninterested;
-    document.getElementById('lbl-quick-tip-text').innerHTML = tDict.lblQuickTip;
-    document.getElementById('lbl-notice-text').textContent = tDict.lblNoticeText;
+    function applyLanguage(lang) {
+      currentLang = lang;
+      isPt = (lang === 'pt');
+      var tDict = translations[lang];
+
+      var txtToggle = document.getElementById('txt-lang-toggle');
+      if (txtToggle) txtToggle.textContent = tDict.toggleBtn;
+
+      var lblReview = document.getElementById('lbl-review-incentive');
+      if (lblReview) {
+        lblReview.textContent = hasReviewed ? tDict.btnReviewDone : tDict.btnReviewPrompt;
+      }
+
+      var btnReview = document.getElementById('btn-review-incentive');
+      if (btnReview) {
+        btnReview.title = hasReviewed 
+          ? (isPt ? 'Obrigado pelo teu feedback! Clica para sugerir mais melhorias.' : 'Thank you for your feedback! Click to suggest more improvements.')
+          : (isPt ? 'Dá a tua opinião e desbloqueia novas funcionalidades!' : 'Give us feedback and unlock new features!');
+      }
+
+      var lblBtnOpen = document.getElementById('lbl-btn-open-text');
+      if (lblBtnOpen) lblBtnOpen.textContent = tDict.btnOpen;
+      document.getElementById('lbl-fastest-title').textContent = tDict.lblFastestTitle;
+      document.getElementById('lbl-slowest-title').textContent = tDict.lblSlowestTitle;
+      document.getElementById('lbl-stats-auth-desc').textContent = tDict.lblStatsAuthDesc;
+      document.getElementById('btn-stats-auth').textContent = tDict.btnStatsAuth;
+      document.getElementById('lbl-stats-empty-desc').textContent = tDict.lblStatsEmptyDesc;
+      document.getElementById('lbl-sel-leads').textContent = tDict.lblSelLeads;
+      document.getElementById('lbl-sel-uninterested').textContent = tDict.lblSelUninterested;
+      document.getElementById('lbl-total-leads').textContent = tDict.lblTotalLeads;
+      document.getElementById('lbl-total-uninterested').textContent = tDict.lblTotalUninterested;
+      var elTimeToday = document.getElementById('lbl-time-today');
+      if (elTimeToday) elTimeToday.textContent = isPt ? 'Hoje' : 'Today';
+      var elTimeWeek = document.getElementById('lbl-time-week');
+      if (elTimeWeek) elTimeWeek.textContent = isPt ? 'Semanal' : 'Weekly';
+      var elActiveStatus = document.getElementById('lbl-status-active');
+      if (elActiveStatus) elActiveStatus.textContent = isPt ? 'Ativo agora' : 'Active now';
+      document.getElementById('lbl-quick-tip-text').innerHTML = tDict.lblQuickTip;
+      
+      var elTeaserTitle = document.getElementById('lbl-teaser-title');
+      if (elTeaserTitle) elTeaserTitle.textContent = tDict.lblTeaserTitle;
+      var elTeaserBadge = document.getElementById('lbl-teaser-badge');
+      if (elTeaserBadge) elTeaserBadge.textContent = tDict.lblTeaserBadge;
+      var elPillFunnel = document.getElementById('lbl-pill-funnel');
+      if (elPillFunnel) elPillFunnel.textContent = tDict.lblPillFunnel;
+      var elPillTime = document.getElementById('lbl-pill-time');
+      if (elPillTime) elPillTime.textContent = tDict.lblPillTime;
+      var elPillCharts = document.getElementById('lbl-pill-charts');
+      if (elPillCharts) elPillCharts.textContent = tDict.lblPillCharts;
+      var elPillTeam = document.getElementById('lbl-pill-team');
+      if (elPillTeam) elPillTeam.textContent = tDict.lblPillTeam;
+      var elPillActions = document.getElementById('lbl-pill-actions');
+      if (elPillActions) elPillActions.textContent = tDict.lblPillActions;
+      var elPillExport = document.getElementById('lbl-pill-export');
+      if (elPillExport) elPillExport.textContent = tDict.lblPillExport;
+
+      // Settings Modal Translations
+      var elSettingsTitle = document.getElementById('lbl-settings-modal-title');
+      if (elSettingsTitle) elSettingsTitle.textContent = tDict.settingsTitle;
+      var elFeatActionsName = document.getElementById('lbl-feat-actions-name');
+      if (elFeatActionsName) elFeatActionsName.textContent = tDict.featActionsName;
+      var elFeatActionsDesc = document.getElementById('lbl-feat-actions-desc');
+      if (elFeatActionsDesc) elFeatActionsDesc.textContent = tDict.featActionsDesc;
+      var elFeatHistoryName = document.getElementById('lbl-feat-history-name');
+      if (elFeatHistoryName) elFeatHistoryName.textContent = tDict.featHistoryName;
+      var elFeatHistoryDesc = document.getElementById('lbl-feat-history-desc');
+      if (elFeatHistoryDesc) elFeatHistoryDesc.textContent = tDict.featHistoryDesc;
+      var elFeatCardAgeName = document.getElementById('lbl-feat-card-age-name');
+      if (elFeatCardAgeName) elFeatCardAgeName.textContent = tDict.featCardAgeName;
+      var elFeatCardAgeDesc = document.getElementById('lbl-feat-card-age-desc');
+      if (elFeatCardAgeDesc) elFeatCardAgeDesc.textContent = tDict.featCardAgeDesc;
+      var elFeatTimeTrackerName = document.getElementById('lbl-feat-time-tracker-name');
+      if (elFeatTimeTrackerName) elFeatTimeTrackerName.textContent = tDict.featTimeTrackerName;
+      var elFeatTimeTrackerDesc = document.getElementById('lbl-feat-time-tracker-desc');
+      if (elFeatTimeTrackerDesc) elFeatTimeTrackerDesc.textContent = tDict.featTimeTrackerDesc;
+      var elSettingsSaved = document.getElementById('settings-saved-note');
+      if (elSettingsSaved) elSettingsSaved.textContent = tDict.settingsSaved;
+      var elBtnDoneSettings = document.getElementById('lbl-btn-done-settings');
+      if (elBtnDoneSettings) elBtnDoneSettings.textContent = tDict.btnDoneSettings;
+
+      var elBannerTitle = document.getElementById('lbl-banner-review-title');
+      if (elBannerTitle) elBannerTitle.textContent = tDict.bannerReviewTitle;
+      var elBannerDesc = document.getElementById('lbl-banner-review-desc');
+      if (elBannerDesc) elBannerDesc.textContent = tDict.bannerReviewDesc;
+      var elBtnBannerUnlock = document.getElementById('lbl-btn-banner-unlock');
+      if (elBtnBannerUnlock) elBtnBannerUnlock.textContent = tDict.btnBannerUnlock;
+    }
+
+    // Inicializar idioma padrão
+    applyLanguage(currentLang);
+
+    // Carregar se o utilizador já deu review e idioma guardado
+    Promise.all([
+      t.get('member', 'private', 'kpi_has_reviewed').catch(function(){ return false; }),
+      t.get('member', 'private', 'kpi_feedback_state').catch(function(){ return null; }),
+      t.get('member', 'private', 'kpi_user_lang').catch(function(){ return null; })
+    ]).then(function(res) {
+      var flagReviewed = (res[0] === true || res[0] === 'true');
+      var rawState = res[1];
+      var stateObj = (rawState && typeof rawState === 'string') ? JSON.parse(rawState) : rawState;
+      var hasSubmittedFeedback = stateObj && (stateObj.lastSubmittedTime > 0);
+      var localReviewed = false;
+      try {
+        localReviewed = (localStorage.getItem('kpi_feedback_submitted_globally') === 'true' || localStorage.getItem('kpi_has_reviewed') === 'true');
+      } catch(e){}
+
+      hasReviewed = flagReviewed || hasSubmittedFeedback || localReviewed;
+      var savedLang = res[2];
+
+      var btnReview = document.getElementById('btn-review-incentive');
+      if (btnReview && hasReviewed) {
+        btnReview.classList.add('reviewed');
+        btnReview.title = isPt ? 'Obrigado pelo teu feedback! Clica para dar mais sugestões.' : 'Thank you for your feedback! Click to suggest more improvements.';
+      }
+
+      if (savedLang === 'pt' || savedLang === 'en') {
+        applyLanguage(savedLang);
+      } else {
+        applyLanguage(currentLang);
+      }
+    });
+
+    // Clique no botão See the new Features add!
+    var btnSeeUpdates = document.getElementById('btn-see-updates');
+    if (btnSeeUpdates) {
+      btnSeeUpdates.addEventListener('click', function(e) {
+        e.preventDefault();
+        Analytics.track('see_new_features_clicked', {
+          description: 'Utilizador clicou em See the new Features add! no cabeçalho'
+        });
+
+        t.modal({
+          title: isPt ? '✨ Novidades & Atualizações' : '✨ New Features & Updates',
+          url: './updates.html',
+          height: 600
+        });
+      });
+    }
+
+    // Clique no botão de Avaliar / Review
+    var btnReviewIncentive = document.getElementById('btn-review-incentive');
+    if (btnReviewIncentive) {
+      btnReviewIncentive.addEventListener('click', function(e) {
+        e.preventDefault();
+        Analytics.track('review_incentive_button_clicked', {
+          already_reviewed: hasReviewed,
+          description: 'Utilizador clicou no botão Review = PRO no cabeçalho'
+        });
+
+        t.modal({
+          title: isPt ? '⭐ A Tua Opinião — KPI Master' : '⭐ Your Feedback — KPI Master',
+          url: './feedback.html',
+          height: 520
+        });
+      });
+    }
+
+    // Alternar idioma ao clicar no botão
+    var btnLangToggle = document.getElementById('btn-lang-toggle');
+    if (btnLangToggle) {
+      btnLangToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        var nextLang = (currentLang === 'pt') ? 'en' : 'pt';
+        applyLanguage(nextLang);
+        Analytics.track('language_switched', {
+          target_lang: nextLang,
+          description: 'Utilizador alternou o idioma para ' + nextLang
+        });
+        t.set('member', 'private', 'kpi_user_lang', nextLang).catch(function(){});
+      });
+    }
 
     var state = { boardId: null, token: null, lists: [], leadsListId: null, uninterestedListId: null, memberId: null, memberName: '', isBoardAdmin: false };
 
@@ -638,6 +1582,11 @@
     document.getElementById('btn-open').addEventListener('click', function(e) {
       e.preventDefault();
 
+      Analytics.track('open_web_dashboard_clicked', {
+        board_id: state.boardId,
+        source: 'trello_dashboard_popup'
+      });
+
       t.board('id').then(function(b) {
         if (!b || !b.id) {
           window.open(SITE, '_blank');
@@ -667,7 +1616,6 @@
           t.getRestApi().getToken().then(function(token) {
             if (token) {
               state.token = token;
-              loadMemberRole();
               document.getElementById('stats-unauth').style.display = 'none';
               
               // Obter as configurações salvas das listas para este board
@@ -776,6 +1724,10 @@
     document.getElementById('select-leads').addEventListener('change', function(e) {
       var val = e.target.value;
       state.leadsListId = val;
+      Analytics.track('leads_list_selected', {
+        type: 'leads_list',
+        description: 'Utilizador selecionou uma Lista de Leads para calcular velocidades'
+      });
       t.set('board', 'shared', 'kpi_lead_list_id', val).then(function() {
         loadBoardData();
       });
@@ -784,6 +1736,10 @@
     document.getElementById('select-uninterested').addEventListener('change', function(e) {
       var val = e.target.value;
       state.uninterestedListId = val;
+      Analytics.track('uninterested_list_selected', {
+        type: 'uninterested_list',
+        description: 'Utilizador selecionou a lista de Sem Interesse / Descartados'
+      });
       t.set('board', 'shared', 'kpi_uninterested_list_id', val).then(function() {
         loadBoardData();
       });
@@ -881,147 +1837,341 @@
       document.getElementById('stats-empty').style.display = 'none';
       document.getElementById('stats-data').style.display = 'flex';
       
-      renderActiveTimeWidget();
       t.sizeTo(document.body).catch(function () { });
     }
 
-    function renderActiveTimeWidget() {
-      try {
-        var raw = localStorage.getItem('kpi_user_active_time_data');
-        var data = raw ? JSON.parse(raw) : {};
-        var todayKey = new Date().toISOString().slice(0, 10);
-        var totalSecs = 0;
-        var html = '';
-
-        function formatMinutesOnly(sec) {
-          if (!sec || sec < 60) return '0m';
-          var hrs = Math.floor(sec / 3600);
-          var mins = Math.floor((sec % 3600) / 60);
-          if (hrs > 0) return hrs + 'h ' + mins + 'm';
-          return mins + 'm';
-        }
-
-        var keys = Object.keys(data).filter(function(k) {
-          var item = data[k];
-          return state.isBoardAdmin || (state.memberId && item && item.id === state.memberId);
+    // Analytics: Rastrear cliques no botão de abrir a Dashboard Web
+    var btnOpenWeb = document.getElementById('btn-open');
+    if (btnOpenWeb) {
+      btnOpenWeb.addEventListener('click', function() {
+        Analytics.track('open_web_dashboard_clicked', {
+          board_id: state.boardId,
+          member_id: state.memberId,
+          source: 'micro_dashboard_popup',
+          description: 'Utilizador clicou em Abrir Dashboard Web (Grátis)'
         });
-        if (keys.length === 0) {
-          html = '<div style="font-size: 11px; color: #94a3b8; text-align: center; padding: 6px 0;">' +
-                 (isPt ? 'Sem dados de tempo ativo ainda' : 'No active time data yet') + '</div>';
-        } else {
-          keys.forEach(function(k) {
-            var m = data[k];
-            var sec = m.days ? (m.days[todayKey] || 0) : 0;
-            totalSecs += sec;
+      });
+    }
 
-            var formatted = formatMinutesOnly(sec);
-            var diffSecs = Math.floor((Date.now() - (m.lastSeen || 0)) / 1000);
-            var statusText = isPt ? 'Offline' : 'Offline';
-            var badgeBg = 'rgba(239, 68, 68, 0.15)';
-            var badgeColor = '#f87171';
+    // ── Lógica das Configurações Plug & Play ─────────────────────────────────
+    var settingsOverlay = document.getElementById('settings-overlay');
+    var btnOpenSettings = document.getElementById('btn-open-settings');
+    var btnCloseSettings = document.getElementById('btn-close-settings');
+    var btnDoneSettings = document.getElementById('btn-done-settings');
+    var savedNote = document.getElementById('settings-saved-note');
 
-            if (diffSecs < 120 && m.isOnline && !m.isIdle) {
-              statusText = isPt ? 'Ativo Agora' : 'Active Now';
-              badgeBg = 'rgba(52, 211, 153, 0.15)';
-              badgeColor = '#34d399';
-            } else if (diffSecs < 300) {
-              statusText = isPt ? 'Inativo' : 'Idle';
-              badgeBg = 'rgba(251, 191, 36, 0.15)';
-              badgeColor = '#fbbf24';
-            }
+    var toggleFeatActions = document.getElementById('toggle-feat-actions');
+    var toggleFeatHistory = document.getElementById('toggle-feat-history');
+    var toggleFeatCardAge = document.getElementById('toggle-feat-card-age');
+    var toggleFeatTimeTracker = document.getElementById('toggle-feat-time-tracker');
 
-            html += '<div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); padding: 5px 10px; border-radius: 8px;">' +
-                      '<div style="display: flex; align-items: center; gap: 8px;">' +
-                        '<div style="width: 22px; height: 22px; border-radius: 6px; background: rgba(59,130,246,0.2); color: #60a5fa; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">' +
-                          m.name.charAt(0).toUpperCase() +
-                        '</div>' +
-                        '<span style="font-size: 11px; font-weight: 600; color: #f8fafc;">' + m.name + '</span>' +
-                      '</div>' +
-                      '<div style="display: flex; align-items: center; gap: 8px;">' +
-                        '<span style="font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: ' + badgeBg + '; color: ' + badgeColor + ';">' + statusText + '</span>' +
-                        '<span style="font-size: 11px; font-weight: 800; color: #ffffff; font-variant-numeric: tabular-nums;">' + formatted + '</span>' +
-                      '</div>' +
-                    '</div>';
+    function showSavedFeedback() {
+      if (savedNote) {
+        savedNote.classList.add('visible');
+        clearTimeout(savedNote._timer);
+        savedNote._timer = setTimeout(function() {
+          savedNote.classList.remove('visible');
+        }, 2000);
+      }
+    }
+
+    // Carregar configurações guardadas do quadro e estado de review
+    Promise.all([
+      t.get('board', 'shared', 'kpi_touchpoints_enabled').catch(function() { return true; }),
+      t.get('board', 'shared', 'kpi_history_enabled').catch(function() { return true; }),
+      t.get('board', 'shared', 'kpi_card_age_enabled').catch(function() { return true; }),
+      t.get('board', 'shared', 'kpi_time_tracker_enabled').catch(function() { return true; }),
+      t.get('member', 'private', 'kpi_has_reviewed').catch(function() { return false; }),
+      t.get('member', 'private', 'kpi_feedback_state').catch(function() { return null; })
+    ]).then(function(res) {
+      var actionsEnabled = (res[0] === undefined || res[0] === null || res[0] === true || res[0] === 'true');
+      var historyEnabled = (res[1] === undefined || res[1] === null || res[1] === true || res[1] === 'true');
+      var cardAgeEnabled = (res[2] === undefined || res[2] === null || res[2] === true || res[2] === 'true');
+      var timeTrackerEnabled = (res[3] === undefined || res[3] === null || res[3] === true || res[3] === 'true');
+      var flagReviewed = (res[4] === true || res[4] === 'true');
+      var rawState = res[5];
+      var stateObj = (rawState && typeof rawState === 'string') ? JSON.parse(rawState) : rawState;
+      var hasSubmittedFeedback = stateObj && (stateObj.lastSubmittedTime > 0);
+      var localReviewed = false;
+      try {
+        localReviewed = (localStorage.getItem('kpi_feedback_submitted_globally') === 'true' || localStorage.getItem('kpi_has_reviewed') === 'true');
+      } catch(e){}
+
+      var userHasReviewed = flagReviewed || hasSubmittedFeedback || localReviewed;
+
+      if (toggleFeatActions) toggleFeatActions.checked = actionsEnabled;
+      if (toggleFeatHistory) toggleFeatHistory.checked = historyEnabled;
+      if (toggleFeatCardAge) toggleFeatCardAge.checked = cardAgeEnabled;
+      if (toggleFeatTimeTracker) toggleFeatTimeTracker.checked = timeTrackerEnabled;
+
+      var cardUserTime = document.getElementById('card-user-time');
+      if (cardUserTime) {
+        cardUserTime.style.display = timeTrackerEnabled ? 'flex' : 'none';
+      }
+
+      var cardFeatActions = document.getElementById('card-feat-actions');
+      var cardFeatHistory = document.getElementById('card-feat-history');
+      var badgeLockActions = document.getElementById('badge-lock-actions');
+      var badgeLockHistory = document.getElementById('badge-lock-history');
+      var reviewBanner = document.getElementById('settings-review-banner');
+      var btnBannerUnlock = document.getElementById('btn-banner-unlock');
+
+      if (!userHasReviewed) {
+        // Se NÃO deu review: mostra banner com oferta grátis, cartões com cadeado e bloqueia switches
+        if (reviewBanner) reviewBanner.style.display = 'flex';
+        if (cardFeatActions) cardFeatActions.classList.add('is-locked');
+        if (cardFeatHistory) cardFeatHistory.classList.add('is-locked');
+        if (badgeLockActions) badgeLockActions.style.display = 'inline-flex';
+        if (badgeLockHistory) badgeLockHistory.style.display = 'inline-flex';
+        if (toggleFeatActions) toggleFeatActions.disabled = true;
+        if (toggleFeatHistory) toggleFeatHistory.disabled = true;
+
+        function promptReviewUnlock(featureName) {
+          closeSettingsModal();
+          Analytics.track('locked_feature_clicked_in_settings', {
+            feature: featureName,
+            description: 'Utilizador clicou na funcionalidade bloqueada para desbloquear com review'
+          });
+          t.modal({
+            title: isPt ? '⭐ Dá Review & Desbloqueia Funcionalidades' : '⭐ Leave a Review & Unlock Features',
+            url: './feedback.html',
+            height: 520
           });
         }
 
-        var totalFormatted = formatMinutesOnly(totalSecs);
+        if (cardFeatActions) {
+          cardFeatActions.addEventListener('click', function(e) {
+            promptReviewUnlock('quick_actions_touchpoints');
+          });
+        }
 
-        var titleEl = document.getElementById('lbl-active-time-title');
-        var totalEl = document.getElementById('val-active-time-total');
-        var rowsEl = document.getElementById('active-team-rows');
+        if (cardFeatHistory) {
+          cardFeatHistory.addEventListener('click', function(e) {
+            promptReviewUnlock('contact_call_history');
+          });
+        }
 
-        if (titleEl) titleEl.textContent = isPt ? '⚡ TEMPO ATIVO DA EQUIPA' : '⚡ ACTIVE TEAM TIME';
-        if (totalEl) totalEl.textContent = (isPt ? 'Hoje: ' : 'Today: ') + totalFormatted;
-        if (rowsEl) rowsEl.innerHTML = html;
-      } catch(e) {}
-    }
-
-    // Track activity under the authenticated Trello member ID and full name.
-    var lastInputTime = Date.now();
-    var isUserIdle = false;
-
-    function recordUserActivity() {
-      lastInputTime = Date.now();
-      if (isUserIdle) {
-        isUserIdle = false;
+        if (btnBannerUnlock) {
+          btnBannerUnlock.addEventListener('click', function(e) {
+            e.stopPropagation();
+            promptReviewUnlock('banner_unlock_both');
+          });
+        }
+      } else {
+        // Se JÁ deu review: esconde cadeados, esconde banner e permite mexer livremente nos switches!
+        if (reviewBanner) reviewBanner.style.display = 'none';
+        if (cardFeatActions) cardFeatActions.classList.remove('is-locked');
+        if (cardFeatHistory) cardFeatHistory.classList.remove('is-locked');
+        if (badgeLockActions) badgeLockActions.style.display = 'none';
+        if (badgeLockHistory) badgeLockHistory.style.display = 'none';
+        if (toggleFeatActions) toggleFeatActions.disabled = false;
+        if (toggleFeatHistory) toggleFeatHistory.disabled = false;
       }
-    }
-
-    ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'click'].forEach(function(evt) {
-      window.addEventListener(evt, recordUserActivity, { passive: true });
     });
 
-    function loadMemberRole() {
-      return Promise.all([
-        t.member('id'),
-        t.member('fullName'),
-        fetch('https://api.trello.com/1/boards/' + state.boardId + '?fields=memberships&key=' + KEY + '&token=' + state.token).then(function(r) { return r.ok ? r.json() : null; })
-      ]).then(function(values) {
-        var member = values[0];
-        var profile = values[1];
-        state.memberId = member && (member.id || member);
-        state.memberName = profile && profile.fullName || '';
-        var memberships = values[2] && values[2].memberships || [];
-        state.isBoardAdmin = memberships.some(function(m) { return m.idMember === state.memberId && m.memberType === 'admin'; });
-        renderActiveTimeWidget();
-      }).catch(function() {});
+    if (btnOpenSettings) {
+      btnOpenSettings.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (settingsOverlay) settingsOverlay.classList.add('active');
+        Analytics.track('plug_and_play_settings_opened', {
+          source: 'micro_dashboard_header',
+          description: 'Utilizador abriu o painel de configurações Plug & Play'
+        });
+      });
     }
 
-    loadMemberRole();
+    function closeSettingsModal() {
+      if (settingsOverlay) settingsOverlay.classList.remove('active');
+    }
 
-    setInterval(function() {
-      if (document.hidden) return;
-      if (Date.now() - lastInputTime > 60000) {
-        isUserIdle = true;
-        return;
+    if (btnCloseSettings) btnCloseSettings.addEventListener('click', closeSettingsModal);
+    if (btnDoneSettings) btnDoneSettings.addEventListener('click', closeSettingsModal);
+    if (settingsOverlay) {
+      settingsOverlay.addEventListener('click', function(e) {
+        if (e.target === settingsOverlay) closeSettingsModal();
+      });
+    }
+
+    if (toggleFeatActions) {
+      toggleFeatActions.addEventListener('change', function() {
+        var isChecked = toggleFeatActions.checked;
+        t.set('board', 'shared', 'kpi_touchpoints_enabled', isChecked).catch(function(){});
+        showSavedFeedback();
+        Analytics.track('feature_toggled', {
+          feature: 'quick_actions_touchpoints',
+          enabled: isChecked,
+          description: 'Alterou estado de Ações Rápidas para ' + isChecked
+        });
+      });
+    }
+
+    if (toggleFeatHistory) {
+      toggleFeatHistory.addEventListener('change', function() {
+        var isChecked = toggleFeatHistory.checked;
+        t.set('board', 'shared', 'kpi_history_enabled', isChecked).catch(function(){});
+        showSavedFeedback();
+        Analytics.track('feature_toggled', {
+          feature: 'contact_call_history',
+          enabled: isChecked,
+          description: 'Alterou estado do Histórico de Chamadas para ' + isChecked
+        });
+      });
+    }
+
+    if (toggleFeatCardAge) {
+      toggleFeatCardAge.addEventListener('change', function() {
+        var isChecked = toggleFeatCardAge.checked;
+        t.set('board', 'shared', 'kpi_card_age_enabled', isChecked).catch(function(){});
+        showSavedFeedback();
+        Analytics.track('feature_toggled', {
+          feature: 'card_age_badges',
+          enabled: isChecked,
+          description: 'Alterou estado de Idade do Cartão (Card Age) para ' + isChecked
+        });
+      });
+    }
+
+    if (toggleFeatTimeTracker) {
+      toggleFeatTimeTracker.addEventListener('change', function() {
+        var isChecked = toggleFeatTimeTracker.checked;
+        t.set('board', 'shared', 'kpi_time_tracker_enabled', isChecked).catch(function(){});
+        var cardUserTime = document.getElementById('card-user-time');
+        if (cardUserTime) {
+          cardUserTime.style.display = isChecked ? 'flex' : 'none';
+        }
+        showSavedFeedback();
+        Analytics.track('feature_toggled', {
+          feature: 'user_active_time_tracker',
+          enabled: isChecked,
+          description: 'Alterou estado de Tempo Ativo (Hoje & Semanal) para ' + isChecked
+        });
+      });
+    }
+
+    // ── Rastreio de Tempo Gasto pelo Utilizador (Hoje + Semanal) ───
+    (function initUserTimeTracker() {
+      function getTodayKey() {
+        var d = new Date();
+        var y = d.getFullYear();
+        var m = String(d.getMonth() + 1).padStart(2, '0');
+        var day = String(d.getDate()).padStart(2, '0');
+        return y + '-' + m + '-' + day;
       }
 
-      // Tick +5 seconds active time
+      function getStartOfWeek(date) {
+        var d = new Date(date);
+        var day = d.getDay();
+        var diff = d.getDate() - day + (day === 0 ? -6 : 1); // Segunda-feira
+        var monday = new Date(d.setDate(diff));
+        monday.setHours(0, 0, 0, 0);
+        return monday.getTime();
+      }
+
+      function formatTime(totalMins) {
+        if (!totalMins || totalMins < 1) return '< 1m';
+        if (totalMins < 60) return Math.round(totalMins) + 'm';
+        var hours = Math.floor(totalMins / 60);
+        var rem = Math.round(totalMins % 60);
+        return hours + 'h ' + rem + 'm';
+      }
+
+      var currentWeekStart = getStartOfWeek(new Date());
+      var todayKey = getTodayKey();
+      var STORAGE_KEY = 'kpi_user_detailed_time_data';
+
+      var store = {};
       try {
-        var raw = localStorage.getItem('kpi_user_active_time_data');
-        var data = raw ? JSON.parse(raw) : {};
-        var todayKey = new Date().toISOString().slice(0, 10);
-        if (!state.memberId) return;
-        var key = state.memberId;
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) store = JSON.parse(raw) || {};
+      } catch(e) {}
 
-        if (!data[key]) {
-          data[key] = { id: key, name: state.memberName || key, days: {}, lastSeen: Date.now(), isOnline: true, isIdle: false };
+      function getUserRecord(userId, userName) {
+        var uKey = userId || 'current_user';
+        if (!store[uKey]) {
+          store[uKey] = {
+            id: uKey,
+            name: userName || 'Utilizador',
+            weekStart: currentWeekStart,
+            weekMins: 1,
+            days: {}
+          };
         }
-        data[key].name = state.memberName || data[key].name || key;
-        if (!data[key].days) data[key].days = {};
-        data[key].days[todayKey] = (data[key].days[todayKey] || 0) + 5;
-        data[key].lastSeen = Date.now();
-        data[key].isOnline = true;
-        data[key].isIdle = false;
+        var record = store[uKey];
+        if (userName && (!record.name || record.name === 'Utilizador' || record.name === 'Loading user...')) {
+          record.name = userName;
+        }
+        if (record.weekStart !== currentWeekStart) {
+          record.weekStart = currentWeekStart;
+          record.weekMins = 0;
+        }
+        if (!record.days) record.days = {};
+        if (typeof record.days[todayKey] !== 'number') {
+          record.days[todayKey] = 1;
+        }
+        return record;
+      }
 
-        localStorage.setItem('kpi_user_active_time_data', JSON.stringify(data));
-      } catch(e){}
+      function renderUserTime(record) {
+        var elName = document.getElementById('val-user-name');
+        var elAvatar = document.getElementById('val-user-avatar');
+        var elToday = document.getElementById('val-user-today-time');
+        var elWeek = document.getElementById('val-user-week-time');
 
-      renderActiveTimeWidget();
-    }, 5000);
+        var displayName = record.name || state.memberName || 'Tu';
+        if (elName) elName.textContent = displayName;
 
-    renderActiveTimeWidget();
+        if (elAvatar) {
+          var initial = displayName ? displayName.trim().charAt(0).toUpperCase() : '👤';
+          elAvatar.textContent = initial || '👤';
+        }
+
+        var todayMins = (record.days && record.days[todayKey]) ? record.days[todayKey] : 1;
+        var weekMins = record.weekMins || 1;
+
+        if (elToday) elToday.textContent = formatTime(todayMins);
+        if (elWeek) elWeek.textContent = formatTime(weekMins);
+      }
+
+      function tickUserTime() {
+        var uKey = state.memberId || 'current_user';
+        var uName = state.memberName || '';
+        var record = getUserRecord(uKey, uName);
+
+        record.days[todayKey] = (record.days[todayKey] || 0) + 1;
+        record.weekMins = (record.weekMins || 0) + 1;
+
+        renderUserTime(record);
+
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+        } catch(e) {}
+      }
+
+      // Inicializar visualização do utilizador ativo
+      t.member('fullName', 'id').then(function(m) {
+        var mId = (m && m.id) || state.memberId || 'current_user';
+        var mName = (m && m.fullName) || state.memberName || '';
+        if (mName) state.memberName = mName;
+        if (mId) state.memberId = mId;
+
+        var rec = getUserRecord(mId, mName);
+        renderUserTime(rec);
+      }).catch(function() {
+        var rec = getUserRecord('current_user', 'Tu');
+        renderUserTime(rec);
+      });
+
+      // Atualiza a cada 60s
+      var timer = setInterval(tickUserTime, 60000);
+
+      window.addEventListener('beforeunload', function() {
+        clearInterval(timer);
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+        } catch(e) {}
+      });
+    })();
+
   </script>
 
 </body>

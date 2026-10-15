@@ -230,52 +230,32 @@
     </div>
 
     <div class="updates-list">
-      <!-- Update 1.6 -->
+      <!-- Update 1.7 -->
       <div class="update-card latest">
         <div class="update-header">
-          <div class="update-title">🚀 Update 1.6</div>
-          <div class="update-date" id="u16-date">Oct 09, 2026</div>
+          <div class="update-title">🚀 Update 1.7</div>
+          <div class="update-date" id="u17-date">Oct 15, 2026</div>
         </div>
         <ul class="update-items">
           <li class="update-item">
-            <strong id="u16-t1">⚡ Live Active Team Time Tracker</strong>
-            <p id="u16-d1">Track real active time spent by each team member in Trello and WebApp, automatically pausing
-              when idle (>60s) or switching tabs.</p>
+            <strong id="u17-t1">✨ Brand New Micro Dashboard Interface</strong>
+            <p id="u17-d1">A completely redesigned popup interface with modern stat cards, refined typography, and quick insights right inside your Trello board.</p>
           </li>
           <li class="update-item">
-            <strong id="u16-t2">⭐ New Interactive 4-Step Feedback Survey</strong>
-            <p id="u16-d2">Share your rating, primary use case, and suggestions through an interactive 4-step survey
-              with smart automated prompts.</p>
+            <strong id="u17-t2">📋 Contact Activity Logs & Quick Actions</strong>
+            <p id="u17-d2">One-click +1 Call and +1 Email buttons on card backs with a full dedicated modal showing timestamped interaction history by author.</p>
           </li>
-        </ul>
-      </div>
-
-      <!-- Update 1.5 -->
-      <div class="update-card">
-        <div class="update-header">
-          <div class="update-title">👥 Update 1.5</div>
-          <div class="update-date" id="u15-date">Oct 09, 2026</div>
-        </div>
-        <ul class="update-items">
           <li class="update-item">
-            <strong id="u15-t1">👥 Role Selection Experience</strong>
-            <p id="u15-d1">Clicking "View Full Board KPIs" now presents the Role Selection screen to choose between
-              Manager & Sales Agent views before opening the dashboard.</p>
+            <strong id="u17-t3">⚙️ Modular Plug & Play Feature Toggles</strong>
+            <p id="u17-d3">Easily enable or disable Quick Actions, Card Age Badges, and Team Time Tracking with auto-saving controls in Settings.</p>
           </li>
-        </ul>
-      </div>
-
-      <!-- Update 1.4 -->
-      <div class="update-card">
-        <div class="update-header">
-          <div class="update-title">📍 Update 1.4</div>
-          <div class="update-date" id="u14-date">Oct 09, 2026</div>
-        </div>
-        <ul class="update-items">
           <li class="update-item">
-            <strong id="u14-t1">📍 NewW History Timeline in Each Card</strong>
-            <p id="u14-d1">A continuous vertical timeline with connected progress nodes showing lead creation date, list
-              moves, and exact duration spent in each stage.</p>
+            <strong id="u17-t4">⏳ Smart List Sorters by Lead Age</strong>
+            <p id="u17-d4">Sort any list by oldest leads first to prevent lead loss, or newest first for rapid contact triage.</p>
+          </li>
+          <li class="update-item">
+            <strong id="u17-t5">🔒 One-Click Account Disconnect</strong>
+            <p id="u17-d5">Full control over your data with an instant disconnect button directly inside Power-Up settings.</p>
           </li>
         </ul>
       </div>
@@ -287,6 +267,25 @@
   </div>
 
   <script type="module">
+    import { Analytics } from '../js/analytics.js';
+    Analytics.init();
+
+    Analytics.track('updates_modal_opened', {
+      version: '1.7',
+      description: 'Modal de Novidades & Atualizações aberto no Trello'
+    });
+
+    var hasTrackedScroll = false;
+    window.addEventListener('scroll', function() {
+      if (!hasTrackedScroll && (window.scrollY || document.documentElement.scrollTop) > 40) {
+        hasTrackedScroll = true;
+        Analytics.track('updates_modal_scrolled', {
+          version: '1.7',
+          description: 'Utilizador fez scroll para ler as novidades no modal de atualizações'
+        });
+      }
+    }, { passive: true });
+
     var CURRENT_VERSION = '1.7';
     var t = TrelloPowerUp.iframe();
 
@@ -300,19 +299,17 @@
         subtitle: "Explore the latest features and performance updates.",
         btnClose: "Got it! Continue in Trello",
 
-        u16Date: "Oct 09, 2026",
-        u16t1: "⚡ Live Active Team Time Tracker",
-        u16d1: "Track real active time spent by each team member in Trello and WebApp, automatically pausing when idle (>60s) or switching tabs.",
-        u16t2: "⭐ New Interactive 4-Step Feedback Survey",
-        u16d2: "Share your rating, primary use case, and suggestions through an interactive 4-step survey with smart automated prompts.",
-
-        u15Date: "Oct 09, 2026",
-        u15t1: "👥 Role Selection Experience",
-        u15d1: "Clicking \"View Full Board KPIs\" now presents the Role Selection screen to choose between Manager & Sales Agent views before opening the dashboard.",
-
-        u14Date: "Oct 09, 2026",
-        u14t1: "📍 New History Timeline in Each Card",
-        u14d1: "A continuous vertical timeline with connected progress nodes showing lead creation date, list moves, and exact duration spent in each stage."
+        u17Date: "Oct 15, 2026",
+        u17t1: "✨ Brand New Micro Dashboard Interface",
+        u17d1: "A completely redesigned popup interface with modern stat cards, refined typography, and quick insights right inside your Trello board.",
+        u17t2: "📋 Contact Activity Logs & Quick Actions",
+        u17d2: "One-click +1 Call and +1 Email buttons on card backs with a full dedicated modal showing timestamped interaction history by author.",
+        u17t3: "⚙️ Modular Plug & Play Feature Toggles",
+        u17d3: "Easily enable or disable Quick Actions, Card Age Badges, and Team Time Tracking with auto-saving controls in Settings.",
+        u17t4: "⏳ Smart List Sorters by Lead Age",
+        u17d4: "Sort any list by oldest leads first to prevent lead loss, or newest first for rapid contact triage directly from list menus.",
+        u17t5: "🔒 One-Click Account Disconnect",
+        u17d5: "Full control over your data with an instant disconnect button directly inside Power-Up settings."
       },
       pt: {
         badge: "✨ Novidades & Atualizações",
@@ -321,19 +318,17 @@
         subtitle: "Explora as últimas melhorias e novas funcionalidades.",
         btnClose: "Entendido! Continuar no Trello",
 
-        u16Date: "09 de Out. de 2026",
-        u16t1: "⚡ Tracking de Tempo Ativo da Equipa",
-        u16d1: "Acompanha em tempo real o tempo ativo dedicado por cada membro da equipa no Trello e no WebApp, com pausa automática em inatividade ou mudança de aba.",
-        u16t2: "⭐ Formulário Interativo de Feedback",
-        u16d2: "Partilha a tua opinião, uso principal e sugestões através de um inquérito interativo de 4 passos com disparos inteligentes.",
-
-        u15Date: "09 de Out. de 2026",
-        u15t1: "👥 Escolha de Perfil ao Abrir o Painel (Role Selection)",
-        u15d1: "Ao clicar em \"View Full Board KPIs\", escolhe facilmente se és Gestor (Visão Geral) ou Vendedor (Funil Pessoal) antes de carregar o dashboard.",
-
-        u14Date: "09 de Out. de 2026",
-        u14t1: "📍 Linha do Tempo Vertical no Verso do Cartão",
-        u14d1: "Uma linha do tempo vertical contínua com pontos encadeados com data de entrada da lead, histórico de transições e tempo em cada etapa."
+        u17Date: "15 de Out. de 2026",
+        u17t1: "✨ Novo Visual do Micro Dashboard",
+        u17d1: "Interface do popup completamente renovada com cartões de estatísticas modernos, tipografia elegante e métricas rápidas no próprio Trello.",
+        u17t2: "📋 Histórico de Contactos & Ações Rápidas",
+        u17d2: "Botões de +1 Chamada e +1 Email no verso do cartão com modal dedicado para consultar o histórico cronológico de contactos por autor.",
+        u17t3: "⚙️ Configurações Modulares Plug & Play",
+        u17d3: "Ativa ou desativa Ações Rápidas, Idade do Cartão e Contador de Tempo com gravação automática no menu de Configurações.",
+        u17t4: "⏳ Ordenação Inteligente por Idade da Lead",
+        u17d4: "Ordena qualquer lista por leads mais antigas primeiro (evitar perdas) ou mais recentes primeiro para triagem rápida no menu da lista.",
+        u17t5: "🔒 Desconexão de Conta com 1 Clique",
+        u17d5: "Controlo total da tua conta e permissões com botão de desconexão instantânea nas configurações da Power-Up."
       }
     };
 
@@ -347,19 +342,17 @@
       document.getElementById('subtitle').textContent = d.subtitle;
       document.getElementById('btn-close').textContent = d.btnClose;
 
-      document.getElementById('u16-date').textContent = d.u16Date;
-      document.getElementById('u16-t1').textContent = d.u16t1;
-      document.getElementById('u16-d1').textContent = d.u16d1;
-      document.getElementById('u16-t2').textContent = d.u16t2;
-      document.getElementById('u16-d2').textContent = d.u16d2;
-
-      document.getElementById('u15-date').textContent = d.u15Date;
-      document.getElementById('u15-t1').textContent = d.u15t1;
-      document.getElementById('u15-d1').textContent = d.u15d1;
-
-      document.getElementById('u14-date').textContent = d.u14Date;
-      document.getElementById('u14-t1').textContent = d.u14t1;
-      document.getElementById('u14-d1').textContent = d.u14d1;
+      document.getElementById('u17-date').textContent = d.u17Date;
+      document.getElementById('u17-t1').textContent = d.u17t1;
+      document.getElementById('u17-d1').textContent = d.u17d1;
+      document.getElementById('u17-t2').textContent = d.u17t2;
+      document.getElementById('u17-d2').textContent = d.u17d2;
+      document.getElementById('u17-t3').textContent = d.u17t3;
+      document.getElementById('u17-d3').textContent = d.u17d3;
+      document.getElementById('u17-t4').textContent = d.u17t4;
+      document.getElementById('u17-d4').textContent = d.u17d4;
+      document.getElementById('u17-t5').textContent = d.u17t5;
+      document.getElementById('u17-d5').textContent = d.u17d5;
     }
 
     // Default: English, but check if user explicitly toggled PT

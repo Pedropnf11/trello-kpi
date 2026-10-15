@@ -71,7 +71,7 @@
       btn.textContent = tDict.btnAuthLoading;
 
       t.getRestApi().authorize({
-        scope:      'read',
+        scope:      'read,write',
         expiration: 'never'
       }).then(function() {
         t.closeModal();

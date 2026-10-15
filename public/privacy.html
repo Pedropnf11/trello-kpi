@@ -4,6 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
   <title>Privacy Policy - KPI Master</title>
   <style>
     :root {
@@ -78,44 +80,93 @@
 </head>
 
 <body>
+  <div style="width: min(880px, calc(100% - 32px)); margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center;">
+    <a href="/" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #0c66e4; text-decoration: none; padding: 6px 12px; background: #e9f2ff; border-radius: 6px;">
+      &larr; Return to Dashboard
+    </a>
+    <span style="font-size: 13px; color: #5f6b7a; font-weight: 600;">KPI Master</span>
+  </div>
   <main>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: April 30, 2026</p>
+    <p class="updated">Last updated: October 14, 2026</p>
 
     <p>
-      KPI Master helps teams visualize key performance indicators directly from Trello boards.
-      This privacy policy explains what data is accessed and how it is processed when you use the Power-Up or our dashboard.
+      KPI Master ("we", "our", or "us") helps teams visualize key performance indicators and workflow efficiency
+      directly from Trello boards and on our web application.
+      This Privacy Policy explains what data is accessed, processed, and stored when you use the KPI Master Power-Up or
+      our web dashboard, in strict compliance with the Atlassian Developer Terms, Public Power-Up Guidelines, and the
+      General Data Protection Regulation (GDPR).
     </p>
 
-    <h2>Data We Access</h2>
+    <h2>1. Data Minimization & How We Access Data</h2>
     <p>
-      When you authorize KPI Master, we retrieve board-related data necessary to compute KPIs through the Trello API. This includes board names, lists, cards, members assigned to cards, activity dates, and comments.
+      When you authorize KPI Master via Trello's client authorization, we dynamically retrieve only the board-related
+      data necessary to compute metrics in real time through the official Trello API. This includes board names, lists,
+      cards, assigned member IDs, activity dates, and comments.
+    </p>
+    <p>
+      We operate on a <strong>client-side processing architecture</strong>: calculations (such as lead speeds,
+      conversion funnels, and card age badges) are performed dynamically in your browser session.
     </p>
 
-    <h2>How We Use the Data</h2>
+    <h2>2. Personal Data Storage & GDPR Compliance</h2>
     <p>
-      We use this data solely to calculate and display metrics such as total cards, completion rate, active members, recently active cards, list funnels, and performance reports. We do not sell or share your data for marketing purposes.
+      <strong>We do not store Trello user personal data on our servers.</strong>
+    </p>
+    <ul>
+      <li><strong>No External Server Databases:</strong> We do not operate external databases storing confidential card
+        details, card descriptions, or member personal identifying information outside of Trello.</li>
+      <li><strong>Local Browser Storage:</strong> Some non-sensitive user preferences (such as selected language, board
+        IDs, and feature toggles) may be stored locally in your browser's <code>localStorage</code> or directly inside
+        Trello's secure storage via the Power-Up Plugin API (<code>t.set()</code>).</li>
+      <li><strong>Right to Erasure & Deletion:</strong> Because no personal data is retained on external servers,
+        disconnecting the Power-Up immediately removes access to your board data. Users can request total deletion of
+        any support correspondence or local data records at any time by contacting us.</li>
+    </ul>
+
+    <h2>3. Telemetry & Analytics (PostHog)</h2>
+    <p>
+      To improve application performance and understand feature adoption, KPI Master collects aggregated, anonymized
+      usage telemetry using <strong>PostHog Inc.</strong> (hosted in the European Union - EU Cloud).
+    </p>
+    <ul>
+      <li><strong>Strictly Defined Events:</strong> We only track explicitly defined user interaction events (such as
+        opening the dashboard popup, switching languages, or clicking the web dashboard button).</li>
+      <li><strong>No Session Recording:</strong> Screen and session recording is strictly disabled
+        (<code>disable_session_recording: true</code>) to prevent any accidental capture of board contents.</li>
+      <li><strong>No Autocapture:</strong> Automatic click scraping and text input capturing are disabled
+        (<code>autocapture: false</code>). Card titles, card descriptions, confidential comments, and API tokens are
+        never tracked or sent to analytics.</li>
+      <li><strong>Graceful Degradation:</strong> If telemetry is blocked by ad-blockers or privacy extensions, the
+        Power-Up continues to operate with 100% of its functionality unaffected.</li>
+    </ul>
+
+    <h2>4. Third-Party Integrations</h2>
+    <p>
+      KPI Master allows users to optionally export reports to external workflow tools like Make.com or Zapier when
+      configured by the user. We only transmit the aggregated summary data specified by you when you trigger an export
+      action.
     </p>
 
-    <h2>Data Storage</h2>
+    <h2>5. Revoking Access & Disconnecting</h2>
     <p>
-      The Power-Up uses Trello client authorization to read board data and render metrics directly in your session. Some configuration preferences, such as selected board ID, role preferences, and dashboard filters, may be stored locally in your browser's local storage to improve user experience.
+      You maintain complete control over your account. You can disconnect KPI Master or revoke its access token at any
+      time:
     </p>
+    <ul>
+      <li>Inside Trello: Open <strong>Power-Up Settings &rarr; Disconnect Account</strong>.</li>
+      <li>Through your Atlassian account: Navigate to your Atlassian Account Settings &rarr; Connected Apps &rarr;
+        Revoke KPI Master.</li>
+    </ul>
 
-    <h2>Third-Party Integration</h2>
+    <h2>6. Contact & Data Protection Inquiries</h2>
     <p>
-      KPI Master allows you to optionally export reports to external workflow tools like Make.com or Zapier. This export only occurs if you explicitly configure a webhook URL and trigger the export action.
+      If you have questions regarding this Privacy Policy, user rights, or data compliance, please reach out directly:
     </p>
-
-    <h2>Revoking Access</h2>
     <p>
-      You can disconnect KPI Master or revoke its access token at any time through the Power-Up settings in Trello or your Atlassian/Trello account connection settings. Once disconnected, the Power-Up will no longer have access to your data.
-    </p>
-
-    <h2>Contact Us</h2>
-    <p>
-      If you have questions about privacy, support, or data removal, please contact us at:
-      <a href="mailto:phenrique07082003@gmail.com">phenrique07082003@gmail.com</a>.
+      <strong>Developer & Data Protection Contact:</strong><br>
+      Email: <a href="mailto:kpismasterpowerup@gmail.com">kpismasterpowerup@gmail.com</a><br>
+      Website: <a href="https://kpismaster.vercel.app" target="_blank">https://kpismaster.vercel.app</a>
     </p>
   </main>
 </body>

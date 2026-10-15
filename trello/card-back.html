@@ -1,134 +1,270 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
   <meta charset="utf-8">
   <title>KPI Master - Histórico do Cartão</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
   <style>
     :root {
       --bg-body: transparent;
       --bg-box: #ffffff;
-      --border-box: #dfe1e6;
-      --title-color: #172b4d;
-      --desc-color: #5e6c84;
-      --accent-blue: #0065ff;
-      --accent-green: #00875a;
-      --btn-bg: #091e420f;
-      --btn-text: #172b4d;
-      --btn-hover: #091e4224;
-      --item-bg: #f4f5f7;
-      --timeline-line: #0065ff;
+      --border-box: rgba(0, 0, 0, 0.08);
+      --title-color: #0f172a;
+      --desc-color: #64748b;
+      --accent-blue: #0284c7;
+      --accent-green: #10b981;
+      --accent-purple: #8b5cf6;
+      --btn-bg: #f8fafc;
+      --btn-text: #0f172a;
+      --btn-hover: #f1f5f9;
+      --item-bg: #f8fafc;
+      --timeline-line: #cbd5e1;
+      --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
     }
+
     @media (prefers-color-scheme: dark) {
       :root {
         --bg-body: transparent;
-        --bg-box: #22272b;
-        --border-box: #38414a;
-        --title-color: #b6c2cf;
-        --desc-color: #9fadbc;
+        --bg-box: #181d24;
+        --border-box: rgba(255, 255, 255, 0.07);
+        --title-color: #f1f5f9;
+        --desc-color: #94a3b8;
         --accent-blue: #38bdf8;
-        --accent-green: #4ade80;
-        --btn-bg: #2c333f;
-        --btn-text: #b6c2cf;
-        --btn-hover: #3a4454;
-        --item-bg: #1c2126;
-        --timeline-line: #38bdf8;
+        --accent-green: #34d399;
+        --accent-purple: #a78bfa;
+        --btn-bg: #202630;
+        --btn-text: #f1f5f9;
+        --btn-hover: #29313d;
+        --item-bg: #1e242c;
+        --timeline-line: #334155;
+        --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
       }
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       background: var(--bg-body);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       margin: 0;
       padding: 4px 0px;
+      -webkit-font-smoothing: antialiased;
     }
 
     .card-history-container {
       background: var(--bg-box);
       border: 1px solid var(--border-box);
-      border-radius: 10px;
-      padding: 10px 12px;
+      border-radius: 12px;
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
+      box-shadow: var(--card-shadow);
     }
 
     .header-row {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .title-box {
-      display: flex;
-      align-items: center;
+      justify-content: flex-end;
       gap: 8px;
     }
 
-    .title-icon { font-size: 16px; }
-
-    .title-text {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--title-color);
-    }
-
     .cycle-badge {
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.3);
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
       color: var(--accent-blue);
       font-size: 11px;
       font-weight: 700;
       padding: 4px 10px;
       border-radius: 20px;
+      letter-spacing: 0.02em;
     }
 
-    .timeline-bar {
+    .btn-toggle-touchpoints {
+      background: var(--btn-bg);
+      border: 1px solid var(--border-box);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 20px;
+      padding: 5px 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-toggle-touchpoints span {
+      color: #ffffff;
+    }
+
+    .btn-toggle-touchpoints:hover {
+      color: #ffffff;
+      border-color: rgba(56, 189, 248, 0.7);
+      background: var(--btn-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-toggle-touchpoints.is-off {
+      opacity: 0.55;
+      border-style: dashed;
+    }
+
+    /* Touchpoints Quick Actions Header */
+    .touchpoints-row {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 10px;
+      transition: all 0.25s ease;
+    }
+
+    .touchpoints-row.is-disabled {
+      display: none;
+    }
+
+    .touchpoint-card {
+      flex: 1;
+      background: var(--btn-bg);
+      border: 1px solid var(--border-box);
+      border-radius: 10px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .touchpoint-card:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      background: rgba(56, 189, 248, 0.04);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .touchpoint-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .touchpoint-icon {
+      font-size: 15px;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+    }
+
+    .touchpoint-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--title-color);
+    }
+
+    .touchpoint-badge {
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      min-width: 22px;
+      text-align: center;
+      letter-spacing: 0.01em;
+    }
+
+    .touchpoint-badge.calls-badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .touchpoint-badge.emails-badge {
+      background: rgba(139, 92, 246, 0.15);
+      color: var(--accent-purple);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-touchpoint-add {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(56, 189, 248, 0.06));
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--accent-blue);
+      border-radius: 7px;
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-touchpoint-add:hover {
+      background: var(--accent-blue);
+      color: #ffffff;
+      border-color: var(--accent-blue);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(56, 189, 248, 0.35);
+    }
+
+    .btn-touchpoint-add:active {
+      transform: scale(0.95);
+    }
+
+    /* Key Indicators Timeline Bar */
+    .timeline-bar {
+      display: flex;
+      align-items: stretch;
+      gap: 8px;
     }
 
     .timeline-step {
       flex: 1;
       background: var(--btn-bg);
-      border-radius: 6px;
-      padding: 6px 8px;
+      border: 1px solid var(--border-box);
+      border-radius: 8px;
+      padding: 7px 10px;
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 3px;
+      transition: all 0.15s ease;
     }
 
     .timeline-step.active {
-      border: 1px solid var(--accent-blue);
-      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      background: rgba(56, 189, 248, 0.06);
     }
 
     .step-label {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
       color: var(--desc-color);
     }
 
     .step-val {
-      font-size: 12px;
+      font-size: 12.5px;
       font-weight: 700;
       color: var(--title-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* Streamed Timeline History Section */
     .stream-section {
-      border-top: 1px dashed var(--border-box);
-      padding-top: 8px;
+      border-top: 1px solid var(--border-box);
+      padding-top: 10px;
       display: flex;
       flex-direction: column;
-      gap: 7px;
-      max-height: 150px;
+      gap: 8px;
+      max-height: 160px;
       overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: var(--desc-color) transparent;
@@ -170,10 +306,11 @@
       content: '';
       position: absolute;
       left: 6px;
-      top: 6px;
-      bottom: 6px;
+      top: 8px;
+      bottom: 8px;
       width: 2px;
-      background: var(--border-box);
+      background: var(--timeline-line);
+      border-radius: 2px;
     }
 
     .stream-node {
@@ -191,12 +328,13 @@
     .stream-dot {
       position: absolute;
       left: -18px;
-      top: 3px;
-      width: 10px;
-      height: 10px;
+      top: 4px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       background: var(--desc-color);
       border: 2px solid var(--bg-box);
+      transition: all 0.2s ease;
     }
 
     .stream-node.latest .stream-dot {
@@ -219,17 +357,21 @@
       font-size: 12px;
       font-weight: 700;
       color: var(--title-color);
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .stream-date {
       font-size: 11px;
+      font-weight: 500;
       color: var(--desc-color);
     }
 
     .stream-stay {
-      font-size: 11px;
+      font-size: 11.5px;
       color: var(--desc-color);
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     .stream-stay-highlight {
@@ -240,9 +382,9 @@
     .auth-banner {
       background: rgba(56, 189, 248, 0.08);
       border: 1px dashed rgba(56, 189, 248, 0.3);
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 11px;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 11.5px;
       color: var(--title-color);
       display: flex;
       align-items: center;
@@ -254,37 +396,48 @@
       background: var(--accent-blue);
       color: #fff;
       border: none;
-      border-radius: 4px;
-      padding: 4px 8px;
-      font-size: 10.5px;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 11px;
       font-weight: 700;
       cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+
+    .auth-btn:hover {
+      opacity: 0.9;
     }
 
     .footer-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 2px;
+      margin-top: 4px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-box);
     }
 
     .btn-link {
       background: var(--btn-bg);
-      color: var(--btn-text);
-      border: none;
-      border-radius: 6px;
-      padding: 7px 12px;
-      font-size: 12px;
+      color: var(--title-color);
+      border: 1px solid var(--border-box);
+      border-radius: 7px;
+      padding: 6px 12px;
+      font-size: 11.5px;
       font-weight: 600;
       cursor: pointer;
       text-decoration: none;
-      transition: background 0.15s ease;
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
       display: inline-flex;
       align-items: center;
       gap: 6px;
     }
+
     .btn-link:hover {
       background: var(--btn-hover);
+      border-color: rgba(56, 189, 248, 0.35);
+      color: var(--accent-blue);
+      transform: translateY(-1px);
     }
 
     .locked-btn {
@@ -364,52 +517,136 @@
       opacity: 0.95;
       transform: translateY(-1px);
     }
+
+    /* Feedback Gate */
+    .gate-wrapper {
+      position: relative;
+    }
+
+    .card-history-container.is-locked {
+      filter: blur(6px);
+      pointer-events: none;
+      user-select: none;
+      transition: filter 0.4s ease;
+    }
+
+    .gate-overlay {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      border-radius: 10px;
+      background: rgba(11, 15, 25, 0.35);
+    }
+
+    .gate-overlay .btn-unlock {
+      animation: gatePulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes gatePulse {
+
+      0%,
+      100% {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3);
+      }
+
+      50% {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(245, 158, 11, 0.5);
+      }
+    }
   </style>
 </head>
+
 <body>
 
-  <div class="card-history-container">
-    <div class="header-row">
-      <div class="title-box">
-        <span class="title-icon">⏱️</span>
-        <span class="title-text" id="lbl-title">Histórico de Passagem da Lead</span>
-      </div>
-      <div class="cycle-badge" id="lbl-cycle">Ciclo Total: Calculando...</div>
-    </div>
-
-    <div class="timeline-bar">
-      <div class="timeline-step">
-        <span class="step-label" id="lbl-created-label">Data de Entrada</span>
-        <span class="step-val" id="lbl-created-val">--</span>
-      </div>
-      <div class="timeline-step active">
-        <span class="step-label" id="lbl-list-label">Coluna Atual</span>
-        <span class="step-val" id="lbl-list-val">--</span>
-      </div>
-      <div class="timeline-step">
-        <span class="step-label" id="lbl-age-label">Idade da Lead</span>
-        <span class="step-val" id="lbl-age-val">--</span>
+  <div class="gate-wrapper">
+    <!-- Feedback Gate Overlay -->
+    <div id="gate-overlay" class="gate-overlay" style="display: none;">
+      <div class="locked-card">
+        <div style="font-size: 36px; margin-bottom: 4px; filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.5));">🔒
+        </div>
+        <div class="locked-header" id="gate-title">Funcionalidade Bloqueada</div>
+        <div class="locked-desc" id="gate-desc">Desbloqueia grátis em 10 segundos sem pagar nada!</div>
+        <button id="btn-unlock-feedback" class="btn-unlock" style="margin-top: 4px;">🔓 Desbloquear Agora — É
+          Grátis!</button>
       </div>
     </div>
-
-    <!-- Sequential Stream Timeline Section -->
-    <div class="stream-section">
-      <div class="stream-title">
-        <span>📜 Histórico Corrente de Passagens:</span>
+    <div class="card-history-container" id="main-content">
+      <div class="header-row">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;">
+          <button id="btn-toggle-touchpoints" class="btn-toggle-touchpoints"
+            title="Ativar ou ocultar registo de chamadas e emails">
+            <span id="txt-toggle-touchpoints">⚡ Ações: ON</span>
+          </button>
+          <button id="btn-view-logs" class="btn-toggle-touchpoints" title="Ver histórico detalhado de contactos">
+            <span id="txt-view-logs">📋 Ver Histórico</span>
+          </button>
+        </div>
       </div>
-      <div id="stream-container" class="stream-timeline">
-        <!-- Filled via JS -->
-      </div>
-    </div>
 
-    <div class="footer-row">
-      <a id="btn-dashboard" class="btn-link" href="#" target="_blank">
-        📈 Ver KPIs Completos do Quadro →
-      </a>
+      <!-- Quick Touchpoints (Calls & Emails) — Agora no topo e com maior destaque -->
+      <div id="touchpoints-row" class="touchpoints-row">
+        <div class="touchpoint-card">
+          <div class="touchpoint-info">
+            <span class="touchpoint-icon">📞</span>
+            <span class="touchpoint-label" id="lbl-touch-calls">Telefonemas:</span>
+            <span class="touchpoint-badge calls-badge" id="val-touch-calls">0</span>
+          </div>
+          <button id="btn-add-call" class="btn-touchpoint-add" title="Registar telefonema">
+            + Chamada
+          </button>
+        </div>
+
+        <div class="touchpoint-card">
+          <div class="touchpoint-info">
+            <span class="touchpoint-icon">✉️</span>
+            <span class="touchpoint-label" id="lbl-touch-emails">E-mails:</span>
+            <span class="touchpoint-badge emails-badge" id="val-touch-emails">0</span>
+          </div>
+          <button id="btn-add-email" class="btn-touchpoint-add" title="Registar e-mail">
+            + Email
+          </button>
+        </div>
+      </div>
+
+      <div class="timeline-bar">
+        <div class="timeline-step">
+          <span class="step-label" id="lbl-created-label">Data de Entrada</span>
+          <span class="step-val" id="lbl-created-val">--</span>
+        </div>
+        <div class="timeline-step active">
+          <span class="step-label" id="lbl-list-label">Coluna Atual</span>
+          <span class="step-val" id="lbl-list-val">--</span>
+        </div>
+      </div>
+
+      <!-- Sequential Stream Timeline Section -->
+      <div id="stream-section" class="stream-section">
+        <div class="stream-title">
+          <span id="lbl-stream-title">📜 Histórico Corrente de Passagens:</span>
+        </div>
+        <div id="stream-container" class="stream-timeline">
+          <!-- Filled via JS -->
+        </div>
+      </div>
+
+      <div class="footer-row" style="display: flex; justify-content: flex-start; align-items: center;">
+        <a id="btn-dashboard" class="btn-link" href="#" target="_blank">
+          📈 Ver KPIs Completos do Quadro →
+        </a>
+      </div>
     </div>
   </div>
 
   <script type="module">
+    import { Analytics } from '../js/analytics.js';
+    Analytics.init();
+
     var KEY = import.meta.env.VITE_TRELLO_API_KEY;
     var NAME = 'KPI Master';
     var SITE = 'https://kpismaster.vercel.app';
@@ -417,11 +654,11 @@
     var t = TrelloPowerUp.iframe({ appKey: KEY, appName: NAME });
 
     var locale = t.locale || 'en';
-    var isPt = locale.startsWith('pt');
+    var isPt = false; // Default: 100% English!
 
     var translations = {
       pt: {
-        title: 'Histórico de Passagem da Lead',
+        title: 'Histórico da Lead',
         createdLabel: 'Data de Entrada',
         listLabel: 'Coluna Atual',
         ageLabel: 'Idade da Lead',
@@ -437,13 +674,22 @@
         daysUnit: 'dias',
         hoursUnit: 'horas',
         authNotice: 'Autorizar Trello para ver histórico detalhado de datas',
-        authBtn: 'Autorizar'
+        authBtn: 'Autorizar',
+        lockedTitle: '🔒 Funcionalidade Bloqueada',
+        lockedDesc: 'Desbloqueia grátis em 10 segundos sem pagar nada!',
+        lockedBtn: '🔓 Desbloquear Agora — É Grátis!',
+        callsLabel: 'Telefonemas:',
+        emailsLabel: 'E-mails:',
+        streamTitle: '📜 Histórico de Listas:',
+        viewLogBtn: '📋 Ver Histórico contactos Feitos',
+        addCallBtn: '+ 1 call Feita',
+        addEmailBtn: '+ 1 Email enviado'
       },
       en: {
         title: 'Lead Stage & Speed History',
         createdLabel: 'Entry Date',
         listLabel: 'Current List',
-        ageLabel: 'Lead Age',
+        ageLabel: 'Age of Lead',
         today: 'Today',
         yesterday: 'Yesterday',
         daysAgo: '{days} days ago',
@@ -456,19 +702,182 @@
         daysUnit: 'days',
         hoursUnit: 'hours',
         authNotice: 'Authorize Trello API to view detailed stage history',
-        authBtn: 'Authorize'
+        authBtn: 'Authorize',
+        lockedTitle: '🔒 Feature Locked',
+        lockedDesc: 'Unlock for free in just 10 seconds — no payment needed!',
+        lockedBtn: '🔓 Unlock Now — It\'s Free!',
+        callsLabel: 'Calls:',
+        emailsLabel: 'Emails:',
+        streamTitle: '📜 Current Stage History:',
+        viewLogBtn: '📋 View History',
+        addCallBtn: '+ 1 Call Made',
+        addEmailBtn: '+ 1 Email Sent'
       }
     };
 
-    var tDict = isPt ? translations.pt : translations.en;
+    var tDict = translations.en;
 
-    document.getElementById('lbl-title').textContent = tDict.title;
-    document.getElementById('lbl-created-label').textContent = tDict.createdLabel;
-    document.getElementById('lbl-list-label').textContent = tDict.listLabel;
-    document.getElementById('lbl-age-label').textContent = tDict.ageLabel;
-    document.getElementById('btn-dashboard').textContent = tDict.btnText;
+    function applyCardBackLanguage(lang) {
+      isPt = lang === 'pt';
+      tDict = isPt ? translations.pt : translations.en;
+
+      var elTitle = document.getElementById('lbl-title');
+      if (elTitle) elTitle.textContent = tDict.title;
+      var elCreated = document.getElementById('lbl-created-label');
+      if (elCreated) elCreated.textContent = tDict.createdLabel;
+      var elList = document.getElementById('lbl-list-label');
+      if (elList) elList.textContent = tDict.listLabel;
+      var elAge = document.getElementById('lbl-age-label');
+      if (elAge) elAge.textContent = tDict.ageLabel;
+      var elCalls = document.getElementById('lbl-touch-calls');
+      if (elCalls) elCalls.textContent = tDict.callsLabel;
+      var elEmails = document.getElementById('lbl-touch-emails');
+      if (elEmails) elEmails.textContent = tDict.emailsLabel;
+      var elStream = document.getElementById('lbl-stream-title');
+      if (elStream) elStream.textContent = tDict.streamTitle;
+      var elDashboard = document.getElementById('btn-dashboard');
+      if (elDashboard) elDashboard.textContent = tDict.btnText;
+      var elGateTitle = document.getElementById('gate-title');
+      if (elGateTitle) elGateTitle.textContent = tDict.lockedTitle;
+      var elGateDesc = document.getElementById('gate-desc');
+      if (elGateDesc) elGateDesc.textContent = tDict.lockedDesc;
+      var elUnlock = document.getElementById('btn-unlock-feedback');
+      if (elUnlock) elUnlock.textContent = tDict.lockedBtn;
+
+      var btnAddCallEl = document.getElementById('btn-add-call');
+      if (btnAddCallEl) btnAddCallEl.textContent = tDict.addCallBtn;
+      var btnAddEmailEl = document.getElementById('btn-add-email');
+      if (btnAddEmailEl) btnAddEmailEl.textContent = tDict.addEmailBtn;
+
+      var txtViewLogs = document.getElementById('txt-view-logs');
+      if (txtViewLogs) txtViewLogs.textContent = tDict.viewLogBtn;
+
+      var txtToggle = document.getElementById('txt-toggle-touchpoints');
+      if (txtToggle) {
+        var isOff = document.getElementById('btn-toggle-touchpoints')?.classList.contains('is-off');
+        txtToggle.textContent = isOff ? (isPt ? '⚡ Ações: OFF' : '⚡ Actions: OFF') : (isPt ? '⚡ Ações: ON' : '⚡ Actions: ON');
+      }
+    }
+
+    // Default to EN immediately
+    applyCardBackLanguage('en');
+
+    // Check user preference
+    t.get('member', 'private', 'kpi_user_lang').then(function (savedLang) {
+      if (savedLang === 'pt') {
+        applyCardBackLanguage('pt');
+      }
+    }).catch(function () { });
+
+    // ── Toggle Ativar/Desativar Touchpoints ──
+    var btnToggleTouchpoints = document.getElementById('btn-toggle-touchpoints');
+    var txtToggleTouchpoints = document.getElementById('txt-toggle-touchpoints');
+    var touchpointsRow = document.getElementById('touchpoints-row');
+
+    function applyTouchpointsVisibility(isEnabled) {
+      if (isEnabled) {
+        touchpointsRow.classList.remove('is-disabled');
+        btnToggleTouchpoints.classList.remove('is-off');
+        txtToggleTouchpoints.textContent = isPt ? '⚡ Ações: ON' : '⚡ Actions: ON';
+      } else {
+        touchpointsRow.classList.add('is-disabled');
+        btnToggleTouchpoints.classList.add('is-off');
+        txtToggleTouchpoints.textContent = isPt ? '⚡ Ações: OFF' : '⚡ Actions: OFF';
+      }
+      t.sizeTo(document.body).catch(function () { });
+    }
+
+    t.get('board', 'shared', 'kpi_touchpoints_enabled')
+      .catch(function () { return true; })
+      .then(function (val) {
+        var isEnabled = val === undefined || val === null || val === true || val === 'true';
+        applyTouchpointsVisibility(isEnabled);
+      });
+
+    // Plug & Play: Verificar se o histórico de contactos está ativado
+    t.get('board', 'shared', 'kpi_history_enabled')
+      .catch(function () { return true; })
+      .then(function (val) {
+        var isHistoryEnabled = val === undefined || val === null || val === true || val === 'true';
+        var btnViewLogs = document.getElementById('btn-view-logs');
+        if (btnViewLogs) {
+          btnViewLogs.style.display = isHistoryEnabled ? 'inline-flex' : 'none';
+        }
+      });
+
+    if (btnToggleTouchpoints) {
+      btnToggleTouchpoints.addEventListener('click', function (e) {
+        e.preventDefault();
+        var currentlyDisabled = touchpointsRow.classList.contains('is-disabled');
+        var newState = currentlyDisabled; // se estava disabled, passa a true (ativo)
+        applyTouchpointsVisibility(newState);
+        t.set('board', 'shared', 'kpi_touchpoints_enabled', newState).catch(function () { });
+      });
+    }
+
+    function checkFeedbackStatus() {
+      return Promise.all([
+        t.get('member', 'private', 'kpi_feedback_state').catch(function(){ return null; }),
+        t.get('member', 'private', 'kpi_has_reviewed').catch(function(){ return false; })
+      ]).then(function (results) {
+          var rawState = results[0];
+          var hasReviewedFlag = (results[1] === true || results[1] === 'true');
+
+          var state = null;
+          if (rawState) {
+            state = typeof rawState === 'string' ? JSON.parse(rawState) : rawState;
+          }
+          var hasSubmitted = false;
+          if ((state && state.lastSubmittedTime) || hasReviewedFlag) {
+            hasSubmitted = true;
+          }
+          try {
+            if (localStorage.getItem('kpi_feedback_submitted_globally') === 'true' || localStorage.getItem('kpi_has_reviewed') === 'true') {
+              hasSubmitted = true;
+            }
+          } catch (e) { }
+
+          var overlay = document.getElementById('gate-overlay');
+          var mainContent = document.getElementById('main-content');
+          var titleIcon = document.querySelector('.title-icon');
+          var btnHeader = document.getElementById('btn-header-unlock');
+
+          if (hasSubmitted) {
+            overlay.style.display = 'none';
+            mainContent.classList.remove('is-locked');
+            if (titleIcon) titleIcon.textContent = '⏱️';
+            if (btnHeader) btnHeader.style.display = 'none';
+          } else {
+            overlay.style.display = 'flex';
+            mainContent.classList.add('is-locked');
+            if (titleIcon) titleIcon.textContent = '🔒';
+            if (btnHeader) btnHeader.style.display = 'inline-flex';
+          }
+          t.sizeTo(document.body).catch(function () { });
+        })
+        .catch(function (err) {
+          console.warn('[KPI Master] Could not check feedback state:', err);
+        });
+    }
+
+    document.getElementById('btn-unlock-feedback').addEventListener('click', function (e) {
+      e.preventDefault();
+      Analytics.track('feature_unlock_intent', {
+        feature: 'lead_stage_and_speed_history',
+        source: 'card_back_gate',
+        description: 'Utilizador clicou para desbloquear Lead Stage & Speed History'
+      });
+      t.modal({
+        title: isPt ? '⭐ A Tua Opinião — KPI Master' : '⭐ Your Feedback — KPI Master',
+        url: './feedback.html',
+        height: 520
+      });
+    });
+
+
 
     t.render(function () {
+      checkFeedbackStatus();
       t.sizeTo(document.body).catch(function () { });
 
       Promise.all([
@@ -496,16 +905,148 @@
           if (currentList && currentList.name) {
             document.getElementById('lbl-list-val').textContent = currentList.name;
           } else {
-            document.getElementById('lbl-list-val').textContent = 'Ativa';
+            document.getElementById('lbl-list-val').textContent = isPt ? 'Ativa' : 'Active';
           }
 
-          var ageText = diffDays === 0 ? tDict.today : (diffDays === 1 ? tDict.yesterday : diffDays + ' dias');
-          document.getElementById('lbl-age-val').textContent = ageText;
-          document.getElementById('lbl-cycle').textContent = tDict.cycleText.replace('{days}', diffDays);
+          var elAgeVal = document.getElementById('lbl-age-val');
+          if (elAgeVal) {
+            var ageText = diffDays === 0 ? tDict.today : (diffDays === 1 ? tDict.yesterday : diffDays + ' ' + tDict.daysUnit);
+            elAgeVal.textContent = ageText;
+          }
+          var elCycle = document.getElementById('lbl-cycle');
+          if (elCycle) {
+            elCycle.textContent = tDict.cycleText.replace('{days}', diffDays);
+          }
+
+          // ── Gerir Touchpoints (Telefonemas & E-mails) ──
+          function updateTouchpointsUI(tp) {
+            var calls = Number(tp && tp.calls) || 0;
+            var emails = Number(tp && tp.emails) || 0;
+            document.getElementById('val-touch-calls').textContent = calls;
+            document.getElementById('val-touch-emails').textContent = emails;
+          }
+
+          t.get('card', 'shared', 'kpi_touchpoints')
+            .catch(function () { return null; })
+            .then(function (saved) {
+              updateTouchpointsUI(saved);
+            });
+
+          function handleAddTouchpoint(type) {
+            return Promise.all([
+              t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; }),
+              t.get('card', 'shared', 'kpi_touchpoints_history').catch(function () { return []; }),
+              t.member('fullName', 'username').catch(function () { return { fullName: 'Member' }; }),
+              t.card('id', 'name').catch(function () { return card; })
+            ]).then(function (values) {
+              var saved = values[0];
+              var history = Array.isArray(values[1]) ? values[1] : [];
+              var member = values[2] || {};
+              var currentCard = values[3] || card;
+
+              var memberName = member.fullName || member.username || (isPt ? 'Membro' : 'Member');
+
+              var current = saved || {};
+              var updated = {
+                calls: (Number(current.calls) || 0) + (type === 'call' ? 1 : 0),
+                emails: (Number(current.emails) || 0) + (type === 'email' ? 1 : 0),
+                lastUpdated: Date.now()
+              };
+              updateTouchpointsUI(updated);
+
+              var now = new Date();
+              var dateFormatted = now.toLocaleDateString(isPt ? 'pt-PT' : 'en-GB', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+              });
+              var timeFormatted = now.toLocaleTimeString(isPt ? 'pt-PT' : 'en-GB', {
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+
+              var logEntry = {
+                type: type,
+                author: memberName,
+                timestamp: Date.now(),
+                formattedDate: `${dateFormatted} - ${timeFormatted}`
+              };
+
+              var newHistory = history.concat([logEntry]);
+
+              return Promise.all([
+                t.set('card', 'shared', 'kpi_touchpoints', updated),
+                t.set('card', 'shared', 'kpi_touchpoints_history', newHistory)
+              ]).then(function () {
+                return t.alert({
+                  message: type === 'call'
+                    ? (isPt ? '📞 Chamada registada no histórico!' : '📞 Call logged to history!')
+                    : (isPt ? '✉️ E-mail registado no histórico!' : '✉️ Email logged to history!'),
+                  duration: 3
+                });
+              });
+            });
+          }
+
+          var btnAddCall = document.getElementById('btn-add-call');
+          var btnAddEmail = document.getElementById('btn-add-email');
+          var btnViewLogs = document.getElementById('btn-view-logs');
+
+          if (btnViewLogs && !btnViewLogs._bound) {
+            btnViewLogs._bound = true;
+            btnViewLogs.addEventListener('click', function (e) {
+              e.preventDefault();
+              Analytics.track('card_touchpoint_history_opened', {
+                description: 'Utilizador abriu o modal de histórico de contactos'
+              });
+              t.modal({
+                title: isPt ? '📋 Histórico de Contactos' : '📋 Contact History',
+                url: './contact-log.html',
+                height: 480
+              });
+            });
+          }
+
+          if (btnAddCall && !btnAddCall._bound) {
+            btnAddCall._bound = true;
+            btnAddCall.addEventListener('click', function (e) {
+              e.preventDefault();
+              Analytics.track('card_quick_action_clicked', {
+                action_type: 'call',
+                description: 'Utilizador clicou em +1 Chamada no verso do cartão'
+              });
+              handleAddTouchpoint('call');
+            });
+          }
+          if (btnAddEmail && !btnAddEmail._bound) {
+            btnAddEmail._bound = true;
+            btnAddEmail.addEventListener('click', function (e) {
+              e.preventDefault();
+              Analytics.track('card_quick_action_clicked', {
+                action_type: 'email',
+                description: 'Utilizador clicou em +1 Email no verso do cartão'
+              });
+              handleAddTouchpoint('email');
+            });
+          }
+
+          var streamSection = document.getElementById('stream-section');
+          if (streamSection && !streamSection._scrollBound) {
+            streamSection._scrollBound = true;
+            var hasTrackedTimelineScroll = false;
+            streamSection.addEventListener('scroll', function () {
+              if (!hasTrackedTimelineScroll && streamSection.scrollTop > 20) {
+                hasTrackedTimelineScroll = true;
+                Analytics.track('card_history_timeline_scrolled', {
+                  description: 'Utilizador fez scroll no histórico de passagens da lead'
+                });
+              }
+            }, { passive: true });
+          }
 
           var streamContainer = document.getElementById('stream-container');
 
-          t.getRestApi().isAuthorized().then(function(isAuth) {
+          t.getRestApi().isAuthorized().then(function (isAuth) {
             if (!isAuth) {
               streamContainer.innerHTML = `
                 <div class="auth-banner">
@@ -515,21 +1056,21 @@
               `;
               var authBtn = document.getElementById('btn-auth-stream');
               if (authBtn) {
-                authBtn.addEventListener('click', function() {
-                  t.getRestApi().authorize().then(function() {
+                authBtn.addEventListener('click', function () {
+                  t.getRestApi().authorize().then(function () {
                     window.location.reload();
                   });
                 });
               }
-              t.sizeTo(document.body).catch(function(){});
+              t.sizeTo(document.body).catch(function () { });
               return;
             }
 
-            return t.getRestApi().getToken().then(function(token) {
+            return t.getRestApi().getToken().then(function (token) {
               var actionsUrl = 'https://api.trello.com/1/cards/' + card.id + '/actions?filter=updateCard:idList,createCard&key=' + KEY + '&token=' + token;
               return fetch(actionsUrl)
-                .then(function(r) { return r.json(); })
-                .then(function(actions) {
+                .then(function (r) { return r.json(); })
+                .then(function (actions) {
                   if (!Array.isArray(actions) || actions.length === 0) {
                     streamContainer.innerHTML = `
                       <div class="stream-node first latest">
@@ -543,7 +1084,7 @@
                         </div>
                       </div>
                     `;
-                    t.sizeTo(document.body).catch(function(){});
+                    t.sizeTo(document.body).catch(function () { });
                     return;
                   }
 
@@ -566,7 +1107,7 @@
                     var stayDays = Math.floor(stayMs / (1000 * 60 * 60 * 24));
                     var stayHours = Math.floor((stayMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 
-                    var durationText = stayDays > 0 
+                    var durationText = stayDays > 0
                       ? (stayDays + ' ' + tDict.daysUnit + (stayHours > 0 ? ' e ' + stayHours + 'h' : ''))
                       : (stayHours + ' ' + tDict.hoursUnit);
 
@@ -606,10 +1147,10 @@
                   if (html) {
                     streamContainer.innerHTML = html;
                   }
-                  t.sizeTo(document.body).catch(function(){});
+                  t.sizeTo(document.body).catch(function () { });
                 });
             });
-          }).catch(function() {
+          }).catch(function () {
             streamContainer.innerHTML = `
               <div class="stream-node first latest">
                 <div class="stream-dot"></div>
@@ -622,7 +1163,7 @@
                 </div>
               </div>
             `;
-            t.sizeTo(document.body).catch(function(){});
+            t.sizeTo(document.body).catch(function () { });
           });
         }
 
@@ -644,6 +1185,10 @@
 
         document.getElementById('btn-dashboard').addEventListener('click', function (e) {
           e.preventDefault();
+          Analytics.track('card_open_dashboard_clicked', {
+            source: 'card_back_footer',
+            description: 'Utilizador clicou em Ver KPIs do Quadro a partir do verso do cartão'
+          });
           t.board('id').then(function (b) {
             if (!b || !b.id) {
               window.open(SITE, '_blank');
@@ -679,4 +1224,5 @@
   </script>
 
 </body>
+
 </html>

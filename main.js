@@ -1,6 +1,9 @@
 import { inject } from '@vercel/analytics';
+import { Analytics } from './js/analytics.js';
 
 inject();
+Analytics.init();
+window.Analytics = Analytics;
 
 import './js/api.js';
 import './js/utils.js';

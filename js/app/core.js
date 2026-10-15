@@ -1,3 +1,5 @@
+import { Analytics } from '../analytics.js';
+
 window.App = window.App || {};
 
 const TrelloConfig = {
@@ -773,6 +775,11 @@ App.setRole = function (role) {
     this.state.selectedMemberId = '';
     localStorage.setItem('trello_user_role', role);
 
+    Analytics.track('role_selected', {
+        role: role,
+        description: 'Utilizador selecionou o perfil ' + (role === 'manager' ? 'Gestor' : 'Vendedor')
+    });
+
     if (this.state.boardId) {
         this.selecionarBoard(this.state.boardId);
     } else {
@@ -789,6 +796,12 @@ App.confirmRole = function (boardId, role) {
     this.state.rawData = null;
     this.state.selectedMemberId = '';
     localStorage.setItem('trello_user_role', role);
+
+    Analytics.track('role_selected', {
+        role: role,
+        description: 'Utilizador confirmou o perfil ' + (role === 'manager' ? 'Gestor' : 'Vendedor')
+    });
+
     this.selecionarBoard(boardId);
 };
 

@@ -74,10 +74,34 @@
       transition: all 0.2s ease;
     }
 
-    .translate-btn:hover {
-      background: rgba(59, 130, 246, 0.18);
-      border-color: rgba(59, 130, 246, 0.4);
-      transform: translateY(-1px);
+    .btn-close-feedback {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: #ffffff !important;
+      font-size: 16px;
+      font-weight: 700;
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      line-height: 1;
+    }
+
+    .btn-close-feedback:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #ffffff !important;
+      transform: scale(1.08);
+    }
+
+    .header-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .header {
@@ -88,7 +112,7 @@
     h1.main-title {
       font-size: 20px;
       font-weight: 800;
-      color: #ffffff;
+      color: #ffffff !important;
       margin-bottom: 6px;
       letter-spacing: -0.01em;
     }
@@ -381,9 +405,12 @@
     <div id="wizard-screen">
       <div class="header-top">
         <div class="badge-feedback" id="badge-text">⚡ 30-Second Feedback</div>
-        <button id="btn-translate" class="translate-btn">
-          <span>🇵🇹 Traduzir para Português</span>
-        </button>
+        <div class="header-top-actions">
+          <button id="btn-translate" class="translate-btn">
+            <span>🇵🇹 Traduzir para Português</span>
+          </button>
+          <button id="btn-close-modal-top" class="btn-close-feedback" title="Fechar / Close">✕</button>
+        </div>
       </div>
 
       <div class="header">
@@ -510,6 +537,14 @@
   </div>
 
   <script type="module">
+    import { Analytics } from '../js/analytics.js';
+    Analytics.init();
+
+    Analytics.track('feedback_wizard_opened', {
+      initial_step: 1,
+      description: 'Modal de Feedback aberto no Trello'
+    });
+
     var WEBHOOK_URL = 'https://hook.eu1.make.com/5mla3rqp2s362eqa6tspuqykucwycu43';
     var t = TrelloPowerUp.iframe();
 
@@ -600,6 +635,12 @@
 
     window.goToStep = function(stepNum) {
       currentStep = stepNum;
+
+      Analytics.track('feedback_step_viewed', {
+        step: stepNum,
+        total_steps: 4,
+        description: 'Utilizador avançou para o Passo ' + stepNum + ' do feedback'
+      });
 
       // Update progress bar
       var percent = stepNum * 25;
@@ -743,8 +784,12 @@
       applyLanguage(currentLang === 'en' ? 'pt' : 'en');
     });
 
-    // Cancel Button Handler
-    document.getElementById('btn-cancel-top').addEventListener('click', function() {
+    // Cancel Button and Top Close 'X' Button Handlers
+    function handleDismissFeedback() {
+      Analytics.track('feedback_abandoned', {
+        step_abandoned: currentStep,
+        description: 'Utilizador cancelou/fechou o feedback no Passo ' + currentStep
+      });
       t.get('member', 'private', 'kpi_feedback_state').then(function(rawState) {
         var state = rawState ? JSON.parse(rawState) : { ignoredCount: 0 };
         state.ignoredCount = (state.ignoredCount || 0) + 1;
@@ -753,7 +798,13 @@
       }).catch(function(){}).finally(function() {
         t.closeModal();
       });
-    });
+    }
+
+    var btnCancelTop = document.getElementById('btn-cancel-top');
+    if (btnCancelTop) btnCancelTop.addEventListener('click', handleDismissFeedback);
+
+    var btnCloseTop = document.getElementById('btn-close-modal-top');
+    if (btnCloseTop) btnCloseTop.addEventListener('click', handleDismissFeedback);
 
     // Final Submit Handler
     document.getElementById('btn-submit').addEventListener('click', function() {
@@ -765,6 +816,14 @@
       var customUseCaseText = document.getElementById('s2-other-input').value.trim();
       var finalUseCase = (selectedUseCase === 'other' && customUseCaseText) ? ('Outro: ' + customUseCaseText) : selectedUseCase;
       var suggestions = document.getElementById('s4-textarea').value.trim();
+
+      Analytics.track('feedback_submitted', {
+        rating: currentRating,
+        use_case: finalUseCase,
+        dashboard_opinion: selectedDashboardOpinion,
+        has_suggestions: Boolean(suggestions),
+        description: 'Utilizador enviou o formulário de feedback com avaliação ' + currentRating + ' estrelas'
+      });
 
       var formattedText = '⭐ Rating: ' + currentRating + '/5\n' +
                           '📌 Use Case: ' + finalUseCase + '\n' +
@@ -795,11 +854,13 @@
           ignoredCount: 0
         };
         t.set('member', 'private', 'kpi_feedback_state', JSON.stringify(state)).catch(function(){});
+        t.set('member', 'private', 'kpi_has_reviewed', true).catch(function(){});
 
         try {
           localStorage.setItem('kpi_feedback_onboarding_seen_manager', 'true');
           localStorage.setItem('kpi_feedback_onboarding_seen_sales', 'true');
           localStorage.setItem('kpi_feedback_submitted_globally', 'true');
+          localStorage.setItem('kpi_has_reviewed', 'true');
         } catch(e){}
 
         document.getElementById('wizard-screen').style.display = 'none';

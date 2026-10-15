@@ -13,9 +13,20 @@
 
 <body>
   <script type="module">
+    import { Analytics } from '../js/analytics.js';
+    Analytics.init();
+
     var POWERUP_URL = window.location.origin + '/trello';
     var SITE_URL = 'https://kpismaster.vercel.app';
     var welcomePrompted = false;
+
+    function getUserIsPt(t) {
+      return t.get('member', 'private', 'kpi_user_lang').then(function (lang) {
+        return lang === 'pt';
+      }).catch(function () {
+        return false;
+      });
+    }
 
     TrelloPowerUp.initialize({
 
@@ -28,142 +39,45 @@
         });
       },
 
-      // ── Botão na barra do board + Abertura Automática ao Abrir o Quadro ───
+      // ── Botão na barra do board (Sem popups automáticos não solicitados) ───
       'board-buttons': function (t) {
-        var CURRENT_VERSION = '1.7';
-        var isPt = (t.locale || 'en').startsWith('pt');
-
-        function shouldPromptFeedback(rawState, welcomeSeenVal, firstSeenTimeVal) {
-          var now = Date.now();
-          var DAY = 24 * 60 * 60 * 1000;
-
-          // Regra: Se instalou a app há menos de 3 dias -> NÃO PERGUNTA FEEDBACK
-          var installTime = null;
-          if (typeof firstSeenTimeVal === 'number') installTime = firstSeenTimeVal;
-          else if (typeof welcomeSeenVal === 'number') installTime = welcomeSeenVal;
-
-          if (installTime && (now - installTime < 3 * DAY)) {
-            return false;
-          }
-
-          if (!rawState) {
-            // Se ainda não tem estado de feedback mas já passaram pelo menos 3 dias da instalação
-            return true;
-          }
-
-          try {
-            var state = typeof rawState === 'string' ? JSON.parse(rawState) : rawState;
-
-            // Se enviou feedback nos últimos 30 dias -> NÃO PERGUNTA
-            if (state.lastSubmittedTime && (now - state.lastSubmittedTime < 30 * DAY)) {
-              return false;
-            }
-
-            var lastPrompt = state.lastPromptTime || installTime || 0;
-            var elapsed = now - lastPrompt;
-            var count = state.ignoredCount || 0;
-
-            var requiredCooldown = 7 * DAY;
-            if (count === 1) requiredCooldown = 2 * DAY;      // 1.ª vez que ignorou -> 2 dias
-            else if (count === 2) requiredCooldown = 7 * DAY;  // 2.ª vez que ignorou -> 1 semana (7 dias)
-            else if (count === 3) requiredCooldown = 14 * DAY; // 3.ª vez que ignorou -> 2 semanas (14 dias)
-            else if (count >= 4) requiredCooldown = 30 * DAY;  // 4.ª+ vez que ignorou -> 1 mês (30 dias)
-
-            return elapsed >= requiredCooldown;
-          } catch(e) {
-            return false;
-          }
-        }
-
-        return Promise.all([
-          t.get('member', 'private', 'kpi_welcome_seen').catch(function () { return false; }),
-          t.get('member', 'private', 'kpi_last_seen_version').catch(function () { return null; }),
-          t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; }),
-          t.get('member', 'private', 'kpi_first_seen_time').catch(function () { return null; })
-        ]).then(function (res) {
-          var hasSeenWelcome = res[0];
-          var lastSeenVersion = res[1];
-          var rawFeedbackState = res[2];
-          var firstSeenTime = res[3];
-
-          var hasNewUpdate = hasSeenWelcome && (lastSeenVersion !== CURRENT_VERSION);
-          var needsFeedback = hasSeenWelcome && shouldPromptFeedback(rawFeedbackState, hasSeenWelcome, firstSeenTime);
-
-          // Dispara o Welcome, Novidades ou Feedback inteligente
-          if (!welcomePrompted) {
-            if (!hasSeenWelcome) {
-              welcomePrompted = true;
-              t.modal({
-                title: 'Bem-vindo ao KPI Master',
-                url: POWERUP_URL + '/welcome.html',
-                height: 540
-              });
-            } else if (hasNewUpdate) {
-              welcomePrompted = true;
-              t.modal({
-                title: isPt ? ('✨ Novidades da Versão ' + CURRENT_VERSION + ' — KPI Master') : ('✨ What\'s New in Version ' + CURRENT_VERSION + ' — KPI Master'),
-                url: POWERUP_URL + '/updates.html',
-                height: 560
-              });
-
-              // Se também precisa de dar feedback, aguarda 2 minutos (120.000 ms) antes de abrir o feedback!
-              if (needsFeedback) {
-                setTimeout(function () {
-                  var state = rawFeedbackState ? (typeof rawFeedbackState === 'string' ? JSON.parse(rawFeedbackState) : rawFeedbackState) : { ignoredCount: 0 };
-                  state.lastPromptTime = Date.now();
-                  state.ignoredCount = (state.ignoredCount || 0) + 1;
-                  t.set('member', 'private', 'kpi_feedback_state', JSON.stringify(state)).catch(function () { });
-
-                  t.modal({
-                    title: isPt ? '⭐ A Tua Opinião — KPI Master' : '⭐ Your Feedback — KPI Master',
-                    url: POWERUP_URL + '/feedback.html',
-                    height: 520
-                  });
-                }, 120000);
-              }
-            } else if (needsFeedback) {
-              welcomePrompted = true;
-              var state = rawFeedbackState ? (typeof rawFeedbackState === 'string' ? JSON.parse(rawFeedbackState) : rawFeedbackState) : { ignoredCount: 0 };
-              state.lastPromptTime = Date.now();
-              state.ignoredCount = (state.ignoredCount || 0) + 1;
-              t.set('member', 'private', 'kpi_feedback_state', JSON.stringify(state)).catch(function () { });
-
-              t.modal({
-                title: isPt ? '⭐ A Tua Opinião — KPI Master' : '⭐ Your Feedback — KPI Master',
-                url: POWERUP_URL + '/feedback.html',
-                height: 520
-              });
-            }
-          }
-
+        return getUserIsPt(t).then(function (isPt) {
           return [{
             icon: {
               dark: POWERUP_URL + '/icon.png',
               light: POWERUP_URL + '/icon.png'
             },
-            text: 'KPI Master',
+            text: isPt ? 'Leads KPIs Master | Abrir Micro Dashboard' : 'Leads KPIs Master | Open Micro Dashboard',
             callback: function (t) {
-              if (!hasSeenWelcome) {
-                return t.modal({
-                  title: 'Bem-vindo ao KPI Master',
-                  url: POWERUP_URL + '/welcome.html',
-                  height: 540
-                });
-              }
+              Analytics.track('micro_dashboard_button_clicked', {
+                board_id: t.getContext().board,
+                member_id: t.getContext().member,
+                description: 'Utilizador clicou no botão de abrir o Micro Dashboard'
+              });
 
-              return t.getRestApi().isAuthorized().then(function (isAuth) {
-                if (!isAuth) {
+              return t.get('member', 'private', 'kpi_welcome_seen').catch(function () { return false; }).then(function (hasSeenWelcome) {
+                if (!hasSeenWelcome) {
                   return t.modal({
-                    title: 'Ligar ao KPI Master',
-                    url: POWERUP_URL + '/auth.html',
-                    height: 420
+                    title: isPt ? 'Bem-vindo ao KPI Master' : 'Welcome to KPI Master',
+                    url: POWERUP_URL + '/welcome.html',
+                    height: 600
                   });
                 }
-                return t.modal({
-                  title: 'KPI Master',
-                  url: POWERUP_URL + '/dashboard.html',
-                  height: 620,
-                  fullscreen: false
+
+                return t.getRestApi().isAuthorized().then(function (isAuth) {
+                  if (!isAuth) {
+                    return t.modal({
+                      title: isPt ? 'Ligar ao KPI Master' : 'Connect KPI Master',
+                      url: POWERUP_URL + '/auth.html',
+                      height: 420
+                    });
+                  }
+                  return t.modal({
+                    title: isPt ? 'Micro Dashboard & Velocidade das Leads' : 'Micro Dashboard & Lead Speed',
+                    url: POWERUP_URL + '/dashboard.html',
+                    height: 690,
+                    fullscreen: false
+                  });
                 });
               });
             }
@@ -205,67 +119,73 @@
           var isPt = (t.locale || 'en').startsWith('pt');
           var badges = [];
 
-          // 1. Badge: Idade do Cartão (Card Age)
-          var timestamp = parseInt(card.id.substring(0, 8), 16);
-          var dateCreated = new Date(timestamp * 1000);
-          var diffMs = Date.now() - dateCreated.getTime();
-          var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+          // 1. Badge: Idade do Cartão (Card Age) - respeita definição Plug & Play
+          return t.get('board', 'shared', 'kpi_card_age_enabled').catch(function () { return true; }).then(function (isCardAgeEnabled) {
+            var showCardAge = (isCardAgeEnabled === undefined || isCardAgeEnabled === null || isCardAgeEnabled === true || isCardAgeEnabled === 'true');
 
-          var ageText = '';
-          var ageColor = null;
+            if (showCardAge) {
+              var timestamp = parseInt(card.id.substring(0, 8), 16);
+              var dateCreated = new Date(timestamp * 1000);
+              var diffMs = Date.now() - dateCreated.getTime();
+              var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-          if (diffDays === 0) {
-            ageText = isPt ? 'Criado hoje' : 'Created today';
-            ageColor = 'green';
-          } else if (diffDays === 1) {
-            ageText = isPt ? '1 dia' : '1 day old';
-          } else {
-            ageText = isPt ? diffDays + ' dias' : diffDays + ' days old';
-            if (diffDays > 14) ageColor = 'yellow';
-            if (diffDays > 30) ageColor = 'red';
-          }
+              var ageText = '';
+              var ageColor = null;
 
-          badges.push({
-            text: ageText,
-            color: ageColor
-          });
+              if (diffDays === 0) {
+                ageText = isPt ? 'Criado hoje' : 'Created today';
+                ageColor = 'green';
+              } else if (diffDays === 1) {
+                ageText = isPt ? '1 dia' : '1 day old';
+              } else {
+                ageText = isPt ? diffDays + ' dias' : diffDays + ' days old';
+                if (diffDays > 14) ageColor = 'yellow';
+                if (diffDays > 30) ageColor = 'red';
+              }
 
-          // Dynamic badge rereads Trello activity and touchpoints, so +1 Call/Email updates the front.
-          badges.push({
-            dynamic: function () {
-              return Promise.all([
-                t.card('id', 'dateLastActivity'),
-                t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; })
-              ]).then(function (values) {
-                var currentCard = values[0] || card;
-                var touchpoints = values[1] || {};
-                var trelloActivityMs = currentCard.dateLastActivity
-                  ? new Date(currentCard.dateLastActivity).getTime()
-                  : dateCreated.getTime();
-                var touchpointActivityMs = Number(touchpoints.lastUpdated) || 0;
-                var lastActivityMs = Math.max(trelloActivityMs, touchpointActivityMs);
-                var ageMs = Math.max(0, Date.now() - lastActivityMs);
-                var days = Math.floor(ageMs / (1000 * 60 * 60 * 24));
-                var hours = Math.floor(ageMs / (1000 * 60 * 60));
-                var formattedLastActivity = new Date(lastActivityMs).toLocaleString(isPt ? 'pt-PT' : 'en-GB', {
-                  day: '2-digit',
-                  month: 'short',
-                  hour: '2-digit',
-                  minute: '2-digit'
-                });
-
-                return {
-                  text: isPt
-                    ? 'Última atualização: ' + formattedLastActivity
-                    : 'Last update: ' + formattedLastActivity,
-                  color: hours < 24 ? 'green' : (days >= 7 ? 'red' : (days >= 3 ? 'yellow' : null)),
-                  refresh: 10
-                };
+              badges.push({
+                text: ageText,
+                color: ageColor
               });
             }
-          });
 
-          return badges;
+            // Dynamic badge rereads Trello activity and touchpoints, so +1 Call/Email updates the front.
+            badges.push({
+              dynamic: function () {
+                return Promise.all([
+                  t.card('id', 'dateLastActivity'),
+                  t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; })
+                ]).then(function (values) {
+                  var currentCard = values[0] || card;
+                  var touchpoints = values[1] || {};
+                  var trelloActivityMs = currentCard.dateLastActivity
+                    ? new Date(currentCard.dateLastActivity).getTime()
+                    : dateCreated.getTime();
+                  var touchpointActivityMs = Number(touchpoints.lastUpdated) || 0;
+                  var lastActivityMs = Math.max(trelloActivityMs, touchpointActivityMs);
+                  var ageMs = Math.max(0, Date.now() - lastActivityMs);
+                  var days = Math.floor(ageMs / (1000 * 60 * 60 * 24));
+                  var hours = Math.floor(ageMs / (1000 * 60 * 60));
+                  var formattedLastActivity = new Date(lastActivityMs).toLocaleString(isPt ? 'pt-PT' : 'en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  });
+
+                  return {
+                    text: isPt
+                      ? 'Última atualização: ' + formattedLastActivity
+                      : 'Last update: ' + formattedLastActivity,
+                    color: hours < 24 ? 'green' : (days >= 7 ? 'red' : (days >= 3 ? 'yellow' : null)),
+                    refresh: 10
+                  };
+                });
+              }
+            });
+
+            return badges;
+          });
         }).catch(function (err) {
           console.error('[KPI Master] Error in card-badges:', err);
           return [];
@@ -310,38 +230,62 @@
 
       // ── Botões de Ação no Cartão (Card Buttons) ───────────────────────────
       'card-buttons': function (t) {
-        var isPt = (t.locale || 'en').startsWith('pt');
+        return Promise.all([
+          getUserIsPt(t),
+          t.get('member', 'private', 'kpi_has_reviewed').catch(function () { return false; }),
+          t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; })
+        ]).then(function (res) {
+          var isPt = res[0];
+          var flagReviewed = (res[1] === true || res[1] === 'true');
+          var rawState = res[2];
+          var stateObj = (rawState && typeof rawState === 'string') ? JSON.parse(rawState) : rawState;
+          var hasSubmittedFeedback = stateObj && (stateObj.lastSubmittedTime > 0);
+          var hasReviewed = flagReviewed || hasSubmittedFeedback;
 
-        function addTouchpoint(tCard, type) {
-          return tCard.get('card', 'shared', 'kpi_touchpoints')
-            .catch(function () { return null; })
-            .then(function (saved) {
-              var current = saved || {};
-              var updated = {
-                calls: (Number(current.calls) || 0) + (type === 'call' ? 1 : 0),
-                emails: (Number(current.emails) || 0) + (type === 'email' ? 1 : 0),
-                lastUpdated: Date.now()
-              };
-              return tCard.set('card', 'shared', 'kpi_touchpoints', updated).then(function () {
-                return tCard.alert({
-                  message: type === 'call'
-                    ? (isPt ? '📞 Telefonema registado!' : '📞 Call recorded!')
-                    : (isPt ? '✉️ E-mail registado!' : '✉️ Email recorded!'),
-                  duration: 3
+          function addTouchpoint(tCard, type) {
+            if (!hasReviewed) {
+              Analytics.track('locked_card_button_clicked', {
+                type: type,
+                description: 'Utilizador tentou usar botão de ação rápida sem ter dado review'
+              });
+              return tCard.modal({
+                title: isPt ? '⭐ Dá Review & Desbloqueia Ações Rápidas' : '⭐ Leave a Review & Unlock Quick Actions',
+                url: POWERUP_URL + '/feedback.html',
+                height: 520
+              });
+            }
+
+            return tCard.get('card', 'shared', 'kpi_touchpoints')
+              .catch(function () { return null; })
+              .then(function (saved) {
+                var current = saved || {};
+                var updated = {
+                  calls: (Number(current.calls) || 0) + (type === 'call' ? 1 : 0),
+                  emails: (Number(current.emails) || 0) + (type === 'email' ? 1 : 0),
+                  lastUpdated: Date.now()
+                };
+                return tCard.set('card', 'shared', 'kpi_touchpoints', updated).then(function () {
+                  return tCard.alert({
+                    message: type === 'call'
+                      ? (isPt ? '📞 Telefonema registado!' : '📞 Call recorded!')
+                      : (isPt ? '✉️ E-mail registado!' : '✉️ Email recorded!'),
+                    duration: 3
+                  });
                 });
               });
-            });
-        }
+          }
 
-        return [
+          var lockPrefix = hasReviewed ? '' : '🔒 ';
+
+          return [
             {
               icon: POWERUP_URL + '/icon.png',
-              text: isPt ? '📞 +1 Telefonema' : '📞 +1 Call',
+              text: lockPrefix + (isPt ? '📞 +1 Telefonema' : '📞 +1 Call'),
               callback: function (tCard) { return addTouchpoint(tCard, 'call'); }
             },
             {
               icon: POWERUP_URL + '/icon.png',
-              text: isPt ? '✉️ +1 E-mail' : '✉️ +1 Email',
+              text: lockPrefix + (isPt ? '✉️ +1 E-mail' : '✉️ +1 Email'),
               callback: function (tCard) { return addTouchpoint(tCard, 'email'); }
             },
             {
@@ -396,51 +340,99 @@
                 });
               }
             }
-        ];
+          ];
+        });
       },
 
       // ── Secção do Verso do Cartão (Card Back Section) ──────────────────────
       'card-back-section': function (t) {
-        var isPt = (t.locale || 'en').startsWith('pt');
-        return {
-          title: isPt ? 'Histórico & Velocidade da Lead' : 'Lead Stage & Speed History',
-          icon: POWERUP_URL + '/icon.png',
-          content: {
-            type: 'iframe',
-            url: t.signUrl(POWERUP_URL + '/card-back.html'),
-            height: 520
+        return Promise.all([
+          t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; }),
+          t.get('member', 'private', 'kpi_has_reviewed').catch(function () { return false; }),
+          getUserIsPt(t)
+        ]).then(function (results) {
+          var rawFeedbackState = results[0];
+          var hasReviewedFlag = (results[1] === true || results[1] === 'true');
+          var isPt = results[2];
+
+          var state = null;
+          if (rawFeedbackState) {
+            state = typeof rawFeedbackState === 'string' ? JSON.parse(rawFeedbackState) : rawFeedbackState;
           }
-        };
+          var hasSubmitted = false;
+          if ((state && state.lastSubmittedTime) || hasReviewedFlag) {
+            hasSubmitted = true;
+          }
+
+          var baseTitle = isPt ? 'Estado da lead' : 'Lead Stage';
+          var tagSuffix = isPt ? '  ⭐ [Dá Feedback & Desbloqueia]' : '  ⭐ [Give Feedback & Unlock]';
+          var displayTitle = hasSubmitted ? baseTitle : (baseTitle + tagSuffix);
+
+          return {
+            title: displayTitle,
+            icon: POWERUP_URL + '/icon.png',
+            content: {
+              type: 'iframe',
+              url: t.signUrl(POWERUP_URL + '/card-back.html'),
+              height: 520
+            }
+          };
+        }).catch(function () {
+          return getUserIsPt(t).then(function (isPt) {
+            var baseTitle = isPt ? 'Estado da Lead' : 'Lead Stage';
+            var tagSuffix = isPt ? '  ⭐ [Dá Feedback & Desbloqueia]' : '  ⭐ [Give Feedback & Unlock]';
+            return {
+              title: baseTitle + tagSuffix,
+              icon: POWERUP_URL + '/icon.png',
+              content: {
+                type: 'iframe',
+                url: t.signUrl(POWERUP_URL + '/card-back.html'),
+                height: 520
+              }
+            };
+          });
+        });
       },
 
       // ── Ordenadores de Lista (List Sorters) ──────────────────────────────────
       'list-sorters': function (t) {
-        var isPt = (t.locale || 'en').startsWith('pt');
-        return [{
-          text: isPt ? '⏳ Idade da Lead: Mais Antigos Primeiro (Evitar Perdas)' : '⏳ Lead Age: Oldest First (Prevent Loss)',
-          callback: function (t, opts) {
-            var sortedCards = opts.cards.sort(function (a, b) {
-              var tA = parseInt(a.id.substring(0, 8), 16);
-              var tB = parseInt(b.id.substring(0, 8), 16);
-              return tA - tB;
-            });
-            return {
-              sortedCardIds: sortedCards.map(function (c) { return c.id; })
-            };
-          }
-        }, {
-          text: isPt ? '⚡ Idade da Lead: Mais Recentes Primeiro' : '⚡ Lead Age: Newest First',
-          callback: function (t, opts) {
-            var sortedCards = opts.cards.sort(function (a, b) {
-              var tA = parseInt(a.id.substring(0, 8), 16);
-              var tB = parseInt(b.id.substring(0, 8), 16);
-              return tB - tA;
-            });
-            return {
-              sortedCardIds: sortedCards.map(function (c) { return c.id; })
-            };
-          }
-        }];
+        return getUserIsPt(t).then(function (isPt) {
+          return [{
+            text: isPt ? '⏳ Idade da Lead: Mais Antigos Primeiro (Evitar Perdas)' : '⏳ Lead Age: Oldest First (Prevent Loss)',
+            callback: function (t, opts) {
+              Analytics.track('list_sort_executed', {
+                sort_order: 'oldest_first',
+                total_cards: (opts.cards || []).length,
+                description: 'Utilizador ordenou a lista por Mais Antigos Primeiro'
+              });
+              var sortedCards = opts.cards.sort(function (a, b) {
+                var tA = parseInt(a.id.substring(0, 8), 16);
+                var tB = parseInt(b.id.substring(0, 8), 16);
+                return tA - tB;
+              });
+              return {
+                sortedCardIds: sortedCards.map(function (c) { return c.id; })
+              };
+            }
+          }, {
+            text: isPt ? '⚡ Idade da Lead: Mais Recentes Primeiro' : '⚡ Lead Age: Newest First',
+            callback: function (t, opts) {
+              Analytics.track('list_sort_executed', {
+                sort_order: 'newest_first',
+                total_cards: (opts.cards || []).length,
+                description: 'Utilizador ordenou a lista por Mais Recentes Primeiro'
+              });
+              var sortedCards = opts.cards.sort(function (a, b) {
+                var tA = parseInt(a.id.substring(0, 8), 16);
+                var tB = parseInt(b.id.substring(0, 8), 16);
+                return tB - tA;
+              });
+              return {
+                sortedCardIds: sortedCards.map(function (c) { return c.id; })
+              };
+            }
+          }];
+        });
       }
 
     }, {

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact Log</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://p.trellocdn.com/power-up.min.js"></script>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111726;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --call-color: #34d399;
+      --email-color: #a78bfa;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 18px 20px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .header h2 {
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .stats-badges {
+      display: flex;
+      gap: 8px;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-call {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--call-color);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .badge-email {
+      background: rgba(139, 92, 246, 0.15);
+      color: var(--email-color);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+    .log-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 380px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .log-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .log-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .log-icon {
+      font-size: 16px;
+    }
+    .log-author {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .log-action {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+    .log-date {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-sub);
+      text-align: right;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 36px 12px;
+      color: var(--text-sub);
+      font-size: 12.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2 id="modal-title">📋 Contact History</h2>
+    <div class="stats-badges">
+      <span class="badge badge-call" id="badge-calls">0 Calls</span>
+      <span class="badge badge-email" id="badge-emails">0 Emails</span>
+    </div>
+  </div>
+
+  <div id="log-list" class="log-list">
+    <!-- Populated dynamically -->
+  </div>
+
+  <script type="module">
+    import { Analytics } from '../js/analytics.js';
+    Analytics.init();
+
+    var KEY = import.meta.env.VITE_TRELLO_API_KEY;
+    var t = TrelloPowerUp.iframe({ appKey: KEY, appName: 'KPI Master' });
+
+    var isPt = false;
+    t.get('member', 'private', 'kpi_user_lang').then(function(lang) {
+      isPt = lang === 'pt';
+      applyLang();
+      loadLogs();
+    }).catch(function() {
+      applyLang();
+      loadLogs();
+    });
+
+    function applyLang() {
+      document.getElementById('modal-title').textContent = isPt ? '📋 Histórico de Contactos' : '📋 Contact History';
+    }
+
+    function loadLogs() {
+      t.get('card', 'shared', 'kpi_touchpoints_history').then(function(rawHistory) {
+        var logs = Array.isArray(rawHistory) ? rawHistory : [];
+        var callsCount = 0;
+        var emailsCount = 0;
+
+        logs.forEach(function(l) {
+          if (l.type === 'call') callsCount++;
+          if (l.type === 'email') emailsCount++;
+        });
+
+        document.getElementById('badge-calls').textContent = callsCount + (isPt ? ' Chamadas' : ' Calls');
+        document.getElementById('badge-emails').textContent = emailsCount + (isPt ? ' Emails' : ' Emails');
+
+        var listEl = document.getElementById('log-list');
+        if (logs.length === 0) {
+          listEl.innerHTML = '<div class="empty-state">' + (isPt ? 'Nenhum contacto registado ainda.' : 'No contact logs recorded yet.') + '</div>';
+          t.sizeTo(document.body).catch(function(){});
+          return;
+        }
+
+        // Mostrar os mais recentes primeiro
+        var reversed = logs.slice().reverse();
+        var html = '';
+        reversed.forEach(function(l) {
+          var icon = l.type === 'call' ? '📞' : '✉️';
+          var actionText = l.type === 'call'
+            ? (isPt ? 'fez uma chamada' : 'made a call')
+            : (isPt ? 'enviou um email' : 'sent an email');
+
+          html += `
+            <div class="log-item">
+              <div class="log-left">
+                <span class="log-icon">${icon}</span>
+                <div>
+                  <div class="log-author">${l.author || (isPt ? 'Membro' : 'Member')}</div>
+                  <div class="log-action">${actionText}</div>
+                </div>
+              </div>
+              <div class="log-date">${l.formattedDate || ''}</div>
+            </div>
+          `;
+        });
+
+        listEl.innerHTML = html;
+        t.sizeTo(document.body).catch(function(){});
+      }).catch(function() {
+        document.getElementById('log-list').innerHTML = '<div class="empty-state">No logs found.</div>';
+      });
+    }
+  </script>
+</body>
+</html>

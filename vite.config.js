@@ -26,14 +26,17 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: 'index.html',
+                privacy: 'privacy.html',
                 'trello/index': 'trello/index.html',
                 'trello/welcome': 'trello/welcome.html',
                 'trello/auth': 'trello/auth.html',
                 'trello/dashboard': 'trello/dashboard.html',
                 'trello/settings': 'trello/settings.html',
                 'trello/card-back': 'trello/card-back.html',
+                'trello/contact-log': 'trello/contact-log.html',
                 'trello/updates': 'trello/updates.html',
-                'trello/feedback': 'trello/feedback.html'
+                'trello/feedback': 'trello/feedback.html',
+                'trello/tutorial-pointer': 'trello/tutorial-pointer.html'
             },
             output: {
 
@@ -52,7 +55,6 @@ export default defineConfig({
     server: {
         port: 3000,
         headers: {
-            'X-Frame-Options': 'DENY',
             'X-Content-Type-Options': 'nosniff'
         }
     }

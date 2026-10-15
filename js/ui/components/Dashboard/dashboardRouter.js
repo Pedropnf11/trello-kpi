@@ -1,8 +1,18 @@
 // ========================================
 // DASHBOARD ROUTER
 // ========================================
+import { Analytics } from '../../../analytics.js';
+
 UI.renderDashboard = function (state) {
-    const userRole = state.userRole;
+    const userRole = state.userRole || 'manager';
+
+    if (!UI._lastTrackedRoleView || UI._lastTrackedRoleView !== userRole) {
+        UI._lastTrackedRoleView = userRole;
+        Analytics.track('dashboard_view_rendered', {
+            role: userRole,
+            description: 'Painel Web carregado para o perfil ' + (userRole === 'sales' ? 'Vendedor' : 'Gestor')
+        });
+    }
 
     // Decide qual dashboard mostrar baseado no role
     if (userRole === 'sales') {
