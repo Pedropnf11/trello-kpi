@@ -1840,13 +1840,18 @@
       });
 
       // Atualizar mini contadores
-      document.getElementById('val-total-leads').textContent = activeLeadsCount;
-      document.getElementById('val-total-uninterested').textContent = uninterestedCount;
+      var elTotalLeadsVal = document.getElementById('val-total-leads');
+      if (elTotalLeadsVal) elTotalLeadsVal.textContent = activeLeadsCount;
+      var elTotalUnintVal = document.getElementById('val-total-uninterested');
+      if (elTotalUnintVal) elTotalUnintVal.textContent = uninterestedCount;
 
       if (durations.length === 0) {
-        document.getElementById('stats-data').style.display = 'none';
-        document.getElementById('stats-unauth').style.display = 'none';
-        document.getElementById('stats-empty').style.display = 'flex';
+        var elStatsData = document.getElementById('stats-data');
+        if (elStatsData) elStatsData.style.display = 'none';
+        var elStatsUnauth = document.getElementById('stats-unauth');
+        if (elStatsUnauth) elStatsUnauth.style.display = 'none';
+        var elStatsEmpty = document.getElementById('stats-empty');
+        if (elStatsEmpty) elStatsEmpty.style.display = 'flex';
         t.sizeTo(document.body).catch(function () { });
         return;
       }
@@ -1870,17 +1875,24 @@
       }
 
       // Preencher dados rápidos
-      document.getElementById('val-fastest-time').textContent = formatDuration(fastest.hours);
-      document.getElementById('val-fastest-name').textContent = fastest.cardName;
+      var elFastestTime = document.getElementById('val-fastest-time');
+      if (elFastestTime) elFastestTime.textContent = formatDuration(fastest.hours);
+      var elFastestName = document.getElementById('val-fastest-name');
+      if (elFastestName) elFastestName.textContent = fastest.cardName;
 
       // Preencher dados lentos
-      document.getElementById('val-slowest-time').textContent = formatDuration(slowest.hours);
-      document.getElementById('val-slowest-name').textContent = slowest.cardName;
+      var elSlowestTime = document.getElementById('val-slowest-time');
+      if (elSlowestTime) elSlowestTime.textContent = formatDuration(slowest.hours);
+      var elSlowestName = document.getElementById('val-slowest-name');
+      if (elSlowestName) elSlowestName.textContent = slowest.cardName;
 
       // Exibir secção de dados e esconder outros
-      document.getElementById('stats-unauth').style.display = 'none';
-      document.getElementById('stats-empty').style.display = 'none';
-      document.getElementById('stats-data').style.display = 'flex';
+      var elStatsUnauth2 = document.getElementById('stats-unauth');
+      if (elStatsUnauth2) elStatsUnauth2.style.display = 'none';
+      var elStatsEmpty2 = document.getElementById('stats-empty');
+      if (elStatsEmpty2) elStatsEmpty2.style.display = 'none';
+      var elStatsData2 = document.getElementById('stats-data');
+      if (elStatsData2) elStatsData2.style.display = 'flex';
 
       t.sizeTo(document.body).catch(function () { });
     }
