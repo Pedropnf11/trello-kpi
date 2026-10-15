@@ -34,8 +34,7 @@ export default defineConfig({
                 'trello/card-back': 'trello/card-back.html',
                 'trello/contact-log': 'trello/contact-log.html',
                 'trello/updates': 'trello/updates.html',
-                'trello/feedback': 'trello/feedback.html',
-                'trello/tutorial-pointer': 'trello/tutorial-pointer.html'
+                'trello/feedback': 'trello/feedback.html'
             },
             output: {
 
