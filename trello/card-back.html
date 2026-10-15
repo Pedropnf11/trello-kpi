@@ -635,10 +635,10 @@
         </div>
       </div>
 
-      <div class="footer-row" style="display: flex; justify-content: flex-start; align-items: center;">
-        <a id="btn-dashboard" class="btn-link" href="#" target="_blank">
+      <div class="footer-row" style="display: flex; justify-content: flex-start; align-items: center; margin-top: 6px;">
+        <button id="btn-dashboard" class="btn-link" style="background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600; color: #38bdf8; text-decoration: underline;">
           📈 Ver KPIs Completos do Quadro →
-        </a>
+        </button>
       </div>
     </div>
   </div>
@@ -1173,51 +1173,6 @@
           });
         }
 
-        if (board && board.id) {
-          var boardId = board.id;
-          document.getElementById('btn-dashboard').href = SITE + '#board=' + boardId;
-
-          t.getRestApi().isAuthorized().then(function (isAuth) {
-            if (isAuth) return t.getRestApi().getToken();
-            throw new Error('Not authorized');
-          }).then(function (token) {
-            if (token) {
-              document.getElementById('btn-dashboard').href = SITE + '#board=' + boardId + '&token=' + token;
-            }
-          }).catch(function (err) { });
-        } else {
-          document.getElementById('btn-dashboard').href = SITE;
-        }
-
-        document.getElementById('btn-dashboard').addEventListener('click', function (e) {
-          e.preventDefault();
-          Analytics.track('card_open_dashboard_clicked', {
-            source: 'card_back_footer',
-            description: 'Utilizador clicou em Ver KPIs do Quadro a partir do verso do cartão'
-          });
-          t.board('id').then(function (b) {
-            if (!b || !b.id) {
-              window.open(SITE, '_blank');
-              return;
-            }
-            var bId = b.id;
-            t.getRestApi().isAuthorized().then(function (isAuth) {
-              if (isAuth) return t.getRestApi().getToken();
-              throw new Error('Not authorized');
-            }).then(function (token) {
-              if (token) {
-                window.open(SITE + '#board=' + bId + '&token=' + token, '_blank');
-              } else {
-                window.open(SITE + '#board=' + bId, '_blank');
-              }
-            }).catch(function () {
-              window.open(SITE + '#board=' + bId, '_blank');
-            });
-          }).catch(function () {
-            window.open(SITE, '_blank');
-          });
-        });
-
         // Garantir que a altura do iframe se expande para mostrar todos os botões e contadores
         setTimeout(function () {
           t.sizeTo(document.body).catch(function () { });
@@ -1227,6 +1182,34 @@
         t.sizeTo(document.body).catch(function () { });
       });
     });
+
+    // ── Botão para Abrir a Dashboard (Ligado no escopo global para nunca falhar) ──
+    var btnDashboard = document.getElementById('btn-dashboard');
+    if (btnDashboard) {
+      btnDashboard.addEventListener('click', function (e) {
+        e.preventDefault();
+        Analytics.track('card_open_dashboard_clicked', {
+          source: 'card_back_footer',
+          description: 'Utilizador clicou em Ver KPIs do Quadro a partir do verso do cartão'
+        });
+
+        // 1. Abre a Micro Dashboard em modal nativo no Trello
+        t.modal({
+          title: isPt ? 'Micro Dashboard & Velocidade das Leads' : 'Micro Dashboard & Lead Speed',
+          url: './dashboard.html',
+          height: 690,
+          fullscreen: false
+        }).catch(function () {
+          // Se modal não abrir, abre o site web como fallback
+          t.board('id').then(function (b) {
+            var bId = b && b.id ? b.id : '';
+            window.open(SITE + (bId ? '#board=' + bId : ''), '_blank');
+          }).catch(function () {
+            window.open(SITE, '_blank');
+          });
+        });
+      });
+    }
   </script>
 
 </body>
