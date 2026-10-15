@@ -26,7 +26,6 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: 'index.html',
-                privacy: 'privacy.html',
                 'trello/index': 'trello/index.html',
                 'trello/welcome': 'trello/welcome.html',
                 'trello/auth': 'trello/auth.html',
