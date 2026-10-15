@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,7 +17,13 @@
       --call-color: #34d399;
       --email-color: #a78bfa;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       background: var(--bg);
       color: var(--text-main);
@@ -24,6 +31,7 @@
       padding: 18px 20px;
       -webkit-font-smoothing: antialiased;
     }
+
     .header {
       display: flex;
       align-items: center;
@@ -32,6 +40,7 @@
       padding-bottom: 12px;
       border-bottom: 1px solid var(--card-border);
     }
+
     .header h2 {
       font-size: 15px;
       font-weight: 700;
@@ -39,10 +48,12 @@
       align-items: center;
       gap: 8px;
     }
+
     .stats-badges {
       display: flex;
       gap: 8px;
     }
+
     .badge {
       font-size: 11px;
       font-weight: 700;
@@ -52,16 +63,19 @@
       align-items: center;
       gap: 4px;
     }
+
     .badge-call {
       background: rgba(16, 185, 129, 0.15);
       color: var(--call-color);
       border: 1px solid rgba(16, 185, 129, 0.3);
     }
+
     .badge-email {
       background: rgba(139, 92, 246, 0.15);
       color: var(--email-color);
       border: 1px solid rgba(139, 92, 246, 0.3);
     }
+
     .log-list {
       display: flex;
       flex-direction: column;
@@ -70,6 +84,7 @@
       overflow-y: auto;
       padding-right: 4px;
     }
+
     .log-item {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -79,29 +94,35 @@
       align-items: center;
       justify-content: space-between;
     }
+
     .log-left {
       display: flex;
       align-items: center;
       gap: 10px;
     }
+
     .log-icon {
       font-size: 16px;
     }
+
     .log-author {
       font-size: 12.5px;
       font-weight: 600;
       color: var(--text-main);
     }
+
     .log-action {
       font-size: 11px;
       color: var(--text-sub);
     }
+
     .log-date {
       font-size: 11px;
       font-weight: 600;
       color: var(--text-sub);
       text-align: right;
     }
+
     .empty-state {
       text-align: center;
       padding: 36px 12px;
@@ -110,6 +131,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="header">
     <h2 id="modal-title">📋 Contact History</h2>
@@ -131,11 +153,11 @@
     var t = TrelloPowerUp.iframe({ appKey: KEY, appName: 'KPI Master' });
 
     var isPt = false;
-    t.get('member', 'private', 'kpi_user_lang').then(function(lang) {
+    t.get('member', 'private', 'kpi_user_lang').then(function (lang) {
       isPt = lang === 'pt';
       applyLang();
       loadLogs();
-    }).catch(function() {
+    }).catch(function () {
       applyLang();
       loadLogs();
     });
@@ -145,12 +167,12 @@
     }
 
     function loadLogs() {
-      t.get('card', 'shared', 'kpi_touchpoints_history').then(function(rawHistory) {
+      t.get('card', 'shared', 'kpi_touchpoints_history').then(function (rawHistory) {
         var logs = Array.isArray(rawHistory) ? rawHistory : [];
         var callsCount = 0;
         var emailsCount = 0;
 
-        logs.forEach(function(l) {
+        logs.forEach(function (l) {
           if (l.type === 'call') callsCount++;
           if (l.type === 'email') emailsCount++;
         });
@@ -161,14 +183,14 @@
         var listEl = document.getElementById('log-list');
         if (logs.length === 0) {
           listEl.innerHTML = '<div class="empty-state">' + (isPt ? 'Nenhum contacto registado ainda.' : 'No contact logs recorded yet.') + '</div>';
-          t.sizeTo(document.body).catch(function(){});
+          t.sizeTo(document.body).catch(function () { });
           return;
         }
 
         // Mostrar os mais recentes primeiro
         var reversed = logs.slice().reverse();
         var html = '';
-        reversed.forEach(function(l) {
+        reversed.forEach(function (l) {
           var icon = l.type === 'call' ? '📞' : '✉️';
           var actionText = l.type === 'call'
             ? (isPt ? 'fez uma chamada' : 'made a call')
@@ -189,11 +211,12 @@
         });
 
         listEl.innerHTML = html;
-        t.sizeTo(document.body).catch(function(){});
-      }).catch(function() {
+        t.sizeTo(document.body).catch(function () { });
+      }).catch(function () {
         document.getElementById('log-list').innerHTML = '<div class="empty-state">No logs found.</div>';
       });
     }
   </script>
 </body>
+
 </html>

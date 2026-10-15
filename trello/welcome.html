@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -340,15 +341,18 @@
       .steps-container {
         grid-template-columns: 1fr;
       }
+
       .features-grid {
         grid-template-columns: 1fr;
       }
+
       .btn-group {
         flex-direction: column;
       }
     }
   </style>
 </head>
+
 <body>
 
   <div>
@@ -366,7 +370,8 @@
     <!-- Hero Header -->
     <div class="header-hero">
       <h1 id="welcome-title">Como funciona o KPI Master?</h1>
-      <p id="welcome-subtitle">Mede automaticamente a velocidade das tuas leads, reduz gargalos e acompanha contactos em 1 clique direto no Trello.</p>
+      <p id="welcome-subtitle">Mede automaticamente a velocidade das tuas leads, reduz gargalos e acompanha contactos em
+        1 clique direto no Trello.</p>
     </div>
 
     <!-- Guia Intuitivo em 3 Passos Simples -->
@@ -374,19 +379,22 @@
       <div class="step-card">
         <div class="step-num-badge">1</div>
         <h3 id="step1-title">⚡ Ações nos Cartões</h3>
-        <p id="step1-desc">Clica no verso do cartão para registar <strong>+1 Chamada</strong> ou <strong>+1 Email</strong> e move a lead com 1 clique.</p>
+        <p id="step1-desc">Clica no verso do cartão para registar <strong>+1 Chamada</strong> ou <strong>+1
+            Email</strong> e move a lead com 1 clique.</p>
       </div>
 
       <div class="step-card">
         <div class="step-num-badge">2</div>
         <h3 id="step2-title">⏱️ Micro Dashboard</h3>
-        <p id="step2-desc">No topo do quadro, clica em <strong>KPI Master</strong> para ver a lead mais rápida, mais lenta e o volume ativo.</p>
+        <p id="step2-desc">No topo do quadro, clica em <strong>KPI Master</strong> para ver a lead mais rápida, mais
+          lenta e o volume ativo.</p>
       </div>
 
       <div class="step-card">
         <div class="step-num-badge">3</div>
         <h3 id="step3-title">⚙️ Plug & Play</h3>
-        <p id="step3-desc">No botão de definições ⚙️ podes ativar ou desativar as funcionalidades à medida da tua equipa.</p>
+        <p id="step3-desc">No botão de definições ⚙️ podes ativar ou desativar as funcionalidades à medida da tua
+          equipa.</p>
       </div>
     </div>
 
@@ -431,7 +439,8 @@
         <div class="web-banner-icon">🚀</div>
         <div class="web-banner-text">
           <h4 id="banner-title">Queres relatórios executivos avançados?</h4>
-          <p id="banner-desc">Acede gratuitamente à Plataforma Web para ver gráficos interativos e taxas de conversão.</p>
+          <p id="banner-desc">Acede gratuitamente à Plataforma Web para ver gráficos interativos e taxas de conversão.
+          </p>
         </div>
       </div>
       <div class="web-banner-tag" id="banner-badge">100% Grátis</div>
@@ -474,8 +483,8 @@
             source: 'trello_welcome_modal',
             ...extra
           })
-        }).catch(function() {});
-      } catch(e) {}
+        }).catch(function () { });
+      } catch (e) { }
     }
 
     // Registar visualização do ecrã de boas-vindas
@@ -485,8 +494,8 @@
 
     // Guardar marcação e data de instalação (timestamp) do utilizador
     var nowTime = Date.now();
-    t.set('member', 'private', 'kpi_welcome_seen', nowTime).catch(function() {});
-    t.set('member', 'private', 'kpi_first_seen_time', nowTime).catch(function() {});
+    t.set('member', 'private', 'kpi_welcome_seen', nowTime).catch(function () { });
+    t.set('member', 'private', 'kpi_first_seen_time', nowTime).catch(function () { });
 
     var locale = t.locale || 'en';
     var currentLang = 'en'; // Padrão inglês com alternador para PT
@@ -571,53 +580,54 @@
       var txtToggle = document.getElementById('txt-lang-toggle');
       if (txtToggle) txtToggle.textContent = dict.toggleBtn;
 
-      t.sizeTo(document.body).catch(function () {});
+      t.sizeTo(document.body).catch(function () { });
     }
 
     // Inicializar idioma padrão
     applyLanguage(currentLang);
 
     // Carregar idioma guardado do utilizador
-    t.get('member', 'private', 'kpi_user_lang').then(function(savedLang) {
+    t.get('member', 'private', 'kpi_user_lang').then(function (savedLang) {
       if (savedLang === 'pt' || savedLang === 'en') {
         applyLanguage(savedLang);
       }
-    }).catch(function(){});
+    }).catch(function () { });
 
     // Alternar idioma
     var btnLangToggle = document.getElementById('btn-lang-toggle');
     if (btnLangToggle) {
-      btnLangToggle.addEventListener('click', function(e) {
+      btnLangToggle.addEventListener('click', function (e) {
         e.preventDefault();
         var nextLang = (currentLang === 'pt') ? 'en' : 'pt';
         applyLanguage(nextLang);
-        t.set('member', 'private', 'kpi_user_lang', nextLang).catch(function(){});
+        t.set('member', 'private', 'kpi_user_lang', nextLang).catch(function () { });
       });
     }
 
-    document.getElementById('btn-site').addEventListener('click', function() {
+    document.getElementById('btn-site').addEventListener('click', function () {
       trackEvent('welcome_open_web_clicked', {
         action: 'open_web_platform',
         description: 'Utilizador clicou em Abrir Plataforma Web no modal de boas-vindas'
       });
-      t.set('member', 'private', 'kpi_welcome_seen', true).then(function() {
+      t.set('member', 'private', 'kpi_welcome_seen', true).then(function () {
         window.open(SITE, '_blank');
-      }).catch(function() {
+      }).catch(function () {
         window.open(SITE, '_blank');
       });
     });
 
-    document.getElementById('btn-close').addEventListener('click', function() {
+    document.getElementById('btn-close').addEventListener('click', function () {
       trackEvent('welcome_dismissed', {
         action: 'view_in_trello',
         description: 'Utilizador fechou as boas-vindas para continuar no Trello'
       });
-      t.set('member', 'private', 'kpi_welcome_seen', true).then(function() {
+      t.set('member', 'private', 'kpi_welcome_seen', true).then(function () {
         t.closeModal();
-      }).catch(function() {
+      }).catch(function () {
         t.closeModal();
       });
     });
   </script>
 </body>
+
 </html>

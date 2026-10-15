@@ -1310,7 +1310,7 @@
       description: 'Popup do Trello aberto (Velocidade de Leads e Features Web)'
     });
 
-    var KEY = import.meta.env.VITE_TRELLO_API_KEY;
+    var KEY = import.meta.env.VITE_TRELLO_API_KEY || '45146ad13364b1e1336607f96081214b';
     var NAME = 'KPI Master';
     var SITE = 'https://kpismaster.vercel.app';
     var BASE_DOMAIN = (window.location.origin && window.location.origin !== 'null' && !window.location.origin.includes('trello.com'))

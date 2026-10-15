@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,18 +8,21 @@
   <link rel="stylesheet" href="./styles.css">
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
 </head>
+
 <body>
 
   <div class="auth-container">
-    <img src="./icon.png" alt="KPI Master" width="72" height="72"
-         onerror="this.style.display='none'">
+    <img src="./icon.png" alt="KPI Master" width="72" height="72" onerror="this.style.display='none'">
     <h1 id="auth-title">KPI Master</h1>
-    <p id="auth-desc">Analyze Trello board KPIs in real-time — completion rate, active members, weekly cards, and more.</p>
+    <p id="auth-desc">Analyze Trello board KPIs in real-time — completion rate, active members, weekly cards, and more.
+    </p>
     <div style="width:100%; max-width:280px; display:flex; flex-direction:column; gap:10px; margin-top:8px;">
       <button id="btn-auth" class="btn btn-primary">🔗 Authorize Access</button>
-      <p id="auth-tip" style="font-size:11px; color:#97a0af; text-align:center;">Only board data is read. Nothing is modified.</p>
+      <p id="auth-tip" style="font-size:11px; color:#97a0af; text-align:center;">Only board data is read. Nothing is
+        modified.</p>
     </div>
-    <a id="auth-link" href="https://kpismaster.vercel.app" target="_blank" class="link">Learn more about KPI Master →</a>
+    <a id="auth-link" href="https://kpismaster.vercel.app" target="_blank" class="link">Learn more about KPI Master
+      →</a>
   </div>
 
   <div id="auth-error" class="error-msg" style="display:none; margin-top:12px;">
@@ -28,7 +32,7 @@
   <script type="module">
     // ⚠️ appKey e appName são OBRIGATÓRIOS em todos os iframes
     var t = TrelloPowerUp.iframe({
-      appKey:  import.meta.env.VITE_TRELLO_API_KEY,
+      appKey: import.meta.env.VITE_TRELLO_API_KEY,
       appName: 'KPI Master'
     });
 
@@ -65,17 +69,17 @@
     document.getElementById('auth-link').textContent = tDict.learnMore;
     document.getElementById('auth-error').textContent = tDict.authError;
 
-    document.getElementById('btn-auth').addEventListener('click', function() {
+    document.getElementById('btn-auth').addEventListener('click', function () {
       var btn = this;
       btn.disabled = true;
       btn.textContent = tDict.btnAuthLoading;
 
       t.getRestApi().authorize({
-        scope:      'read,write',
+        scope: 'read,write',
         expiration: 'never'
-      }).then(function() {
+      }).then(function () {
         t.closeModal();
-      }).catch(function(err) {
+      }).catch(function (err) {
         btn.disabled = false;
         btn.textContent = tDict.btnAuth;
         document.getElementById('auth-error').style.display = 'block';
@@ -84,4 +88,5 @@
   </script>
 
 </body>
+
 </html>
