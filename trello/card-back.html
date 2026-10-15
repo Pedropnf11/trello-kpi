@@ -900,12 +900,16 @@
             day: 'numeric'
           });
 
-          document.getElementById('lbl-created-val').textContent = dateStr;
+          var elCreatedVal = document.getElementById('lbl-created-val');
+          if (elCreatedVal) elCreatedVal.textContent = dateStr;
 
-          if (currentList && currentList.name) {
-            document.getElementById('lbl-list-val').textContent = currentList.name;
-          } else {
-            document.getElementById('lbl-list-val').textContent = isPt ? 'Ativa' : 'Active';
+          var elListVal = document.getElementById('lbl-list-val');
+          if (elListVal) {
+            if (currentList && currentList.name) {
+              elListVal.textContent = currentList.name;
+            } else {
+              elListVal.textContent = isPt ? 'Ativa' : 'Active';
+            }
           }
 
           var elAgeVal = document.getElementById('lbl-age-val');
@@ -922,8 +926,10 @@
           function updateTouchpointsUI(tp) {
             var calls = Number(tp && tp.calls) || 0;
             var emails = Number(tp && tp.emails) || 0;
-            document.getElementById('val-touch-calls').textContent = calls;
-            document.getElementById('val-touch-emails').textContent = emails;
+            var elCallsVal = document.getElementById('val-touch-calls');
+            if (elCallsVal) elCallsVal.textContent = calls;
+            var elEmailsVal = document.getElementById('val-touch-emails');
+            if (elEmailsVal) elEmailsVal.textContent = emails;
           }
 
           t.get('card', 'shared', 'kpi_touchpoints')

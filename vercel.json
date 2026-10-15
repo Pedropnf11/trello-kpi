@@ -43,7 +43,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "frame-ancestors https://trello.com https://*.trello.com; connect-src 'self' https://api.trello.com https://*.posthog.com https://eu.i.posthog.com https://us.i.posthog.com;"
+          "value": "frame-ancestors https://trello.com https://*.trello.com; connect-src 'self' https://api.trello.com https://p.trellocdn.com https://*.posthog.com https://eu.i.posthog.com https://us.i.posthog.com;"
         },
         {
           "key": "Access-Control-Allow-Origin",
@@ -60,7 +60,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "frame-ancestors https://trello.com https://*.trello.com; connect-src 'self' https://api.trello.com https://*.posthog.com https://eu.i.posthog.com https://us.i.posthog.com;"
+          "value": "frame-ancestors https://trello.com https://*.trello.com; connect-src 'self' https://api.trello.com https://p.trellocdn.com https://*.posthog.com https://eu.i.posthog.com https://us.i.posthog.com;"
         },
         {
           "key": "Access-Control-Allow-Origin",
