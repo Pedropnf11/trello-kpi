@@ -16,7 +16,10 @@
     import { Analytics } from '../js/analytics.js';
     Analytics.init();
 
-    var POWERUP_URL = window.location.origin + '/trello';
+    var BASE_DOMAIN = (window.location.origin && window.location.origin !== 'null' && !window.location.origin.includes('trello.com'))
+      ? window.location.origin
+      : 'https://kpismaster.vercel.app';
+    var POWERUP_URL = BASE_DOMAIN + '/trello';
     var SITE_URL = 'https://kpismaster.vercel.app';
     var welcomePrompted = false;
 
@@ -316,7 +319,7 @@
                       if (!isAuth) {
                         return t.modal({
                           title: isPt ? 'Ligar ao KPI Master' : 'Connect KPI Master',
-                          url: './auth.html',
+                          url: POWERUP_URL + '/auth.html',
                           height: 420
                         });
                       }

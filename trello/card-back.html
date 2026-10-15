@@ -647,9 +647,13 @@
     import { Analytics } from '../js/analytics.js';
     Analytics.init();
 
-    var KEY = import.meta.env.VITE_TRELLO_API_KEY;
+    var KEY = import.meta.env.VITE_TRELLO_API_KEY || '45146ad13364b1e1336607f96081214b';
     var NAME = 'KPI Master';
     var SITE = 'https://kpismaster.vercel.app';
+    var BASE_DOMAIN = (window.location.origin && window.location.origin !== 'null' && !window.location.origin.includes('trello.com'))
+      ? window.location.origin
+      : 'https://kpismaster.vercel.app';
+    var POWERUP_URL = BASE_DOMAIN + '/trello';
 
     var t = TrelloPowerUp.iframe({ appKey: KEY, appName: NAME });
 
@@ -869,7 +873,7 @@
       });
       t.modal({
         title: isPt ? '⭐ A Tua Opinião — KPI Master' : '⭐ Your Feedback — KPI Master',
-        url: './feedback.html',
+        url: POWERUP_URL + '/feedback.html',
         height: 520
       });
     });
@@ -1007,7 +1011,7 @@
               });
               t.modal({
                 title: isPt ? '📋 Histórico de Contactos' : '📋 Contact History',
-                url: './contact-log.html',
+                url: POWERUP_URL + '/contact-log.html',
                 height: 480
               });
             });
@@ -1196,7 +1200,7 @@
         // 1. Abre a Micro Dashboard em modal nativo no Trello
         t.modal({
           title: isPt ? 'Micro Dashboard & Velocidade das Leads' : 'Micro Dashboard & Lead Speed',
-          url: './dashboard.html',
+          url: POWERUP_URL + '/dashboard.html',
           height: 690,
           fullscreen: false
         }).catch(function () {

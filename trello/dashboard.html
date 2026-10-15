@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,16 +14,16 @@
       --card-bg: #111726;
       --card-border: rgba(255, 255, 255, 0.08);
       --card-hover-border: rgba(255, 255, 255, 0.16);
-      
+
       --text-main: #f8fafc;
       --text-sub: #94a3b8;
       --text-muted: #64748b;
-      
+
       --primary: #3b82f6;
       --primary-hover: #2563eb;
       --primary-glow: rgba(59, 130, 246, 0.25);
       --gradient-btn: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-      
+
       --fast-bg: #0f1f1d;
       --fast-border: #10b981;
       --fast-text: #34d399;
@@ -52,7 +53,7 @@
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
-    
+
     .container {
       display: flex;
       flex-direction: column;
@@ -68,7 +69,7 @@
       padding-bottom: 12px;
       border-bottom: 1px solid var(--card-border);
     }
-    
+
     .header-top {
       display: flex;
       align-items: center;
@@ -96,14 +97,14 @@
       z-index: 1;
       pointer-events: none;
     }
-    
+
     .brand-center img {
       width: 26px;
       height: 26px;
       border-radius: 7px;
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
     }
-    
+
     .brand-center h1 {
       font-size: 16px;
       font-weight: 800;
@@ -747,7 +748,7 @@
       transition: all 0.2s ease;
       box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
     }
-    
+
     .btn-primary:hover {
       background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
       transform: translateY(-1px);
@@ -782,8 +783,13 @@
     }
 
     @keyframes fadeInOverlay {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
 
     .settings-modal {
@@ -800,8 +806,15 @@
     }
 
     @keyframes zoomModalIn {
-      from { transform: scale(0.95); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+      from {
+        transform: scale(0.95);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
 
     .settings-modal-header {
@@ -966,12 +979,12 @@
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
     }
 
-    input:checked + .switch-slider {
+    input:checked+.switch-slider {
       background-color: #3b82f6;
       box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
     }
 
-    input:checked + .switch-slider:before {
+    input:checked+.switch-slider:before {
       transform: translateX(20px);
     }
 
@@ -1000,6 +1013,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="container">
@@ -1025,9 +1039,12 @@
             <span id="lbl-btn-see-updates">See the new Features add!</span>
           </button>
           <button id="btn-open-settings" class="btn-icon-setting" title="Configurações Plug & Play / Settings">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+              </path>
             </svg>
           </button>
         </div>
@@ -1049,17 +1066,21 @@
       </div>
 
       <div id="quick-tip" class="quick-tip-box">
-        <span id="lbl-quick-tip-text"><strong>Lista de Leads</strong> é a lista onde quer medir a rapidez das leads. <strong>Sem Interesse</strong> são leads descartadas.</span>
+        <span id="lbl-quick-tip-text"><strong>Lista de Leads</strong> é a lista onde quer medir a rapidez das leads.
+          <strong>Sem Interesse</strong> são leads descartadas.</span>
       </div>
     </div>
 
     <!-- Área de Conteúdo Central -->
     <div class="content-area">
-      
+
       <!-- Estado 1: Não Autorizado -->
       <div id="stats-unauth" class="unauth-card" style="display: none;">
         <div class="unauth-icon">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
         </div>
         <p id="lbl-stats-auth-desc">Connect your Trello account to see lead speed metrics.</p>
         <button id="btn-stats-auth" class="btn-primary" style="padding: 9px 20px; width: auto;">Connect Account</button>
@@ -1068,7 +1089,9 @@
       <!-- Estado 2: Sem Dados (Lista sem saídas) -->
       <div id="stats-empty" class="unauth-card" style="display: none;">
         <div class="unauth-icon">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
         </div>
         <p id="lbl-stats-empty-desc">Move cards out of your first list to see speed statistics.</p>
       </div>
@@ -1188,11 +1211,14 @@
           <div style="display:flex; align-items:center; gap:8px;">
             <span style="font-size:18px;">🎁</span>
             <div>
-              <div style="font-size:12px; font-weight:800; color:#fbbf24;" id="lbl-banner-review-title">Avaliação Grátis = 2 Funcionalidades Desbloqueadas</div>
-              <div style="font-size:11px; color:#cbd5e1;" id="lbl-banner-review-desc">Deixa uma avaliação rápida para desbloquear os botões e usar sem restrições.</div>
+              <div style="font-size:12px; font-weight:800; color:#fbbf24;" id="lbl-banner-review-title">Avaliação Grátis
+                = 2 Funcionalidades Desbloqueadas</div>
+              <div style="font-size:11px; color:#cbd5e1;" id="lbl-banner-review-desc">Deixa uma avaliação rápida para
+                desbloquear os botões e usar sem restrições.</div>
             </div>
           </div>
-          <button id="btn-banner-unlock" class="btn-review-pro" style="padding:4px 10px; font-size:10.5px; white-space:nowrap;">
+          <button id="btn-banner-unlock" class="btn-review-pro"
+            style="padding:4px 10px; font-size:10.5px; white-space:nowrap;">
             ⭐ <span id="lbl-btn-banner-unlock">Avaliar Agora</span>
           </button>
         </div>
@@ -1205,7 +1231,8 @@
               <span id="lbl-feat-actions-name">Ações Rápidas nos Cartões</span>
               <span id="badge-lock-actions" class="lock-badge" style="display:none;">🔒 Review</span>
             </div>
-            <div class="setting-feature-desc" id="lbl-feat-actions-desc">Botões de +1 Chamada e +1 Email direto no verso do cartão para registar contactos com um clique.</div>
+            <div class="setting-feature-desc" id="lbl-feat-actions-desc">Botões de +1 Chamada e +1 Email direto no verso
+              do cartão para registar contactos com um clique.</div>
           </div>
           <label class="switch">
             <input type="checkbox" id="toggle-feat-actions" checked>
@@ -1221,7 +1248,8 @@
               <span id="lbl-feat-history-name">Histórico de Chamadas & Contactos</span>
               <span id="badge-lock-history" class="lock-badge" style="display:none;">🔒 Review</span>
             </div>
-            <div class="setting-feature-desc" id="lbl-feat-history-desc">Permite consultar a lista cronológica de quem realizou cada contacto, com data e hora exatas.</div>
+            <div class="setting-feature-desc" id="lbl-feat-history-desc">Permite consultar a lista cronológica de quem
+              realizou cada contacto, com data e hora exatas.</div>
           </div>
           <label class="switch">
             <input type="checkbox" id="toggle-feat-history" checked>
@@ -1236,7 +1264,8 @@
               <span>⏱️</span>
               <span id="lbl-feat-card-age-name">Idade do Cartão (Card Age)</span>
             </div>
-            <div class="setting-feature-desc" id="lbl-feat-card-age-desc">Exibe emblemas na frente do cartão indicando há quantos dias a lead foi criada ou está sem atualização.</div>
+            <div class="setting-feature-desc" id="lbl-feat-card-age-desc">Exibe emblemas na frente do cartão indicando
+              há quantos dias a lead foi criada ou está sem atualização.</div>
           </div>
           <label class="switch">
             <input type="checkbox" id="toggle-feat-card-age" checked>
@@ -1251,7 +1280,8 @@
               <span>⏳</span>
               <span id="lbl-feat-time-tracker-name">Tempo Ativo (Hoje & Semanal)</span>
             </div>
-            <div class="setting-feature-desc" id="lbl-feat-time-tracker-desc">Mostra a barra inferior com o tempo gasto na app hoje e nesta semana pelo membro atual.</div>
+            <div class="setting-feature-desc" id="lbl-feat-time-tracker-desc">Mostra a barra inferior com o tempo gasto
+              na app hoje e nesta semana pelo membro atual.</div>
           </div>
           <label class="switch">
             <input type="checkbox" id="toggle-feat-time-tracker" checked>
@@ -1263,7 +1293,8 @@
       <div class="settings-modal-footer">
         <span id="settings-saved-note" class="settings-saved-note">✓ Guardado automaticamente</span>
         <div style="display: flex; align-items: center; gap: 8px;">
-          <button id="btn-done-settings" class="btn-header-action" style="padding: 6px 14px; background: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.4); color: #93c5fd;">
+          <button id="btn-done-settings" class="btn-header-action"
+            style="padding: 6px 14px; background: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.4); color: #93c5fd;">
             <span id="lbl-btn-done-settings">Concluído</span>
           </button>
         </div>
@@ -1282,6 +1313,10 @@
     var KEY = import.meta.env.VITE_TRELLO_API_KEY;
     var NAME = 'KPI Master';
     var SITE = 'https://kpismaster.vercel.app';
+    var BASE_DOMAIN = (window.location.origin && window.location.origin !== 'null' && !window.location.origin.includes('trello.com'))
+      ? window.location.origin
+      : 'https://kpismaster.vercel.app';
+    var POWERUP_URL = BASE_DOMAIN + '/trello';
 
     var t = TrelloPowerUp.iframe({ appKey: KEY, appName: NAME });
 
@@ -1387,7 +1422,7 @@
 
       var btnReview = document.getElementById('btn-review-incentive');
       if (btnReview) {
-        btnReview.title = hasReviewed 
+        btnReview.title = hasReviewed
           ? (isPt ? 'Obrigado pelo teu feedback! Clica para sugerir mais melhorias.' : 'Thank you for your feedback! Click to suggest more improvements.')
           : (isPt ? 'Dá a tua opinião e desbloqueia novas funcionalidades!' : 'Give us feedback and unlock new features!');
       }
@@ -1410,7 +1445,7 @@
       var elActiveStatus = document.getElementById('lbl-status-active');
       if (elActiveStatus) elActiveStatus.textContent = isPt ? 'Ativo agora' : 'Active now';
       document.getElementById('lbl-quick-tip-text').innerHTML = tDict.lblQuickTip;
-      
+
       var elTeaserTitle = document.getElementById('lbl-teaser-title');
       if (elTeaserTitle) elTeaserTitle.textContent = tDict.lblTeaserTitle;
       var elTeaserBadge = document.getElementById('lbl-teaser-badge');
@@ -1465,10 +1500,10 @@
 
     // Carregar se o utilizador já deu review e idioma guardado
     Promise.all([
-      t.get('member', 'private', 'kpi_has_reviewed').catch(function(){ return false; }),
-      t.get('member', 'private', 'kpi_feedback_state').catch(function(){ return null; }),
-      t.get('member', 'private', 'kpi_user_lang').catch(function(){ return null; })
-    ]).then(function(res) {
+      t.get('member', 'private', 'kpi_has_reviewed').catch(function () { return false; }),
+      t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; }),
+      t.get('member', 'private', 'kpi_user_lang').catch(function () { return null; })
+    ]).then(function (res) {
       var flagReviewed = (res[0] === true || res[0] === 'true');
       var rawState = res[1];
       var stateObj = (rawState && typeof rawState === 'string') ? JSON.parse(rawState) : rawState;
@@ -1476,7 +1511,7 @@
       var localReviewed = false;
       try {
         localReviewed = (localStorage.getItem('kpi_feedback_submitted_globally') === 'true' || localStorage.getItem('kpi_has_reviewed') === 'true');
-      } catch(e){}
+      } catch (e) { }
 
       hasReviewed = flagReviewed || hasSubmittedFeedback || localReviewed;
       var savedLang = res[2];
@@ -1497,7 +1532,7 @@
     // Clique no botão See the new Features add!
     var btnSeeUpdates = document.getElementById('btn-see-updates');
     if (btnSeeUpdates) {
-      btnSeeUpdates.addEventListener('click', function(e) {
+      btnSeeUpdates.addEventListener('click', function (e) {
         e.preventDefault();
         Analytics.track('see_new_features_clicked', {
           description: 'Utilizador clicou em See the new Features add! no cabeçalho'
@@ -1505,7 +1540,7 @@
 
         t.modal({
           title: isPt ? '✨ Novidades & Atualizações' : '✨ New Features & Updates',
-          url: './updates.html',
+          url: POWERUP_URL + '/updates.html',
           height: 600
         });
       });
@@ -1514,7 +1549,7 @@
     // Clique no botão de Avaliar / Review
     var btnReviewIncentive = document.getElementById('btn-review-incentive');
     if (btnReviewIncentive) {
-      btnReviewIncentive.addEventListener('click', function(e) {
+      btnReviewIncentive.addEventListener('click', function (e) {
         e.preventDefault();
         Analytics.track('review_incentive_button_clicked', {
           already_reviewed: hasReviewed,
@@ -1523,7 +1558,7 @@
 
         t.modal({
           title: isPt ? '⭐ A Tua Opinião — KPI Master' : '⭐ Your Feedback — KPI Master',
-          url: './feedback.html',
+          url: POWERUP_URL + '/feedback.html',
           height: 520
         });
       });
@@ -1532,7 +1567,7 @@
     // Alternar idioma ao clicar no botão
     var btnLangToggle = document.getElementById('btn-lang-toggle');
     if (btnLangToggle) {
-      btnLangToggle.addEventListener('click', function(e) {
+      btnLangToggle.addEventListener('click', function (e) {
         e.preventDefault();
         var nextLang = (currentLang === 'pt') ? 'en' : 'pt';
         applyLanguage(nextLang);
@@ -1540,7 +1575,7 @@
           target_lang: nextLang,
           description: 'Utilizador alternou o idioma para ' + nextLang
         });
-        t.set('member', 'private', 'kpi_user_lang', nextLang).catch(function(){});
+        t.set('member', 'private', 'kpi_user_lang', nextLang).catch(function () { });
       });
     }
 
@@ -1548,7 +1583,7 @@
 
     t.render(function () {
       t.sizeTo(document.body).catch(function () { });
-      
+
       t.board('id').then(function (board) {
         if (!board || !board.id) {
           document.getElementById('btn-open').href = SITE;
@@ -1559,19 +1594,19 @@
         var boardId = board.id;
         document.getElementById('btn-open').href = SITE + '#board=' + boardId;
 
-        t.getRestApi().isAuthorized().then(function(isAuth) {
+        t.getRestApi().isAuthorized().then(function (isAuth) {
           if (isAuth) return t.getRestApi().getToken();
           throw new Error('Not authorized');
-        }).then(function(token) {
+        }).then(function (token) {
           if (token) {
             document.getElementById('btn-open').href = SITE + '#board=' + boardId + '&token=' + token;
           }
-        }).catch(function(err) { });
+        }).catch(function (err) { });
 
-        Promise.all([t.member('id'), t.member('fullName')]).then(function(memberData) {
+        Promise.all([t.member('id'), t.member('fullName')]).then(function (memberData) {
           state.memberId = memberData[0] && (memberData[0].id || memberData[0]);
           state.memberName = (memberData[1] && memberData[1].fullName) || '';
-        }).catch(function() {});
+        }).catch(function () { });
 
         checkAuthAndLoadStats();
       }).catch(function () {
@@ -1579,7 +1614,7 @@
       });
     });
 
-    document.getElementById('btn-open').addEventListener('click', function(e) {
+    document.getElementById('btn-open').addEventListener('click', function (e) {
       e.preventDefault();
 
       Analytics.track('open_web_dashboard_clicked', {
@@ -1587,42 +1622,42 @@
         source: 'trello_dashboard_popup'
       });
 
-      t.board('id').then(function(b) {
+      t.board('id').then(function (b) {
         if (!b || !b.id) {
           window.open(SITE, '_blank');
           return;
         }
         var bId = b.id;
-        t.getRestApi().isAuthorized().then(function(isAuth) {
+        t.getRestApi().isAuthorized().then(function (isAuth) {
           if (isAuth) return t.getRestApi().getToken();
           throw new Error('Not authorized');
-        }).then(function(token) {
+        }).then(function (token) {
           if (token) {
             window.open(SITE + '#board=' + bId + '&token=' + token, '_blank');
           } else {
             window.open(SITE + '#board=' + bId, '_blank');
           }
-        }).catch(function() {
+        }).catch(function () {
           window.open(SITE + '#board=' + bId, '_blank');
         });
-      }).catch(function() {
+      }).catch(function () {
         window.open(SITE, '_blank');
       });
     });
 
     function checkAuthAndLoadStats() {
-      t.getRestApi().isAuthorized().then(function(isAuth) {
+      t.getRestApi().isAuthorized().then(function (isAuth) {
         if (isAuth) {
-          t.getRestApi().getToken().then(function(token) {
+          t.getRestApi().getToken().then(function (token) {
             if (token) {
               state.token = token;
               document.getElementById('stats-unauth').style.display = 'none';
-              
+
               // Obter as configurações salvas das listas para este board
               Promise.all([
-                t.get('board', 'shared', 'kpi_lead_list_id').catch(function() { return null; }),
-                t.get('board', 'shared', 'kpi_uninterested_list_id').catch(function() { return null; })
-              ]).then(function(saved) {
+                t.get('board', 'shared', 'kpi_lead_list_id').catch(function () { return null; }),
+                t.get('board', 'shared', 'kpi_uninterested_list_id').catch(function () { return null; })
+              ]).then(function (saved) {
                 state.leadsListId = saved[0];
                 state.uninterestedListId = saved[1];
                 loadBoardData();
@@ -1644,9 +1679,9 @@
       t.sizeTo(document.body).catch(function () { });
     }
 
-    document.getElementById('btn-stats-auth').addEventListener('click', function() {
+    document.getElementById('btn-stats-auth').addEventListener('click', function () {
       t.getRestApi().authorize({ scope: 'read', expiration: 'never' })
-        .then(function() {
+        .then(function () {
           checkAuthAndLoadStats();
         });
     });
@@ -1654,15 +1689,15 @@
     function loadBoardData() {
       // 1. Obter listas do quadro
       fetch('https://api.trello.com/1/boards/' + state.boardId + '/lists?key=' + KEY + '&token=' + state.token)
-        .then(function(r) { 
+        .then(function (r) {
           if (r.status === 401) {
             t.getRestApi().clearToken();
             showUnauth();
             return;
           }
-          return r.json(); 
+          return r.json();
         })
-        .then(function(lists) {
+        .then(function (lists) {
           if (!lists || lists.length === 0) return;
           state.lists = lists;
 
@@ -1671,7 +1706,7 @@
             state.leadsListId = lists[0].id;
           }
           if (!state.uninterestedListId) {
-            var found = lists.find(function(l) { 
+            var found = lists.find(function (l) {
               var name = l.name.toLowerCase();
               return name.indexOf('interesse') !== -1 || name.indexOf('descart') !== -1 || name.indexOf('uninterested') !== -1;
             });
@@ -1682,7 +1717,7 @@
 
           // 2. Obter cartas do quadro com o respetivo histórico de ações
           fetch('https://api.trello.com/1/boards/' + state.boardId + '/cards?actions=updateCard,createCard&key=' + KEY + '&token=' + state.token)
-            .then(function(r) {
+            .then(function (r) {
               if (r.status === 401) {
                 t.getRestApi().clearToken();
                 showUnauth();
@@ -1690,12 +1725,12 @@
               }
               return r.json();
             })
-            .then(function(cards) {
+            .then(function (cards) {
               calculateDashboardMetrics(cards);
             })
-            .catch(function(err) { console.error('Erro ao ler cartas:', err); });
+            .catch(function (err) { console.error('Erro ao ler cartas:', err); });
         })
-        .catch(function(err) { console.error('Erro ao ler listas:', err); });
+        .catch(function (err) { console.error('Erro ao ler listas:', err); });
     }
 
     function populateSelectors() {
@@ -1705,7 +1740,7 @@
       selectLeads.innerHTML = '';
       selectUninterested.innerHTML = '';
 
-      state.lists.forEach(function(l) {
+      state.lists.forEach(function (l) {
         var optLeads = document.createElement('option');
         optLeads.value = l.id;
         optLeads.textContent = l.name;
@@ -1721,26 +1756,26 @@
     }
 
     // Ouvir alterações nos seletores de listas
-    document.getElementById('select-leads').addEventListener('change', function(e) {
+    document.getElementById('select-leads').addEventListener('change', function (e) {
       var val = e.target.value;
       state.leadsListId = val;
       Analytics.track('leads_list_selected', {
         type: 'leads_list',
         description: 'Utilizador selecionou uma Lista de Leads para calcular velocidades'
       });
-      t.set('board', 'shared', 'kpi_lead_list_id', val).then(function() {
+      t.set('board', 'shared', 'kpi_lead_list_id', val).then(function () {
         loadBoardData();
       });
     });
 
-    document.getElementById('select-uninterested').addEventListener('change', function(e) {
+    document.getElementById('select-uninterested').addEventListener('change', function (e) {
       var val = e.target.value;
       state.uninterestedListId = val;
       Analytics.track('uninterested_list_selected', {
         type: 'uninterested_list',
         description: 'Utilizador selecionou a lista de Sem Interesse / Descartados'
       });
-      t.set('board', 'shared', 'kpi_uninterested_list_id', val).then(function() {
+      t.set('board', 'shared', 'kpi_uninterested_list_id', val).then(function () {
         loadBoardData();
       });
     });
@@ -1750,19 +1785,19 @@
       var uninterestedCount = 0;
       var durations = [];
 
-      cards.forEach(function(card) {
+      cards.forEach(function (card) {
         // Contagem básica nas listas ativas
         if (card.idList === state.leadsListId) activeLeadsCount++;
         if (card.idList === state.uninterestedListId) uninterestedCount++;
 
         // Cálculo de velocidades para a lista de Leads selecionada
         var actions = card.actions || [];
-        actions.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+        actions.sort(function (a, b) { return new Date(a.date) - new Date(b.date); });
 
         var cardId = card.id;
         var dateCreated = new Date(parseInt(cardId.substring(0, 8), 16) * 1000);
 
-        var firstMove = actions.find(function(act) {
+        var firstMove = actions.find(function (act) {
           return act.type === 'updateCard' && act.data && act.data.listBefore;
         });
 
@@ -1774,7 +1809,7 @@
         }
 
         var currentEntry = entryDate;
-        actions.forEach(function(act) {
+        actions.forEach(function (act) {
           if (act.type === 'updateCard' && act.data) {
             if (act.data.listBefore && act.data.listBefore.id === state.leadsListId && currentEntry) {
               var exitDate = new Date(act.date);
@@ -1806,7 +1841,7 @@
         return;
       }
 
-      durations.sort(function(a, b) { return a.hours - b.hours; });
+      durations.sort(function (a, b) { return a.hours - b.hours; });
 
       var fastest = durations[0];
       var slowest = durations[durations.length - 1];
@@ -1836,14 +1871,14 @@
       document.getElementById('stats-unauth').style.display = 'none';
       document.getElementById('stats-empty').style.display = 'none';
       document.getElementById('stats-data').style.display = 'flex';
-      
+
       t.sizeTo(document.body).catch(function () { });
     }
 
     // Analytics: Rastrear cliques no botão de abrir a Dashboard Web
     var btnOpenWeb = document.getElementById('btn-open');
     if (btnOpenWeb) {
-      btnOpenWeb.addEventListener('click', function() {
+      btnOpenWeb.addEventListener('click', function () {
         Analytics.track('open_web_dashboard_clicked', {
           board_id: state.boardId,
           member_id: state.memberId,
@@ -1869,7 +1904,7 @@
       if (savedNote) {
         savedNote.classList.add('visible');
         clearTimeout(savedNote._timer);
-        savedNote._timer = setTimeout(function() {
+        savedNote._timer = setTimeout(function () {
           savedNote.classList.remove('visible');
         }, 2000);
       }
@@ -1877,13 +1912,13 @@
 
     // Carregar configurações guardadas do quadro e estado de review
     Promise.all([
-      t.get('board', 'shared', 'kpi_touchpoints_enabled').catch(function() { return true; }),
-      t.get('board', 'shared', 'kpi_history_enabled').catch(function() { return true; }),
-      t.get('board', 'shared', 'kpi_card_age_enabled').catch(function() { return true; }),
-      t.get('board', 'shared', 'kpi_time_tracker_enabled').catch(function() { return true; }),
-      t.get('member', 'private', 'kpi_has_reviewed').catch(function() { return false; }),
-      t.get('member', 'private', 'kpi_feedback_state').catch(function() { return null; })
-    ]).then(function(res) {
+      t.get('board', 'shared', 'kpi_touchpoints_enabled').catch(function () { return true; }),
+      t.get('board', 'shared', 'kpi_history_enabled').catch(function () { return true; }),
+      t.get('board', 'shared', 'kpi_card_age_enabled').catch(function () { return true; }),
+      t.get('board', 'shared', 'kpi_time_tracker_enabled').catch(function () { return true; }),
+      t.get('member', 'private', 'kpi_has_reviewed').catch(function () { return false; }),
+      t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; })
+    ]).then(function (res) {
       var actionsEnabled = (res[0] === undefined || res[0] === null || res[0] === true || res[0] === 'true');
       var historyEnabled = (res[1] === undefined || res[1] === null || res[1] === true || res[1] === 'true');
       var cardAgeEnabled = (res[2] === undefined || res[2] === null || res[2] === true || res[2] === 'true');
@@ -1895,7 +1930,7 @@
       var localReviewed = false;
       try {
         localReviewed = (localStorage.getItem('kpi_feedback_submitted_globally') === 'true' || localStorage.getItem('kpi_has_reviewed') === 'true');
-      } catch(e){}
+      } catch (e) { }
 
       var userHasReviewed = flagReviewed || hasSubmittedFeedback || localReviewed;
 
@@ -1934,25 +1969,25 @@
           });
           t.modal({
             title: isPt ? '⭐ Dá Review & Desbloqueia Funcionalidades' : '⭐ Leave a Review & Unlock Features',
-            url: './feedback.html',
+            url: POWERUP_URL + '/feedback.html',
             height: 520
           });
         }
 
         if (cardFeatActions) {
-          cardFeatActions.addEventListener('click', function(e) {
+          cardFeatActions.addEventListener('click', function (e) {
             promptReviewUnlock('quick_actions_touchpoints');
           });
         }
 
         if (cardFeatHistory) {
-          cardFeatHistory.addEventListener('click', function(e) {
+          cardFeatHistory.addEventListener('click', function (e) {
             promptReviewUnlock('contact_call_history');
           });
         }
 
         if (btnBannerUnlock) {
-          btnBannerUnlock.addEventListener('click', function(e) {
+          btnBannerUnlock.addEventListener('click', function (e) {
             e.stopPropagation();
             promptReviewUnlock('banner_unlock_both');
           });
@@ -1970,7 +2005,7 @@
     });
 
     if (btnOpenSettings) {
-      btnOpenSettings.addEventListener('click', function(e) {
+      btnOpenSettings.addEventListener('click', function (e) {
         e.preventDefault();
         if (settingsOverlay) settingsOverlay.classList.add('active');
         Analytics.track('plug_and_play_settings_opened', {
@@ -1987,15 +2022,15 @@
     if (btnCloseSettings) btnCloseSettings.addEventListener('click', closeSettingsModal);
     if (btnDoneSettings) btnDoneSettings.addEventListener('click', closeSettingsModal);
     if (settingsOverlay) {
-      settingsOverlay.addEventListener('click', function(e) {
+      settingsOverlay.addEventListener('click', function (e) {
         if (e.target === settingsOverlay) closeSettingsModal();
       });
     }
 
     if (toggleFeatActions) {
-      toggleFeatActions.addEventListener('change', function() {
+      toggleFeatActions.addEventListener('change', function () {
         var isChecked = toggleFeatActions.checked;
-        t.set('board', 'shared', 'kpi_touchpoints_enabled', isChecked).catch(function(){});
+        t.set('board', 'shared', 'kpi_touchpoints_enabled', isChecked).catch(function () { });
         showSavedFeedback();
         Analytics.track('feature_toggled', {
           feature: 'quick_actions_touchpoints',
@@ -2006,9 +2041,9 @@
     }
 
     if (toggleFeatHistory) {
-      toggleFeatHistory.addEventListener('change', function() {
+      toggleFeatHistory.addEventListener('change', function () {
         var isChecked = toggleFeatHistory.checked;
-        t.set('board', 'shared', 'kpi_history_enabled', isChecked).catch(function(){});
+        t.set('board', 'shared', 'kpi_history_enabled', isChecked).catch(function () { });
         showSavedFeedback();
         Analytics.track('feature_toggled', {
           feature: 'contact_call_history',
@@ -2019,9 +2054,9 @@
     }
 
     if (toggleFeatCardAge) {
-      toggleFeatCardAge.addEventListener('change', function() {
+      toggleFeatCardAge.addEventListener('change', function () {
         var isChecked = toggleFeatCardAge.checked;
-        t.set('board', 'shared', 'kpi_card_age_enabled', isChecked).catch(function(){});
+        t.set('board', 'shared', 'kpi_card_age_enabled', isChecked).catch(function () { });
         showSavedFeedback();
         Analytics.track('feature_toggled', {
           feature: 'card_age_badges',
@@ -2032,9 +2067,9 @@
     }
 
     if (toggleFeatTimeTracker) {
-      toggleFeatTimeTracker.addEventListener('change', function() {
+      toggleFeatTimeTracker.addEventListener('change', function () {
         var isChecked = toggleFeatTimeTracker.checked;
-        t.set('board', 'shared', 'kpi_time_tracker_enabled', isChecked).catch(function(){});
+        t.set('board', 'shared', 'kpi_time_tracker_enabled', isChecked).catch(function () { });
         var cardUserTime = document.getElementById('card-user-time');
         if (cardUserTime) {
           cardUserTime.style.display = isChecked ? 'flex' : 'none';
@@ -2083,7 +2118,7 @@
       try {
         var raw = localStorage.getItem(STORAGE_KEY);
         if (raw) store = JSON.parse(raw) || {};
-      } catch(e) {}
+      } catch (e) { }
 
       function getUserRecord(userId, userName) {
         var uKey = userId || 'current_user';
@@ -2144,11 +2179,11 @@
 
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
-        } catch(e) {}
+        } catch (e) { }
       }
 
       // Inicializar visualização do utilizador ativo
-      t.member('fullName', 'id').then(function(m) {
+      t.member('fullName', 'id').then(function (m) {
         var mId = (m && m.id) || state.memberId || 'current_user';
         var mName = (m && m.fullName) || state.memberName || '';
         if (mName) state.memberName = mName;
@@ -2156,7 +2191,7 @@
 
         var rec = getUserRecord(mId, mName);
         renderUserTime(rec);
-      }).catch(function() {
+      }).catch(function () {
         var rec = getUserRecord('current_user', 'Tu');
         renderUserTime(rec);
       });
@@ -2164,15 +2199,16 @@
       // Atualiza a cada 60s
       var timer = setInterval(tickUserTime, 60000);
 
-      window.addEventListener('beforeunload', function() {
+      window.addEventListener('beforeunload', function () {
         clearInterval(timer);
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
-        } catch(e) {}
+        } catch (e) { }
       });
     })();
 
   </script>
 
 </body>
+
 </html>
