@@ -37,7 +37,7 @@
       'on-enable': function (t) {
         return t.modal({
           title: 'Bem-vindo ao KPI Master',
-          url: POWERUP_URL + '/welcome.html',
+          url: POWERUP_URL + '/welcome.html?v=3',
           height: 540
         });
       },
@@ -62,7 +62,7 @@
                 if (!hasSeenWelcome) {
                   return t.modal({
                     title: isPt ? 'Bem-vindo ao KPI Master' : 'Welcome to KPI Master',
-                    url: POWERUP_URL + '/welcome.html',
+                    url: POWERUP_URL + '/welcome.html?v=3',
                     height: 600
                   });
                 }
@@ -71,13 +71,13 @@
                   if (!isAuth) {
                     return t.modal({
                       title: isPt ? 'Ligar ao KPI Master' : 'Connect KPI Master',
-                      url: POWERUP_URL + '/auth.html',
+                      url: POWERUP_URL + '/auth.html?v=3',
                       height: 420
                     });
                   }
                   return t.modal({
                     title: isPt ? 'Micro Dashboard & Velocidade das Leads' : 'Micro Dashboard & Lead Speed',
-                    url: POWERUP_URL + '/dashboard.html',
+                    url: POWERUP_URL + '/dashboard.html?v=3',
                     height: 690,
                     fullscreen: false
                   });
@@ -99,7 +99,7 @@
       'show-authorization': function (t) {
         return t.modal({
           title: 'Ligar ao KPI Master',
-          url: POWERUP_URL + '/auth.html',
+          url: POWERUP_URL + '/auth.html?v=3',
           height: 420
         });
       },
@@ -108,7 +108,7 @@
       'show-settings': function (t) {
         return t.modal({
           title: 'Definições — KPI Master',
-          url: POWERUP_URL + '/settings.html',
+          url: POWERUP_URL + '/settings.html?v=3',
           height: 420
         });
       },
@@ -253,7 +253,7 @@
               });
               return tCard.modal({
                 title: isPt ? '⭐ Dá Review & Desbloqueia Ações Rápidas' : '⭐ Leave a Review & Unlock Quick Actions',
-                url: POWERUP_URL + '/feedback.html',
+                url: POWERUP_URL + '/feedback.html?v=3',
                 height: 520
               });
             }
@@ -319,13 +319,13 @@
                       if (!isAuth) {
                         return t.modal({
                           title: isPt ? 'Ligar ao KPI Master' : 'Connect KPI Master',
-                          url: POWERUP_URL + '/auth.html',
+                          url: POWERUP_URL + '/auth.html?v=3',
                           height: 420
                         });
                       }
 
                       return t.getRestApi().getToken().then(function (token) {
-                        return fetch('https://api.trello.com/1/cards/' + card.id + '?idList=' + nextList.id + '&key=' + import.meta.env.VITE_TRELLO_API_KEY + '&token=' + token, {
+                        return fetch('https://api.trello.com/1/cards/' + card.id + '?idList=' + nextList.id + '&key=' + KEY + '&token=' + token, {
                           method: 'PUT'
                         }).then(function (res) {
                           if (res.ok) {
@@ -376,7 +376,7 @@
             icon: POWERUP_URL + '/icon.png',
             content: {
               type: 'iframe',
-              url: t.signUrl(POWERUP_URL + '/card-back.html?v=2'),
+              url: t.signUrl(POWERUP_URL + '/card-back.html?v=3'),
               height: 520
             }
           };
@@ -389,7 +389,7 @@
               icon: POWERUP_URL + '/icon.png',
               content: {
                 type: 'iframe',
-                url: t.signUrl(POWERUP_URL + '/card-back.html?v=2'),
+                url: t.signUrl(POWERUP_URL + '/card-back.html?v=3'),
                 height: 520
               }
             };
