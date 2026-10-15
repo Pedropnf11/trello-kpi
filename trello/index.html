@@ -401,7 +401,7 @@
       'list-sorters': function (t) {
         return getUserIsPt(t).then(function (isPt) {
           return [{
-            text: isPt ? '⏳ Idade da Lead: Mais Antigos Primeiro (Evitar Perdas)' : '⏳ Lead Age: Oldest First (Prevent Loss)',
+            text: isPt ? 'Idade da Lead: Mais Antigos Primeiro (Evitar Perdas)' : '⏳ Lead Age: Oldest First (Prevent Loss)',
             callback: function (t, opts) {
               Analytics.track('list_sort_executed', {
                 sort_order: 'oldest_first',
