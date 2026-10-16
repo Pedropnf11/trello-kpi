@@ -39,7 +39,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "frame-ancestors 'self' https://trello.com https://*.trello.com; default-src 'self' 'unsafe-inline' 'unsafe-eval' https: blob: data:; connect-src 'self' https://api.trello.com https://p.trellocdn.com https://*.posthog.com https://eu.i.posthog.com https://us.i.posthog.com;"
+          "value": "frame-ancestors 'self' https://trello.com https://*.trello.com; default-src 'self' 'unsafe-inline' 'unsafe-eval' https: blob: data:; connect-src 'self' https://api.trello.com https://p.trellocdn.com https://hook.eu1.make.com https://*.posthog.com https://eu.i.posthog.com https://us.i.posthog.com;"
         },
         {
           "key": "Access-Control-Allow-Origin",
@@ -64,7 +64,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "frame-ancestors 'self' https://trello.com https://*.trello.com; default-src 'self' 'unsafe-inline' 'unsafe-eval' https: blob: data:; connect-src 'self' https://api.trello.com https://p.trellocdn.com https://*.posthog.com https://eu.i.posthog.com https://us.i.posthog.com;"
+          "value": "frame-ancestors 'self' https://trello.com https://*.trello.com; default-src 'self' 'unsafe-inline' 'unsafe-eval' https: blob: data:; connect-src 'self' https://api.trello.com https://p.trellocdn.com https://hook.eu1.make.com https://*.posthog.com https://eu.i.posthog.com https://us.i.posthog.com;"
         },
         {
           "key": "Access-Control-Allow-Origin",
