@@ -346,6 +346,25 @@
       box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
     }
 
+    .validation-error {
+      color: #f87171;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 8px;
+      display: none;
+      text-align: center;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .validation-error.active {
+      display: block;
+    }
+
+    textarea.input-error, input.input-error {
+      border-color: #ef4444 !important;
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25) !important;
+    }
+
     .btn-back {
       padding: 10px 16px;
       border-radius: 12px;
@@ -441,11 +460,12 @@
           <span class="star" data-rating="4">★</span>
           <span class="star" data-rating="5">★</span>
         </div>
-        <div class="rating-label" id="rating-label">5/5 Excellent!</div>
+        <div class="rating-label" id="rating-label"></div>
+        <div class="validation-error" id="s1-error"></div>
 
         <div class="actions-footer">
           <button type="button" id="btn-cancel-top" class="btn-skip">Not now</button>
-          <button type="button" onclick="goToStep(2)" class="btn-next" id="s1-next-btn">Next →</button>
+          <button type="button" onclick="validateAndGoToStep(1, 2)" class="btn-next" id="s1-next-btn">Next →</button>
         </div>
       </div>
 
@@ -476,10 +496,11 @@
         <div id="s2-other-container" class="other-input-container">
           <input type="text" id="s2-other-input" placeholder="Describe your main use case...">
         </div>
+        <div class="validation-error" id="s2-error"></div>
 
         <div class="actions-footer">
           <button type="button" onclick="goToStep(1)" class="btn-back" id="s2-back-btn">← Back</button>
-          <button type="button" onclick="goToStep(3)" class="btn-next" id="s2-next-btn">Next →</button>
+          <button type="button" onclick="validateAndGoToStep(2, 3)" class="btn-next" id="s2-next-btn">Next →</button>
         </div>
       </div>
 
@@ -506,10 +527,11 @@
             <div class="option-radio"></div>
           </div>
         </div>
+        <div class="validation-error" id="s3-error"></div>
 
         <div class="actions-footer">
           <button type="button" onclick="goToStep(2)" class="btn-back" id="s3-back-btn">← Back</button>
-          <button type="button" onclick="goToStep(4)" class="btn-next" id="s3-next-btn">Next →</button>
+          <button type="button" onclick="validateAndGoToStep(3, 4)" class="btn-next" id="s3-next-btn">Next →</button>
         </div>
       </div>
 
@@ -518,7 +540,8 @@
         <h2 class="step-title" id="s4-title">Any suggestions or improvements for us?</h2>
         <p class="step-desc" id="s4-desc">🔒 Feedback is 100% anonymous. If you need support assistance, please include your email address below!</p>
 
-        <textarea id="s4-textarea" placeholder="Type your suggestions here (optional). Include your email if you would like a reply from support..."></textarea>
+        <textarea id="s4-textarea" placeholder="Type your suggestions or feedback here..."></textarea>
+        <div class="validation-error" id="s4-error"></div>
 
         <div class="actions-footer">
           <button type="button" onclick="goToStep(3)" class="btn-back" id="s4-back-btn">← Back</button>
@@ -549,9 +572,9 @@
     var t = TrelloPowerUp.iframe();
 
     var currentStep = 1;
-    var currentRating = 5;
-    var selectedUseCase = 'sales_leads';
-    var selectedDashboardOpinion = 'essential';
+    var currentRating = null;
+    var selectedUseCase = null;
+    var selectedDashboardOpinion = null;
     var currentLang = 'en'; // DEFAULT IS 100% ENGLISH!
 
     var dictionary = {
@@ -573,6 +596,7 @@
         s1Title: "How would you rate your overall experience?",
         s1Desc: "Select a rating from 1 to 5 stars.",
         ratings: ["1/5 Poor", "2/5 Fair", "3/5 Good", "4/5 Very Good!", "5/5 Excellent!"],
+        errS1: "Please select a star rating to proceed.",
 
         s2Title: "What do you primarily use KPI Master for?",
         s2Desc: "Select the area that best matches your daily work.",
@@ -581,6 +605,8 @@
         s2Opt3: "🚀 Projects & Team Operations",
         s2Opt4: "✍️ Other...",
         phS2Other: "Describe your main use case...",
+        errS2: "Please choose one option to proceed.",
+        errS2Other: "Please describe your use case.",
 
         s3Title: "What do you think of the Full Dashboard web platform?",
         s3Desc: "Tell us your opinion about our full analytics web dashboard.",
@@ -588,10 +614,12 @@
         s3Opt2: "📊 Useful, but could be improved",
         s3Opt3: "💡 Haven't explored it enough yet",
         s3Opt4: "⚠️ Needs more features for my team",
+        errS3: "Please select an option to proceed.",
 
         s4Title: "Any suggestions or improvements for us?",
         s4Desc: "🔒 Feedback is 100% anonymous. If you need support assistance, please include your email address below!",
-        phS4Textarea: "Type your suggestions here (optional). Include your email if you would like a reply from support..."
+        phS4Textarea: "Type your feedback or suggestions here...",
+        errS4: "Please write your feedback before submitting."
       },
       pt: {
         badge: "⚡ Feedback Rápido (30s)",
@@ -611,6 +639,7 @@
         s1Title: "Como avalias a tua experiência com o KPI Master?",
         s1Desc: "Seleciona uma pontuação de 1 a 5 estrelas.",
         ratings: ["1/5 Fraco", "2/5 Razoável", "3/5 Bom", "4/5 Muito Bom!", "5/5 Excelente!"],
+        errS1: "Por favor, escolhe uma classificação em estrelas.",
 
         s2Title: "Para o que usas principalmente o KPI Master?",
         s2Desc: "Seleciona a área que melhor descreve o teu trabalho.",
@@ -619,6 +648,8 @@
         s2Opt3: "🚀 Projetos & Operações de Equipa",
         s2Opt4: "✍️ Outro...",
         phS2Other: "Escreve como utilizas a aplicação...",
+        errS2: "Por favor, seleciona uma opção para continuar.",
+        errS2Other: "Por favor, descreve a tua forma de utilização.",
 
         s3Title: "O que achas do Painel de KPIs Completo (Full Dashboard)?",
         s3Desc: "Diz-nos a tua opinião sobre a nossa plataforma web de métricas.",
@@ -626,15 +657,75 @@
         s3Opt2: "📊 Útil, mas pode melhorar",
         s3Opt3: "💡 Ainda não explorei o suficiente",
         s3Opt4: "⚠️ Precisa de mais funcionalidades",
+        errS3: "Por favor, seleciona uma opção para continuar.",
 
         s4Title: "Tens alguma sugestão de melhoria?",
         s4Desc: "🔒 Este feedback é 100% anónimo. Se precisares de ajuda do suporte, inclui o teu email nos comentários abaixo!",
-        phS4Textarea: "Escreve as tuas sugestões aqui (opcional). Inclui o teu email se desejares resposta do suporte..."
+        phS4Textarea: "Escreve o teu feedback ou sugestões aqui...",
+        errS4: "Por favor, escreve algum feedback antes de submeter."
       }
+    };
+
+    function clearError(stepNum) {
+      var errEl = document.getElementById('s' + stepNum + '-error');
+      if (errEl) {
+        errEl.textContent = '';
+        errEl.classList.remove('active');
+      }
+      if (stepNum === 2) {
+        document.getElementById('s2-other-input').classList.remove('input-error');
+      } else if (stepNum === 4) {
+        document.getElementById('s4-textarea').classList.remove('input-error');
+      }
+    }
+
+    function showError(stepNum, message) {
+      var errEl = document.getElementById('s' + stepNum + '-error');
+      if (errEl) {
+        errEl.textContent = message;
+        errEl.classList.add('active');
+      }
+      if (stepNum === 2 && selectedUseCase === 'other') {
+        document.getElementById('s2-other-input').classList.add('input-error');
+      } else if (stepNum === 4) {
+        document.getElementById('s4-textarea').classList.add('input-error');
+      }
+    }
+
+    window.validateAndGoToStep = function(fromStep, toStep) {
+      var d = dictionary[currentLang];
+      clearError(fromStep);
+
+      if (fromStep === 1) {
+        if (!currentRating) {
+          showError(1, d.errS1);
+          return;
+        }
+      } else if (fromStep === 2) {
+        if (!selectedUseCase) {
+          showError(2, d.errS2);
+          return;
+        }
+        if (selectedUseCase === 'other') {
+          var otherVal = document.getElementById('s2-other-input').value.trim();
+          if (!otherVal) {
+            showError(2, d.errS2Other);
+            return;
+          }
+        }
+      } else if (fromStep === 3) {
+        if (!selectedDashboardOpinion) {
+          showError(3, d.errS3);
+          return;
+        }
+      }
+
+      window.goToStep(toStep);
     };
 
     window.goToStep = function(stepNum) {
       currentStep = stepNum;
+      clearError(stepNum);
 
       Analytics.track('feedback_step_viewed', {
         step: stepNum,
@@ -713,13 +804,17 @@
       var d = dictionary[currentLang];
 
       stars.forEach(function(s, index) {
-        if (index < rating) {
+        if (rating && index < rating) {
           s.classList.add('active');
         } else {
           s.classList.remove('active');
         }
       });
-      document.getElementById('rating-label').textContent = d.ratings[rating - 1] || (rating + '/5');
+      if (rating) {
+        document.getElementById('rating-label').textContent = d.ratings[rating - 1] || (rating + '/5');
+      } else {
+        document.getElementById('rating-label').textContent = '';
+      }
     }
 
     // Star Click Handlers
@@ -727,6 +822,7 @@
       star.addEventListener('click', function() {
         var r = parseInt(this.getAttribute('data-rating'), 10);
         updateStarDisplay(r);
+        clearError(1);
         setTimeout(function() {
           goToStep(2);
         }, 200);
@@ -738,6 +834,8 @@
       card.addEventListener('click', function() {
         var step = this.getAttribute('data-step');
         var val = this.getAttribute('data-value');
+
+        clearError(parseInt(step, 10));
 
         document.querySelectorAll('.option-card[data-step="' + step + '"]').forEach(function(c) {
           c.classList.remove('selected');
@@ -759,14 +857,16 @@
       });
     });
 
-    // Set Default Selections
-    var defaultStep2Card = document.querySelector('.option-card[data-step="2"][data-value="sales_leads"]');
-    if (defaultStep2Card) defaultStep2Card.classList.add('selected');
+    // Input listeners to clear errors on typing
+    document.getElementById('s2-other-input').addEventListener('input', function() {
+      if (this.value.trim()) clearError(2);
+    });
 
-    var defaultStep3Card = document.querySelector('.option-card[data-step="3"][data-value="essential"]');
-    if (defaultStep3Card) defaultStep3Card.classList.add('selected');
+    document.getElementById('s4-textarea').addEventListener('input', function() {
+      if (this.value.trim()) clearError(4);
+    });
 
-    // Force initialization in English by default!
+    // Initialize in English by default without preselected options!
     applyLanguage('en');
 
     // Immediately record prompt time on load so closing via Trello's X button stores cooldown
@@ -808,8 +908,17 @@
 
     // Final Submit Handler
     document.getElementById('btn-submit').addEventListener('click', function() {
-      var submitBtn = this;
       var d = dictionary[currentLang];
+      clearError(4);
+
+      var suggestions = document.getElementById('s4-textarea').value.trim();
+      if (!suggestions) {
+        showError(4, d.errS4);
+        document.getElementById('s4-textarea').focus();
+        return;
+      }
+
+      var submitBtn = this;
       submitBtn.disabled = true;
       submitBtn.textContent = d.btnSubmitting;
 
