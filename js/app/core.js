@@ -358,6 +358,9 @@ App.attachDashboardEvents = function () {
     if (configBtn && logoutModal) {
         configBtn.addEventListener('click', () => {
             logoutModal.classList.remove('hidden');
+            Analytics.track('web_logout_modal_opened', {
+                role: this.state.userRole || 'manager'
+            });
         });
     }
 
@@ -367,11 +370,20 @@ App.attachDashboardEvents = function () {
     const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
 
     if (confirmLogoutBtn) {
-        confirmLogoutBtn.addEventListener('click', () => this.logout());
+        confirmLogoutBtn.addEventListener('click', () => {
+            Analytics.track('web_logout_clicked', {
+                role: this.state.userRole || 'manager'
+            });
+            this.logout();
+        });
     }
 
     if (changeBoardBtn) {
         changeBoardBtn.addEventListener('click', () => {
+            Analytics.track('web_change_board_clicked', {
+                role: this.state.userRole || 'manager',
+                board_id: this.state.boardId || ''
+            });
             this.resetBoardAndRole();
         });
     }
@@ -399,6 +411,9 @@ App.attachDashboardEvents = function () {
     if (settingsBtn && settingsModal) {
         settingsBtn.addEventListener('click', () => {
             settingsModal.classList.remove('hidden');
+            Analytics.track('web_settings_opened', {
+                role: this.state.userRole || 'manager'
+            });
         });
     }
 
@@ -428,6 +443,11 @@ App.attachDashboardEvents = function () {
             this.state.webhookUrl = newUrl;
             localStorage.setItem('trello_webhook_url', newUrl);
 
+            Analytics.track('web_settings_saved', {
+                role: this.state.userRole || 'manager',
+                has_webhook: Boolean(newUrl)
+            });
+
             const originalText = saveSettingsBtn.innerHTML;
             saveSettingsBtn.innerHTML = '✔ Guardado!';
             saveSettingsBtn.classList.remove('bg-blue-600', 'hover:bg-blue-500');
@@ -450,6 +470,9 @@ App.attachDashboardEvents = function () {
     if (tutorialBtn && tutorialModal) {
         tutorialBtn.addEventListener('click', () => {
             tutorialModal.classList.remove('hidden');
+            Analytics.track('web_tutorial_opened', {
+                role: this.state.userRole || 'manager'
+            });
         });
     }
 
@@ -484,6 +507,10 @@ App.attachDashboardEvents = function () {
 
                 // Switch content
                 const target = tab.dataset.tab;
+                Analytics.track('web_tutorial_tab_switched', {
+                    role: this.state.userRole || 'manager',
+                    tab: target
+                });
                 contents.forEach(content => {
                     if (content.id === `tab-content-${target}`) {
                         content.classList.remove('hidden');
@@ -503,6 +530,9 @@ App.attachDashboardEvents = function () {
     if (docsBtn && docsModal) {
         docsBtn.addEventListener('click', () => {
             docsModal.classList.remove('hidden');
+            Analytics.track('web_help_docs_opened', {
+                role: this.state.userRole || 'manager'
+            });
         });
     }
 
@@ -530,6 +560,10 @@ App.attachDashboardEvents = function () {
 
                 // Switch list content
                 const target = tab.dataset.tab;
+                Analytics.track('web_help_docs_tab_switched', {
+                    role: this.state.userRole || 'manager',
+                    tab: target
+                });
                 lists.forEach(list => {
                     if (list.id === `docs-list-${target}`) {
                         list.classList.remove('hidden');
@@ -553,6 +587,10 @@ App.attachDashboardEvents = function () {
     if (activityPeriodFilter) {
         activityPeriodFilter.addEventListener('change', (e) => {
             const days = e.target.value;
+            Analytics.track('web_graphs_activity_filter_changed', {
+                days: days,
+                role: this.state.userRole || 'manager'
+            });
             const container = document.getElementById('teamPerformanceChartContainer');
             if (container && this.state.rawData) {
                 container.innerHTML = UI.renderTeamPerformanceChart(this.state.kpis?.geral, this.state.rawData, days);
@@ -564,6 +602,11 @@ App.attachDashboardEvents = function () {
     if (memberFilter) {
         memberFilter.addEventListener('change', (e) => {
             this.state.selectedMemberId = e.target.value;
+            Analytics.track('web_team_filter_changed', {
+                selected_member_id: e.target.value || 'all',
+                is_all: !e.target.value,
+                role: this.state.userRole || 'manager'
+            });
             this.render();
         });
     }
@@ -617,6 +660,11 @@ App.attachDashboardEvents = function () {
         }
 
         dateChangeTimeout = setTimeout(() => {
+            Analytics.track('web_date_range_applied', {
+                start_date: this.state.startDate,
+                end_date: this.state.endDate,
+                role: this.state.userRole || 'manager'
+            });
             this.conectarTrello();
         }, 400);
     };
@@ -692,6 +740,13 @@ App.attachDashboardEvents = function () {
             this.state.startDate = startStr;
             this.state.endDate = todayStr;
 
+            Analytics.track('web_date_preset_clicked', {
+                preset: preset,
+                start_date: startStr,
+                end_date: todayStr,
+                role: this.state.userRole || 'manager'
+            });
+
             if (fpStart) fpStart.setDate(startStr, false);
             if (fpEnd) fpEnd.setDate(todayStr, false);
 
@@ -703,6 +758,9 @@ App.attachDashboardEvents = function () {
         clearDates.addEventListener('click', () => {
             this.state.startDate = '';
             this.state.endDate = '';
+            Analytics.track('web_dates_cleared', {
+                role: this.state.userRole || 'manager'
+            });
             if (fpStart) fpStart.clear();
             if (fpEnd) fpEnd.clear();
             this.conectarTrello();
@@ -713,18 +771,33 @@ App.attachDashboardEvents = function () {
     const atualizarBtn = document.getElementById('atualizarBtn');
     if (atualizarBtn) {
         atualizarBtn.addEventListener('click', () => {
+            Analytics.track('web_refresh_clicked', {
+                role: this.state.userRole || 'manager',
+                board_id: this.state.boardId || ''
+            });
             this.conectarTrello();
         });
     }
 
     const importLeadBtn = document.getElementById('importLeadBtn');
     if (importLeadBtn && this.openLeadImportModal) {
-        importLeadBtn.addEventListener('click', () => this.openLeadImportModal());
+        importLeadBtn.addEventListener('click', () => {
+            Analytics.track('web_lead_import_modal_opened', {
+                role: this.state.userRole || 'manager'
+            });
+            this.openLeadImportModal();
+        });
     }
 
     const exportarBtn = document.getElementById('exportarBtn');
     if (exportarBtn && this.exportarCSV) {
-        exportarBtn.addEventListener('click', () => this.exportarCSV());
+        exportarBtn.addEventListener('click', () => {
+            Analytics.track('web_csv_exported', {
+                role: this.state.userRole || 'manager',
+                board_id: this.state.boardId || ''
+            });
+            this.exportarCSV();
+        });
     }
 
     const exportarPdfBtn = document.getElementById('exportarPdfBtn');
@@ -734,13 +807,24 @@ App.attachDashboardEvents = function () {
 
     const enviarWebhookBtn = document.getElementById('enviarWebhookBtn');
     if (enviarWebhookBtn && this.enviarWebhook) {
-        enviarWebhookBtn.addEventListener('click', () => this.enviarWebhook());
+        enviarWebhookBtn.addEventListener('click', () => {
+            Analytics.track('web_webhook_export_clicked', {
+                role: this.state.userRole || 'manager',
+                board_id: this.state.boardId || ''
+            });
+            this.enviarWebhook();
+        });
     }
 
     // 4. Navigation (Graphs)
     const goToGraphsBtn = document.getElementById('goToGraphsBtn');
     if (goToGraphsBtn) {
         goToGraphsBtn.addEventListener('click', () => {
+            Analytics.track('web_advanced_graphs_opened', {
+                role: this.state.userRole || 'manager',
+                board_id: this.state.boardId || '',
+                total_cards: this.state.rawData?.cards?.length || 0
+            });
             this.state.viewMode = 'graphs';
             this.render();
         });
@@ -749,6 +833,9 @@ App.attachDashboardEvents = function () {
     const backToDashBtn = document.getElementById('backToDashBtn');
     if (backToDashBtn) {
         backToDashBtn.addEventListener('click', () => {
+            Analytics.track('web_back_to_dashboard_clicked', {
+                role: this.state.userRole || 'manager'
+            });
             this.state.viewMode = 'dashboard';
             this.render();
         });
@@ -775,8 +862,9 @@ App.setRole = function (role) {
     this.state.selectedMemberId = '';
     localStorage.setItem('trello_user_role', role);
 
-    Analytics.track('role_selected', {
+    Analytics.track('web_role_selected', {
         role: role,
+        action: 'select',
         description: 'Utilizador selecionou o perfil ' + (role === 'manager' ? 'Gestor' : 'Vendedor')
     });
 
@@ -797,8 +885,9 @@ App.confirmRole = function (boardId, role) {
     this.state.selectedMemberId = '';
     localStorage.setItem('trello_user_role', role);
 
-    Analytics.track('role_selected', {
+    Analytics.track('web_role_selected', {
         role: role,
+        action: 'confirm',
         description: 'Utilizador confirmou o perfil ' + (role === 'manager' ? 'Gestor' : 'Vendedor')
     });
 
@@ -830,10 +919,45 @@ App.sendFeedback = async function (inputId) {
     if (!input) return;
 
     const feedbackText = input.value.trim();
-    if (!feedbackText) return;
-
     const popup = document.getElementById('bugReportPopup');
-    const submitBtn = popup ? popup.querySelector('button.bg-blue-600') : null;
+    const isSales = inputId.includes('Sales');
+    const errorEl = document.getElementById(isSales ? 'feedbackErrorMsgSales' : 'feedbackErrorMsg');
+    const errorText = document.getElementById(isSales ? 'feedbackErrorTextSales' : 'feedbackErrorText');
+
+    const showError = (msg) => {
+        if (errorEl && errorText) {
+            errorText.textContent = msg;
+            errorEl.classList.remove('hidden');
+        } else {
+            alert(msg);
+        }
+        input.focus();
+        input.classList.add('border-rose-500');
+        setTimeout(() => input.classList.remove('border-rose-500'), 2500);
+    };
+
+    // 1. Validar texto vazio
+    if (!feedbackText) {
+        showError('Por favor escreve a tua mensagem antes de enviar.');
+        return;
+    }
+
+    // 2. Mínimo de 3 caracteres
+    if (feedbackText.length < 3) {
+        showError('O feedback deve ter pelo menos 3 caracteres.');
+        return;
+    }
+
+    // 3. Bloquear mensagens sem letras/números (ex: apenas ":)", "...", "!?", emojis)
+    const hasLettersOrNumbers = /[\p{L}\p{N}]/u.test(feedbackText);
+    if (!hasLettersOrNumbers) {
+        showError('Por favor escreve uma mensagem válida com texto.');
+        return;
+    }
+
+    if (errorEl) errorEl.classList.add('hidden');
+
+    const submitBtn = popup ? popup.querySelector(isSales ? '#submitFeedbackBtnSales' : '#submitFeedbackBtn') : null;
     const originalText = submitBtn ? submitBtn.innerText : 'Enviar Feedback';
 
     if (submitBtn) {
@@ -853,6 +977,11 @@ App.sendFeedback = async function (inputId) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(payload)
+        });
+
+        Analytics.track('web_feedback_submitted', {
+            role: this.state.userRole || 'manager',
+            char_count: feedbackText.length
         });
 
         if (submitBtn) {

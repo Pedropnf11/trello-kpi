@@ -8,7 +8,7 @@ UI.renderDashboard = function (state) {
 
     if (!UI._lastTrackedRoleView || UI._lastTrackedRoleView !== userRole) {
         UI._lastTrackedRoleView = userRole;
-        Analytics.track('dashboard_view_rendered', {
+        Analytics.track('web_dashboard_view_rendered', {
             role: userRole,
             description: 'Painel Web carregado para o perfil ' + (userRole === 'sales' ? 'Vendedor' : 'Gestor')
         });

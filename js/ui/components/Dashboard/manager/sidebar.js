@@ -100,11 +100,11 @@ UI.renderSidebarManager = function (state, kpis, filterId) {
 
             <!-- Bottom nav actions -->
             <div class="p-4 border-t border-white/[0.04] flex flex-col gap-1 flex-shrink-0">
-                <button id="sendFeedbackSidebarBtn" onclick="document.getElementById('bugReportPopup').classList.remove('hidden')" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:text-blue-400 hover:bg-blue-500/[0.05] transition-all duration-200 font-semibold text-[12px]">
+                <button id="sendFeedbackSidebarBtn" onclick="if(window.Analytics)window.Analytics.track('web_feedback_modal_opened', {role:'manager'}); document.getElementById('bugReportPopup').classList.remove('hidden')" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:text-blue-400 hover:bg-blue-500/[0.05] transition-all duration-200 font-semibold text-[12px]">
                     <svg class="w-4 h-4 text-gray-600 group-hover:text-blue-400 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
                     <span>${t('Enviar Feedback', 'Send Feedback')}</span>
                 </button>
-                <button onclick="document.getElementById('docsComingSoonPopup').classList.remove('hidden')" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:text-green-400 hover:bg-green-500/[0.05] transition-all duration-200 font-semibold text-[12px]">
+                <button onclick="if(window.Analytics)window.Analytics.track('web_help_docs_coming_soon_clicked', {role:'manager'}); document.getElementById('docsComingSoonPopup').classList.remove('hidden')" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:text-green-400 hover:bg-green-500/[0.05] transition-all duration-200 font-semibold text-[12px]">
                     <svg class="w-4 h-4 text-gray-600 group-hover:text-green-400 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     <span>${t('Documentos de Ajuda', 'Help Documents')}</span>
                     <span class="ml-auto text-[8px] font-bold text-green-500/70 bg-green-500/[0.08] border border-green-500/20 px-1.5 py-0.5 rounded-full whitespace-nowrap">${t('Em breve', 'Coming soon')}</span>
@@ -117,10 +117,6 @@ UI.renderSidebarManager = function (state, kpis, filterId) {
                     <svg class="w-4 h-4 flex-shrink-0 transition-transform group-hover:rotate-90 duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                     <span>${t('Configurações', 'Settings')}</span>
                 </button>
-                <a href="/privacy" target="_blank" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:text-blue-400 hover:bg-blue-500/[0.05] transition-all duration-200 font-semibold text-[12px] no-underline">
-                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-                    <span>${t('Privacidade & Termos', 'Privacy & Terms')}</span>
-                </a>
                 <div class="h-px bg-white/[0.04] my-1"></div>
                 <button id="configBtn" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:text-rose-400 hover:bg-rose-500/[0.05] transition-all duration-200 font-semibold text-[12px]">
                     <svg class="w-4 h-4 flex-shrink-0 transition-transform group-hover:-translate-x-0.5 duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
@@ -141,16 +137,25 @@ UI.renderSidebarManager = function (state, kpis, filterId) {
                 <h3 class="text-base font-bold text-white mb-1">${t('Enviar Feedback', 'Send Feedback')}</h3>
                 <p class="text-xs text-gray-400 mb-3">${t('Queremos a tua opinião e sugestões para continuar a melhorar a app.', 'We want your feedback and suggestions to keep improving the app.')}</p>
                 
-                <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-3 mb-4 text-[11px] text-blue-300/90 leading-relaxed flex items-start gap-2">
+                <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-3 mb-3 text-[11px] text-blue-300/90 leading-relaxed flex items-start gap-2">
                     <span class="text-sm flex-shrink-0">🔒</span>
                     <span>${t('O feedback é enviado de forma 100% anónima. Se tiveres algum problema que precise de resposta ou resolução, inclui o teu email na caixa de texto para te podermos contactar!', 'Feedback is submitted 100% anonymously. If you have an issue that requires support or a response, please include your email in the text box so we can reach out!')}</span>
                 </div>
 
-                <textarea id="feedbackTextInput" rows="4" placeholder="${t('Escreve a tua sugestão ou opinião aqui (inclui o teu email se precisares de resposta)...', 'Write your suggestion or feedback here (include your email if you need a response)...')}" class="w-full bg-[#111726] border border-white/[0.08] rounded-xl p-3 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-blue-500/50 resize-none mb-4"></textarea>
+                <div class="relative mb-2">
+                    <textarea id="feedbackTextInput" rows="4" maxlength="1500" placeholder="${t('Conta-nos o que achas, o que gostavas de ver melhorado ou se encontraste algum erro... (mínimo 3 caracteres)', 'Tell us what you think, what you would like to see improved, or if you found a bug... (minimum 3 characters)')}" class="w-full bg-[#111726] border border-white/[0.08] rounded-xl p-3 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-blue-500/50 resize-none transition-colors" oninput="const c=this.value.trim().length; const countEl=document.getElementById('feedbackCounter'); if(countEl) countEl.innerText=c+'/3'; const err=document.getElementById('feedbackErrorMsg'); if(c>=3 && err) err.classList.add('hidden');"></textarea>
+                    <div class="flex items-center justify-between mt-1 px-1">
+                        <span id="feedbackErrorMsg" class="hidden text-[11px] font-semibold text-rose-400 flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            <span id="feedbackErrorText"></span>
+                        </span>
+                        <span id="feedbackCounter" class="text-[10px] text-gray-500 ml-auto tabular-nums">0/3</span>
+                    </div>
+                </div>
 
-                <div class="flex items-center gap-2 justify-end">
+                <div class="flex items-center gap-2 justify-end mt-4">
                     <button onclick="document.getElementById('bugReportPopup').classList.add('hidden')" class="px-4 py-2 rounded-lg text-xs font-semibold text-gray-400 hover:text-white hover:bg-white/[0.05] transition-colors">${t('Cancelar', 'Cancel')}</button>
-                    <button onclick="App.sendFeedback('feedbackTextInput')" class="px-4 py-2 rounded-lg text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20 transition-colors">${t('Enviar Feedback', 'Submit Feedback')}</button>
+                    <button id="submitFeedbackBtn" onclick="App.sendFeedback('feedbackTextInput')" class="px-4 py-2 rounded-lg text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20 transition-colors">${t('Enviar Feedback', 'Submit Feedback')}</button>
                 </div>
             </div>
         </div>

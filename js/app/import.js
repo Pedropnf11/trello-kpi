@@ -104,6 +104,15 @@ App.importLeadsFromSelectedCsv = async function () {
 
         const result = await this.importLeadRows(rows, defaultListId);
 
+        if (window.Analytics) {
+            window.Analytics.track('web_lead_import_completed', {
+                role: this.state.userRole || 'manager',
+                imported_count: result.imported,
+                errors_count: result.errors,
+                has_errors: result.errors > 0
+            });
+        }
+
         document.getElementById('leadImportModal')?.remove();
         const details = result.firstError ? `\n${t('Primeiro erro:', 'First error:')} ${result.firstError}` : '';
         alert(`${t('Importacao concluida!', 'Import completed!')}\n${t('Sucesso:', 'Success:')} ${result.imported}\n${t('Erros:', 'Errors:')} ${result.errors}${details}`);

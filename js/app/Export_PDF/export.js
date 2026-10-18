@@ -26,9 +26,10 @@ App.exportarPDF = async function (returnContent = false) {
     if (!this.state.kpis) return;
 
     if (window.Analytics) {
-        window.Analytics.track('pdf_exported', {
+        window.Analytics.track('web_pdf_exported', {
             role: this.state.userRole || 'manager',
-            description: 'Utilizador exportou o relatório executivo em PDF'
+            board_id: this.state.boardId || '',
+            description: 'Utilizador exportou o relatório executivo em PDF na Dashboard Web'
         });
     }
 

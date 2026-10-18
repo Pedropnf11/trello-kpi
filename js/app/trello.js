@@ -126,9 +126,22 @@ App.conectarTrello = async function () {
             window.ActiveTracker.init({ id: userInfo.id, name: userInfo.fullName || userInfo.username });
         }
 
-        // Se for manager, garante que o selectedMemberId é limpo para mostrar dados de todos
-        if (this.state.userRole === 'manager') {
-            this.state.selectedMemberId = '';
+        if (window.Analytics) {
+            window.Analytics.identify(userInfo.id, {
+                name: userInfo.fullName || userInfo.username,
+                username: userInfo.username,
+                role: this.state.userRole,
+                is_admin: isBoardAdmin
+            });
+
+            window.Analytics.track(this.state.refreshing ? 'web_data_refreshed' : 'web_board_loaded', {
+                board_id: boardId,
+                role: this.state.userRole,
+                is_admin: isBoardAdmin,
+                cards_count: cards.length,
+                lists_count: listas.length,
+                members_count: membros.length
+            });
         }
 
         if (this.state.userRole === 'sales') {
