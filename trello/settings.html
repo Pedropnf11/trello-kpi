@@ -127,7 +127,8 @@
     document.getElementById('link-updates').addEventListener('click', function (e) {
       e.preventDefault();
       t.modal({
-        title: isPt ? '✨ Novidades da Versão 1.5 — KPI Master' : '✨ What\'s New in Version 1.5 — KPI Master',
+        title: isPt ? 'Novidades da Versão 1.5 — KPI Master' : 'What\'s New in Version 1.5 — KPI Master',
+        accentColor: '#090d16',
         url: './updates.html?v=3',
         height: 560
       });
@@ -136,7 +137,8 @@
     document.getElementById('link-feedback').addEventListener('click', function (e) {
       e.preventDefault();
       t.modal({
-        title: isPt ? '⭐ A Tua Opinião — KPI Master' : '⭐ Your Feedback — KPI Master',
+        title: isPt ? 'O Teu Feedback Importa' : 'Your Feedback Matters',
+        accentColor: '#090d16',
         url: './feedback.html?v=3',
         height: 520
       });

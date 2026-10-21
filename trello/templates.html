@@ -1,0 +1,3039 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modelos de Comunicação — KPI Master</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://p.trellocdn.com/power-up.min.js"></script>
+  <style>
+    :root {
+      --bg: #090d16;
+      --bg-card: #0f172a;
+      --bg-card-subtle: #0b111e;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.18);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --blue: #3b82f6;
+      --green: #10b981;
+      --purple: #8b5cf6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Top Bar */
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .header-bar h2 {
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      letter-spacing: -0.01em;
+    }
+
+    .header-bar .pill-tag {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.12);
+      color: #93c5fd;
+      border: 1px solid rgba(147, 197, 253, 0.28);
+    }
+
+    /* Main Section Card */
+    .section-card {
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: none;
+    }
+
+    .field-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    /* Dropdown Trigger Button */
+    .dropdown-btn {
+      min-height: 46px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0b111e;
+      color: #ffffff;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.18s ease;
+      position: relative;
+    }
+
+    .dropdown-btn:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      background: #0e1626;
+    }
+
+    .dropdown-btn:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .dropdown-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .dropdown-icon.wpp {
+      background: rgba(16, 185, 129, 0.14);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+    .dropdown-icon.email {
+      background: rgba(59, 130, 246, 0.14);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.25);
+    }
+
+    /* Dropdown Menu Popup */
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 6px);
+      z-index: 50;
+      max-height: 270px;
+      overflow-y: auto;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(15, 23, 42, 0.98);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7);
+      padding: 6px;
+    }
+
+    .dropdown-group-title {
+      padding: 7px 10px 4px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 4px;
+    }
+    .dropdown-group-title:first-child {
+      border-top: none;
+      margin-top: 0;
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      min-height: 38px;
+      border-radius: 8px;
+      padding: 7px 10px;
+      border: none;
+      background: transparent;
+      color: #cbd5e1;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.07);
+      color: #ffffff;
+    }
+
+    .dropdown-item.active {
+      background: rgba(16, 185, 129, 0.14);
+      color: #34d399;
+    }
+
+    /* Preview Card */
+    .preview-card {
+      background: #090e18;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 8px;
+    }
+
+    .preview-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .btn-copy-preview {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+    .btn-copy-preview:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .preview-subject {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #93c5fd;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    .preview-text {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      font-family: inherit;
+    }
+
+    /* Delivery Edit Notice Tip */
+    .delivery-edit-notice {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 12px;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.22);
+      border-radius: 10px;
+      color: #bfdbfe;
+      font-size: 11.5px;
+      line-height: 1.45;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .delivery-edit-notice.wpp-tip {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.25);
+      color: #a7f3d0;
+    }
+    .delivery-edit-notice.email-tip {
+      background: rgba(59, 130, 246, 0.08);
+      border-color: rgba(59, 130, 246, 0.25);
+      color: #bfdbfe;
+    }
+    .delivery-notice-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      flex-shrink: 0;
+    }
+    .delivery-edit-notice.wpp-tip .delivery-notice-icon {
+      background: rgba(16, 185, 129, 0.16);
+      color: #34d399;
+    }
+    .delivery-edit-notice.email-tip .delivery-notice-icon {
+      background: rgba(59, 130, 246, 0.16);
+      color: #60a5fa;
+    }
+
+    /* Contact Input Rows */
+    .contact-input-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.75);
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      transition: all 0.18s ease;
+      cursor: text;
+    }
+
+    .contact-input-row:hover {
+      background: rgba(30, 41, 59, 0.65);
+      border-color: rgba(59, 130, 246, 0.45);
+    }
+
+    .contact-input-row:focus-within {
+      background: rgba(15, 23, 42, 0.95);
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.22);
+    }
+
+    .contact-input-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .contact-input-row input {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      color: #ffffff;
+      padding: 5px 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      flex: 1;
+      min-width: 0;
+      outline: none;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+    .contact-input-row input:focus {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(59, 130, 246, 0.35);
+    }
+    .contact-input-row input::placeholder {
+      color: #64748b;
+    }
+
+    .contact-edit-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 3px 7px;
+      border-radius: 6px;
+      letter-spacing: 0.02em;
+      pointer-events: none;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+    .contact-input-row:hover .contact-edit-pill {
+      color: #93c5fd;
+      background: rgba(59, 130, 246, 0.12);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+    .contact-input-row:focus-within .contact-edit-pill {
+      color: #60a5fa;
+      background: rgba(59, 130, 246, 0.2);
+      border-color: rgba(59, 130, 246, 0.45);
+    }
+
+    /* Footer Buttons */
+    .footer-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+    }
+
+    .btn-secondary {
+      min-height: 38px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: #cbd5e1;
+      padding: 0 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.09);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-primary {
+      min-height: 38px;
+      border-radius: 8px;
+      border: none;
+      color: #ffffff;
+      padding: 0 16px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: inherit;
+    }
+    .btn-primary.wpp {
+      background: #10b981;
+      box-shadow: 0 3px 12px rgba(16, 185, 129, 0.35);
+    }
+    .btn-primary.wpp:hover:not(:disabled) {
+      background: #059669;
+      transform: translateY(-1px);
+      box-shadow: 0 5px 16px rgba(16, 185, 129, 0.45);
+    }
+    .btn-primary.email {
+      background: #3b82f6;
+      box-shadow: 0 3px 12px rgba(59, 130, 246, 0.35);
+    }
+    .btn-primary.email:hover:not(:disabled) {
+      background: #2563eb;
+      transform: translateY(-1px);
+      box-shadow: 0 5px 16px rgba(59, 130, 246, 0.45);
+    }
+    .btn-primary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* ── Settings View: Header & "+ Adicionar Modelo" ── */
+    .settings-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .settings-head-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+    .settings-head-subtitle {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .btn-new-model {
+      min-height: 36px;
+      padding: 0 13px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #93c5fd;
+      transition: all 0.18s ease;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .btn-new-model:hover {
+      background: rgba(59, 130, 246, 0.22);
+      border-color: rgba(59, 130, 246, 0.55);
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
+    }
+
+    /* Settings View Segmented Tabs (Obsidian Segmented Control) */
+    .nav-tabs {
+      display: inline-flex;
+      width: fit-content;
+      max-width: 320px;
+      gap: 4px;
+      background: rgba(11, 17, 30, 0.85);
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35);
+    }
+    .tab-btn {
+      padding: 6px 14px;
+      font-size: 11.5px;
+      font-weight: 500;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      background: transparent;
+      color: #94a3b8;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: all 0.16s ease;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .tab-btn svg {
+      opacity: 0.7;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    .tab-btn:hover {
+      color: #f1f5f9;
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .tab-btn:hover svg {
+      opacity: 1;
+    }
+    .tab-btn.active.wpp {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      font-weight: 600;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    }
+    .tab-btn.active.wpp svg {
+      opacity: 1;
+      stroke: #34d399;
+    }
+    .tab-btn.active.email {
+      background: rgba(59, 130, 246, 0.12);
+      border-color: rgba(59, 130, 246, 0.3);
+      color: #93c5fd;
+      font-weight: 600;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    }
+    .tab-btn.active.email svg {
+      opacity: 1;
+      stroke: #93c5fd;
+    }
+
+    /* ── Filtro de Grupos / Abas (Design Linear / SaaS) ── */
+    .groups-filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 12px 0 2px 0;
+      padding-bottom: 2px;
+    }
+
+    .filter-pills {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      overflow-x: auto;
+      padding: 2px 0;
+      scrollbar-width: none;
+      flex: 1;
+    }
+    .filter-pills::-webkit-scrollbar { display: none; }
+
+    .filter-pill {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      color: #94a3b8;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .filter-pill:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #f1f5f9;
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+    .filter-pill.active {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    .filter-pill .pill-count {
+      font-size: 9.5px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      padding: 1px 5px;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+    }
+    .filter-pill.active .pill-count {
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+    }
+
+    .btn-new-group-pill {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed rgba(255, 255, 255, 0.16);
+      color: #94a3b8;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      margin-left: auto;
+      font-family: inherit;
+    }
+    .btn-new-group-pill:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.32);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+    .btn-new-group-pill svg {
+      opacity: 0.8;
+    }
+    .btn-new-group-pill:hover svg {
+      opacity: 1;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+      gap: 12px;
+    }
+
+    /* Template Cards (Linear / SaaS Style) */
+    .template-box {
+      background: rgba(11, 17, 30, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 11px 12px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 140px;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+    .template-box:hover {
+      background: rgba(16, 25, 42, 0.95);
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.06);
+    }
+
+    .template-box .box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+
+    .template-box .box-category-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      padding: 2px 7px;
+      border-radius: 4px;
+      max-width: 140px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .template-box .box-category-badge.wpp {
+      background: rgba(16, 185, 129, 0.09);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.22);
+    }
+    .template-box .box-category-badge.email {
+      background: rgba(59, 130, 246, 0.09);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.22);
+    }
+
+    .template-box .box-edit-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      color: #64748b;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+    .template-box:hover .box-edit-icon {
+      color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    .template-box .box-edit-icon:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .template-box h4 {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #f8fafc;
+      margin: 4px 0 4px 0;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+
+    .template-box p {
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .template-box .box-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10.5px;
+      font-weight: 500;
+      color: #64748b;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 7px;
+      margin-top: 9px;
+      transition: color 0.15s ease;
+    }
+    .template-box:hover .box-footer {
+      color: #cbd5e1;
+    }
+    .template-box .box-footer svg {
+      transition: transform 0.15s ease;
+      color: #64748b;
+    }
+    .template-box:hover .box-footer svg {
+      transform: translateX(3px);
+      color: #94a3b8;
+    }
+
+    /* Variables Bar */
+    .variables-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      background: rgba(15, 23, 42, 0.55);
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .var-pill {
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.22);
+      color: #93c5fd;
+      padding: 2.5px 7px;
+      border-radius: 5px;
+      font-size: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      cursor: pointer;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+    .var-pill:hover {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: rgba(59, 130, 246, 0.45);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+    .var-pill small {
+      color: #64748b;
+      font-size: 9px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+    }
+    .var-pill:hover small {
+      color: #cbd5e1;
+    }
+
+    /* Modal de Edição (Obsidian Dark Glass Compact) */
+    .edit-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 7, 14, 0.82);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .edit-modal-content {
+      background: #0b0f19;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      max-width: 480px;
+      width: 100%;
+      max-height: 94vh;
+      overflow-y: auto;
+      padding: 14px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.04);
+      animation: modalFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+    }
+    .edit-modal-content::-webkit-scrollbar {
+      width: 5px;
+    }
+    .edit-modal-content::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .btn-close-modal {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+    .btn-close-modal:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+
+    .edit-modal-head-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .edit-modal-head-sub {
+      font-size: 10.5px;
+      color: #64748b;
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+
+    .edit-modal .field-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #94a3b8;
+      margin-bottom: 3px;
+      display: block;
+    }
+
+    .edit-modal input, .edit-modal textarea, .edit-modal select {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #f8fafc;
+      padding: 7px 11px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+    .edit-modal input:focus, .edit-modal textarea:focus, .edit-modal select:focus {
+      background: rgba(15, 23, 42, 0.95);
+      border-color: rgba(59, 130, 246, 0.6);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.18);
+    }
+    .edit-modal input::placeholder, .edit-modal textarea::placeholder {
+      color: #475569;
+    }
+    .edit-modal textarea {
+      min-height: 70px;
+      height: 75px;
+      max-height: 130px;
+      resize: vertical;
+      line-height: 1.45;
+      font-size: 11.5px;
+    }
+
+    .edit-modal-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .btn-modal-cancel {
+      min-height: 32px;
+      padding: 0 12px;
+      border-radius: 7px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      color: #cbd5e1;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .btn-modal-cancel:hover {
+      background: rgba(255, 255, 255, 0.09);
+      color: #fff;
+    }
+
+    .btn-modal-save {
+      min-height: 32px;
+      padding: 0 14px;
+      border-radius: 7px;
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25);
+      transition: all 0.18s ease;
+      font-family: inherit;
+    }
+    .btn-modal-save:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+      transform: translateY(-1px);
+    }
+    .btn-modal-save.email-save {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      border-color: rgba(96, 165, 250, 0.35);
+      box-shadow: 0 2px 10px rgba(59, 130, 246, 0.25);
+    }
+    .btn-modal-save.email-save:hover {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-danger {
+      color: #f87171 !important;
+      border-color: rgba(248, 113, 113, 0.25) !important;
+      background: rgba(248, 113, 113, 0.05) !important;
+      min-height: 32px !important;
+      padding: 0 10px !important;
+      font-size: 11px !important;
+      border-radius: 7px !important;
+    }
+    .btn-danger:hover {
+      background: rgba(248, 113, 113, 0.14) !important;
+      border-color: rgba(248, 113, 113, 0.45) !important;
+      color: #fca5a5 !important;
+    }
+
+    /* Toast Notification (Sleek Glassmorphic) */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(16, 185, 129, 0.2);
+      backdrop-filter: blur(8px);
+      color: #f1f5f9;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 9px 14px;
+      border-radius: 8px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      z-index: 200;
+    }
+
+    @media (max-width: 480px) {
+      .settings-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .container.is-locked {
+      filter: blur(6px);
+      pointer-events: none;
+      user-select: none;
+      transition: filter 0.3s ease;
+    }
+
+    /* Feedback Gate Overlay */
+    .gate-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      background: rgba(4, 7, 13, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 16px;
+      animation: fadeInGate 0.2s ease-out;
+    }
+
+    @keyframes fadeInGate {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .gate-overlay .locked-card {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(15, 23, 42, 0.95));
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: 14px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: center;
+      align-items: center;
+      max-width: 380px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(245, 158, 11, 0.2);
+      animation: zoomGate 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes zoomGate {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .gate-close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.15s ease;
+    }
+    .gate-close-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+
+    .locked-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #f59e0b;
+    }
+
+    .locked-desc {
+      font-size: 12px;
+      color: #cbd5e1;
+      max-width: 320px;
+      line-height: 1.45;
+    }
+
+    .btn-unlock {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.2s ease, transform 0.1s ease;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+      animation: gatePulse 2.5s ease-in-out infinite;
+    }
+
+    .btn-unlock:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+    }
+
+    @keyframes gatePulse {
+      0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+      }
+      50% {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 22px rgba(245, 158, 11, 0.6);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Feedback Gate Overlay (Se o utilizador ainda não deu feedback) -->
+  <div id="gate-overlay" class="gate-overlay" style="display: none;">
+    <div class="locked-card">
+      <button id="btn-close-gate" class="gate-close-btn" title="Fechar" type="button">✕</button>
+      <div class="locked-icon-wrap" style="width: 46px; height: 46px; border-radius: 12px; background: rgba(245, 158, 11, 0.14); border: 1px solid rgba(245, 158, 11, 0.35); display: inline-flex; align-items: center; justify-content: center; color: #f59e0b; margin-bottom: 4px; box-shadow: 0 0 20px rgba(245, 158, 11, 0.25);">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <div class="locked-header" id="gate-title">Desbloqueio Grátis com Feedback</div>
+      <div class="locked-desc" id="gate-desc">Os Modelos de Mensagem são 100% gratuitos! Basta deixares uma avaliação rápida de 10 segundos para desbloquear permanentemente.</div>
+      <button id="btn-unlock-feedback" class="btn-unlock" style="margin-top: 4px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+        <span id="lbl-gate-unlock-text">Dar Feedback Grátis (Desbloquear)</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="header-bar">
+      <h2>
+        <span id="header-icon-wrap" style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:7px; background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.25); color:#93c5fd;">
+          <svg id="header-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </span>
+        <span id="header-title">Message Templates</span>
+      </h2>
+      <span class="pill-tag" id="lead-name-tag">Lead</span>
+    </div>
+
+    <!-- MODO 1: FLUXO DE ENVIO (WHATSAPP OU EMAIL) -->
+    <div id="view-delivery" class="section-card">
+      <p style="font-size: 12.5px; color: var(--text-muted);" id="lbl-intro-text">
+        Select the message you want to send.
+      </p>
+
+      <!-- Campo Dropbox (Combobox com Icon + Título) -->
+      <div>
+        <label class="field-label" id="lbl-model-label">Template:</label>
+        <div style="position: relative; margin-top: 6px;">
+          <button id="btn-dropdown-toggle" class="dropdown-btn" type="button">
+            <span style="display: flex; align-items: center; gap: 10px; overflow: hidden;">
+              <span id="dropdown-icon" class="dropdown-icon wpp">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </span>
+              <span id="dropdown-selected-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Select a template</span>
+            </span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.6;"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+
+          <!-- Menu Flutuante -->
+          <div id="dropdown-menu" class="dropdown-menu">
+            <!-- Grupos preenchidos dinamicamente -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview do Modelo Selecionado -->
+      <div id="preview-container" class="preview-card" style="display: none;">
+        <div class="preview-header">
+          <div class="preview-title" id="preview-title">Title</div>
+          <button id="btn-copy-preview" class="btn-copy-preview" type="button" title="Copy message text">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span id="lbl-btn-copy">Copy</span>
+          </button>
+        </div>
+        <div class="preview-subject" id="preview-subject" style="display: none;">Subject: ...</div>
+        <div class="preview-text" id="preview-text">...</div>
+      </div>
+
+      <!-- Dica de Edição das Informações de Contacto -->
+      <div class="delivery-edit-notice wpp-tip" id="delivery-edit-notice">
+        <span class="delivery-notice-icon">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </span>
+        <span id="lbl-delivery-edit-notice" style="flex: 1;">You can edit the contact name and phone number below before sending.</span>
+      </div>
+
+      <!-- Nome da Lead (Editável com Preview) -->
+      <div class="contact-input-row" title="Click to edit name">
+        <span class="contact-input-label">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span id="lbl-name-field">Name:</span>
+        </span>
+        <input type="text" id="lead-name-input" placeholder="e.g. John Doe" title="Name used in {{nome}}">
+        <span class="contact-edit-pill">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <span class="lbl-pill-edit">Edit</span>
+        </span>
+      </div>
+
+      <!-- Destino (Telefone ou Email) -->
+      <div class="contact-input-row" title="Click to edit contact">
+        <span id="lbl-dest-label" class="contact-input-label">
+          <svg id="dest-icon-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span id="lbl-dest-text">Phone:</span>
+        </span>
+        <input type="text" id="dest-input" placeholder="e.g. +1 555 123 4567">
+        <span class="contact-edit-pill">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <span class="lbl-pill-edit">Edit</span>
+        </span>
+      </div>
+
+      <!-- Ações de Envio -->
+      <div class="footer-actions">
+        <button id="btn-open-settings" class="btn-secondary" title="Customize templates">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span id="lbl-btn-manage">Manage Templates</span>
+        </button>
+        <button id="btn-skip-model" class="btn-secondary">
+          <span id="lbl-btn-skip">Send without template</span>
+        </button>
+        <button id="btn-advance-send" class="btn-primary wpp" disabled>
+          <span id="lbl-advance-text">Next</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- MODO 2: PÁGINA DE PERSONALIZAÇÃO DE MODELOS (SETTINGS) -->
+    <div id="view-settings" class="section-card" style="display: none;">
+      <div class="settings-head">
+        <div>
+          <h3 class="settings-head-title" id="lbl-settings-title">Customize Templates</h3>
+          <p class="settings-head-subtitle" id="lbl-settings-subtitle">Click a template to edit or add new templates to your library.</p>
+        </div>
+        <button id="btn-new-model" class="btn-new-model" type="button">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span id="lbl-btn-new-model">Add Template</span>
+        </button>
+      </div>
+
+      <!-- Tabs de Configuração (WhatsApp vs Email) -->
+      <div class="nav-tabs">
+        <button id="tab-cfg-wpp" class="tab-btn active wpp" type="button">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          <span id="lbl-tab-wpp">WhatsApp</span>
+        </button>
+        <button id="tab-cfg-email" class="tab-btn email" type="button">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span id="lbl-tab-email">Email</span>
+        </button>
+      </div>
+
+      <!-- Filtro de Grupos / Gatilhos & Botão Novo Grupo -->
+      <div class="groups-filter-bar">
+        <div class="filter-pills" id="filter-pills-container">
+          <!-- Gerado dinamicamente: Todos, Atendida, Não Atendida, etc. -->
+        </div>
+        <button id="btn-add-new-group" class="btn-new-group-pill" type="button" title="Criar nova aba">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span id="lbl-btn-new-group">New Tab</span>
+        </button>
+      </div>
+
+      <!-- Grelha de Modelos -->
+      <div class="settings-grid" id="settings-grid">
+        <!-- Preenchido via JS -->
+      </div>
+
+      <div style="display: flex; justify-content: flex-start; margin-top: 6px;">
+        <button id="btn-back-from-settings" class="btn-secondary" type="button">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          <span id="lbl-btn-back">Back to Send</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Edição de Modelo -->
+  <div id="edit-modal" class="edit-modal">
+    <div class="edit-modal-content">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <h3 id="edit-modal-title" class="edit-modal-head-title">Configure Template</h3>
+          <p id="edit-modal-subtitle" class="edit-modal-head-sub">Edit content and click variable tags to insert dynamic fields.</p>
+        </div>
+        <button id="btn-close-edit" class="btn-close-modal" type="button" aria-label="Fechar">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div>
+        <label class="field-label" id="lbl-edit-group">Tab / Category:</label>
+        <select id="edit-group">
+          <!-- Preenchido dinamicamente via JS -->
+        </select>
+        <div id="new-group-inline-wrap" style="display: none; margin-top: 6px;">
+          <label class="field-label" id="lbl-inline-group-name" style="color: #6ee7b7;">New Tab Name:</label>
+          <input type="text" id="edit-new-group-name" placeholder="e.g. Proposal sent, Re-engagement...">
+        </div>
+      </div>
+
+      <div>
+        <label class="field-label" id="lbl-edit-title">Template Title:</label>
+        <input type="text" id="edit-title" placeholder="e.g. Confirm next steps">
+      </div>
+
+      <div id="edit-subject-container" style="display: none;">
+        <label class="field-label" id="lbl-edit-subject">Email Subject:</label>
+        <input type="text" id="edit-subject" placeholder="e.g. Follow-up: {{negocio}}">
+      </div>
+
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <label class="field-label" style="margin: 0;" id="lbl-edit-text">Message Body:</label>
+          <span style="font-size: 10px; color: var(--text-muted);" id="lbl-edit-vars-hint">Click to insert:</span>
+        </div>
+        <!-- Barra de Variáveis dentro do Modal -->
+        <div class="variables-bar">
+          <span class="var-pill" data-var="{{nome}}" title="Insert {{nome}}">{{nome}} <small id="lbl-var-nome">(Name)</small></span>
+          <span class="var-pill" data-var="{{negocio}}" title="Insert {{negocio}}">{{negocio}} <small id="lbl-var-negocio">(Title)</small></span>
+          <span class="var-pill" data-var="{{etapa}}" title="Insert {{etapa}}">{{etapa}} <small id="lbl-var-etapa">(Stage)</small></span>
+          <span class="var-pill" data-var="{{responsavel}}" title="Insert {{responsavel}}">{{responsavel}} <small id="lbl-var-responsavel">(Owner)</small></span>
+          <span class="var-pill" data-var="{{dias_etapa}}" title="Insert {{dias_etapa}}">{{dias_etapa}} <small id="lbl-var-dias">(Age)</small></span>
+          <span class="var-pill" data-var="{{telefone}}" title="Insert {{telefone}}">{{telefone}} <small id="lbl-var-tel">(Phone)</small></span>
+          <span class="var-pill" data-var="{{email}}" title="Insert {{email}}">{{email}} <small id="lbl-var-email">(Email)</small></span>
+          <span class="var-pill" data-var="{{data_hoje}}" title="Insert {{data_hoje}}">{{data_hoje}} <small id="lbl-var-data">(Date)</small></span>
+        </div>
+        <textarea id="edit-text" placeholder="Hi {{nome}}, ..." style="margin-top: 6px;"></textarea>
+      </div>
+
+      <div class="edit-modal-footer">
+        <button id="btn-delete-model" class="btn-danger" type="button">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          <span id="lbl-btn-delete">Delete</span>
+        </button>
+        <div style="display: flex; gap: 7px; margin-left: auto;">
+          <button id="btn-cancel-edit" class="btn-modal-cancel" type="button"><span id="lbl-btn-cancel">Cancel</span></button>
+          <button id="btn-save-model" class="btn-modal-save" type="button">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span id="lbl-btn-save">Save</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Criar Nova Aba -->
+  <div id="new-group-modal" class="edit-modal" style="display: none;">
+    <div class="edit-modal-content" style="max-width: 420px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <h3 id="new-group-modal-title" class="edit-modal-head-title">New Tab / Category</h3>
+          <p id="new-group-modal-sub" class="edit-modal-head-sub">Create a new tab to organize your templates.</p>
+        </div>
+        <button id="btn-close-new-group" class="btn-close-modal" type="button" aria-label="Fechar">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div>
+        <label class="field-label" id="lbl-new-group-name">Tab Name:</label>
+        <input type="text" id="input-new-group-name" placeholder="e.g. Proposal sent, Follow-up 3 days...">
+      </div>
+
+      <div>
+        <label class="field-label" id="lbl-new-group-channel">Channel:</label>
+        <select id="select-new-group-channel">
+          <option value="whatsapp">WhatsApp</option>
+          <option value="email">Email</option>
+        </select>
+      </div>
+
+      <div class="edit-modal-footer">
+        <div></div>
+        <div style="display: flex; gap: 7px;">
+          <button id="btn-cancel-new-group" class="btn-modal-cancel" type="button"><span id="lbl-cancel-new-group">Cancel</span></button>
+          <button id="btn-confirm-new-group" class="btn-modal-save" type="button">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span id="lbl-confirm-new-group">Create Tab</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toast-msg">Done!</span>
+  </div>
+
+  <script type="module">
+    import { Analytics } from '../js/analytics.js';
+    Analytics.init();
+
+    var t = TrelloPowerUp.iframe();
+    var BASE_DOMAIN = (window.location.origin && window.location.origin !== 'null' && !window.location.origin.includes('trello.com'))
+      ? window.location.origin
+      : 'https://kpismaster.vercel.app';
+    var POWERUP_URL = BASE_DOMAIN + '/trello';
+
+    var STORAGE_KEY = 'pipedrive-kpi-followup-templates-v3';
+
+    // Dicionário de Traduções da Página
+    var i18n = {
+      pt: {
+        wppHeaderTitle: 'Modelo WhatsApp',
+        emailHeaderTitle: 'Modelo de Email',
+        settingsHeaderTitle: 'Personalizar Modelos',
+        wppIntro: 'Seleciona a mensagem que pretendes enviar.',
+        emailIntro: 'Seleciona o tipo de email que pretendes enviar.',
+        lblModel: 'Modelo:',
+        selectModelPlaceholder: 'Seleciona um modelo',
+        btnManageModels: 'Gerir Modelos',
+        btnSkipModel: 'Seguir sem modelo',
+        btnAdvanceWpp: 'Abrir WhatsApp',
+        btnAdvanceEmail: 'Abrir no Email',
+        btnCopy: 'Copiar',
+        nameLabel: 'Nome:',
+        namePlaceholder: 'ex: João Silva',
+        phoneLabel: 'Telefone:',
+        phonePlaceholder: 'ex: 351912345678',
+        emailLabel: 'Email:',
+        emailPlaceholder: 'cliente@empresa.com',
+        deliveryEditTipWpp: 'Podes editar o nome e o telefone abaixo antes de enviar.',
+        deliveryEditTipEmail: 'Podes editar o nome e o email abaixo antes de enviar.',
+        badgeEditable: 'Editar',
+        settingsTitle: 'Personalizar Modelos',
+        settingsSubtitle: 'Clica num modelo para editar ou adiciona novos modelos à tua biblioteca.',
+        btnAddModel: 'Adicionar Modelo',
+        btnBackToSend: 'Voltar ao Envio',
+        btnBackToDashboard: 'Voltar ao Dashboard',
+        btnBackToCard: 'Voltar ao Cartão',
+        tabWpp: 'WhatsApp',
+        tabEmail: 'Email',
+        tagAnswered: 'Atendida',
+        tagNoAnswer: 'Não atendida',
+        tagMeeting: 'Reunião',
+        modelBadgePrefix: 'Modelo',
+        btnEdit: 'Editar',
+        btnConfigureModel: 'Configurar modelo',
+        modalEditTitle: 'Configurar Modelo',
+        modalNewTitle: 'Novo Modelo',
+        modalSubtitle: 'Edita o conteúdo e clica nas variáveis para as inserires no texto.',
+        lblGroupTrigger: 'Aba / Categoria:',
+        optAnswered: 'Depois de chamada atendida (WhatsApp)',
+        optNoAnswer: 'Depois de chamada não atendida (WhatsApp)',
+        optMeeting: 'Depois de reunião sem comparência (WhatsApp)',
+        optEmail: 'Modelos de Email',
+        lblTemplateTitle: 'Título do Modelo:',
+        lblEmailSubject: 'Assunto do Email:',
+        lblMessageBody: 'Texto da Mensagem:',
+        lblClickInsert: 'Clica para inserir no texto:',
+        btnDelete: 'Eliminar',
+        btnCancel: 'Cancelar',
+        btnSave: 'Guardar',
+        toastSaved: 'Modelo gravado com sucesso!',
+        toastDeleted: 'Modelo eliminado.',
+        toastCopied: 'Mensagem copiada!',
+        toastVarInserted: 'Variável inserida!',
+        deleteConfirm: 'Eliminar este modelo?',
+        filterAll: 'Todos',
+        btnNewGroup: 'Nova Aba',
+        modalNewGroupTitle: 'Nova Aba / Categoria',
+        modalNewGroupSub: 'Cria uma nova aba para organizar os teus modelos.',
+        lblNewGroupName: 'Nome da Nova Aba:',
+        inputNewGroupPlaceholder: 'ex: Proposta enviada, Reativação...',
+        lblNewGroupChannel: 'Canal:',
+        btnCreateGroup: 'Criar Aba',
+        optCreateNewGroup: '+ Criar nova aba...',
+        lblInlineGroupName: 'Nome da Nova Aba:',
+        toastGroupCreated: 'Nova aba criada com sucesso!',
+        errorGroupNameEmpty: 'Por favor introduz o nome da aba.',
+        emptyGroupState: 'Sem modelos nesta aba.',
+        btnAddModelToGroup: 'Adicionar Modelo a esta Aba'
+      },
+      en: {
+        wppHeaderTitle: 'WhatsApp Template',
+        emailHeaderTitle: 'Email Template',
+        settingsHeaderTitle: 'Message Templates',
+        wppIntro: 'Select the message you want to send.',
+        emailIntro: 'Select the email template you want to send.',
+        lblModel: 'Template:',
+        selectModelPlaceholder: 'Select a template',
+        btnManageModels: 'Manage Templates',
+        btnSkipModel: 'Send without template',
+        btnAdvanceWpp: 'Open WhatsApp',
+        btnAdvanceEmail: 'Open in Email',
+        btnCopy: 'Copy',
+        nameLabel: 'Name:',
+        namePlaceholder: 'e.g. John Doe',
+        phoneLabel: 'Phone:',
+        phonePlaceholder: 'e.g. +1 555 123 4567',
+        emailLabel: 'Email:',
+        emailPlaceholder: 'client@company.com',
+        deliveryEditTipWpp: 'You can edit the contact name and phone number below before sending.',
+        deliveryEditTipEmail: 'You can edit the contact name and email address below before sending.',
+        badgeEditable: 'Edit',
+        settingsTitle: 'Customize Templates',
+        settingsSubtitle: 'Click a template to edit or add new templates to your library.',
+        btnAddModel: 'Add Template',
+        btnBackToSend: 'Back to Send',
+        btnBackToDashboard: 'Back to Dashboard',
+        btnBackToCard: 'Back to Card',
+        tabWpp: 'WhatsApp',
+        tabEmail: 'Email',
+        tagAnswered: 'Answered',
+        tagNoAnswer: 'No answer',
+        tagMeeting: 'Meeting',
+        modelBadgePrefix: 'Template',
+        btnEdit: 'Edit',
+        btnConfigureModel: 'Configure template',
+        modalEditTitle: 'Configure Template',
+        modalNewTitle: 'New Template',
+        modalSubtitle: 'Edit content and click variable tags to insert dynamic fields.',
+        lblGroupTrigger: 'Tab / Category:',
+        optAnswered: 'After answered call (WhatsApp)',
+        optNoAnswer: 'After unanswered call (WhatsApp)',
+        optMeeting: 'After meeting no-show (WhatsApp)',
+        optEmail: 'Email Templates',
+        lblTemplateTitle: 'Template Title:',
+        lblEmailSubject: 'Email Subject:',
+        lblMessageBody: 'Message Body:',
+        lblClickInsert: 'Click to insert into text:',
+        btnDelete: 'Delete',
+        btnCancel: 'Cancel',
+        btnSave: 'Save',
+        toastSaved: 'Template saved successfully!',
+        toastDeleted: 'Template deleted.',
+        toastCopied: 'Message copied to clipboard!',
+        toastVarInserted: 'Variable inserted!',
+        deleteConfirm: 'Delete this template?',
+        filterAll: 'All',
+        btnNewGroup: 'New Tab',
+        modalNewGroupTitle: 'New Tab / Category',
+        modalNewGroupSub: 'Create a new tab to organize your templates.',
+        lblNewGroupName: 'Tab Name:',
+        inputNewGroupPlaceholder: 'e.g. Proposal sent, Re-engagement...',
+        lblNewGroupChannel: 'Channel:',
+        btnCreateGroup: 'Create Tab',
+        optCreateNewGroup: '+ Create new tab...',
+        lblInlineGroupName: 'New Tab Name:',
+        toastGroupCreated: 'New tab created successfully!',
+        errorGroupNameEmpty: 'Please enter a tab name.',
+        emptyGroupState: 'No templates in this tab.',
+        btnAddModelToGroup: 'Add Template to this Tab'
+      }
+    };
+
+    var urlParams = new URLSearchParams(window.location.search);
+    var entryMode = urlParams.get('mode') || 'whatsapp'; // whatsapp | email | settings
+    var fromParam = urlParams.get('from') || ''; // 'dashboard' | 'card'
+    var openedFromDeliveryView = false;
+    var paramLang = urlParams.get('lang');
+
+    var currentLang = (paramLang && paramLang.toLowerCase().startsWith('pt')) ? 'pt' : 'en'; // Default English
+    var currentDict = i18n[currentLang];
+
+    // Modelos Padrão em PT e EN (Apenas 3 modelos WhatsApp iniciais + 1 Email)
+    var defaultsPt = {
+      "call-answered": [
+        { id: "answered-next-step", title: "Pós-reunião: resumo e próximos passos", text: "Olá {{nome}}, obrigado pela nossa conversa sobre {{negocio}}. Conforme combinámos, vou avançar com os próximos passos e mantenho-te a par." }
+      ],
+      "no-answer": [
+        { id: "call-back", title: "Chamada não atendida", text: "Olá {{nome}}, tentei ligar-te há pouco sobre {{negocio}}. Qual seria a melhor altura para falarmos?" }
+      ],
+      "meeting-no-show": [
+        { id: "reschedule", title: "Reunião sem comparência", text: "Olá {{nome}}, tínhamos uma reunião marcada para falar sobre {{negocio}}. Espero que esteja tudo bem. Gostarias de marcar uma nova data?" }
+      ],
+      "email": [
+        { id: "email-follow-up", title: "Seguimento do negócio", subject: "Seguimento: {{negocio}}", text: "Olá {{nome}},\n\nEstou a dar seguimento ao nosso contacto sobre {{negocio}}.\n\nQual seria o melhor momento para conversarmos?\n\nCumprimentos,\n{{responsavel}}" }
+      ]
+    };
+
+    var defaultsEn = {
+      "call-answered": [
+        { id: "answered-next-step", title: "Post-meeting: summary & next steps", text: "Hi {{nome}}, thank you for our meeting regarding {{negocio}}. As agreed, I'll move forward with the next steps and keep you posted." }
+      ],
+      "no-answer": [
+        { id: "call-back", title: "Missed call follow-up", text: "Hi {{nome}}, I tried calling you earlier regarding {{negocio}}. What would be the best time for us to connect?" }
+      ],
+      "meeting-no-show": [
+        { id: "reschedule", title: "Meeting no-show follow-up", text: "Hi {{nome}}, we had a meeting scheduled to discuss {{negocio}}. Hope everything is okay. Would you like to reschedule for another time?" }
+      ],
+      "email": [
+        { id: "email-follow-up", title: "Deal follow-up", subject: "Follow-up: {{negocio}}", text: "Hi {{nome}},\n\nI am following up on our recent contact regarding {{negocio}}.\n\nWhen would be the best time for a quick chat?\n\nBest regards,\n{{responsavel}}" }
+      ]
+    };
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Função de cópia 100% fiável para iframes Trello
+    function copyTextSafely(text) {
+      return new Promise(function (resolve, reject) {
+        try {
+          var textArea = document.createElement('textarea');
+          textArea.value = text;
+          textArea.style.position = 'fixed';
+          textArea.style.top = '0';
+          textArea.style.left = '0';
+          textArea.style.width = '2em';
+          textArea.style.height = '2em';
+          textArea.style.padding = '0';
+          textArea.style.border = 'none';
+          textArea.style.outline = 'none';
+          textArea.style.boxShadow = 'none';
+          textArea.style.background = 'transparent';
+          textArea.style.opacity = '0';
+          textArea.setAttribute('readonly', '');
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          textArea.setSelectionRange(0, textArea.value.length);
+          var success = document.execCommand('copy');
+          document.body.removeChild(textArea);
+          if (success) return resolve();
+        } catch (e) {}
+
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(resolve).catch(reject);
+          return;
+        }
+
+        reject(new Error('Copy not supported'));
+      });
+    }
+
+    var GROUPS_STORAGE_KEY = 'pipedrive-kpi-custom-groups-v1';
+
+    var defaultGroupsPt = [
+      { id: "call-answered", label: "Pós-Reunião / Atendida", shortLabel: "Pós-Reunião", channel: "whatsapp", isDefault: true },
+      { id: "no-answer", label: "Quando não atende", shortLabel: "Não atende", channel: "whatsapp", isDefault: true },
+      { id: "meeting-no-show", label: "Quando não comparece à reunião", shortLabel: "Sem comparência", channel: "whatsapp", isDefault: true },
+      { id: "email", label: "Modelos de Email", shortLabel: "Email Geral", channel: "email", isDefault: true }
+    ];
+
+    var defaultGroupsEn = [
+      { id: "call-answered", label: "Post-Meeting / Answered", shortLabel: "Post-Meeting", channel: "whatsapp", isDefault: true },
+      { id: "no-answer", label: "When no answer", shortLabel: "No answer", channel: "whatsapp", isDefault: true },
+      { id: "meeting-no-show", label: "Meeting no-show", shortLabel: "No-show", channel: "whatsapp", isDefault: true },
+      { id: "email", label: "Email Templates", shortLabel: "General Email", channel: "email", isDefault: true }
+    ];
+
+    function readCustomGroups() {
+      try {
+        var raw = localStorage.getItem(GROUPS_STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch(e) {}
+      return [];
+    }
+
+    function saveCustomGroups(list) {
+      localStorage.setItem(GROUPS_STORAGE_KEY, JSON.stringify(list));
+      t.set('member', 'private', 'kpi_custom_groups_v1', JSON.stringify(list)).catch(function(){});
+    }
+
+    function getAllGroups() {
+      var defaults = (currentLang === 'pt') ? defaultGroupsPt : defaultGroupsEn;
+      var custom = readCustomGroups();
+      return defaults.concat(custom);
+    }
+
+    var currentGroupFilter = 'all';
+
+    function readTemplates() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch(e) {}
+      return (currentLang === 'pt') ? defaultsPt : defaultsEn;
+    }
+
+    function saveTemplates(next) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      t.set('member', 'private', 'kpi_message_templates_set', JSON.stringify(next)).catch(function(){});
+    }
+
+    var templates = readTemplates();
+
+    var currentMode = entryMode;
+    var currentSettingsChannel = (entryMode === 'email') ? 'email' : 'whatsapp';
+    var selectedTemplateId = '';
+    var selectedTemplateObj = null;
+
+    var currentCardData = {
+      nome: 'Lead',
+      negocio: 'Cartão',
+      etapa: '',
+      responsavel: '',
+      dias_etapa: '',
+      telefone: '',
+      email: '',
+      data_hoje: new Date().toLocaleDateString(currentLang === 'pt' ? 'pt-PT' : 'en-US')
+    };
+
+    function applyPageLanguage(lang) {
+      currentLang = lang;
+      currentDict = i18n[lang] || i18n.en;
+
+      var setTxt = function(id, text) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = text;
+      };
+
+      setTxt('lbl-model-label', currentDict.lblModel);
+      setTxt('lbl-btn-manage', currentDict.btnManageModels);
+      setTxt('lbl-btn-skip', currentDict.btnSkipModel);
+      setTxt('lbl-btn-copy', currentDict.btnCopy);
+      setTxt('lbl-name-field', currentDict.nameLabel);
+      setTxt('lbl-settings-title', currentDict.settingsTitle);
+      setTxt('lbl-settings-subtitle', currentDict.settingsSubtitle);
+      setTxt('lbl-btn-new-model', currentDict.btnAddModel);
+      setTxt('lbl-tab-wpp', currentDict.tabWpp);
+      setTxt('lbl-tab-email', currentDict.tabEmail);
+      updateBackButton();
+
+      setTxt('lbl-btn-new-group', currentDict.btnNewGroup);
+      setTxt('new-group-modal-title', currentDict.modalNewGroupTitle);
+      setTxt('new-group-modal-sub', currentDict.modalNewGroupSub);
+      setTxt('lbl-new-group-name', currentDict.lblNewGroupName);
+      setTxt('lbl-new-group-channel', currentDict.lblNewGroupChannel);
+      setTxt('lbl-cancel-new-group', currentDict.btnCancel);
+      setTxt('lbl-confirm-new-group', currentDict.btnCreateGroup);
+      setTxt('lbl-inline-group-name', currentDict.lblInlineGroupName);
+
+      var inputNewGroup = document.getElementById('input-new-group-name');
+      if (inputNewGroup) inputNewGroup.placeholder = currentDict.inputNewGroupPlaceholder;
+      var editNewGroup = document.getElementById('edit-new-group-name');
+      if (editNewGroup) editNewGroup.placeholder = currentDict.inputNewGroupPlaceholder;
+
+      setTxt('lbl-edit-group', currentDict.lblGroupTrigger);
+      setTxt('lbl-edit-title', currentDict.lblTemplateTitle);
+      setTxt('lbl-edit-subject', currentDict.lblEmailSubject);
+      setTxt('lbl-edit-text', currentDict.lblMessageBody);
+      setTxt('lbl-edit-vars-hint', currentDict.lblClickInsert);
+      setTxt('lbl-btn-delete', currentDict.btnDelete);
+      setTxt('lbl-btn-cancel', currentDict.btnCancel);
+      setTxt('lbl-btn-save', currentDict.btnSave);
+
+      var inputName = document.getElementById('lead-name-input');
+      if (inputName) inputName.placeholder = currentDict.namePlaceholder;
+      var inputDest = document.getElementById('dest-input');
+      if (inputDest) inputDest.placeholder = (currentMode === 'email') ? currentDict.emailPlaceholder : currentDict.phonePlaceholder;
+
+      var editNoticeText = (currentMode === 'email') ? currentDict.deliveryEditTipEmail : currentDict.deliveryEditTipWpp;
+      setTxt('lbl-delivery-edit-notice', editNoticeText);
+      document.querySelectorAll('.lbl-pill-edit').forEach(function(el) {
+        el.textContent = currentDict.badgeEditable;
+      });
+    }
+
+    function showToast(msg) {
+      var toast = document.getElementById('toast');
+      var toastMsg = document.getElementById('toast-msg');
+      if (toastMsg) {
+        toastMsg.textContent = msg || currentDict.toastSaved;
+      } else {
+        toast.textContent = msg || currentDict.toastSaved;
+      }
+      toast.style.display = 'inline-flex';
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(function() {
+        toast.style.display = 'none';
+      }, 2200);
+    }
+
+    // ── EXTRAÇÃO E FORMATAÇÃO INTERNACIONAL DE TELEFONE ──
+    function detectUserCountry() {
+      try {
+        var loc = ((t && t.locale) ? t.locale : (navigator.language || '')).toLowerCase();
+        if (loc.includes('br')) return 'BR';
+        if (loc.includes('pt')) return 'PT';
+        if (loc.includes('es')) return 'ES';
+        if (loc.includes('gb') || loc.includes('uk')) return 'GB';
+        if (loc.includes('us') || loc.includes('ca')) return 'US';
+        if (loc.includes('fr')) return 'FR';
+        if (loc.includes('de')) return 'DE';
+        if (loc.includes('it')) return 'IT';
+        if (loc.includes('mx')) return 'MX';
+      } catch(e) {}
+      return (currentLang === 'pt') ? 'PT' : 'US';
+    }
+
+    function normalizeInternationalPhone(raw, country) {
+      if (!raw) return '';
+      var str = String(raw).trim();
+      var c = country || detectUserCountry();
+
+      // Normaliza 00 inicial para +
+      if (str.startsWith('00')) {
+        str = '+' + str.slice(2);
+      }
+
+      var hasPlus = str.startsWith('+');
+      var digits = str.replace(/[^0-9]/g, '');
+      if (digits.length < 8) return '';
+
+      // Se tiver prefixo internacional explícito (+)
+      if (hasPlus) {
+        return digits;
+      }
+
+      // Se já contém indicativo de país reconhecido com tamanho compatível
+      if (digits.startsWith('351') && digits.length === 12) return digits; // Portugal
+      if (digits.startsWith('55') && (digits.length === 12 || digits.length === 13)) return digits; // Brasil
+      if (digits.startsWith('34') && digits.length === 11) return digits; // Espanha
+      if (digits.startsWith('44') && digits.length === 12) return digits; // Reino Unido
+      if (digits.startsWith('33') && digits.length === 11) return digits; // França
+      if (digits.startsWith('49') && digits.length >= 11 && digits.length <= 14) return digits; // Alemanha
+      if (digits.startsWith('1') && digits.length === 11) return digits; // EUA/Canadá
+      if (digits.startsWith('52') && digits.length >= 12 && digits.length <= 13) return digits; // México
+
+      // Normalização de números locais por País
+      switch (c) {
+        case 'PT':
+          if (digits.length === 9 && /^[29]/.test(digits)) {
+            return '351' + digits;
+          }
+          break;
+
+        case 'BR':
+          if (digits.startsWith('0') && (digits.length === 11 || digits.length === 12)) {
+            digits = digits.slice(1);
+          }
+          if (digits.length === 10 || digits.length === 11) {
+            return '55' + digits;
+          }
+          break;
+
+        case 'ES':
+          if (digits.length === 9 && /^[6789]/.test(digits)) {
+            return '34' + digits;
+          }
+          break;
+
+        case 'GB':
+          if (digits.startsWith('0') && digits.length === 11) {
+            return '44' + digits.slice(1);
+          }
+          if (digits.length === 10 && digits.startsWith('7')) {
+            return '44' + digits;
+          }
+          break;
+
+        case 'FR':
+          if (digits.startsWith('0') && digits.length === 10) {
+            return '33' + digits.slice(1);
+          }
+          break;
+
+        case 'US':
+          if (digits.length === 10) {
+            return '1' + digits;
+          }
+          break;
+      }
+
+      // Fallback contextual por idioma
+      if (digits.length === 9 && /^[29]/.test(digits) && currentLang === 'pt') {
+        return '351' + digits;
+      }
+      if ((digits.length === 10 || digits.length === 11) && currentLang === 'pt' && detectUserCountry() === 'BR') {
+        return '55' + digits;
+      }
+
+      return digits;
+    }
+
+    function extractPhone(text) {
+      if (!text) return '';
+      var str = String(text);
+
+      // 1. Procura links diretos wa.me / api.whatsapp.com
+      var wppLinkMatch = str.match(/(?:wa\.me\/|phone=|whatsapp\.com\/send\?phone=)([+]?\d{9,16})/i);
+      if (wppLinkMatch && wppLinkMatch[1]) {
+        return normalizeInternationalPhone(wppLinkMatch[1]);
+      }
+
+      // 2. Limpeza prévia para evitar falsos positivos
+      var clean = str
+        .replace(/[a-zA-Z0-9_\-.]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, ' ')
+        .replace(/https?:\/\/[^\s]+/g, ' ')
+        .replace(/\b\d{4}[-/.]\d{1,2}[-/.]\d{1,2}\b/g, ' ') // datas AAAA-MM-DD
+        .replace(/\b\d{1,2}[-/.]\d{1,2}[-/.]\d{2,4}\b/g, ' ') // datas DD/MM/AAAA
+        .replace(/(?:€|\$|R\$|£|\bEUR|\bUSD|\bBRL)\s*[\d.,]+/gi, ' ') // preços
+        .replace(/\r\n/g, '\n');
+
+      // 3. Padrões por ordem de fiabilidade
+      var patterns = [
+        /(?:tel(?:efon?e?)?|phone|mobile|cel(?:ular)?|w(?:ats|pp|hatsapp)|tlm|m[oó]vil|contac?to|kontakt|fone|t[eé]l[eé]phone)[\s:=_-]*([+]?[\d\s().-]{8,24})/i,
+        /(\+\d{1,4}[\s().-]?\d{1,4}[\s().-]?\d{2,4}[\s().-]?\d{3,4})/,
+        /(\(\d{2,4}\)[\s.-]?\d{3,5}[\s.-]?\d{3,5})/,
+        /(?:\b|\D)(\d{3}[\s.-]\d{3}[\s.-]\d{3,4})(?:\b|\D)/,
+        /(?:\b|\D)(\d{9,14})(?:\b|\D)/
+      ];
+
+      for (var i = 0; i < patterns.length; i++) {
+        var match = clean.match(patterns[i]);
+        if (match && match[1]) {
+          var res = normalizeInternationalPhone(match[1]);
+          if (res && res.length >= 8) {
+            return res;
+          }
+        }
+      }
+      return '';
+    }
+
+    function extractEmail(text) {
+      if (!text) return '';
+      var clean = String(text).replace(/\r\n/g, '\n');
+      var match = clean.match(/(?:^|[\s:;,<(\["])([a-zA-Z0-9_\-.]+(?:\+[a-zA-Z0-9_\-.]+)?@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+      if (match && match[1]) {
+        var email = match[1].trim();
+        if (/^\d{8,}\+/.test(email)) {
+          email = email.replace(/^\d{8,}\+/, '');
+        }
+        return email;
+      }
+      return '';
+    }
+
+    function personalize(text) {
+      if (!text) return '';
+      return text.replace(/{{\s*([\w]+)\s*}}/g, function(token, key) {
+        return currentCardData[key] !== undefined ? currentCardData[key] : token;
+      });
+    }
+
+    // ── EXTRAÇÃO E FORMATAÇÃO INTERNACIONAL DE NOME ──
+    var BUSINESS_STOPWORDS = new RegExp(
+      '\\b(' + [
+        'website', 'site', 'landing', 'software', 'app', 'crm', 'erp', 'dev', 'seo',
+        'orcamento', 'orçamento', 'proposta', 'proposal', 'presupuesto', 'devis', 'angebot', 'quote',
+        'fatura', 'factura', 'invoice', 'reuniao', 'reunião', 'meeting', 'call', 'chamada', 'cita',
+        'projeto', 'project', 'proyecto', 'projet', 'projekt', 'venda', 'sale', 'deal', 'negocio', 'negócio',
+        'lead', 'demo', 'onboarding', 'consultoria', 'consulting', 'gestao', 'gestão', 'suporte',
+        'support', 'marketing', 'design', 'copy', 'teste', 'test', 'contrato', 'contract', 'empresa', 'company'
+      ].join('|') + ')\\b', 'i'
+    );
+
+    var LOWERCASE_PARTICLES = {
+      'da': true, 'de': true, 'do': true, 'das': true, 'dos': true, 'e': true,
+      'del': true, 'la': true, 'las': true, 'los': true, 'y': true,
+      'du': true, 'des': true, 'le': true,
+      'di': true, 'della': true, 'dei': true,
+      'von': true, 'zu': true, 'der': true,
+      'van': true, 'of': true
+    };
+
+    function formatProperName(raw) {
+      if (!raw) return '';
+      var clean = raw.trim().replace(/\s+/g, ' ');
+      var words = clean.split(' ');
+      var formatted = words.map(function(word, idx) {
+        var lower = word.toLowerCase();
+        if (idx > 0 && idx < words.length - 1 && LOWERCASE_PARTICLES[lower]) {
+          return lower;
+        }
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+      });
+      return formatted.join(' ');
+    }
+
+    function cleanNameCandidate(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/[a-zA-Z0-9_\-.]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '')
+        .replace(/https?:\/\/[^\s]+/g, '')
+        .replace(/[+]?[\d\s().-]{8,22}/g, '')
+        .replace(/(?:€|\$|R\$|£|\bEUR|\bUSD|\bBRL)\s*[\d.,]+/gi, '')
+        .replace(/[#\d]+/g, '')
+        .replace(/[-–—|_/\\()[\]{}*•]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function isValidPersonName(str) {
+      if (!str || str.length < 2 || str.length > 38) return false;
+      if (BUSINESS_STOPWORDS.test(str)) return false;
+      if (/\d/.test(str)) return false;
+      var words = str.split(' ').filter(Boolean);
+      if (words.length < 1 || words.length > 4) return false;
+      for (var i = 0; i < words.length; i++) {
+        if (words[i].length < 2 && !LOWERCASE_PARTICLES[words[i].toLowerCase()]) return false;
+      }
+      return true;
+    }
+
+    function extractPersonName(cardName, desc) {
+      // 1. Procurar na descrição linha a linha com rótulo explícito internacional
+      if (desc) {
+        var lines = String(desc).split(/\r?\n/);
+        var labelRegex = /^(?:nome(?:\s+d[oa]\s+lead|\s+d[oa]\s+cliente)?|name(?:\s+of\s+lead|\s+of\s+client)?|full\s*name|nombre|nom(?:\s+du\s+client)?|lead|cliente|client|customer|kunde|contac?to|kontakt|contact|person|persona|ansprechpartner)[\s:=_-]+([A-Za-zÀ-ÖØ-öø-ÿ\s'.]{2,40})/i;
+        for (var i = 0; i < lines.length; i++) {
+          var m = lines[i].trim().match(labelRegex);
+          if (m && m[1]) {
+            var candidate = cleanNameCandidate(m[1]);
+            if (isValidPersonName(candidate)) {
+              return formatProperName(candidate);
+            }
+          }
+        }
+      }
+
+      if (!cardName) return 'Lead';
+
+      var title = String(cardName).trim();
+
+      // 2. Procura expressões tipo "Reunião com Nome" / "Meeting with Name" / "Cita con Nombre"
+      var meetingRegex = /(?:reuni[ãa]o\s+com|meeting\s+with|call\s+with|conversa\s+com|cita\s+con|rdv\s+avec|call\s+con)\s+([A-Za-zÀ-ÖØ-öø-ÿ\s'.]{2,35})/i;
+      var meetingMatch = title.match(meetingRegex);
+      if (meetingMatch && meetingMatch[1]) {
+        var mCand = cleanNameCandidate(meetingMatch[1]);
+        if (isValidPersonName(mCand)) {
+          return formatProperName(mCand);
+        }
+      }
+
+      // 3. Limpeza de tags tipo [Lead], (Novo), #1234
+      title = title
+        .replace(/^\[[^\]]+\]\s*/, '')
+        .replace(/^\([^\)]+\)\s*/, '')
+        .replace(/^#\d+\s*[-:]?\s*/, '');
+
+      // 4. Divisão por separadores comuns (- | / :)
+      var parts = title.split(/\s*[-–—|/:]\s*/);
+      if (parts.length > 1) {
+        for (var p = 0; p < parts.length; p++) {
+          var partClean = cleanNameCandidate(parts[p]);
+          if (isValidPersonName(partClean)) {
+            return formatProperName(partClean);
+          }
+        }
+      }
+
+      // 5. Se não tiver separadores válidos, avalia o título limpo
+      var fullClean = cleanNameCandidate(title);
+      if (isValidPersonName(fullClean)) {
+        return formatProperName(fullClean);
+      }
+
+      // 6. Se o título começar com duas palavras que formam um nome
+      var words = fullClean.split(' ').filter(Boolean);
+      if (words.length >= 2) {
+        var firstTwo = words.slice(0, 2).join(' ');
+        if (isValidPersonName(firstTwo)) {
+          return formatProperName(firstTwo);
+        }
+      }
+
+      return fullClean ? formatProperName(fullClean) : (cardName.trim() || 'Lead');
+    }
+
+    // Carregar dados reais do Cartão Trello e Idioma do Membro com suporte a Campos Personalizados
+    Promise.all([
+      t.get('member', 'private', 'kpi_user_lang').catch(function(){ return null; }),
+      t.card('id', 'name', 'desc', 'members', 'attachments', 'customFieldItems').catch(function(){ return {}; }),
+      t.list('name').catch(function(){ return {}; }),
+      t.member('fullName', 'username').catch(function(){ return {}; }),
+      t.board('customFields').catch(function(){ return []; })
+    ]).then(function(res) {
+      var savedLang = res[0];
+      var card = res[1] || {};
+      var list = res[2] || {};
+      var member = res[3] || {};
+      var boardCustomFields = Array.isArray(res[4]) ? res[4] : [];
+
+      var detectedLang = paramLang || savedLang || ((t.locale && t.locale.toLowerCase().startsWith('pt')) ? 'pt' : 'en');
+      applyPageLanguage(detectedLang);
+
+      var cardName = card.name || 'Lead';
+
+      // 1. Prioridade máxima: Campos Personalizados do Trello
+      var cfPhone = '';
+      var cfEmail = '';
+      var cfName = '';
+
+      var fieldDefMap = {};
+      boardCustomFields.forEach(function(f) {
+        if (f && f.id && f.name) fieldDefMap[f.id] = f.name.toLowerCase();
+      });
+
+      if (card.customFieldItems && card.customFieldItems.length) {
+        card.customFieldItems.forEach(function(cf) {
+          if (cf.value) {
+            var valStr = String(cf.value.text || cf.value.number || '').trim();
+            var fieldName = fieldDefMap[cf.idCustomField] || '';
+
+            if (!cfPhone && (/tel|phone|whats|wpp|cel|mobile|contac?to|tlm|fone/.test(fieldName) || valStr.replace(/[^0-9]/g, '').length >= 8)) {
+              var p = extractPhone(valStr);
+              if (p) cfPhone = p;
+            }
+            if (!cfEmail && (/email|mail/.test(fieldName) || valStr.includes('@'))) {
+              var em = extractEmail(valStr);
+              if (em) cfEmail = em;
+            }
+            if (!cfName && (/nome|name|lead|cliente|client|customer|person|persona/.test(fieldName))) {
+              var nc = cleanNameCandidate(valStr);
+              if (isValidPersonName(nc)) cfName = formatProperName(nc);
+            }
+          }
+        });
+      }
+
+      var personName = cfName || extractPersonName(cardName, card.desc);
+      var phone = cfPhone || extractPhone(card.desc) || extractPhone(cardName);
+      var email = cfEmail || extractEmail(card.desc) || extractEmail(cardName);
+
+      currentCardData.nome = personName;
+      currentCardData.negocio = cardName;
+      currentCardData.etapa = list.name || '';
+      currentCardData.responsavel = (card.members && card.members.length > 0)
+        ? (card.members[0].fullName || card.members[0].username)
+        : (member.fullName || member.username || '');
+
+      currentCardData.telefone = phone;
+      currentCardData.email = email;
+
+      document.getElementById('lead-name-tag').textContent = personName;
+
+      initUI();
+    });
+
+    function initUI() {
+      if (currentMode === 'settings') {
+        showSettingsView();
+      } else {
+        showDeliveryView(currentMode);
+      }
+    }
+
+    if (entryMode === 'settings') {
+      applyPageLanguage(currentLang);
+      initUI();
+    }
+
+    /* ── MODO DE ENVIO: DROPBOX COM MODELOS ── */
+    function showDeliveryView(channel) {
+      currentMode = channel;
+      document.getElementById('view-delivery').style.display = 'flex';
+      document.getElementById('view-settings').style.display = 'none';
+
+      var isEmail = channel === 'email';
+      var headerIconWrap = document.getElementById('header-icon-wrap');
+      var headerIconSvg = document.getElementById('header-icon-svg');
+      if (headerIconWrap && headerIconSvg) {
+        headerIconWrap.style.background = isEmail ? 'rgba(59,130,246,0.12)' : 'rgba(16,185,129,0.12)';
+        headerIconWrap.style.borderColor = isEmail ? 'rgba(59,130,246,0.25)' : 'rgba(16,185,129,0.25)';
+        headerIconWrap.style.color = isEmail ? '#93c5fd' : '#34d399';
+        headerIconSvg.innerHTML = isEmail
+          ? '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>'
+          : '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>';
+      }
+
+      document.getElementById('header-title').textContent = isEmail ? currentDict.emailHeaderTitle : currentDict.wppHeaderTitle;
+      document.getElementById('lbl-intro-text').textContent = isEmail ? currentDict.emailIntro : currentDict.wppIntro;
+
+      var dropIcon = document.getElementById('dropdown-icon');
+      dropIcon.className = 'dropdown-icon ' + (isEmail ? 'email' : 'wpp');
+      dropIcon.innerHTML = isEmail
+        ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>'
+        : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>';
+
+      var destIconSvg = document.getElementById('dest-icon-svg');
+      if (destIconSvg) {
+        destIconSvg.innerHTML = isEmail
+          ? '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>'
+          : '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>';
+      }
+
+      var destText = document.getElementById('lbl-dest-text');
+      if (destText) destText.textContent = isEmail ? currentDict.emailLabel : currentDict.phoneLabel;
+
+      var nameInput = document.getElementById('lead-name-input');
+      if (nameInput) {
+        nameInput.value = currentCardData.nome || '';
+      }
+
+      var destInput = document.getElementById('dest-input');
+      destInput.value = isEmail ? (currentCardData.email || '') : (currentCardData.telefone || '');
+      destInput.placeholder = isEmail ? currentDict.emailPlaceholder : currentDict.phonePlaceholder;
+
+      var btnAdvance = document.getElementById('btn-advance-send');
+      btnAdvance.className = 'btn-primary ' + (isEmail ? 'email' : 'wpp');
+      document.getElementById('lbl-advance-text').textContent = isEmail ? currentDict.btnAdvanceEmail : currentDict.btnAdvanceWpp;
+
+      var noticeBox = document.getElementById('delivery-edit-notice');
+      if (noticeBox) {
+        noticeBox.className = 'delivery-edit-notice ' + (isEmail ? 'email-tip' : 'wpp-tip');
+      }
+      var editNoticeText = isEmail ? currentDict.deliveryEditTipEmail : currentDict.deliveryEditTipWpp;
+      var lblNotice = document.getElementById('lbl-delivery-edit-notice');
+      if (lblNotice) lblNotice.textContent = editNoticeText;
+
+      renderDropdownOptions();
+      t.sizeTo(document.body).catch(function(){});
+    }
+
+    var leadNameInputEl = document.getElementById('lead-name-input');
+    if (leadNameInputEl) {
+      leadNameInputEl.addEventListener('input', function() {
+        var val = this.value.trim();
+        currentCardData.nome = val || 'Lead';
+        document.getElementById('lead-name-tag').textContent = val || 'Lead';
+        if (selectedTemplateObj) {
+          document.getElementById('preview-text').textContent = personalize(selectedTemplateObj.text);
+          var subEl = document.getElementById('preview-subject');
+          if (currentMode === 'email' && selectedTemplateObj.subject) {
+            subEl.textContent = (currentLang === 'pt' ? 'Assunto: ' : 'Subject: ') + personalize(selectedTemplateObj.subject);
+          }
+        }
+      });
+    }
+
+    var destInputEl = document.getElementById('dest-input');
+    if (destInputEl) {
+      destInputEl.addEventListener('input', function() {
+        var val = this.value.trim();
+        if (currentMode === 'email') {
+          currentCardData.email = val;
+        } else {
+          currentCardData.telefone = val;
+        }
+        if (selectedTemplateObj) {
+          document.getElementById('preview-text').textContent = personalize(selectedTemplateObj.text);
+        }
+      });
+    }
+
+    document.querySelectorAll('.contact-input-row').forEach(function(row) {
+      row.addEventListener('click', function(e) {
+        if (e.target && e.target.tagName !== 'INPUT') {
+          var input = row.querySelector('input');
+          if (input) input.focus();
+        }
+      });
+    });
+
+    function renderDropdownOptions() {
+      var menu = document.getElementById('dropdown-menu');
+      menu.innerHTML = '';
+
+      var isEmail = currentMode === 'email';
+      var targetChannel = isEmail ? 'email' : 'whatsapp';
+      var allGroups = getAllGroups().filter(function(g) { return g.channel === targetChannel; });
+
+      var hasItems = false;
+      allGroups.forEach(function(grp) {
+        var items = templates[grp.id] || [];
+        if (items.length) {
+          hasItems = true;
+          var grpTitle = document.createElement('div');
+          grpTitle.className = 'dropdown-group-title';
+          grpTitle.textContent = grp.label || grp.shortLabel;
+          menu.appendChild(grpTitle);
+
+          items.forEach(function(item) {
+            var btn = createDropdownItem(item);
+            menu.appendChild(btn);
+          });
+        }
+      });
+
+      if (!hasItems) {
+        menu.innerHTML = `<p style="padding:10px; font-size:12px; color:#64748b; text-align:center;">${(currentLang === 'pt') ? 'Sem modelos disponíveis.' : 'No templates found.'}</p>`;
+      }
+    }
+
+    function createDropdownItem(item) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      var isAct = selectedTemplateId === item.id;
+      btn.className = 'dropdown-item' + (isAct ? ' active' : '');
+      btn.innerHTML = `<span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(item.title)}</span>` +
+        (isAct ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : '');
+
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        selectTemplate(item);
+        closeDropdown();
+      });
+      return btn;
+    }
+
+    function selectTemplate(item) {
+      selectedTemplateId = item.id;
+      selectedTemplateObj = item;
+      document.getElementById('dropdown-selected-title').textContent = item.title;
+
+      var previewBox = document.getElementById('preview-container');
+      previewBox.style.display = 'flex';
+
+      document.getElementById('preview-title').textContent = item.title;
+
+      var subEl = document.getElementById('preview-subject');
+      if (currentMode === 'email' && item.subject) {
+        subEl.style.display = 'block';
+        subEl.textContent = (currentLang === 'pt' ? 'Assunto: ' : 'Subject: ') + personalize(item.subject);
+      } else {
+        subEl.style.display = 'none';
+      }
+
+      document.getElementById('preview-text').textContent = personalize(item.text);
+
+      document.getElementById('btn-advance-send').removeAttribute('disabled');
+      t.sizeTo(document.body).catch(function(){});
+    }
+
+    // Copiar Texto no Preview com copyTextSafely
+    var btnCopyPreview = document.getElementById('btn-copy-preview');
+    if (btnCopyPreview) {
+      btnCopyPreview.addEventListener('click', function() {
+        var textToCopy = document.getElementById('preview-text').textContent;
+        if (!textToCopy) return;
+        copyTextSafely(textToCopy).then(function() {
+          showToast(currentDict.toastCopied);
+        }).catch(function() {
+          window.prompt(currentLang === 'pt' ? 'Copia a mensagem (Ctrl+C):' : 'Copy message (Ctrl+C):', textToCopy);
+        });
+      });
+    }
+
+    // Dropdown Toggle
+    var dropdownBtn = document.getElementById('btn-dropdown-toggle');
+    var dropdownMenu = document.getElementById('dropdown-menu');
+
+    dropdownBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var isOpen = dropdownMenu.style.display === 'block';
+      dropdownMenu.style.display = isOpen ? 'none' : 'block';
+    });
+
+    function closeDropdown() {
+      dropdownMenu.style.display = 'none';
+    }
+
+    document.addEventListener('click', function(e) {
+      if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+        closeDropdown();
+      }
+    });
+
+    // Botão Seguir sem modelo
+    document.getElementById('btn-skip-model').addEventListener('click', function() {
+      triggerSendAction('');
+    });
+
+    // Botão Avançar / Enviar
+    document.getElementById('btn-advance-send').addEventListener('click', function() {
+      if (!selectedTemplateObj) return;
+      var msg = personalize(selectedTemplateObj.text);
+      triggerSendAction(msg);
+    });
+
+    function triggerSendAction(message) {
+      var dest = document.getElementById('dest-input').value.trim();
+
+      if (currentMode === 'whatsapp') {
+        var cleanPhone = dest.replace(/[^0-9]/g, '');
+        Analytics.track('card_whatsapp_dispatched', { has_phone: !!cleanPhone });
+        var url = cleanPhone
+          ? ('https://wa.me/' + cleanPhone + (message ? ('?text=' + encodeURIComponent(message)) : ''))
+          : ('https://wa.me/' + (message ? ('?text=' + encodeURIComponent(message)) : ''));
+        window.open(url, '_blank');
+        t.closeModal();
+      } else {
+        var defaultSub = (currentLang === 'pt') ? ('Seguimento: ' + currentCardData.negocio) : ('Follow-up: ' + currentCardData.negocio);
+        var subject = selectedTemplateObj ? personalize(selectedTemplateObj.subject || defaultSub) : defaultSub;
+        Analytics.track('card_email_dispatched', { has_email: !!dest });
+        var mailto = 'mailto:' + encodeURIComponent(dest) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(message);
+        window.open(mailto, '_blank');
+        t.closeModal();
+      }
+    }
+
+    function updateBackButton() {
+      var label = '';
+      if (openedFromDeliveryView) {
+        label = currentDict.btnBackToSend;
+      } else if (fromParam === 'dashboard') {
+        label = currentDict.btnBackToDashboard;
+      } else {
+        label = currentDict.btnBackToCard;
+      }
+      var lblBack = document.getElementById('lbl-btn-back');
+      if (lblBack) lblBack.textContent = label;
+    }
+
+    function handleBackNavigation() {
+      if (openedFromDeliveryView) {
+        openedFromDeliveryView = false;
+        showDeliveryView(currentSettingsChannel);
+      } else if (fromParam === 'dashboard') {
+        Analytics.track('templates_back_to_dashboard_clicked');
+        t.modal({
+          title: ' ',
+          url: POWERUP_URL + '/dashboard.html?v=4&lang=' + (currentLang || 'en'),
+          height: 690,
+          fullscreen: false,
+          accentColor: '#090d16'
+        });
+      } else {
+        Analytics.track('templates_back_to_card_clicked');
+        t.closeModal();
+      }
+    }
+
+    // Ir para Configuração de Modelos
+    document.getElementById('btn-open-settings').addEventListener('click', function() {
+      openedFromDeliveryView = true;
+      showSettingsView();
+    });
+
+    var btnBackSettings = document.getElementById('btn-back-from-settings');
+    if (btnBackSettings) {
+      btnBackSettings.addEventListener('click', handleBackNavigation);
+    }
+
+    /* ── MODO 2: PÁGINA DE PERSONALIZAR MODELOS ── */
+    function showSettingsView() {
+      currentMode = 'settings';
+      document.getElementById('view-delivery').style.display = 'none';
+      document.getElementById('view-settings').style.display = 'flex';
+      updateBackButton();
+
+      var headerIconWrap = document.getElementById('header-icon-wrap');
+      var headerIconSvg = document.getElementById('header-icon-svg');
+      if (headerIconWrap && headerIconSvg) {
+        headerIconWrap.style.background = 'rgba(148,163,184,0.1)';
+        headerIconWrap.style.borderColor = 'rgba(148,163,184,0.2)';
+        headerIconWrap.style.color = '#94a3b8';
+        headerIconSvg.innerHTML = '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>';
+      }
+      document.getElementById('header-title').textContent = currentDict.settingsHeaderTitle;
+
+      if (currentSettingsChannel === 'email') {
+        document.getElementById('tab-cfg-email').className = 'tab-btn active email';
+        document.getElementById('tab-cfg-wpp').className = 'tab-btn wpp';
+      } else {
+        document.getElementById('tab-cfg-wpp').className = 'tab-btn active wpp';
+        document.getElementById('tab-cfg-email').className = 'tab-btn email';
+      }
+
+      renderSettingsGrid();
+      t.sizeTo(document.body).catch(function(){});
+    }
+
+    document.getElementById('tab-cfg-wpp').addEventListener('click', function() {
+      currentSettingsChannel = 'whatsapp';
+      currentGroupFilter = 'all';
+      this.className = 'tab-btn active wpp';
+      document.getElementById('tab-cfg-email').className = 'tab-btn email';
+      renderSettingsGrid();
+    });
+
+    document.getElementById('tab-cfg-email').addEventListener('click', function() {
+      currentSettingsChannel = 'email';
+      currentGroupFilter = 'all';
+      this.className = 'tab-btn active email';
+      document.getElementById('tab-cfg-wpp').className = 'tab-btn wpp';
+      renderSettingsGrid();
+    });
+
+    function renderGroupFilterPills() {
+      var container = document.getElementById('filter-pills-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      var channelGroups = getAllGroups().filter(function(g) {
+        return g.channel === currentSettingsChannel;
+      });
+
+      var totalCount = 0;
+      channelGroups.forEach(function(g) {
+        totalCount += (templates[g.id] || []).length;
+      });
+
+      var pillAll = document.createElement('button');
+      pillAll.type = 'button';
+      pillAll.className = 'filter-pill' + (currentGroupFilter === 'all' ? ' active' : '');
+      pillAll.innerHTML = `<span>${escapeHtml(currentDict.filterAll)}</span><span class="pill-count">${totalCount}</span>`;
+      pillAll.addEventListener('click', function() {
+        currentGroupFilter = 'all';
+        renderGroupFilterPills();
+        renderSettingsGrid();
+      });
+      container.appendChild(pillAll);
+
+      channelGroups.forEach(function(g) {
+        var count = (templates[g.id] || []).length;
+        var pill = document.createElement('button');
+        pill.type = 'button';
+        var isAct = currentGroupFilter === g.id;
+        pill.className = 'filter-pill' + (isAct ? ' active' : '');
+        var label = g.shortLabel || g.label;
+        pill.innerHTML = `<span>${escapeHtml(label)}</span><span class="pill-count">${count}</span>`;
+        pill.addEventListener('click', function() {
+          currentGroupFilter = g.id;
+          renderGroupFilterPills();
+          renderSettingsGrid();
+        });
+        container.appendChild(pill);
+      });
+    }
+
+    function renderSettingsGrid() {
+      renderGroupFilterPills();
+
+      var grid = document.getElementById('settings-grid');
+      grid.innerHTML = '';
+
+      var channelGroups = getAllGroups().filter(function(g) {
+        return g.channel === currentSettingsChannel;
+      });
+
+      var activeGroups = (currentGroupFilter === 'all')
+        ? channelGroups
+        : channelGroups.filter(function(g) { return g.id === currentGroupFilter; });
+
+      var list = [];
+      activeGroups.forEach(function(grp) {
+        var items = templates[grp.id] || [];
+        items.forEach(function(item) {
+          list.push(Object.assign({}, item, {
+            groupKey: grp.id,
+            groupLabel: grp.shortLabel || grp.label
+          }));
+        });
+      });
+
+      if (list.length === 0) {
+        var emptyBox = document.createElement('div');
+        emptyBox.style.gridColumn = '1 / -1';
+        emptyBox.style.padding = '34px 16px';
+        emptyBox.style.textAlign = 'center';
+        emptyBox.style.background = '#0b111e';
+        emptyBox.style.borderRadius = '12px';
+        emptyBox.style.border = '1px dashed rgba(255, 255, 255, 0.12)';
+        emptyBox.innerHTML = `
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">${escapeHtml(currentDict.emptyGroupState)}</p>
+          <button type="button" class="btn-primary ${currentSettingsChannel === 'email' ? 'email' : 'wpp'}" id="btn-add-to-empty" style="padding: 7px 15px; font-size: 12px; margin: 0 auto; display: inline-flex; align-items: center; gap: 6px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>${escapeHtml(currentDict.btnAddModelToGroup)}</span>
+          </button>
+        `;
+        emptyBox.querySelector('#btn-add-to-empty').addEventListener('click', function() {
+          var targetGroup = (currentGroupFilter !== 'all') ? currentGroupFilter : (channelGroups[0] ? channelGroups[0].id : 'call-answered');
+          openEditModal(targetGroup, null);
+        });
+        grid.appendChild(emptyBox);
+        t.sizeTo(document.body).catch(function(){});
+        return;
+      }
+
+      var prefix = currentDict.modelBadgePrefix || (currentLang === 'pt' ? 'Modelo' : 'Template');
+
+      list.forEach(function(item, idx) {
+        var box = document.createElement('div');
+        box.className = 'template-box';
+        var isEmailItem = currentSettingsChannel === 'email';
+        var channelClass = isEmailItem ? 'email' : 'wpp';
+
+        box.innerHTML = `
+          <div>
+            <div class="box-header">
+              <span class="box-category-badge ${channelClass}">${prefix} ${idx + 1}</span>
+              <span class="box-edit-icon" title="${escapeHtml(currentDict.btnEdit)}">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </span>
+            </div>
+            <h4>${escapeHtml(item.title)}</h4>
+            <p>${escapeHtml(item.text)}</p>
+          </div>
+          <div class="box-footer">
+            <span style="font-size: 10px; color: #64748b; font-weight: 500;">${escapeHtml(item.groupLabel)}</span>
+            <div style="display: inline-flex; align-items: center; gap: 4px;">
+              <span>${escapeHtml(currentDict.btnConfigureModel)}</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </div>
+          </div>
+        `;
+        box.addEventListener('click', function() {
+          openEditModal(item.groupKey, item);
+        });
+        grid.appendChild(box);
+      });
+      t.sizeTo(document.body).catch(function(){});
+    }
+
+    // Modal para Criar Novo Grupo / Gatilho
+    var newGroupModal = document.getElementById('new-group-modal');
+    var btnAddNewGroup = document.getElementById('btn-add-new-group');
+    var btnCloseNewGroup = document.getElementById('btn-close-new-group');
+    var btnCancelNewGroup = document.getElementById('btn-cancel-new-group');
+    var btnConfirmNewGroup = document.getElementById('btn-confirm-new-group');
+    var inputNewGroupName = document.getElementById('input-new-group-name');
+    var selectNewGroupChannel = document.getElementById('select-new-group-channel');
+
+    function openNewGroupModal() {
+      if (!newGroupModal) return;
+      newGroupModal.style.display = 'flex';
+      inputNewGroupName.value = '';
+      selectNewGroupChannel.value = currentSettingsChannel;
+      if (btnConfirmNewGroup) {
+        btnConfirmNewGroup.className = 'btn-modal-save' + (currentSettingsChannel === 'email' ? ' email-save' : '');
+      }
+      inputNewGroupName.focus();
+      t.sizeTo(document.body).catch(function(){});
+    }
+
+    function closeNewGroupModal() {
+      if (newGroupModal) newGroupModal.style.display = 'none';
+    }
+
+    if (btnAddNewGroup) btnAddNewGroup.addEventListener('click', openNewGroupModal);
+    if (btnCloseNewGroup) btnCloseNewGroup.addEventListener('click', closeNewGroupModal);
+    if (btnCancelNewGroup) btnCancelNewGroup.addEventListener('click', closeNewGroupModal);
+    if (selectNewGroupChannel) {
+      selectNewGroupChannel.addEventListener('change', function() {
+        if (btnConfirmNewGroup) {
+          btnConfirmNewGroup.className = 'btn-modal-save' + (this.value === 'email' ? ' email-save' : '');
+        }
+      });
+    }
+
+    if (btnConfirmNewGroup) {
+      btnConfirmNewGroup.addEventListener('click', function() {
+        var name = (inputNewGroupName.value || '').trim();
+        if (!name) {
+          alert(currentDict.errorGroupNameEmpty);
+          return;
+        }
+
+        var channel = selectNewGroupChannel.value || currentSettingsChannel;
+        var newGroupId = 'grp-' + Date.now();
+        var newGroup = {
+          id: newGroupId,
+          label: name,
+          shortLabel: name,
+          channel: channel,
+          isCustom: true
+        };
+
+        var customGroups = readCustomGroups();
+        customGroups.push(newGroup);
+        saveCustomGroups(customGroups);
+
+        if (!templates[newGroupId]) templates[newGroupId] = [];
+        saveTemplates(templates);
+
+        if (currentSettingsChannel !== channel) {
+          currentSettingsChannel = channel;
+          if (channel === 'email') {
+            document.getElementById('tab-cfg-email').className = 'tab-btn active email';
+            document.getElementById('tab-cfg-wpp').className = 'tab-btn wpp';
+          } else {
+            document.getElementById('tab-cfg-wpp').className = 'tab-btn active wpp';
+            document.getElementById('tab-cfg-email').className = 'tab-btn email';
+          }
+        }
+
+        currentGroupFilter = newGroupId;
+        closeNewGroupModal();
+        renderSettingsGrid();
+        showToast(currentDict.toastGroupCreated);
+      });
+    }
+
+    // Modal de Edição de Modelo
+    var editingGroup = null;
+    var editingModel = null;
+
+    function populateEditGroupSelect(selectedGroupKey) {
+      var select = document.getElementById('edit-group');
+      if (!select) return;
+      select.innerHTML = '';
+
+      var all = getAllGroups();
+
+      all.forEach(function(g) {
+        var opt = document.createElement('option');
+        opt.value = g.id;
+        opt.textContent = (g.label || g.shortLabel) + ' (' + (g.channel === 'email' ? 'Email' : 'WhatsApp') + ')';
+        select.appendChild(opt);
+      });
+
+      var optNew = document.createElement('option');
+      optNew.value = '__new__';
+      optNew.textContent = currentDict.optCreateNewGroup;
+      select.appendChild(optNew);
+
+      if (selectedGroupKey) {
+        select.value = selectedGroupKey;
+      }
+
+      handleEditGroupChange();
+    }
+
+    function handleEditGroupChange() {
+      var select = document.getElementById('edit-group');
+      var inlineWrap = document.getElementById('new-group-inline-wrap');
+      if (select.value === '__new__') {
+        inlineWrap.style.display = 'block';
+        document.getElementById('edit-new-group-name').focus();
+      } else {
+        inlineWrap.style.display = 'none';
+      }
+      toggleSubjectVisibility();
+      t.sizeTo(document.body).catch(function(){});
+    }
+
+    function openEditModal(groupKey, item) {
+      editingGroup = groupKey;
+      editingModel = item;
+      document.getElementById('edit-modal').style.display = 'flex';
+
+      document.getElementById('edit-modal-title').textContent = item ? currentDict.modalEditTitle : currentDict.modalNewTitle;
+      document.getElementById('edit-modal-subtitle').textContent = currentDict.modalSubtitle;
+      document.getElementById('edit-title').value = item ? item.title : '';
+      document.getElementById('edit-subject').value = item ? (item.subject || '') : '';
+      document.getElementById('edit-text').value = item ? item.text : '';
+      document.getElementById('edit-new-group-name').value = '';
+
+      populateEditGroupSelect(groupKey || (currentSettingsChannel === 'email' ? 'email' : 'call-answered'));
+      document.getElementById('btn-delete-model').style.display = item ? 'inline-flex' : 'none';
+      t.sizeTo(document.body).catch(function(){});
+    }
+
+    function toggleSubjectVisibility() {
+      var grpVal = document.getElementById('edit-group').value;
+      var grpObj = getAllGroups().find(function(g){ return g.id === grpVal; });
+      var isEmail = (grpVal === 'email') || (grpObj && grpObj.channel === 'email') || (grpVal === '__new__' && currentSettingsChannel === 'email');
+      document.getElementById('edit-subject-container').style.display = isEmail ? 'block' : 'none';
+      var btnSave = document.getElementById('btn-save-model');
+      if (btnSave) {
+        btnSave.className = 'btn-modal-save' + (isEmail ? ' email-save' : '');
+      }
+    }
+
+    document.getElementById('edit-group').addEventListener('change', handleEditGroupChange);
+
+    function closeEditModal() {
+      document.getElementById('edit-modal').style.display = 'none';
+      editingGroup = null;
+      editingModel = null;
+    }
+
+    document.getElementById('btn-close-edit').addEventListener('click', closeEditModal);
+    document.getElementById('btn-cancel-edit').addEventListener('click', closeEditModal);
+
+    document.getElementById('btn-new-model').addEventListener('click', function() {
+      var defaultTarget = (currentGroupFilter !== 'all') ? currentGroupFilter : (currentSettingsChannel === 'email' ? 'email' : 'call-answered');
+      openEditModal(defaultTarget, null);
+    });
+
+    document.getElementById('btn-save-model').addEventListener('click', function() {
+      var grp = document.getElementById('edit-group').value;
+      var title = document.getElementById('edit-title').value.trim();
+      var subject = document.getElementById('edit-subject').value.trim();
+      var text = document.getElementById('edit-text').value.trim();
+
+      if (!title || !text) {
+        alert(currentLang === 'pt' ? 'Por favor preenche o título e o texto.' : 'Please fill in both title and text.');
+        return;
+      }
+
+      // Se for novo grupo criado inline
+      if (grp === '__new__') {
+        var newGroupName = document.getElementById('edit-new-group-name').value.trim();
+        if (!newGroupName) {
+          alert(currentDict.errorGroupNameEmpty);
+          return;
+        }
+
+        var newGroupId = 'grp-' + Date.now();
+        var newGroup = {
+          id: newGroupId,
+          label: newGroupName,
+          shortLabel: newGroupName,
+          channel: currentSettingsChannel,
+          isCustom: true
+        };
+
+        var customGroups = readCustomGroups();
+        customGroups.push(newGroup);
+        saveCustomGroups(customGroups);
+
+        grp = newGroupId;
+      }
+
+      if (editingModel && editingGroup) {
+        if (editingGroup !== grp) {
+          if (templates[editingGroup]) {
+            templates[editingGroup] = templates[editingGroup].filter(function(m){ return m.id !== editingModel.id; });
+          }
+          if (!templates[grp]) templates[grp] = [];
+          templates[grp].push({ id: editingModel.id, title: title, subject: subject, text: text });
+        } else {
+          if (!templates[grp]) templates[grp] = [];
+          templates[grp] = templates[grp].map(function(m) {
+            if (m.id === editingModel.id) {
+              return { id: m.id, title: title, subject: subject, text: text };
+            }
+            return m;
+          });
+        }
+      } else {
+        if (!templates[grp]) templates[grp] = [];
+        templates[grp].push({ id: grp + '-' + Date.now(), title: title, subject: subject, text: text });
+      }
+
+      saveTemplates(templates);
+      closeEditModal();
+      currentGroupFilter = grp;
+      renderSettingsGrid();
+      showToast(currentDict.toastSaved);
+    });
+
+    document.getElementById('btn-delete-model').addEventListener('click', function() {
+      if (!confirm(currentDict.deleteConfirm)) return;
+      if (editingModel && editingGroup && templates[editingGroup]) {
+        templates[editingGroup] = templates[editingGroup].filter(function(m){ return m.id !== editingModel.id; });
+        saveTemplates(templates);
+      }
+      closeEditModal();
+      renderSettingsGrid();
+      showToast(currentDict.toastDeleted);
+    });
+
+    // Inserir / Copiar Variáveis no Editor de Modelo
+    document.querySelectorAll('.var-pill').forEach(function(pill) {
+      pill.addEventListener('click', function() {
+        var v = pill.dataset.var;
+        var textarea = document.getElementById('edit-text');
+        if (textarea) {
+          var start = textarea.selectionStart;
+          var end = textarea.selectionEnd;
+          var text = textarea.value;
+          if (start !== undefined && end !== undefined) {
+            textarea.value = text.substring(0, start) + v + text.substring(end);
+            textarea.selectionStart = textarea.selectionEnd = start + v.length;
+            textarea.focus();
+          } else {
+            textarea.value += v;
+          }
+        }
+        copyTextSafely(v).then(function() {
+          showToast(currentDict.toastVarInserted);
+        }).catch(function() {
+          showToast(currentDict.toastVarInserted);
+        });
+      });
+    });
+
+    // ── Verificação de Bloqueio por Feedback em Templates ──
+    function checkTemplatesFeedbackStatus() {
+      var elGateTitle = document.getElementById('gate-title');
+      if (elGateTitle) elGateTitle.textContent = (currentLang === 'pt') ? 'Desbloqueio Grátis com Feedback' : 'Free Unlock with Feedback';
+      var elGateDesc = document.getElementById('gate-desc');
+      if (elGateDesc) elGateDesc.textContent = (currentLang === 'pt')
+        ? 'Os Modelos de Mensagem são 100% gratuitos! Basta deixares uma avaliação rápida de 10 segundos para desbloquear permanentemente.'
+        : 'Message Templates are 100% free! Simply leave a quick 10-second review to unlock them permanently.';
+      var elGateBtn = document.getElementById('lbl-gate-unlock-text');
+      if (elGateBtn) elGateBtn.textContent = (currentLang === 'pt') ? 'Dar Feedback Grátis (Desbloquear)' : 'Give Free Feedback (Unlock Now)';
+
+      var localReviewed = false;
+      try {
+        localReviewed = (localStorage.getItem('kpi_feedback_submitted_globally') === 'true' || localStorage.getItem('kpi_has_reviewed') === 'true');
+      } catch (e) { }
+
+      if (localReviewed) return;
+
+      Promise.all([
+        t.get('member', 'private', 'kpi_has_reviewed').catch(function () { return false; }),
+        t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; }),
+        t.get('member', 'shared', 'kpi_has_reviewed').catch(function () { return false; }),
+        t.get('board', 'shared', 'kpi_feedback_submitted_globally').catch(function () { return false; })
+      ]).then(function (results) {
+        var flagRev = (results[0] === true || results[0] === 'true');
+        var rawState = results[1];
+        var stateObj = (rawState && typeof rawState === 'string') ? JSON.parse(rawState) : rawState;
+        var hasSubmitted = stateObj && (stateObj.lastSubmittedTime > 0);
+        var flagMemShared = (results[2] === true || results[2] === 'true');
+        var flagBoardShared = (results[3] === true || results[3] === 'true');
+
+        var isUnlocked = Boolean(localReviewed || flagRev || hasSubmitted || flagMemShared || flagBoardShared);
+        if (isUnlocked) {
+          try {
+            localStorage.setItem('kpi_feedback_submitted_globally', 'true');
+            localStorage.setItem('kpi_has_reviewed', 'true');
+          } catch (e) {}
+          var overlay = document.getElementById('gate-overlay');
+          var container = document.querySelector('.container');
+          if (overlay) overlay.style.display = 'none';
+          if (container) container.classList.remove('is-locked');
+        } else {
+          var overlay = document.getElementById('gate-overlay');
+          var container = document.querySelector('.container');
+          if (overlay) overlay.style.display = 'flex';
+          if (container) container.classList.add('is-locked');
+          gateShownTime = Date.now();
+          Analytics.track('locked_feature_gate_shown', {
+            feature: 'message_templates',
+            source: 'templates_page_direct'
+          });
+        }
+      });
+    }
+
+    var gateShownTime = null;
+    var unlockIntentTriggered = false;
+    var gateDismissedTracked = false;
+
+    function trackGateDismissed() {
+      if (gateShownTime && !unlockIntentTriggered && !gateDismissedTracked) {
+        gateDismissedTracked = true;
+        var timeViewed = Math.max(0, Math.round((Date.now() - gateShownTime) / 1000));
+        Analytics.track('locked_feature_dismissed', {
+          feature: 'message_templates',
+          time_viewed: timeViewed
+        });
+      }
+    }
+
+    checkTemplatesFeedbackStatus();
+
+    var btnUnlockGate = document.getElementById('btn-unlock-feedback');
+    if (btnUnlockGate) {
+      btnUnlockGate.addEventListener('click', function (e) {
+        e.preventDefault();
+        unlockIntentTriggered = true;
+        Analytics.track('feature_unlock_intent', {
+          feature: 'message_templates',
+          source: 'templates_gate'
+        });
+        window.location.href = './feedback.html?v=3&lang=' + (currentLang || 'en');
+      });
+    }
+
+    var btnCloseGate = document.getElementById('btn-close-gate');
+    if (btnCloseGate) {
+      btnCloseGate.addEventListener('click', function (e) {
+        e.preventDefault();
+        trackGateDismissed();
+        t.closeModal();
+      });
+    }
+
+    window.addEventListener('pagehide', trackGateDismissed);
+  </script>
+</body>
+
+</html>

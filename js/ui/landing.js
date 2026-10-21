@@ -715,7 +715,7 @@ UI.renderLandingFooter = function () {
             </div>
             <div style="display:flex;gap:24px;align-items:center;">
                 <a href="/privacy" target="_blank" style="font-size:12px;color:#334155;text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#94a3b8'" onmouseout="this.style.color='#334155'" data-translate="footer-privacy">${_t('footer-privacy')}</a>
-                <a href="mailto:phenrique07082003@gmail.com" style="font-size:12px;color:#334155;text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#94a3b8'" onmouseout="this.style.color='#334155'" data-translate="footer-contact">${_t('footer-contact')}</a>
+                <a href="mailto:kpismasterpowerup@gmail.com" style="font-size:12px;color:#334155;text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#94a3b8'" onmouseout="this.style.color='#334155'" data-translate="footer-contact">${_t('footer-contact')}</a>
             </div>
         </div>
     </footer>

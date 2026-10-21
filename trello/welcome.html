@@ -1,633 +1,214 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<!doctype html>
+<html lang="pt">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>KPI Master — Welcome & Quick Start</title>
+  <title>KPI Master — Guia de início</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
   <style>
-    :root {
-      --bg-body: #090d16;
-      --card-bg: #111726;
-      --card-border: rgba(255, 255, 255, 0.08);
-      --card-hover: rgba(255, 255, 255, 0.16);
-      --text-main: #f8fafc;
-      --text-sub: #94a3b8;
-      --accent-blue: #38bdf8;
-      --accent-green: #34d399;
-      --accent-purple: #a78bfa;
-      --accent-orange: #fb923c;
-      --btn-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-      --btn-hover: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 20px 24px;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-body);
-      color: var(--text-main);
-      min-height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* Top Nav: Language & Brand */
-    .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .brand-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(56, 189, 248, 0.08);
-      border: 1px solid rgba(56, 189, 248, 0.22);
-      padding: 4px 12px;
-      border-radius: 9999px;
-    }
-
-    .brand-badge img {
-      width: 18px;
-      height: 18px;
-      border-radius: 5px;
-    }
-
-    .brand-badge span {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--accent-blue);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .btn-lang {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #cbd5e1;
-      padding: 4px 10px;
-      border-radius: 9999px;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn-lang:hover {
-      background: rgba(255, 255, 255, 0.12);
-      color: #ffffff;
-    }
-
-    /* Header Hero */
-    .header-hero {
-      text-align: center;
-      margin-bottom: 16px;
-    }
-
-    .header-hero h1 {
-      font-size: 21px;
-      font-weight: 800;
-      margin: 0 0 6px 0;
-      letter-spacing: -0.025em;
-      color: #ffffff;
-    }
-
-    .header-hero p {
-      font-size: 12.5px;
-      color: var(--text-sub);
-      margin: 0 auto;
-      max-width: 470px;
-      line-height: 1.45;
-    }
-
-    /* 3-Step Interactive Process Guide */
-    .steps-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .step-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--card-border);
-      border-radius: 11px;
-      padding: 12px 12px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      transition: all 0.2s ease;
-    }
-
-    .step-card:hover {
-      border-color: rgba(56, 189, 248, 0.35);
-      background: rgba(255, 255, 255, 0.05);
-      transform: translateY(-1px);
-    }
-
-    .step-num-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 22px;
-      height: 22px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 800;
-      background: rgba(56, 189, 248, 0.15);
-      color: var(--accent-blue);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      margin-bottom: 2px;
-    }
-
-    .step-card h3 {
-      margin: 0;
-      font-size: 12.5px;
-      font-weight: 700;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .step-card p {
-      margin: 0;
-      font-size: 11px;
-      color: var(--text-sub);
-      line-height: 1.4;
-    }
-
-    /* Live Features Grid (2 columns) */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .feature-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 11px;
-      padding: 11px 13px;
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      transition: all 0.2s ease;
-    }
-
-    .feature-card:hover {
-      border-color: var(--card-hover);
-    }
-
-    .feature-icon-box {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      flex-shrink: 0;
-    }
-
-    .feature-body {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .feature-body h4 {
-      margin: 0;
-      font-size: 12px;
-      font-weight: 700;
-      color: #ffffff;
-    }
-
-    .feature-body p {
-      margin: 0;
-      font-size: 10.5px;
-      color: var(--text-sub);
-      line-height: 1.35;
-    }
-
-    /* Web Platform Teaser Banner */
-    .web-banner {
-      background: linear-gradient(135deg, rgba(37, 99, 235, 0.18) 0%, rgba(124, 58, 237, 0.18) 100%);
-      border: 1px solid rgba(59, 130, 246, 0.35);
-      border-radius: 11px;
-      padding: 12px 14px;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .web-banner-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .web-banner-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      background: rgba(37, 99, 235, 0.25);
-      border: 1px solid rgba(59, 130, 246, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      flex-shrink: 0;
-    }
-
-    .web-banner-text h4 {
-      margin: 0 0 2px 0;
-      font-size: 12px;
-      font-weight: 700;
-      color: #ffffff;
-    }
-
-    .web-banner-text p {
-      margin: 0;
-      font-size: 10.5px;
-      color: #cbd5e1;
-      line-height: 1.35;
-    }
-
-    .web-banner-tag {
-      background: rgba(16, 185, 129, 0.16);
-      border: 1px solid rgba(52, 211, 153, 0.35);
-      color: #34d399;
-      font-size: 9.5px;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 999px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      white-space: nowrap;
-    }
-
-    /* Actions Footer */
-    .actions-footer {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      width: 100%;
-    }
-
-    .btn-group {
-      display: flex;
-      gap: 10px;
-      width: 100%;
-    }
-
-    .btn {
-      flex: 1;
-      padding: 11px 16px;
-      border-radius: 9px;
-      font-size: 13px;
-      font-weight: 700;
-      text-align: center;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      border: none;
-    }
-
-    .btn-primary {
-      background: var(--btn-gradient);
-      color: #ffffff;
-      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
-    }
-
-    .btn-primary:hover {
-      background: var(--btn-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.06);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: rgba(255, 255, 255, 0.25);
-    }
-
-    @media (max-width: 480px) {
-      .steps-container {
-        grid-template-columns: 1fr;
-      }
-
-      .features-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .btn-group {
-        flex-direction: column;
-      }
-    }
+    :root{color-scheme:dark;--bg:#090d16;--panel:#101725;--panel2:#141d2d;--line:#263247;--text:#f5f8ff;--muted:#9aabc4;--blue:#3478ff;--cyan:#45c9f4;--green:#22d3a0}
+    *{box-sizing:border-box} body{width:100%;max-width:1000px;margin:0 auto;padding:15px 18px 13px;background:var(--bg);color:var(--text);font:13px Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;display:flex;flex-direction:column;gap:12px;-webkit-font-smoothing:antialiased}
+    button,a{font:inherit} button:focus-visible,a:focus-visible{outline:2px solid #8cb5ff;outline-offset:2px}
+    .topbar{display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:8px;font-weight:750;font-size:12px;letter-spacing:.04em;color:#cfddf1}.brand img{width:20px;height:20px;border-radius:6px}.lang{border:1px solid var(--line);border-radius:999px;background:#121a29;color:#dce8fa;padding:6px 10px;font-weight:700;font-size:11px;cursor:pointer}
+    .intro{text-align:center}.eyebrow{margin:0 0 5px;color:var(--cyan);font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.intro h1{margin:0;font-size:20px;letter-spacing:-.04em}.intro p{margin:5px auto 0;max-width:540px;color:var(--muted);font-size:11px;line-height:1.5}
+    .guide{border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,#101827,#0d1420);overflow:hidden;box-shadow:0 12px 32px #0004}
+    .guide-head{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-bottom:1px solid #ffffff10}.step-label{display:flex;align-items:center;gap:8px;font-weight:750;font-size:12px}.step-index{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;background:#17336b;color:#8cb5ff;font-size:11px}.counter{color:var(--muted);font-size:10px;font-weight:700}.progress{height:3px;background:#202b3d}.progress span{display:block;height:100%;width:25%;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width .25s ease}
+    .slide{display:grid;grid-template-columns:minmax(230px,.82fr) minmax(280px,1.18fr);gap:15px;padding:14px;align-items:center;min-height:292px}.copy h2{margin:0 0 8px;font-size:17px;letter-spacing:-.025em}.copy p{margin:0;color:#b8c5d8;line-height:1.55;font-size:11px}.route{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:12px 0 0;color:#e7efff;font-size:10px;font-weight:700}.route span{border:1px solid #31405a;background:#131e30;padding:5px 7px;border-radius:7px}.route b{color:#7185a3}.tip{margin-top:11px;padding:8px 9px;border:1px solid #254275;border-radius:9px;background:#10213c;color:#b9d4ff;font-size:10px;line-height:1.45}.tip strong{color:#fff}
+    .visual{position:relative;margin:0;overflow:hidden;border:1px solid #34415a;border-radius:11px;background:#080b12;box-shadow:0 8px 24px #0005;cursor:zoom-in}.visual-media{position:relative;display:flex;justify-content:center;align-items:center;overflow:hidden;background:#080b12}.visual-media img{display:block;width:100%;height:auto;max-height:320px;object-fit:contain}.visual figcaption{padding:7px 10px;background:#0e1522;color:#a9bad2;font-size:9px;border-top:1px solid #263247}.focus-ring{position:absolute;border:2px solid #75a6ff;box-shadow:0 0 0 999px #04091420,0 0 18px #3478ffaa;border-radius:8px;pointer-events:none;animation:pulse 2.4s ease-in-out infinite}.focus-ring:after{content:"";position:absolute;inset:-5px;border:1px solid #b9d3ff88;border-radius:11px}.focus-board-button{left:61%;top:0%;width:21%;height:6%}.focus-dashboard-settings{left:72%;top:6%;width:8%;height:7%}.focus-settings-options{left:64%;top:25%;width:9%;height:11%}.focus-card{left:32%;top:25%;width:45%;height:19%}.focus-card-history-button{left:33%;top:19%;width:9%;height:5%}.focus-history{left:12%;top:3%;width:76%;height:63%}.focus-templates{left:20%;top:14%;width:62%;height:42%}.focus-dashboard{left:7%;top:7%;width:85%;height:31%}.focus-web-dashboard{left:2%;top:2%;width:96%;height:96%;border-radius:5px}.focus-micro-web-button{left:6%;top:91%;width:88%;height:7%}.focus-card-web-button{left:19%;top:88%;width:75%;height:10%}
+    .gallery{display:flex;gap:8px;padding:9px 10px;background:#0e1522;border-bottom:1px solid #263247;overflow-x:auto;scrollbar-width:thin}.gallery[hidden]{display:none}.gallery button{flex:0 0 auto;min-height:36px;border:1px solid #34435d;border-radius:8px;background:#141e2e;color:#c5d5ec;padding:8px 12px;font-size:10px;font-weight:700;cursor:pointer;transition:background .15s,border-color .15s}.gallery button:hover{border-color:#628bca;background:#1a2940}.gallery button.active{border-color:#5790ff;color:#fff;background:#17336b;box-shadow:0 0 0 1px #5790ff55}
+    .zoom-callout{position:absolute;z-index:2;right:10px;bottom:10px;width:46%;height:34%;border:2px solid #78a9ff;border-radius:10px;background-color:#080d17;background-repeat:no-repeat;background-size:var(--zoom-scale,500%) auto;background-position:var(--zoom-x,92%) var(--zoom-y,5%);box-shadow:0 0 0 3px #0a1222cc,0 9px 24px #000a;pointer-events:none}.zoom-callout[hidden]{display:none}.zoom-callout span{position:absolute;left:7px;bottom:6px;padding:4px 6px;border-radius:5px;background:#102246ee;color:#dceaff;font-size:8px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;box-shadow:0 2px 8px #0008}
+    .redaction{position:absolute;border-radius:4px;background:#111726;filter:blur(4px);opacity:.96;pointer-events:none}.redact-fast{left:8%;top:35%;width:39%;height:5%}.redact-slow{left:52%;top:35%;width:39%;height:5%}.redact-rank{left:10%;top:51%;width:80%;height:5%}.redact-member{left:10%;top:61%;width:80%;height:5%}
+    @keyframes pulse{50%{box-shadow:0 0 0 999px #04091435,0 0 26px #3478ff}}
+    .zoom-hint{position:absolute;right:7px;top:7px;padding:5px 7px;border-radius:7px;background:#0a1020dd;color:#e7efff;font-size:9px;font-weight:700}
+    .footer{display:flex;align-items:center;justify-content:space-between;gap:10px}.step-dots{display:flex;gap:6px}.dot{width:7px;height:7px;padding:0;border:0;border-radius:9px;background:#344158;cursor:pointer;transition:all .2s}.dot.active{width:21px;background:var(--blue)}.nav{display:flex;align-items:center;gap:7px}.nav button,.web-link{border:1px solid var(--line);border-radius:9px;background:#121a29;color:#e5edfa;padding:8px 11px;font-weight:700;font-size:10px;cursor:pointer;text-decoration:none}.nav button:hover,.web-link:hover{border-color:#5673a2;background:#17243a}.nav .next,.nav .finish{border-color:transparent;background:linear-gradient(135deg,#3478ff,#2858dc);color:white}.skip{border:0!important;background:transparent!important;color:#9aabc4!important}.below{display:flex;justify-content:space-between;align-items:center;gap:8px}.web-link{font-size:10px;color:#bdcff0;padding:7px 10px}
+    .zoom-modal{position:fixed;inset:0;z-index:5;display:none;align-items:center;justify-content:center;padding:15px;background:#02050bdc;backdrop-filter:blur(5px)}.zoom-modal.open{display:flex}.zoom-dialog{position:relative;max-width:min(96vw,1000px);max-height:92vh;border:1px solid #41516d;border-radius:12px;background:#0c1320;overflow:auto}.zoom-dialog img{display:block;max-width:100%;max-height:84vh;object-fit:contain}.zoom-close{position:sticky;top:8px;float:right;z-index:1;margin:8px;padding:7px 10px;border:1px solid #536582;border-radius:8px;background:#111a29;color:#fff;cursor:pointer}
+    @media(max-width:600px){body{padding:11px;gap:9px}.intro h1{font-size:18px}.slide{grid-template-columns:1fr;gap:10px;padding:11px;min-height:0}.copy h2{font-size:15px}.visual img{max-height:230px}.focus-settings{left:72%;top:8%;width:10%;height:8%}.footer{align-items:flex-start}.below{align-items:flex-start;flex-direction:column}.nav button{padding:8px}.web-link{font-size:9px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
   </style>
 </head>
-
 <body>
-
-  <div>
-    <!-- Top Bar com Idioma e Identificação -->
-    <div class="top-bar">
-      <div class="brand-badge">
-        <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
-        <span>KPI Master · Quick Start</span>
-      </div>
-      <button id="btn-lang-toggle" class="btn-lang" title="Switch Language / Alternar Idioma">
-        <span id="txt-lang-toggle">🇵🇹 PT</span>
-      </button>
-    </div>
-
-    <!-- Hero Header -->
-    <div class="header-hero">
-      <h1 id="welcome-title">Como funciona o KPI Master?</h1>
-      <p id="welcome-subtitle">Mede automaticamente a velocidade das tuas leads, reduz gargalos e acompanha contactos em
-        1 clique direto no Trello.</p>
-    </div>
-
-    <!-- Guia Intuitivo em 3 Passos Simples -->
-    <div class="steps-container">
-      <div class="step-card">
-        <div class="step-num-badge">1</div>
-        <h3 id="step1-title">⚡ Ações nos Cartões</h3>
-        <p id="step1-desc">Clica no verso do cartão para registar <strong>+1 Chamada</strong> ou <strong>+1
-            Email</strong> e move a lead com 1 clique.</p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-num-badge">2</div>
-        <h3 id="step2-title">⏱️ Micro Dashboard</h3>
-        <p id="step2-desc">No topo do quadro, clica em <strong>KPI Master</strong> para ver a lead mais rápida, mais
-          lenta e o volume ativo.</p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-num-badge">3</div>
-        <h3 id="step3-title">⚙️ Plug & Play</h3>
-        <p id="step3-desc">No botão de definições ⚙️ podes ativar ou desativar as funcionalidades à medida da tua
-          equipa.</p>
-      </div>
-    </div>
-
-    <!-- 4 Funcionalidades Prontas a Usar -->
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon-box" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">📞</div>
-        <div class="feature-body">
-          <h4 id="f1-title">+1 Chamada & Email</h4>
-          <p id="f1-desc">Registo instantâneo de contactos com histórico cronológico de quem falou com a lead.</p>
+  <header class="topbar">
+    <div class="brand"><img src="./icon.png" alt="" onerror="this.style.display='none'"><span>KPI MASTER · QUICK START</span></div>
+    <button id="btn-lang" class="lang" type="button" aria-label="Mudar idioma">🇵🇹 PT</button>
+  </header>
+  <section class="intro" aria-labelledby="welcome-title">
+    <p class="eyebrow" id="intro-eyebrow">Guia rápido · 5 passos</p>
+    <h1 id="welcome-title">Começa a usar o KPI Master</h1>
+    <p id="welcome-subtitle">Vê onde configurar, registar contactos e acompanhar as tuas leads no Trello.</p>
+  </section>
+  <main class="guide" aria-live="polite">
+    <div class="guide-head"><div class="step-label"><span class="step-index" id="step-number">01</span><span id="step-kicker">Configuração</span></div><span class="counter" id="step-counter">1 / 4</span></div>
+    <div class="progress"><span id="progress-bar"></span></div>
+    <section class="slide" id="slide">
+      <div class="copy"><h2 id="slide-title">1. Personaliza a aplicação</h2><p id="slide-desc">Escolhe as funcionalidades que fazem sentido para a tua equipa. Abre KPI Master no topo do quadro, entra em Settings e ativa as opções que queres usar.</p><div class="route" id="slide-route"><span>Quadro Trello</span><b>›</b><span>KPI Master</span><b>›</b><span>⚙ Settings</span></div><div class="tip" id="slide-tip">Podes ligar ou desligar ações rápidas, histórico de contactos e idade do cartão quando quiseres.</div></div>
+      <figure class="visual" id="visual" role="group" tabindex="0" aria-label="Imagem do passo; ativa para ampliar">
+        <div class="gallery" id="gallery" hidden></div>
+        <div class="visual-media" id="visual-media">
+          <img id="slide-image" src="/trello/onboarding/settings.png" alt="Definições Plug & Play com opções de ações rápidas, histórico e idade dos cartões.">
+          <div id="focus-ring" class="focus-ring"></div>
+          <div id="redactions" aria-hidden="true"></div>
+          <div id="zoom-callout" class="zoom-callout" aria-hidden="true" hidden><span id="zoom-label">ZOOM</span></div>
+          <span class="zoom-hint" id="zoom-hint">Clica para ampliar</span>
         </div>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon-box" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">🏷️</div>
-        <div class="feature-body">
-          <h4 id="f2-title">Idade da Lead (Card Age)</h4>
-          <p id="f2-desc">Emblemas coloridos na frente do cartão indicam há quantos dias a lead aguarda resposta.</p>
-        </div>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon-box" style="background: rgba(251, 146, 60, 0.15); color: #fb923c;">⏩</div>
-        <div class="feature-body">
-          <h4 id="f3-title">Avançar Próxima Etapa</h4>
-          <p id="f3-desc">Avança cartões na pipeline sem precisar de arrastar manualmente de coluna em coluna.</p>
-        </div>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon-box" style="background: rgba(167, 139, 250, 0.15); color: #a78bfa;">📊</div>
-        <div class="feature-body">
-          <h4 id="f4-title">Dashboard Web Completa</h4>
-          <p id="f4-desc">Gráficos de funil, tempo médio por lista, relatórios por membro e exportação em PDF.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Banner Plataforma Web -->
-    <div class="web-banner">
-      <div class="web-banner-left">
-        <div class="web-banner-icon">🚀</div>
-        <div class="web-banner-text">
-          <h4 id="banner-title">Queres relatórios executivos avançados?</h4>
-          <p id="banner-desc">Acede gratuitamente à Plataforma Web para ver gráficos interativos e taxas de conversão.
-          </p>
-        </div>
-      </div>
-      <div class="web-banner-tag" id="banner-badge">100% Grátis</div>
-    </div>
+        <figcaption id="slide-caption"></figcaption>
+      </figure>
+    </section>
+  </main>
+  <div class="footer">
+    <div class="step-dots" id="step-dots" aria-label="Passos do guia"></div>
+    <div class="nav"><button id="btn-skip" class="skip" type="button">Saltar guia</button><button id="btn-prev" type="button">← Anterior</button><button id="btn-next" class="next" type="button">Seguinte →</button></div>
   </div>
-
-  <!-- Footer com Ações -->
-  <div class="actions-footer">
-    <div class="btn-group">
-      <button id="btn-close" class="btn btn-primary">
-        <span id="lbl-btn-close">🚀 Começar a Usar no Trello</span>
-      </button>
-      <a id="btn-site" href="https://kpismaster.vercel.app" target="_blank" class="btn btn-secondary">
-        <span id="lbl-btn-site">🌐 Ver Dashboard Web →</span>
-      </a>
-    </div>
-  </div>
-
+  <div class="below"><button id="btn-finish" class="web-link" type="button" hidden>Concluir guia ✓</button></div>
+  <div class="zoom-modal" id="zoom-modal" role="dialog" aria-modal="true" aria-label="Imagem ampliada"><div class="zoom-dialog"><button class="zoom-close" id="zoom-close" type="button">Fechar ✕</button><img id="zoom-image" src="" alt=""></div></div>
   <script type="module">
     import { Analytics } from '../js/analytics.js';
     Analytics.init();
-
     var KEY = import.meta.env.VITE_TRELLO_API_KEY;
-    var NAME = 'KPI Master';
-    var SITE = 'https://kpismaster.vercel.app';
     var WEBHOOK_URL = 'https://hook.eu1.make.com/nnhynw1t9cabqrpedjnvp1m9t9h3pfv4';
-
-    var t = TrelloPowerUp.iframe({ appKey: KEY, appName: NAME });
-
-    function trackEvent(eventName, extra = {}) {
+    var t = TrelloPowerUp.iframe({ appKey: KEY, appName: 'KPI Master' });
+    function trackEvent(eventName, extra) {
       try {
-        Analytics.track(eventName, extra);
-        var url = WEBHOOK_URL + '?event=' + encodeURIComponent(eventName);
-        fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            event: eventName,
-            timestamp: new Date().toISOString(),
-            source: 'trello_welcome_modal',
-            ...extra
-          })
-        }).catch(function () { });
-      } catch (e) { }
+        Analytics.track(eventName, extra || {});
+        fetch(WEBHOOK_URL + '?event=' + encodeURIComponent(eventName), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event: eventName, timestamp: new Date().toISOString(), source: 'trello_welcome_modal', ...(extra || {}) }) }).catch(function () {});
+      } catch (e) {}
     }
-
-    // Registar visualização do ecrã de boas-vindas
-    trackEvent('welcome_popup_viewed', {
-      description: 'Popup de Boas-vindas exibido no Trello'
-    });
-
-    // Guardar marcação e data de instalação (timestamp) do utilizador
-    var nowTime = Date.now();
-    t.set('member', 'private', 'kpi_welcome_seen', nowTime).catch(function () { });
-    t.set('member', 'private', 'kpi_first_seen_time', nowTime).catch(function () { });
-
-    var locale = t.locale || 'en';
-    var currentLang = 'en'; // Padrão inglês com alternador para PT
-
-    var i18n = {
-      pt: {
-        title: 'Como funciona o KPI Master?',
-        subtitle: 'Mede automaticamente a velocidade das tuas leads, reduz gargalos e regista contactos em 1 clique direto no Trello.',
-        step1Title: '⚡ Ações nos Cartões',
-        step1Desc: 'No verso do cartão regista <strong>+1 Chamada</strong> ou <strong>+1 Email</strong> e avança a etapa da lead.',
-        step2Title: '⏱️ Micro Dashboard',
-        step2Desc: 'No topo do quadro clica em <strong>KPI Master</strong> para ver a lead mais rápida, mais lenta e gargalos.',
-        step3Title: '⚙️ Plug & Play',
-        step3Desc: 'No botão ⚙️ ativa ou desativa o histórico, idade e ações rápidas quando quiseres.',
-        f1Title: '+1 Chamada & Email',
-        f1Desc: 'Registo instantâneo com histórico de quem realizou cada contacto.',
-        f2Title: 'Idade da Lead (Card Age)',
-        f2Desc: 'Emblemas visuais indicam há quantos dias a lead aguarda resposta.',
-        f3Title: 'Avançar Próxima Etapa',
-        f3Desc: 'Move cartões na pipeline sem precisar de arrastar manualmente.',
-        f4Title: 'Dashboard Web Completa',
-        f4Desc: 'Funil de conversão, tempo por lista e relatórios executivos.',
-        bannerTitle: 'Queres relatórios executivos avançados?',
-        bannerDesc: 'Acede gratuitamente à Plataforma Web para ver gráficos interativos e taxas de conversão.',
-        bannerBadge: '100% Grátis',
-        btnClose: '🚀 Começar a Usar no Trello',
-        btnSite: '🌐 Ver Dashboard Web →',
-        toggleBtn: '🇬🇧 English'
-      },
-      en: {
-        title: 'How does KPI Master work?',
-        subtitle: 'Automatically measure your lead response speed, eliminate bottlenecks, and log customer touchpoints in 1 click.',
-        step1Title: '⚡ Card Quick Actions',
-        step1Desc: 'Open any card to log <strong>+1 Call</strong> or <strong>+1 Email</strong> and advance stages instantly.',
-        step2Title: '⏱️ Micro Dashboard',
-        step2Desc: 'Click <strong>KPI Master</strong> at the board top to monitor fastest leads, slowest bottlenecks, and counts.',
-        step3Title: '⚙️ Plug & Play',
-        step3Desc: 'Use the ⚙️ settings button to toggle history, card age badges, or quick actions anytime.',
-        f1Title: '+1 Call & Email Logging',
-        f1Desc: 'Instant touchpoint counter with audit log of member timestamps.',
-        f2Title: 'Card Age Badges',
-        f2Desc: 'Visual badges on cards showing how many days leads are waiting.',
-        f3Title: '1-Click Stage Move',
-        f3Desc: 'Advance cards to the next list without dragging across the board.',
-        f4Title: 'Full Web Platform',
-        f4Desc: 'Pipeline funnels, time-in-list breakdown, and executive reports.',
-        bannerTitle: 'Looking for advanced executive reports?',
-        bannerDesc: 'Access our Web Platform for free with interactive charts and funnel analytics.',
-        bannerBadge: '100% Free',
-        btnClose: '🚀 Get Started in Trello',
-        btnSite: '🌐 Open Web Dashboard →',
-        toggleBtn: '🇵🇹 Português'
-      }
+    var slides = {
+      pt: [
+        { kicker:'Configuração', title:'1. Abre e configura o painel', desc:'Segue os três cliques para personalizar a aplicação: abre o Micro Dashboard no topo do quadro, entra em Settings e escolhe as funcionalidades.', route:['Quadro Trello','Leads KPIs Master','Open Micro Dashboard','Settings'], tip:'Ativa ou desativa ações rápidas, histórico de contactos, idade do cartão e outros recursos quando quiseres.', image:'/trello/onboarding/settings.png', alt:'Definições Plug & Play com opções de ações rápidas, histórico e idade dos cartões.', caption:'', focus:'focus-settings-options' },
+        { kicker:'Ações e histórico', title:'2. Regista contactos e consulta o histórico', desc:'Abre um cartão e usa +1 Call ou +1 Email para guardar o contacto. Depois abre History para rever chamadas, emails, resultados e datas numa linha temporal.', route:['Abrir cartão','+1 Call / +1 Email','History'], tip:'Após uma chamada, indica se foi atendida. O registo fica associado ao cartão para acompanhares cada lead sem perder contexto.', image:'/trello/onboarding/card-actions.png', alt:'Verso de um cartão com ações de chamada, email e histórico.', caption:'No verso do cartão, regista uma chamada ou email e abre History.', focus:'focus-card' },
+        { kicker:'Modelos de mensagem', title:'3. Personaliza WhatsApp e email', desc:'Cria modelos para os casos mais comuns. Ao enviar, escolhe o modelo certo ou continua sem modelo; a mensagem fica pronta para rever e enviar.', route:['KPI Master','Templates','WhatsApp / Email'], tip:'Clica num cartão de modelo para editar o nome, o texto e as variáveis disponíveis.', image:'/trello/onboarding/template-settings.png', alt:'Gestão de modelos de WhatsApp e email com cartões editáveis.', caption:'Em Templates, alterna entre WhatsApp e Email e edita os teus modelos.', focus:'focus-templates' },
+        { kicker:'Mini dashboard', title:'4. Acompanha as tuas leads e a equipa', desc:'Abre KPI Master no topo do quadro para ver as leads mais rápidas e mais lentas, a atividade da equipa e os indicadores principais.', route:['Topo do quadro','KPI Master','Dashboard'], tip:'Usa Settings para escolher o que aparece. Para funis, tendências e relatórios, abre a dashboard web.', image:'/trello/onboarding/dashboard.png', alt:'Mini dashboard do KPI Master com leads mais rápidas e lentas, atividade da equipa e relatórios web.', caption:'A mini dashboard dá-te uma leitura rápida; a dashboard web mostra a análise completa.', focus:'focus-dashboard' },
+        { kicker:'Dashboard web', title:'2. Abre a dashboard web completa', desc:'Há duas formas de chegar à dashboard: no quadro, clica em Leads KPIs Master > Open Micro Dashboard > Open Web Dashboard; ou abre o verso de um cartão e clica em “Ver mais dados na Dashboard Web”.', route:['Quadro Trello','Leads KPIs Master','Open Micro Dashboard','Open Web Dashboard','ou verso do cartão'], tip:'A dashboard web traz mais funcionalidades e uma perspetiva diferente dos dados: explora o pipeline, zonas de foco, tempos por lista e opções de importação/exportação.', image:'/trello/Dashboard.png', alt:'Dashboard web do KPI Master com pipeline, zona de foco, tempos por lista e opções de importar e exportar.', caption:'Escolhe um dos dois caminhos acima para abrir a dashboard web completa.', focus:'focus-web-dashboard' }
+      ],
+      en: [
+        { kicker:'Setup', title:'1. Open and configure the panel', desc:'Follow three clicks to customize the app: open Micro Dashboard at the top of the board, go to Settings and choose your features.', route:['Trello board','Leads KPIs Master','Open Micro Dashboard','Settings'], tip:'Turn quick actions, contact history, card age and other features on or off whenever you need.', image:'/trello/onboarding/settings.png', alt:'Plug & Play settings for quick actions, contact history and card age.', caption:'', focus:'focus-settings-options' },
+        { kicker:'Actions & history', title:'2. Log contacts and review history', desc:'Open a card and use +1 Call or +1 Email to log a touchpoint. Then open History to review calls, emails, outcomes and timestamps.', route:['Open card','+1 Call / +1 Email','History'], tip:'After a call, record whether it was answered. The log stays with the card so you can keep the full context.', image:'/trello/onboarding/card-actions.png', alt:'Card back with call, email and history actions.', caption:'Log a call or email and open History from the card back.', focus:'focus-card' },
+        { kicker:'Message templates', title:'3. Customize WhatsApp and email', desc:'Create templates for common situations. When sending, choose a template or continue without one; the message is ready for you to review and send.', route:['KPI Master','Templates','WhatsApp / Email'], tip:'Click a template card to edit its name, message and available variables.', image:'/trello/onboarding/template-settings.png', alt:'WhatsApp and email template manager with editable cards.', caption:'Switch between WhatsApp and Email in Templates and edit your messages.', focus:'focus-templates' },
+        { kicker:'Mini dashboard', title:'4. Track leads and team activity', desc:'Open KPI Master at the top of the board to see your fastest and slowest leads, team activity and key metrics.', route:['Board header','KPI Master','Dashboard'], tip:'Use Settings to choose what appears. For funnels, trends and full reports, open the web dashboard.', image:'/trello/onboarding/dashboard.png', alt:'KPI Master mini dashboard with fastest and slowest leads, team activity and web reports.', caption:'The mini dashboard gives you a quick view; the web dashboard has the full analysis.', focus:'focus-dashboard' },
+        { kicker:'Web dashboard', title:'2. Open the full web dashboard', desc:'There are two ways to get there: on the board, click Leads KPIs Master > Open Micro Dashboard > Open Web Dashboard; or open a card back and click “View more data on Web Dashboard”.', route:['Trello board','Leads KPIs Master','Open Micro Dashboard','Open Web Dashboard','or card back'], tip:'The web dashboard adds more features and a different view of your data: explore the pipeline, focus zones, time per list, and import/export options.', image:'/trello/Dashboard.png', alt:'KPI Master web dashboard showing the pipeline, focus zone, time per list and import and export controls.', caption:'Choose either path above to open the full web dashboard.', focus:'focus-web-dashboard' }
+      ]
     };
-
-    function applyLanguage(lang) {
-      currentLang = lang;
-      var dict = i18n[lang];
-
-      document.getElementById('welcome-title').textContent = dict.title;
-      document.getElementById('welcome-subtitle').textContent = dict.subtitle;
-      document.getElementById('step1-title').innerHTML = dict.step1Title;
-      document.getElementById('step1-desc').innerHTML = dict.step1Desc;
-      document.getElementById('step2-title').innerHTML = dict.step2Title;
-      document.getElementById('step2-desc').innerHTML = dict.step2Desc;
-      document.getElementById('step3-title').innerHTML = dict.step3Title;
-      document.getElementById('step3-desc').innerHTML = dict.step3Desc;
-      document.getElementById('f1-title').textContent = dict.f1Title;
-      document.getElementById('f1-desc').textContent = dict.f1Desc;
-      document.getElementById('f2-title').textContent = dict.f2Title;
-      document.getElementById('f2-desc').textContent = dict.f2Desc;
-      document.getElementById('f3-title').textContent = dict.f3Title;
-      document.getElementById('f3-desc').textContent = dict.f3Desc;
-      document.getElementById('f4-title').textContent = dict.f4Title;
-      document.getElementById('f4-desc').textContent = dict.f4Desc;
-      document.getElementById('banner-title').textContent = dict.bannerTitle;
-      document.getElementById('banner-desc').textContent = dict.bannerDesc;
-      document.getElementById('banner-badge').textContent = dict.bannerBadge;
-      document.getElementById('lbl-btn-close').textContent = dict.btnClose;
-      document.getElementById('lbl-btn-site').textContent = dict.btnSite;
-
-      var txtToggle = document.getElementById('txt-lang-toggle');
-      if (txtToggle) txtToggle.textContent = dict.toggleBtn;
-
-      t.sizeTo(document.body).catch(function () { });
+    var locale = 'en', index = 0, didFinish = false;
+    ['pt','en'].forEach(function(lang){
+      var webStep=slides[lang].pop();slides[lang].splice(1,0,webStep);
+      slides[lang][2].title=lang==='pt'?'3. Regista contactos e consulta o histórico':'3. Log contacts and review history';
+      slides[lang][3].title=lang==='pt'?'4. Personaliza WhatsApp e email':'4. Customize WhatsApp and email';
+      slides[lang][4].title=lang==='pt'?'5. Acompanha as tuas leads e a equipa':'5. Track leads and team activity';
+      slides[lang][0].gallery=[
+        {image:'/trello/onboarding/board-micro-dashboard.png',alt:lang==='pt'?'Quadro Trello com o botão Leads KPIs Master | Open Micro Dashboard no topo.':'Trello board with the Leads KPIs Master | Open Micro Dashboard button at the top.',caption:lang==='pt'?'1 de 3 · No topo do quadro, clica em Leads KPIs Master · Open Micro Dashboard.':'1 of 3 · At the top of the board, click Leads KPIs Master · Open Micro Dashboard.',focus:'focus-board-button',label:lang==='pt'?'1 · Abrir painel':'1 · Open panel',zoom:{x:'80%',y:'0%',label:'Leads KPIs Master · Open Micro Dashboard'}},
+        {image:'/trello/onboarding/dashboard.png',alt:lang==='pt'?'Painel KPI Master aberto, com o botão Settings no topo.':'KPI Master panel open, with the Settings button at the top.',caption:lang==='pt'?'2 de 3 · No painel que abriu, clica na roda dentada Settings.':'2 of 3 · In the panel that opened, click the Settings gear.',focus:'focus-dashboard-settings',label:lang==='pt'?'2 · Abrir Settings':'2 · Open Settings',zoom:{x:'88%',y:'6%',label:'Settings ⚙'}},
+        {image:'/trello/onboarding/settings.png',alt:lang==='pt'?'Definições Plug & Play com opções de ações rápidas, histórico e idade dos cartões.':'Plug & Play settings for quick actions, contact history and card age.',caption:lang==='pt'?'3 de 3 · Liga ou desliga as funcionalidades e guarda em Done.':'3 of 3 · Turn features on or off, then save with Done.',focus:'focus-settings-options',label:lang==='pt'?'3 · Configurar opções':'3 · Choose features',zoom:{x:'92%',y:'26%',label:lang==='pt'?'Opções Settings':'Settings toggles'}}
+      ];
+      slides[lang][1].gallery=[
+        {image:'/trello/onboarding/board-micro-dashboard.png',alt:lang==='pt'?'Cabeçalho do quadro Trello com o botão Leads KPIs Master | Open Micro Dashboard.':'Trello board header with the Leads KPIs Master | Open Micro Dashboard button.',caption:lang==='pt'?'Caminho 1 · No quadro, abre Leads KPIs Master e clica em Open Micro Dashboard.':'Path 1 · On the board, open Leads KPIs Master and click Open Micro Dashboard.',focus:'focus-board-button',label:lang==='pt'?'1 · Open Micro Dashboard':'1 · Open Micro Dashboard'},
+        {image:'/trello/MiniDashboardTrello.png',alt:lang==='pt'?'Micro Dashboard com o botão Open Web Dashboard na parte inferior.':'Micro Dashboard with the Open Web Dashboard button at the bottom.',caption:lang==='pt'?'Continua o caminho 1 · No Micro Dashboard, clica em Open Web Dashboard.':'Continue path 1 · In the Micro Dashboard, click Open Web Dashboard.',focus:'focus-micro-web-button',label:lang==='pt'?'2 · Open Web Dashboard':'2 · Open Web Dashboard'},
+        {image:'/trello/onboarding/card-actions.png',alt:lang==='pt'?'Verso do cartão com o botão Ver mais dados na Dashboard Web.':'Card back with the View more data on Web Dashboard button.',caption:lang==='pt'?'Caminho 2 · No verso de um cartão, clica em Ver mais dados na Dashboard Web.':'Path 2 · On a card back, click View more data on Web Dashboard.',focus:'focus-card-web-button',label:lang==='pt'?'3 · Pelo verso do cartão':'3 · From the card back'},
+        {image:'/trello/Dashboard.png',alt:lang==='pt'?'Dashboard web completa com pipeline, zonas de foco, tempos por lista e controlos de importação e exportação.':'Full web dashboard with pipeline, focus zones, time per list, and import and export controls.',caption:lang==='pt'?'A dashboard web tem mais funcionalidades e uma perspetiva diferente dos teus dados.':'The web dashboard adds more features and a different view of your data.',focus:'focus-web-dashboard',label:lang==='pt'?'4 · Explora a dashboard':'4 · Explore the dashboard'}
+      ];
+      slides[lang][2].gallery=[
+        {image:'/trello/onboarding/card-actions.png',alt:lang==='pt'?'Verso de um cartão com ações rápidas de chamada e email.':'Card back with quick call and email actions.',caption:lang==='pt'?'1 de 3 · Regista uma chamada com +1 Call ou um email com +1 Email.':'1 of 3 · Log a call with +1 Call or an email with +1 Email.',focus:'focus-card',label:lang==='pt'?'1 · Regista contacto':'1 · Log contact'},
+        {image:'/trello/onboarding/card-actions.png',alt:lang==='pt'?'Botão History no verso do cartão, usado para abrir Contact History.':'History button on the card back, used to open Contact History.',caption:lang==='pt'?'2 de 3 · Depois de registares o contacto, clica em History no cartão para abrir Contact History.':'2 of 3 · After logging the contact, click History on the card to open Contact History.',focus:'focus-card-history-button',label:lang==='pt'?'2 · Clica em History':'2 · Click History'},
+        {image:'/trello/onboarding/history.png',alt:lang==='pt'?'Popup Contact History com chamadas e emails por ordem cronológica.':'Contact History popup with calls and emails in chronological order.',caption:lang==='pt'?'3 de 3 · Consulta as chamadas, emails, resultados e datas no Contact History.':'3 of 3 · Review calls, emails, outcomes and dates in Contact History.',focus:'focus-history',label:lang==='pt'?'3 · Consulta Contact History':'3 · Review Contact History'}
+      ];
+      slides[lang][3].gallery=[
+        {image:'/trello/onboarding/template-settings.png',alt:lang==='pt'?'Gestão de modelos WhatsApp e email.':'WhatsApp and email template manager.',caption:lang==='pt'?'Alterna entre WhatsApp e Email e edita os modelos.':'Switch between WhatsApp and Email and edit templates.',focus:'focus-templates',label:lang==='pt'?'1 · Editar modelos':'1 · Edit templates'},
+        {image:'/trello/onboarding/whatsapp-template.png',alt:lang==='pt'?'Popup para escolher um modelo WhatsApp ou continuar sem modelo.':'Popup to select a WhatsApp template or continue without one.',caption:lang==='pt'?'Ao enviar, escolhe um modelo ou segue sem modelo.':'When sending, choose a template or continue without one.',focus:'focus-templates',label:lang==='pt'?'2 · Escolher modelo':'2 · Select a template'}
+      ];
+    });
+    var $ = function(id){ return document.getElementById(id); };
+    function renderRoute(items){ $('slide-route').replaceChildren(); items.forEach(function(item,i){ var el=document.createElement('span');el.textContent=item;$('slide-route').appendChild(el);if(i<items.length-1){var arrow=document.createElement('b');arrow.textContent='›';$('slide-route').appendChild(arrow);} }); }
+    function render(){
+      var list=slides[locale], data=list[index];
+      $('step-number').textContent=String(index+1).padStart(2,'0'); $('step-counter').textContent=(index+1)+' / '+list.length;
+      $('step-kicker').textContent=data.kicker; $('slide-title').textContent=data.title; $('slide-desc').textContent=data.desc; $('slide-tip').textContent=data.tip;
+      var gallery=data.gallery||[data];
+      function selectVisual(item){$('slide-image').src=item.image;$('slide-image').alt=item.alt;$('slide-caption').textContent=item.caption;$('zoom-image').src=item.image;$('zoom-image').alt=item.alt;$('focus-ring').className='focus-ring '+item.focus;$('redactions').replaceChildren();if(item.image==='/trello/onboarding/dashboard.png'){['redact-fast','redact-slow','redact-rank','redact-member'].forEach(function(c){var m=document.createElement('span');m.className='redaction '+c;$('redactions').appendChild(m);});}var zoom=$('zoom-callout');zoom.hidden=!item.zoom;if(item.zoom){zoom.style.backgroundImage='url("'+item.image+'")';zoom.style.setProperty('--zoom-x',item.zoom.x);zoom.style.setProperty('--zoom-y',item.zoom.y);zoom.querySelector('span').textContent=item.zoom.label;}}
+      selectVisual(gallery[0]);
+      var galleryEl=$('gallery');galleryEl.replaceChildren();galleryEl.hidden=gallery.length<2;
+      if(gallery.length>1){gallery.forEach(function(item,i){var b=document.createElement('button');b.type='button';b.textContent=item.label||((locale==='pt'?'Imagem ':'Image ')+(i+1));b.className=i===0?'active':'';b.addEventListener('click',function(e){e.stopPropagation();galleryEl.querySelectorAll('button').forEach(function(x){x.classList.remove('active');});b.classList.add('active');selectVisual(item);});galleryEl.appendChild(b);});}
+      renderRoute(data.route); $('progress-bar').style.width=((index+1)/list.length*100)+'%';
+      $('btn-prev').disabled=index===0; $('btn-prev').style.opacity=index===0?'.45':'1'; $('btn-next').hidden=index===list.length-1; $('btn-finish').hidden=index!==list.length-1;
+      $('btn-lang').textContent=locale==='pt'?'🇵🇹 PT':'🇬🇧 EN';
+      $('intro-eyebrow').textContent=locale==='pt'?'Guia rápido · 5 passos':'Quick guide · 5 steps'; $('welcome-title').textContent=locale==='pt'?'Começa a usar o KPI Master':'Get started with KPI Master'; $('welcome-subtitle').textContent=locale==='pt'?'Vê onde configurar, registar contactos e acompanhar as tuas leads no Trello.':'Learn where to configure the app, log contacts and follow your leads in Trello.';
+      $('zoom-hint').textContent=locale==='pt'?'Clica para ampliar':'Click to zoom'; $('btn-skip').textContent=locale==='pt'?'Saltar guia':'Skip guide'; $('btn-prev').textContent=locale==='pt'?'← Anterior':'← Back'; $('btn-next').textContent=locale==='pt'?'Seguinte →':'Next →'; $('btn-finish').textContent=locale==='pt'?'Concluir guia ✓':'Finish guide ✓';
+      document.documentElement.lang=locale;
+      var dots=$('step-dots');dots.replaceChildren();list.forEach(function(_,i){var b=document.createElement('button');b.type='button';b.className='dot'+(i===index?' active':'');b.setAttribute('aria-label',(locale==='pt'?'Passo ':'Step ')+(i+1));b.setAttribute('aria-current',i===index?'step':'false');b.addEventListener('click',function(){go(i);});dots.appendChild(b);});
+      if(t&&t.sizeTo)t.sizeTo(document.body).catch(function(){});
+    }
+    var startTime = Date.now();
+    function getTimeSpentSec() {
+      return Math.max(0, Math.round((Date.now() - startTime) / 1000));
     }
 
-    // Inicializar idioma padrão
-    applyLanguage(currentLang);
+    function go(next) {
+      index = Math.max(0, Math.min(slides[locale].length - 1, next));
+      render();
+      trackEvent('welcome_step_viewed', { step: index + 1, total_steps: slides[locale].length });
+    }
 
-    // Carregar idioma guardado do utilizador
-    t.get('member', 'private', 'kpi_user_lang').then(function (savedLang) {
-      if (savedLang === 'pt' || savedLang === 'en') {
-        applyLanguage(savedLang);
+    function finish(eventName, extraProps) {
+      if (didFinish) return;
+      didFinish = true;
+      var totalSteps = slides[locale].length;
+      var props = Object.assign({
+        total_steps: totalSteps,
+        time_spent_seconds: getTimeSpentSec(),
+        language: locale
+      }, extraProps || {});
+
+      trackEvent(eventName, props);
+      t.set('member', 'private', 'kpi_welcome_seen', Date.now()).catch(function () {});
+
+      // Pequena pausa (100ms) para garantir envio fiável do evento ao PostHog antes do fecho do iframe
+      setTimeout(function () {
+        t.closeModal();
+      }, 100);
+    }
+
+    trackEvent('welcome_guide_opened', { total_steps: slides[locale].length, language: locale });
+    var now = Date.now();
+    t.set('member', 'private', 'kpi_welcome_seen', now).catch(function () {});
+    t.set('member', 'private', 'kpi_first_seen_time', now).catch(function () {});
+    t.get('member', 'private', 'kpi_user_lang').then(function (saved) {
+      if (saved === 'pt' || saved === 'en') {
+        locale = saved;
+        render();
       }
-    }).catch(function () { });
+    }).catch(function () {});
 
-    // Alternar idioma
-    var btnLangToggle = document.getElementById('btn-lang-toggle');
-    if (btnLangToggle) {
-      btnLangToggle.addEventListener('click', function (e) {
-        e.preventDefault();
-        var nextLang = (currentLang === 'pt') ? 'en' : 'pt';
-        applyLanguage(nextLang);
-        t.set('member', 'private', 'kpi_user_lang', nextLang).catch(function () { });
-      });
-    }
+    $('btn-lang').addEventListener('click', function () {
+      locale = locale === 'pt' ? 'en' : 'pt';
+      index = 0;
+      render();
+      t.set('member', 'private', 'kpi_user_lang', locale).catch(function () {});
+    });
 
-    document.getElementById('btn-site').addEventListener('click', function () {
-      trackEvent('welcome_open_web_clicked', {
-        action: 'open_web_platform',
-        description: 'Utilizador clicou em Abrir Plataforma Web no modal de boas-vindas'
-      });
-      t.set('member', 'private', 'kpi_welcome_seen', true).then(function () {
-        window.open(SITE, '_blank');
-      }).catch(function () {
-        window.open(SITE, '_blank');
+    $('btn-prev').addEventListener('click', function () { go(index - 1); });
+    $('btn-next').addEventListener('click', function () { go(index + 1); });
+
+    $('btn-skip').addEventListener('click', function () {
+      finish('welcome_guide_skipped', {
+        skipped_at_step: index + 1,
+        completed: false
       });
     });
 
-    document.getElementById('btn-close').addEventListener('click', function () {
-      trackEvent('welcome_dismissed', {
-        action: 'view_in_trello',
-        description: 'Utilizador fechou as boas-vindas para continuar no Trello'
-      });
-      t.set('member', 'private', 'kpi_welcome_seen', true).then(function () {
-        t.closeModal();
-      }).catch(function () {
-        t.closeModal();
+    $('btn-finish').addEventListener('click', function () {
+      finish('welcome_guide_completed', {
+        completed: true
       });
     });
+
+    $('btn-web').addEventListener('click', function () {
+      trackEvent('welcome_open_web_clicked', { step: index + 1 });
+      t.set('member', 'private', 'kpi_welcome_seen', Date.now()).catch(function () {});
+      window.open(SITE, '_blank', 'noopener');
+    });
+    function openZoom(){ $('zoom-modal').classList.add('open'); $('zoom-close').focus(); } function closeZoom(){ $('zoom-modal').classList.remove('open'); $('visual').focus(); }
+    $('visual').addEventListener('click',function(e){if(e.target.closest('.gallery'))return;openZoom();});$('visual').addEventListener('keydown',function(e){if(e.target===$('visual')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openZoom();}});$('zoom-close').addEventListener('click',closeZoom);$('zoom-modal').addEventListener('click',function(e){if(e.target===$('zoom-modal'))closeZoom();});
+    document.addEventListener('keydown',function(e){if($('zoom-modal').classList.contains('open')){if(e.key==='Escape')closeZoom();return;}if(e.key==='ArrowRight')go(index+1);if(e.key==='ArrowLeft')go(index-1);});
+    render();trackEvent('welcome_step_viewed',{step:1});
   </script>
 </body>
-
 </html>

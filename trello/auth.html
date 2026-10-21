@@ -30,11 +30,17 @@
   </div>
 
   <script type="module">
+    import { Analytics } from '../js/analytics.js';
+    Analytics.init();
+
     // ⚠️ appKey e appName são OBRIGATÓRIOS em todos os iframes
     var t = TrelloPowerUp.iframe({
       appKey: import.meta.env.VITE_TRELLO_API_KEY,
       appName: 'KPI Master'
     });
+
+    var urlParams = new URLSearchParams(window.location.search);
+    var authSource = urlParams.get('source') || 'popup';
 
     var locale = t.locale || 'en';
     var isPt = locale.startsWith('pt');
@@ -74,12 +80,34 @@
       btn.disabled = true;
       btn.textContent = tDict.btnAuthLoading;
 
+      Analytics.track('trello_auth_started', {
+        source: authSource
+      });
+
       t.getRestApi().authorize({
         scope: 'read,write',
         expiration: 'never'
       }).then(function () {
+        Analytics.track('trello_auth_completed', {
+          success: true,
+          source: authSource
+        });
         t.closeModal();
       }).catch(function (err) {
+        var reason = 'unknown';
+        if (typeof err === 'string') {
+          reason = err;
+        } else if (err && err.message) {
+          reason = err.message;
+        } else if (err && err.error) {
+          reason = err.error;
+        }
+
+        Analytics.track('trello_auth_failed', {
+          error_reason: reason,
+          source: authSource
+        });
+
         btn.disabled = false;
         btn.textContent = tDict.btnAuth;
         document.getElementById('auth-error').style.display = 'block';

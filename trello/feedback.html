@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Feedback — KPI Master</title>
+  <title>Your Feedback Matters — KPI Master</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
   <style>
     :root {
-      --bg-color: #0b0f19;
-      --card-bg: #131b2e;
+      --bg-color: #090d16;
+      --card-bg: linear-gradient(180deg, rgba(18, 26, 43, 0.72) 0%, rgba(13, 19, 32, 0.88) 100%);
       --card-border: rgba(255, 255, 255, 0.08);
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
       --accent-blue: #3b82f6;
       --accent-purple: #8b5cf6;
       --star-active: #fbbf24;
@@ -21,90 +26,148 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    html,
+    body {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    html::-webkit-scrollbar-track,
+    body::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    html::-webkit-scrollbar-thumb,
+    body::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 9999px;
+    }
+
+    html::-webkit-scrollbar-thumb:hover,
+    body::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.28);
     }
 
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
-      padding: 20px 18px;
+      padding: 16px 20px 22px 20px;
       line-height: 1.5;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
     .container {
-      max-width: 520px;
+      max-width: 500px;
       margin: 0 auto;
+    }
+
+    /* Barra do Topo Estilo KPI Master */
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 18px;
     }
 
     .header-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
+      position: relative;
+      padding: 2px 0;
+      min-height: 36px;
+    }
+
+    .header-actions-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 2;
+    }
+
+    .brand-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .brand-center img {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    }
+
+    .brand-center h1 {
+      font-size: 16px;
+      font-weight: 800;
+      margin: 0;
+      color: #ffffff;
+      letter-spacing: -0.025em;
+    }
+
+    .header-actions-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 2;
     }
 
     .badge-feedback {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 5px 12px;
+      padding: 4px 10px;
       border-radius: 9999px;
-      background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(59, 130, 246, 0.15));
+      background: rgba(251, 191, 36, 0.12);
       border: 1px solid rgba(251, 191, 36, 0.3);
       color: #fbbf24;
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
     }
 
     .translate-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
-      border-radius: 10px;
+      gap: 5px;
+      padding: 4px 11px;
+      border-radius: 9999px;
       background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--card-border);
-      color: #60a5fa;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s ease;
+      font-family: inherit;
     }
 
-    .btn-close-feedback {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--card-border);
-      color: #ffffff !important;
-      font-size: 16px;
-      font-weight: 700;
-      width: 32px;
-      height: 32px;
-      border-radius: 9px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      line-height: 1;
+    .translate-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.2);
     }
 
-    .btn-close-feedback:hover {
-      background: rgba(239, 68, 68, 0.2);
-      border-color: rgba(239, 68, 68, 0.4);
-      color: #ffffff !important;
-      transform: scale(1.08);
-    }
-
-    .header-top-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .header {
+    .hero-intro {
       text-align: center;
       margin-bottom: 20px;
     }
@@ -114,14 +177,15 @@
       font-weight: 800;
       color: #ffffff !important;
       margin-bottom: 6px;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.015em;
     }
 
     p.subtitle {
-      font-size: 13px;
+      font-size: 12.5px;
       color: var(--text-muted);
       max-width: 440px;
       margin: 0 auto;
+      line-height: 1.45;
     }
 
     /* Progress Bar */
@@ -134,13 +198,13 @@
       justify-content: space-between;
       font-size: 11px;
       font-weight: 700;
-      color: var(--text-muted);
+      color: #64748b;
       margin-bottom: 6px;
     }
 
     .progress-track {
       width: 100%;
-      height: 6px;
+      height: 5px;
       background: rgba(255, 255, 255, 0.08);
       border-radius: 999px;
       overflow: hidden;
@@ -150,15 +214,16 @@
     .progress-fill {
       height: 100%;
       width: 25%;
-      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      background: linear-gradient(90deg, #2563eb, #3b82f6);
       border-radius: 999px;
-      transition: width 0.3s ease;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     /* Steps Layout */
     .step-content {
       display: none;
-      animation: fadeIn 0.25s ease;
+      animation: fadeIn 0.2s ease;
     }
 
     .step-content.active {
@@ -166,12 +231,19 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     h2.step-title {
-      font-size: 16px;
+      font-size: 14.5px;
       font-weight: 700;
       margin-bottom: 4px;
       color: #ffffff;
@@ -181,7 +253,8 @@
     p.step-desc {
       font-size: 12px;
       color: var(--text-muted);
-      margin-bottom: 18px;
+      margin-bottom: 16px;
+      line-height: 1.4;
     }
 
     /* Star Rating */
@@ -189,25 +262,34 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 14px;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
+      border-radius: 14px;
       padding: 22px 20px;
       margin-bottom: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     }
 
     .star {
-      font-size: 34px;
-      color: #4b5563;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.16);
       cursor: pointer;
-      transition: transform 0.15s ease, color 0.15s ease;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       user-select: none;
     }
 
-    .star:hover, .star.active {
+    .star:hover {
+      color: #fcd34d;
+      transform: scale(1.18);
+    }
+
+    .star.active {
       color: var(--star-active);
-      transform: scale(1.2);
+      filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
+      transform: scale(1.15);
     }
 
     .rating-label {
@@ -216,21 +298,22 @@
       font-weight: 700;
       color: #fbbf24;
       margin-bottom: 20px;
+      min-height: 20px;
     }
 
     /* Choice Options (Pills/Cards) */
     .options-grid {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 9px;
       margin-bottom: 20px;
     }
 
     .option-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 13px 16px;
+      border-radius: 12px;
+      padding: 12px 14px;
       font-size: 13px;
       font-weight: 600;
       color: var(--text-main);
@@ -238,38 +321,63 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      transition: all 0.2s ease;
+      gap: 12px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       user-select: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     }
 
     .option-card:hover {
-      border-color: rgba(59, 130, 246, 0.4);
-      background: rgba(59, 130, 246, 0.08);
-      transform: translateX(3px);
+      background: linear-gradient(180deg, rgba(24, 34, 56, 0.85) 0%, rgba(16, 24, 40, 0.95) 100%);
+      border-color: rgba(59, 130, 246, 0.35);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 10px rgba(59, 130, 246, 0.1);
     }
 
     .option-card.selected {
-      border-color: #3b82f6;
-      background: rgba(59, 130, 246, 0.18);
+      border-color: rgba(59, 130, 246, 0.65);
+      background: linear-gradient(180deg, rgba(30, 48, 80, 0.85) 0%, rgba(18, 30, 52, 0.95) 100%);
       color: #ffffff;
-      box-shadow: 0 0 0 1px #3b82f6;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 14px rgba(37, 99, 235, 0.3);
+    }
+
+    .option-left {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .option-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .option-radio {
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      border: 2px solid var(--text-muted);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.2s ease;
       flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.03);
     }
 
     .option-card.selected .option-radio {
       border-color: #3b82f6;
-      background: #3b82f6;
+      background: #2563eb;
+      box-shadow: 0 0 8px rgba(37, 99, 235, 0.6);
     }
 
     .option-radio::after {
@@ -279,6 +387,7 @@
       background: white;
       border-radius: 50%;
       opacity: 0;
+      transition: opacity 0.15s ease;
     }
 
     .option-card.selected .option-radio::after {
@@ -286,26 +395,47 @@
     }
 
     /* Inputs */
-    input[type="text"], textarea {
+    input[type="text"],
+    textarea {
       width: 100%;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+      background: rgba(18, 26, 43, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
-      padding: 11px 14px;
+      padding: 12px 14px;
       color: var(--text-main);
-      font-size: 12px;
+      font-family: inherit;
+      font-size: 13px;
       outline: none;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      box-sizing: border-box;
     }
 
-    input[type="text"]:focus, textarea:focus {
-      border-color: var(--accent-blue);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: rgba(59, 130, 246, 0.55);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+      background: rgba(22, 33, 54, 0.85);
     }
 
     textarea {
       resize: vertical;
-      min-height: 90px;
+      min-height: 100px;
+      line-height: 1.45;
+    }
+
+    .char-count-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 600;
+      padding: 0 4px;
+    }
+
+    .char-count-bar.valid {
+      color: #10b981;
     }
 
     .other-input-container {
@@ -323,32 +453,44 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      margin-top: 24px;
+      margin-top: 22px;
       padding-top: 14px;
       border-top: 1px solid var(--card-border);
     }
 
-    .btn-next, .btn-submit {
-      padding: 11px 22px;
-      border-radius: 12px;
-      border: none;
-      background: linear-gradient(135deg, #2563eb, #4f46e5);
+    .btn-next,
+    .btn-submit {
+      padding: 9px 20px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
       color: #ffffff;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
-      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+      transition: all 0.18s ease;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .btn-next:hover, .btn-submit:hover {
+    .btn-next:hover,
+    .btn-submit:hover {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
+    }
+
+    .btn-next:active,
+    .btn-submit:active {
+      transform: scale(0.98);
     }
 
     .validation-error {
       color: #f87171;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       margin-top: 8px;
       display: none;
@@ -360,40 +502,44 @@
       display: block;
     }
 
-    textarea.input-error, input.input-error {
+    textarea.input-error,
+    input.input-error {
       border-color: #ef4444 !important;
       box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25) !important;
     }
 
     .btn-back {
-      padding: 10px 16px;
-      border-radius: 12px;
+      padding: 9px 16px;
+      border-radius: 8px;
       border: 1px solid var(--card-border);
       background: rgba(255, 255, 255, 0.05);
       color: var(--text-muted);
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.18s ease;
+      font-family: inherit;
     }
 
     .btn-back:hover {
       background: rgba(255, 255, 255, 0.1);
       color: var(--text-main);
+      border-color: rgba(255, 255, 255, 0.2);
     }
 
     .btn-skip {
       background: none;
       border: none;
-      color: var(--text-muted);
+      color: #64748b;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      text-decoration: underline;
+      transition: color 0.15s ease;
+      font-family: inherit;
     }
 
     .btn-skip:hover {
-      color: var(--text-main);
+      color: #cbd5e1;
     }
 
     /* Success Screen */
@@ -404,36 +550,58 @@
     }
 
     .success-icon {
-      width: 60px;
-      height: 60px;
-      background: rgba(34, 197, 94, 0.15);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-      color: #4ade80;
-      border-radius: 20px;
+      width: 54px;
+      height: 54px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0 auto 16px;
-      font-size: 28px;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
     }
   </style>
 </head>
+
 <body>
 
   <div class="container">
     <div id="wizard-screen">
-      <div class="header-top">
-        <div class="badge-feedback" id="badge-text">⚡ 30-Second Feedback</div>
-        <div class="header-top-actions">
-          <button id="btn-translate" class="translate-btn">
-            <span>🇵🇹 Traduzir para Português</span>
-          </button>
-          <button id="btn-close-modal-top" class="btn-close-feedback" title="Fechar / Close">✕</button>
+      <!-- Barra do Topo Estilo KPI Master -->
+      <div class="header">
+        <div class="header-top">
+          <div class="header-actions-left">
+            <div class="badge-feedback">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              <span id="badge-text">30-Second Feedback</span>
+            </div>
+          </div>
+          <div class="brand-center">
+            <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
+            <h1>KPI Master</h1>
+          </div>
+          <div class="header-actions-right">
+            <button id="btn-translate" class="translate-btn" type="button" title="Switch Language / Alternar Idioma">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                </path>
+              </svg>
+              <span id="txt-translate">Português</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <div class="header">
-        <h1 class="main-title" id="title">Help Us Improve KPI Master</h1>
+      <div class="hero-intro">
+        <h1 class="main-title" id="title">Help Us Improve our App</h1>
         <p class="subtitle" id="subtitle">Share your experience in 30 seconds to help us build a better tool.</p>
       </div>
 
@@ -454,11 +622,36 @@
         <p class="step-desc" id="s1-desc">Select a rating from 1 to 5 stars.</p>
 
         <div class="stars-container">
-          <span class="star" data-rating="1">★</span>
-          <span class="star" data-rating="2">★</span>
-          <span class="star" data-rating="3">★</span>
-          <span class="star" data-rating="4">★</span>
-          <span class="star" data-rating="5">★</span>
+          <div class="star" data-rating="1" title="1 star">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+          </div>
+          <div class="star" data-rating="2" title="2 stars">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+          </div>
+          <div class="star" data-rating="3" title="3 stars">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+          </div>
+          <div class="star" data-rating="4" title="4 stars">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+          </div>
+          <div class="star" data-rating="5" title="5 stars">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+          </div>
         </div>
         <div class="rating-label" id="rating-label"></div>
         <div class="validation-error" id="s1-error"></div>
@@ -476,19 +669,65 @@
 
         <div class="options-grid">
           <div class="option-card" data-step="2" data-value="sales_leads">
-            <span id="s2-opt1">💼 Sales & Lead Management</span>
+            <div class="option-left">
+              <div class="option-icon"
+                style="color: #38bdf8; background: rgba(56, 189, 248, 0.12); border-color: rgba(56, 189, 248, 0.25);">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <span id="s2-opt1">Sales & Lead Management</span>
+            </div>
             <div class="option-radio"></div>
           </div>
+
           <div class="option-card" data-step="2" data-value="marketing_outreach">
-            <span id="s2-opt2">📣 Marketing & Outreach</span>
+            <div class="option-left">
+              <div class="option-icon"
+                style="color: #f59e0b; background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.25);">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 2L11 13"></path>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </div>
+              <span id="s2-opt2">Marketing & Outreach</span>
+            </div>
             <div class="option-radio"></div>
           </div>
+
           <div class="option-card" data-step="2" data-value="team_project">
-            <span id="s2-opt3">🚀 Projects & Team Operations</span>
+            <div class="option-left">
+              <div class="option-icon"
+                style="color: #34d399; background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.25);">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                  <polyline points="2 17 12 22 22 17"></polyline>
+                  <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+              </div>
+              <span id="s2-opt3">Projects & Team Operations</span>
+            </div>
             <div class="option-radio"></div>
           </div>
+
           <div class="option-card" data-step="2" data-value="other">
-            <span id="s2-opt4">✍️ Other...</span>
+            <div class="option-left">
+              <div class="option-icon"
+                style="color: #94a3b8; background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.08);">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 20h9"></path>
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+              </div>
+              <span id="s2-opt4">Other...</span>
+            </div>
             <div class="option-radio"></div>
           </div>
         </div>
@@ -511,19 +750,64 @@
 
         <div class="options-grid">
           <div class="option-card" data-step="3" data-value="essential">
-            <span id="s3-opt1">🔥 Essential & Extremely Useful!</span>
+            <div class="option-left">
+              <div class="option-icon"
+                style="color: #f59e0b; background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.25);">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+              </div>
+              <span id="s3-opt1">Essential & Extremely Useful</span>
+            </div>
             <div class="option-radio"></div>
           </div>
+
           <div class="option-card" data-step="3" data-value="useful_improve">
-            <span id="s3-opt2">📊 Useful, but could be improved</span>
+            <div class="option-left">
+              <div class="option-icon"
+                style="color: #60a5fa; background: rgba(59, 130, 246, 0.12); border-color: rgba(59, 130, 246, 0.25);">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+              </div>
+              <span id="s3-opt2">Useful, but could be improved</span>
+            </div>
             <div class="option-radio"></div>
           </div>
+
           <div class="option-card" data-step="3" data-value="not_explored">
-            <span id="s3-opt3">💡 Haven't explored it enough yet</span>
+            <div class="option-left">
+              <div class="option-icon"
+                style="color: #38bdf8; background: rgba(56, 189, 248, 0.12); border-color: rgba(56, 189, 248, 0.25);">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                </svg>
+              </div>
+              <span id="s3-opt3">Haven't explored it enough yet</span>
+            </div>
             <div class="option-radio"></div>
           </div>
+
           <div class="option-card" data-step="3" data-value="needs_features">
-            <span id="s3-opt4">⚠️ Needs more features for my team</span>
+            <div class="option-left">
+              <div class="option-icon"
+                style="color: #a78bfa; background: rgba(139, 92, 246, 0.12); border-color: rgba(139, 92, 246, 0.25);">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="14" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+              </div>
+              <span id="s3-opt4">Needs more features for my team</span>
+            </div>
             <div class="option-radio"></div>
           </div>
         </div>
@@ -538,24 +822,45 @@
       <!-- STEP 4: Open Suggestions -->
       <div id="step-4" class="step-content">
         <h2 class="step-title" id="s4-title">Any suggestions or improvements for us?</h2>
-        <p class="step-desc" id="s4-desc">🔒 Feedback is 100% anonymous. If you need support assistance, please include your email address below!</p>
+        <div
+          style="display: flex; align-items: flex-start; gap: 7px; margin-bottom: 14px; color: var(--text-muted); font-size: 11.5px; line-height: 1.45;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span id="s4-desc">Feedback is 100% anonymous. If you need support assistance, please include your email
+            address below!</span>
+        </div>
 
         <textarea id="s4-textarea" placeholder="Type your suggestions or feedback here..."></textarea>
+        <div class="char-count-bar" id="char-count-bar">
+          <span id="char-quality-hint">Min. 15 characters</span>
+          <span id="char-counter"><span id="char-count">0</span> / 15</span>
+        </div>
         <div class="validation-error" id="s4-error"></div>
 
         <div class="actions-footer">
           <button type="button" onclick="goToStep(3)" class="btn-back" id="s4-back-btn">← Back</button>
-          <button type="button" id="btn-submit" class="btn-submit">Submit Feedback 🚀</button>
+          <button type="button" id="btn-submit" class="btn-submit">Submit Feedback</button>
         </div>
       </div>
     </div>
 
     <!-- Success Screen -->
     <div id="success-screen" class="success-screen">
-      <div class="success-icon">✓</div>
-      <h2 id="success-title" style="font-size: 20px; font-weight: 800; margin-bottom: 6px;">Thank you for your feedback! 🚀</h2>
-      <p id="success-subtitle" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Your insights directly guide our product roadmap.</p>
-      <button type="button" id="btn-done" class="btn-submit" style="width: auto; padding: 10px 24px;">Back to Trello</button>
+      <div class="success-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h2 id="success-title" style="font-size: 19px; font-weight: 800; margin-bottom: 6px; color: #ffffff;">Thank you
+        for your feedback!</h2>
+      <p id="success-subtitle" style="font-size: 13px; color: var(--text-muted); margin-bottom: 22px;">Your insights
+        directly guide our product roadmap.</p>
+      <button type="button" id="btn-done" class="btn-submit" style="width: auto; padding: 9px 24px;">Back to
+        Trello</button>
     </div>
   </div>
 
@@ -571,25 +876,50 @@
     var WEBHOOK_URL = 'https://hook.eu1.make.com/sgwuxniy3qk287j0tb5pubixi8fh8f7s';
     var t = TrelloPowerUp.iframe();
 
+    // Garantir que a barra nativa do Trello aplica accentColor #090d16 (forçando título e botão 'X' a branco #ffffff)
+    if (typeof t.updateModal === 'function') {
+      t.updateModal({
+        accentColor: '#090d16'
+      }).catch(function () { });
+    }
+
+    try {
+      if (window.parent && window.parent !== window) {
+        var pDoc = window.parent.document;
+        var modalHeader = pDoc.querySelector('.window-header, .mod-trello-modal-header, .dialog-header');
+        if (modalHeader) modalHeader.style.backgroundColor = '#090d16';
+        var titleEls = pDoc.querySelectorAll('.window-header-title, .mod-trello-modal-header .window-header-title, .dialog-header-title');
+        titleEls.forEach(function(el) { el.style.color = '#ffffff'; });
+        var closeBtns = pDoc.querySelectorAll('.dialog-close-button, .pop-over-header-close-btn, [data-testid="popover-close-btn"]');
+        closeBtns.forEach(function(btn) {
+          btn.style.color = '#ffffff';
+          var svg = btn.querySelector('svg');
+          if (svg) svg.style.color = '#ffffff';
+        });
+      }
+    } catch (e) { }
+
     var currentStep = 1;
     var currentRating = null;
     var selectedUseCase = null;
     var selectedDashboardOpinion = null;
     var currentLang = 'en'; // DEFAULT IS 100% ENGLISH!
+    var wizardStartTime = Date.now();
 
     var dictionary = {
       en: {
-        badge: "⚡ 30-Second Feedback",
-        translateBtn: "🇵🇹 Traduzir para Português",
-        title: "Help Us Improve KPI Master",
+        modalTitle: "Your Feedback Matters",
+        badge: "30-Second Feedback",
+        translateBtn: "Português",
+        title: "Help Us Improve our App",
         subtitle: "Share your experience in 30 seconds to help us build a better tool.",
         stepFormat: "Step {step} of 4",
         btnSkip: "Not now",
         btnNext: "Next →",
         btnBack: "← Back",
-        btnSubmit: "Submit Feedback 🚀",
+        btnSubmit: "Submit Feedback",
         btnSubmitting: "Submitting...",
-        successTitle: "Thank you for your feedback! 🚀",
+        successTitle: "Thank you for your feedback!",
         successSubtitle: "Your insights directly guide our product roadmap.",
         btnDone: "Back to Trello",
 
@@ -600,39 +930,44 @@
 
         s2Title: "What do you primarily use KPI Master for?",
         s2Desc: "Select the area that best matches your daily work.",
-        s2Opt1: "💼 Sales & Lead Management",
-        s2Opt2: "📣 Marketing & Outreach",
-        s2Opt3: "🚀 Projects & Team Operations",
-        s2Opt4: "✍️ Other...",
+        s2Opt1: "Sales & Lead Management",
+        s2Opt2: "Marketing & Outreach",
+        s2Opt3: "Projects & Team Operations",
+        s2Opt4: "Other...",
         phS2Other: "Describe your main use case...",
         errS2: "Please choose one option to proceed.",
         errS2Other: "Please describe your use case.",
 
         s3Title: "What do you think of the Full Dashboard web platform?",
         s3Desc: "Tell us your opinion about our full analytics web dashboard.",
-        s3Opt1: "🔥 Essential & Extremely Useful!",
-        s3Opt2: "📊 Useful, but could be improved",
-        s3Opt3: "💡 Haven't explored it enough yet",
-        s3Opt4: "⚠️ Needs more features for my team",
+        s3Opt1: "Essential & Extremely Useful",
+        s3Opt2: "Useful, but could be improved",
+        s3Opt3: "Haven't explored it enough yet",
+        s3Opt4: "Needs more features for my team",
         errS3: "Please select an option to proceed.",
 
         s4Title: "Any suggestions or improvements for us?",
-        s4Desc: "🔒 Feedback is 100% anonymous. If you need support assistance, please include your email address below!",
+        s4Desc: "Feedback is 100% anonymous. If you need support assistance, please include your email address below!",
         phS4Textarea: "Type your feedback or suggestions here...",
-        errS4: "Please write your feedback before submitting."
+        errS4: "Please write your feedback before submitting.",
+        errS4Length: "Please write at least 15 characters so your feedback is helpful.",
+        errS4Words: "Please share a complete sentence so we can understand your perspective.",
+        errS4Repeated: "Please avoid repeated characters and share genuine feedback.",
+        errS4Spam: "Please share genuine feedback or ideas to help us improve."
       },
       pt: {
-        badge: "⚡ Feedback Rápido (30s)",
-        translateBtn: "🇬🇧 Translate to English",
-        title: "Ajuda-nos a Melhorar o KPI Master",
+        modalTitle: "O Teu Feedback Importa",
+        badge: "Feedback Rápido (30s)",
+        translateBtn: "English",
+        title: "Ajuda-nos a Melhorar a nossa App",
         subtitle: "Partilha a tua experiência em 30s para tornarmos a app ainda melhor.",
         stepFormat: "Passo {step} de 4",
         btnSkip: "Agora não",
         btnNext: "Seguinte →",
         btnBack: "← Voltar",
-        btnSubmit: "Enviar Feedback 🚀",
+        btnSubmit: "Enviar Feedback",
         btnSubmitting: "A enviar...",
-        successTitle: "Obrigado pelo teu feedback! 🚀",
+        successTitle: "Obrigado pelo teu feedback!",
         successSubtitle: "A tua opinião ajuda-nos a evoluir a ferramenta.",
         btnDone: "Voltar ao Trello",
 
@@ -643,26 +978,30 @@
 
         s2Title: "Para o que usas principalmente o KPI Master?",
         s2Desc: "Seleciona a área que melhor descreve o teu trabalho.",
-        s2Opt1: "💼 Vendas & Gestão de Leads",
-        s2Opt2: "📣 Marketing & Prospeção",
-        s2Opt3: "🚀 Projetos & Operações de Equipa",
-        s2Opt4: "✍️ Outro...",
+        s2Opt1: "Vendas & Gestão de Leads",
+        s2Opt2: "Marketing & Prospeção",
+        s2Opt3: "Projetos & Operações de Equipa",
+        s2Opt4: "Outro...",
         phS2Other: "Escreve como utilizas a aplicação...",
         errS2: "Por favor, seleciona uma opção para continuar.",
         errS2Other: "Por favor, descreve a tua forma de utilização.",
 
         s3Title: "O que achas do Painel de KPIs Completo (Full Dashboard)?",
         s3Desc: "Diz-nos a tua opinião sobre a nossa plataforma web de métricas.",
-        s3Opt1: "🔥 Essencial e Muito Útil!",
-        s3Opt2: "📊 Útil, mas pode melhorar",
-        s3Opt3: "💡 Ainda não explorei o suficiente",
-        s3Opt4: "⚠️ Precisa de mais funcionalidades",
+        s3Opt1: "Essencial e Muito Útil",
+        s3Opt2: "Útil, mas pode melhorar",
+        s3Opt3: "Ainda não explorei o suficiente",
+        s3Opt4: "Precisa de mais funcionalidades",
         errS3: "Por favor, seleciona uma opção para continuar.",
 
         s4Title: "Tens alguma sugestão de melhoria?",
-        s4Desc: "🔒 Este feedback é 100% anónimo. Se precisares de ajuda do suporte, inclui o teu email nos comentários abaixo!",
+        s4Desc: "Este feedback é 100% anónimo. Se precisares de ajuda do suporte, inclui o teu email nos comentários abaixo!",
         phS4Textarea: "Escreve o teu feedback ou sugestões aqui...",
-        errS4: "Por favor, escreve algum feedback antes de submeter."
+        errS4: "Por favor, escreve algum feedback antes de submeter.",
+        errS4Length: "Por favor escreve pelo menos 15 caracteres para que a tua sugestão seja útil.",
+        errS4Words: "Por favor partilha uma frase completa para entendermos a tua opinião.",
+        errS4Repeated: "Por favor evita caracteres repetidos e partilha uma opinião real.",
+        errS4Spam: "Por favor partilha uma sugestão ou opinião genuína para nos ajudar a melhorar."
       }
     };
 
@@ -673,9 +1012,11 @@
         errEl.classList.remove('active');
       }
       if (stepNum === 2) {
-        document.getElementById('s2-other-input').classList.remove('input-error');
+        var inp = document.getElementById('s2-other-input');
+        if (inp) inp.classList.remove('input-error');
       } else if (stepNum === 4) {
-        document.getElementById('s4-textarea').classList.remove('input-error');
+        var txt = document.getElementById('s4-textarea');
+        if (txt) txt.classList.remove('input-error');
       }
     }
 
@@ -686,13 +1027,80 @@
         errEl.classList.add('active');
       }
       if (stepNum === 2 && selectedUseCase === 'other') {
-        document.getElementById('s2-other-input').classList.add('input-error');
+        var inp = document.getElementById('s2-other-input');
+        if (inp) inp.classList.add('input-error');
       } else if (stepNum === 4) {
-        document.getElementById('s4-textarea').classList.add('input-error');
+        var txt = document.getElementById('s4-textarea');
+        if (txt) txt.classList.add('input-error');
       }
     }
 
-    window.validateAndGoToStep = function(fromStep, toStep) {
+    // Validação Inteligente Anti-Fake Feedback
+    function validateGenuineFeedback(text) {
+      var trimmed = (text || '').trim();
+      var d = dictionary[currentLang];
+
+      // 1. Mínimo 15 caracteres
+      if (trimmed.length < 15) {
+        return d.errS4Length;
+      }
+
+      // 2. Mínimo 2 palavras separadas
+      var words = trimmed.split(/\s+/).filter(function (w) { return w.length > 0; });
+      if (words.length < 2) {
+        return d.errS4Words;
+      }
+
+      // 3. Detetar caracteres repetidos seguidos (ex: aaaaa, ....., xxxx)
+      if (/(.)\1{3,}/i.test(trimmed)) {
+        return d.errS4Repeated;
+      }
+
+      // 4. Detetar falta de variedade de caracteres (evita spam tipo "asdfasdfasdf")
+      var cleanChars = trimmed.toLowerCase().replace(/[^a-z0-9áàâãéèêíóòôõúç]/g, '');
+      var uniqueCount = 0;
+      var seen = {};
+      for (var i = 0; i < cleanChars.length; i++) {
+        if (!seen[cleanChars[i]]) {
+          seen[cleanChars[i]] = true;
+          uniqueCount++;
+        }
+      }
+      if (uniqueCount < 5) {
+        return d.errS4Spam;
+      }
+
+      // 5. Detetar respostas de teste / placeholder conhecidas
+      var junkPatterns = [
+        /^teste(\s+teste)*$/i,
+        /^test(\s+test)*$/i,
+        /^testing(\s+testing)*$/i,
+        /^asdf(\s+asdf)*$/i,
+        /^qwerty(\s+qwerty)*$/i,
+        /^nada(\s+nada)*$/i,
+        /^nenhum(\s+nenhum)*$/i,
+        /^ok(\s+ok)*$/i,
+        /^bom(\s+bom)*$/i,
+        /^top(\s+top)*$/i,
+        /^sim(\s+sim)*$/i,
+        /^nao(\s+nao)*$/i,
+        /^não(\s+não)*$/i,
+        /^none(\s+none)*$/i,
+        /^nothing(\s+nothing)*$/i,
+        /^nao\s+sei$/i,
+        /^não\s+sei$/i,
+        /^idk$/i
+      ];
+      for (var j = 0; j < junkPatterns.length; j++) {
+        if (junkPatterns[j].test(trimmed)) {
+          return d.errS4Spam;
+        }
+      }
+
+      return null; // Válido!
+    }
+
+    window.validateAndGoToStep = function (fromStep, toStep) {
       var d = dictionary[currentLang];
       clearError(fromStep);
 
@@ -723,7 +1131,7 @@
       window.goToStep(toStep);
     };
 
-    window.goToStep = function(stepNum) {
+    window.goToStep = function (stepNum) {
       currentStep = stepNum;
       clearError(stepNum);
 
@@ -744,10 +1152,12 @@
       // Toggle active step
       for (var i = 1; i <= 4; i++) {
         var el = document.getElementById('step-' + i);
-        if (i === stepNum) {
-          el.classList.add('active');
-        } else {
-          el.classList.remove('active');
+        if (el) {
+          if (i === stepNum) {
+            el.classList.add('active');
+          } else {
+            el.classList.remove('active');
+          }
         }
       }
     };
@@ -756,43 +1166,100 @@
       currentLang = lang;
       var d = dictionary[lang];
 
-      document.getElementById('badge-text').textContent = d.badge;
-      document.getElementById('title').textContent = d.title;
-      document.getElementById('subtitle').textContent = d.subtitle;
-      document.getElementById('btn-translate').innerHTML = '<span>' + d.translateBtn + '</span>';
-      document.getElementById('btn-cancel-top').textContent = d.btnSkip;
-      document.getElementById('btn-submit').textContent = d.btnSubmit;
-      document.getElementById('success-title').textContent = d.successTitle;
-      document.getElementById('success-subtitle').textContent = d.successSubtitle;
-      document.getElementById('btn-done').textContent = d.btnDone;
+      if (d.modalTitle) {
+        document.title = d.modalTitle + ' — KPI Master';
+        try {
+          if (window.parent && window.parent !== window) {
+            var pDoc = window.parent.document;
+            var titleEls = pDoc.querySelectorAll('.window-header-title, .mod-trello-modal-header .window-header-title, .dialog-header-title');
+            titleEls.forEach(function(el) { el.textContent = d.modalTitle; el.style.color = '#ffffff'; });
+          }
+        } catch (e) { }
+      }
 
-      document.getElementById('s1-title').textContent = d.s1Title;
-      document.getElementById('s1-desc').textContent = d.s1Desc;
-      document.getElementById('s1-next-btn').textContent = d.btnNext;
+      var badgeEl = document.getElementById('badge-text');
+      if (badgeEl) badgeEl.textContent = d.badge;
 
-      document.getElementById('s2-title').textContent = d.s2Title;
-      document.getElementById('s2-desc').textContent = d.s2Desc;
-      document.getElementById('s2-opt1').textContent = d.s2Opt1;
-      document.getElementById('s2-opt2').textContent = d.s2Opt2;
-      document.getElementById('s2-opt3').textContent = d.s2Opt3;
-      document.getElementById('s2-opt4').textContent = d.s2Opt4;
-      document.getElementById('s2-other-input').placeholder = d.phS2Other;
-      document.getElementById('s2-back-btn').textContent = d.btnBack;
-      document.getElementById('s2-next-btn').textContent = d.btnNext;
+      var titleEl = document.getElementById('title');
+      if (titleEl) titleEl.textContent = d.title;
 
-      document.getElementById('s3-title').textContent = d.s3Title;
-      document.getElementById('s3-desc').textContent = d.s3Desc;
-      document.getElementById('s3-opt1').textContent = d.s3Opt1;
-      document.getElementById('s3-opt2').textContent = d.s3Opt2;
-      document.getElementById('s3-opt3').textContent = d.s3Opt3;
-      document.getElementById('s3-opt4').textContent = d.s3Opt4;
-      document.getElementById('s3-back-btn').textContent = d.btnBack;
-      document.getElementById('s3-next-btn').textContent = d.btnNext;
+      var subEl = document.getElementById('subtitle');
+      if (subEl) subEl.textContent = d.subtitle;
 
-      document.getElementById('s4-title').textContent = d.s4Title;
-      document.getElementById('s4-desc').textContent = d.s4Desc;
-      document.getElementById('s4-textarea').placeholder = d.phS4Textarea;
-      document.getElementById('s4-back-btn').textContent = d.btnBack;
+      var txtTrans = document.getElementById('txt-translate');
+      if (txtTrans) txtTrans.textContent = d.translateBtn;
+
+      var cancelTop = document.getElementById('btn-cancel-top');
+      if (cancelTop) cancelTop.textContent = d.btnSkip;
+
+      var submitBtn = document.getElementById('btn-submit');
+      if (submitBtn) submitBtn.textContent = d.btnSubmit;
+
+      var succTitle = document.getElementById('success-title');
+      if (succTitle) succTitle.textContent = d.successTitle;
+
+      var succSub = document.getElementById('success-subtitle');
+      if (succSub) succSub.textContent = d.successSubtitle;
+
+      var doneBtn = document.getElementById('btn-done');
+      if (doneBtn) doneBtn.textContent = d.btnDone;
+
+      var s1Title = document.getElementById('s1-title');
+      if (s1Title) s1Title.textContent = d.s1Title;
+      var s1Desc = document.getElementById('s1-desc');
+      if (s1Desc) s1Desc.textContent = d.s1Desc;
+      var s1Next = document.getElementById('s1-next-btn');
+      if (s1Next) s1Next.textContent = d.btnNext;
+
+      var s2Title = document.getElementById('s2-title');
+      if (s2Title) s2Title.textContent = d.s2Title;
+      var s2Desc = document.getElementById('s2-desc');
+      if (s2Desc) s2Desc.textContent = d.s2Desc;
+      var s2Opt1 = document.getElementById('s2-opt1');
+      if (s2Opt1) s2Opt1.textContent = d.s2Opt1;
+      var s2Opt2 = document.getElementById('s2-opt2');
+      if (s2Opt2) s2Opt2.textContent = d.s2Opt2;
+      var s2Opt3 = document.getElementById('s2-opt3');
+      if (s2Opt3) s2Opt3.textContent = d.s2Opt3;
+      var s2Opt4 = document.getElementById('s2-opt4');
+      if (s2Opt4) s2Opt4.textContent = d.s2Opt4;
+      var s2OtherInp = document.getElementById('s2-other-input');
+      if (s2OtherInp) s2OtherInp.placeholder = d.phS2Other;
+      var s2Back = document.getElementById('s2-back-btn');
+      if (s2Back) s2Back.textContent = d.btnBack;
+      var s2Next = document.getElementById('s2-next-btn');
+      if (s2Next) s2Next.textContent = d.btnNext;
+
+      var s3Title = document.getElementById('s3-title');
+      if (s3Title) s3Title.textContent = d.s3Title;
+      var s3Desc = document.getElementById('s3-desc');
+      if (s3Desc) s3Desc.textContent = d.s3Desc;
+      var s3Opt1 = document.getElementById('s3-opt1');
+      if (s3Opt1) s3Opt1.textContent = d.s3Opt1;
+      var s3Opt2 = document.getElementById('s3-opt2');
+      if (s3Opt2) s3Opt2.textContent = d.s3Opt2;
+      var s3Opt3 = document.getElementById('s3-opt3');
+      if (s3Opt3) s3Opt3.textContent = d.s3Opt3;
+      var s3Opt4 = document.getElementById('s3-opt4');
+      if (s3Opt4) s3Opt4.textContent = d.s3Opt4;
+      var s3Back = document.getElementById('s3-back-btn');
+      if (s3Back) s3Back.textContent = d.btnBack;
+      var s3Next = document.getElementById('s3-next-btn');
+      if (s3Next) s3Next.textContent = d.btnNext;
+
+      var s4Title = document.getElementById('s4-title');
+      if (s4Title) s4Title.textContent = d.s4Title;
+      var s4Desc = document.getElementById('s4-desc');
+      if (s4Desc) s4Desc.textContent = d.s4Desc;
+      var s4Textarea = document.getElementById('s4-textarea');
+      if (s4Textarea) s4Textarea.placeholder = d.phS4Textarea;
+      var s4Back = document.getElementById('s4-back-btn');
+      if (s4Back) s4Back.textContent = d.btnBack;
+
+      var hintEl = document.getElementById('char-quality-hint');
+      if (hintEl) {
+        hintEl.textContent = (currentLang === 'pt' ? 'Mín. 15 caracteres' : 'Min. 15 characters');
+      }
 
       updateStarDisplay(currentRating);
       goToStep(currentStep);
@@ -803,7 +1270,7 @@
       var stars = document.querySelectorAll('.star');
       var d = dictionary[currentLang];
 
-      stars.forEach(function(s, index) {
+      stars.forEach(function (s, index) {
         if (rating && index < rating) {
           s.classList.add('active');
         } else {
@@ -818,26 +1285,26 @@
     }
 
     // Star Click Handlers
-    document.querySelectorAll('.star').forEach(function(star) {
-      star.addEventListener('click', function() {
+    document.querySelectorAll('.star').forEach(function (star) {
+      star.addEventListener('click', function () {
         var r = parseInt(this.getAttribute('data-rating'), 10);
         updateStarDisplay(r);
         clearError(1);
-        setTimeout(function() {
+        setTimeout(function () {
           goToStep(2);
-        }, 200);
+        }, 180);
       });
     });
 
     // Option Cards Handler
-    document.querySelectorAll('.option-card').forEach(function(card) {
-      card.addEventListener('click', function() {
+    document.querySelectorAll('.option-card').forEach(function (card) {
+      card.addEventListener('click', function () {
         var step = this.getAttribute('data-step');
         var val = this.getAttribute('data-value');
 
         clearError(parseInt(step, 10));
 
-        document.querySelectorAll('.option-card[data-step="' + step + '"]').forEach(function(c) {
+        document.querySelectorAll('.option-card[data-step="' + step + '"]').forEach(function (c) {
           c.classList.remove('selected');
         });
         this.classList.add('selected');
@@ -858,19 +1325,37 @@
     });
 
     // Input listeners to clear errors on typing
-    document.getElementById('s2-other-input').addEventListener('input', function() {
+    document.getElementById('s2-other-input').addEventListener('input', function () {
       if (this.value.trim()) clearError(2);
     });
 
-    document.getElementById('s4-textarea').addEventListener('input', function() {
-      if (this.value.trim()) clearError(4);
-    });
+    // Contador e Validador em Tempo Real no Campo de Texto do Passo 4
+    var s4Textarea = document.getElementById('s4-textarea');
+    if (s4Textarea) {
+      s4Textarea.addEventListener('input', function () {
+        var count = this.value.trim().length;
+        var countEl = document.getElementById('char-count');
+        var barEl = document.getElementById('char-count-bar');
+        var hintEl = document.getElementById('char-quality-hint');
+        if (countEl) countEl.textContent = count;
 
-    // Initialize in English by default without preselected options!
+        var err = validateGenuineFeedback(this.value);
+        if (count >= 15 && !err) {
+          if (barEl) barEl.classList.add('valid');
+          if (hintEl) hintEl.textContent = (currentLang === 'pt' ? '✓ Sugestão válida' : '✓ Good feedback');
+          clearError(4);
+        } else {
+          if (barEl) barEl.classList.remove('valid');
+          if (hintEl) hintEl.textContent = (currentLang === 'pt' ? 'Mín. 15 caracteres' : 'Min. 15 characters');
+        }
+      });
+    }
+
+    // Initialize in English by default
     applyLanguage('en');
 
     // Immediately record prompt time on load so closing via Trello's X button stores cooldown
-    t.get('member', 'private', 'kpi_feedback_state').then(function(rawState) {
+    t.get('member', 'private', 'kpi_feedback_state').then(function (rawState) {
       var state = rawState ? JSON.parse(rawState) : { ignoredCount: 0 };
       var now = Date.now();
       if (!state.lastPromptTime || (now - state.lastPromptTime > 60000)) {
@@ -878,9 +1363,9 @@
         state.ignoredCount = (state.ignoredCount || 0) + 1;
         return t.set('member', 'private', 'kpi_feedback_state', JSON.stringify(state));
       }
-    }).catch(function(){});
+    }).catch(function () { });
 
-    document.getElementById('btn-translate').addEventListener('click', function() {
+    document.getElementById('btn-translate').addEventListener('click', function () {
       applyLanguage(currentLang === 'en' ? 'pt' : 'en');
     });
 
@@ -890,12 +1375,12 @@
         step_abandoned: currentStep,
         description: 'Utilizador cancelou/fechou o feedback no Passo ' + currentStep
       });
-      t.get('member', 'private', 'kpi_feedback_state').then(function(rawState) {
+      t.get('member', 'private', 'kpi_feedback_state').then(function (rawState) {
         var state = rawState ? JSON.parse(rawState) : { ignoredCount: 0 };
         state.ignoredCount = (state.ignoredCount || 0) + 1;
         state.lastPromptTime = Date.now();
         return t.set('member', 'private', 'kpi_feedback_state', JSON.stringify(state));
-      }).catch(function(){}).finally(function() {
+      }).catch(function () { }).finally(function () {
         t.closeModal();
       });
     }
@@ -903,17 +1388,17 @@
     var btnCancelTop = document.getElementById('btn-cancel-top');
     if (btnCancelTop) btnCancelTop.addEventListener('click', handleDismissFeedback);
 
-    var btnCloseTop = document.getElementById('btn-close-modal-top');
-    if (btnCloseTop) btnCloseTop.addEventListener('click', handleDismissFeedback);
-
-    // Final Submit Handler
-    document.getElementById('btn-submit').addEventListener('click', function() {
+    // Final Submit Handler com Lógica Anti-Fake
+    document.getElementById('btn-submit').addEventListener('click', function () {
       var d = dictionary[currentLang];
       clearError(4);
 
       var suggestions = document.getElementById('s4-textarea').value.trim();
-      if (!suggestions) {
-        showError(4, d.errS4);
+
+      // Validação Anti-Fake rigorosa
+      var fakeError = validateGenuineFeedback(suggestions);
+      if (fakeError) {
+        showError(4, fakeError);
         document.getElementById('s4-textarea').focus();
         return;
       }
@@ -924,7 +1409,6 @@
 
       var customUseCaseText = document.getElementById('s2-other-input').value.trim();
       var finalUseCase = (selectedUseCase === 'other' && customUseCaseText) ? ('Outro: ' + customUseCaseText) : selectedUseCase;
-      var suggestions = document.getElementById('s4-textarea').value.trim();
 
       Analytics.track('feedback_submitted', {
         rating: currentRating,
@@ -934,10 +1418,10 @@
         description: 'Utilizador enviou o formulário de feedback com avaliação ' + currentRating + ' estrelas'
       });
 
-      var formattedText = '⭐ Rating: ' + currentRating + '/5\n' +
-                          '📌 Use Case: ' + finalUseCase + '\n' +
-                          '📊 Dashboard Opinion: ' + selectedDashboardOpinion + '\n' +
-                          '💡 Suggestions: ' + (suggestions || 'None');
+      var formattedText = 'Rating: ' + currentRating + '/5\n' +
+        'Use Case: ' + finalUseCase + '\n' +
+        'Dashboard Opinion: ' + selectedDashboardOpinion + '\n' +
+        'Suggestions: ' + (suggestions || 'None');
 
       var payload = {
         text: formattedText,
@@ -954,33 +1438,35 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
-      }).catch(function(err) {
+      }).catch(function (err) {
         console.warn('Feedback send warning:', err);
-      }).finally(function() {
+      }).finally(function () {
         var state = {
           lastPromptTime: Date.now(),
           lastSubmittedTime: Date.now(),
           ignoredCount: 0
         };
-        t.set('member', 'private', 'kpi_feedback_state', JSON.stringify(state)).catch(function(){});
-        t.set('member', 'private', 'kpi_has_reviewed', true).catch(function(){});
+        t.set('member', 'private', 'kpi_feedback_state', JSON.stringify(state)).catch(function () { });
+        t.set('member', 'private', 'kpi_has_reviewed', true).catch(function () { });
+        t.set('member', 'shared', 'kpi_has_reviewed', true).catch(function () { });
+        t.set('board', 'shared', 'kpi_feedback_submitted_globally', true).catch(function () { });
 
         try {
           localStorage.setItem('kpi_feedback_onboarding_seen_manager', 'true');
           localStorage.setItem('kpi_feedback_onboarding_seen_sales', 'true');
           localStorage.setItem('kpi_feedback_submitted_globally', 'true');
           localStorage.setItem('kpi_has_reviewed', 'true');
-        } catch(e){}
+        } catch (e) { }
 
         document.getElementById('wizard-screen').style.display = 'none';
         document.getElementById('success-screen').style.display = 'block';
       });
     });
 
-    document.getElementById('btn-done').addEventListener('click', function() {
+    document.getElementById('btn-done').addEventListener('click', function () {
       t.closeModal();
     });
   </script>
 </body>
-</html>
 
+</html>

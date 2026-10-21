@@ -47,6 +47,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      color: #ffffff;
     }
 
     .stats-badges {
@@ -134,9 +135,9 @@
 
 <body>
   <div class="header">
-    <h2 id="modal-title">📋 Contact History</h2>
+    <h2 id="modal-title">Histórico de Contactos</h2>
     <div class="stats-badges">
-      <span class="badge badge-call" id="badge-calls">0 Calls</span>
+      <span class="badge badge-call" id="badge-calls">0 Chamadas</span>
       <span class="badge badge-email" id="badge-emails">0 Emails</span>
     </div>
   </div>
@@ -163,7 +164,7 @@
     });
 
     function applyLang() {
-      document.getElementById('modal-title').textContent = isPt ? '📋 Histórico de Contactos' : '📋 Contact History';
+      document.getElementById('modal-title').textContent = isPt ? 'Histórico de Contactos' : 'Contact History';
     }
 
     function loadLogs() {
@@ -191,17 +192,30 @@
         var reversed = logs.slice().reverse();
         var html = '';
         reversed.forEach(function (l) {
-          var icon = l.type === 'call' ? '📞' : '✉️';
-          var actionText = l.type === 'call'
+          var isCall = l.type === 'call';
+          var iconSvg = isCall
+            ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'
+            : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
+
+          var outcomeBadge = '';
+          if (isCall) {
+            if (l.outcome === 'answered') {
+              outcomeBadge = ' <span style="display:inline-flex; align-items:center; gap:3px; font-size:10px; font-weight:700; color:#34d399; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.3); padding:2px 8px; border-radius:999px; margin-left:6px;"><span style="width:5px; height:5px; border-radius:50%; background:#10b981;"></span>' + (isPt ? 'Atendida' : 'Answered') + '</span>';
+            } else if (l.outcome === 'no-answer') {
+              outcomeBadge = ' <span style="display:inline-flex; align-items:center; gap:3px; font-size:10px; font-weight:700; color:#f87171; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); padding:2px 8px; border-radius:999px; margin-left:6px;"><span style="width:5px; height:5px; border-radius:50%; background:#f87171;"></span>' + (isPt ? 'Não Atendida' : 'No Answer') + '</span>';
+            }
+          }
+
+          var actionText = isCall
             ? (isPt ? 'fez uma chamada' : 'made a call')
             : (isPt ? 'enviou um email' : 'sent an email');
 
           html += `
             <div class="log-item">
               <div class="log-left">
-                <span class="log-icon">${icon}</span>
+                <span class="log-icon" style="display:flex; align-items:center;">${iconSvg}</span>
                 <div>
-                  <div class="log-author">${l.author || (isPt ? 'Membro' : 'Member')}</div>
+                  <div class="log-author" style="display:flex; align-items:center;">${l.author || (isPt ? 'Membro' : 'Member')}${outcomeBadge}</div>
                   <div class="log-action">${actionText}</div>
                 </div>
               </div>

@@ -16,9 +16,8 @@
     import { Analytics } from '../js/analytics.js';
     Analytics.init();
 
-    var BASE_DOMAIN = (window.location.origin && window.location.origin !== 'null' && !window.location.origin.includes('trello.com'))
-      ? window.location.origin
-      : 'https://kpismaster.vercel.app';
+    // Trello Power-Up iframes must use the deployed app origin, never the local dev server.
+    var BASE_DOMAIN = 'https://kpismaster.vercel.app';
     var POWERUP_URL = BASE_DOMAIN + '/trello';
     var SITE_URL = 'https://kpismaster.vercel.app';
     var welcomePrompted = false;
@@ -31,14 +30,50 @@
       });
     }
 
+    function isFeedbackUnlocked(t) {
+      var localReviewed = false;
+      try {
+        localReviewed = (
+          localStorage.getItem('kpi_feedback_submitted_globally') === 'true' ||
+          localStorage.getItem('kpi_has_reviewed') === 'true'
+        );
+      } catch (e) {}
+
+      if (localReviewed) return Promise.resolve(true);
+
+      return Promise.all([
+        t.get('member', 'private', 'kpi_has_reviewed').catch(function () { return false; }),
+        t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; }),
+        t.get('member', 'shared', 'kpi_has_reviewed').catch(function () { return false; }),
+        t.get('board', 'shared', 'kpi_feedback_submitted_globally').catch(function () { return false; })
+      ]).then(function (results) {
+        var flagMemberPriv = (results[0] === true || results[0] === 'true');
+        var rawState = results[1];
+        var stateObj = (rawState && typeof rawState === 'string') ? JSON.parse(rawState) : rawState;
+        var hasSubmittedTime = stateObj && (stateObj.lastSubmittedTime > 0);
+        var flagMemberShared = (results[2] === true || results[2] === 'true');
+        var flagBoardShared = (results[3] === true || results[3] === 'true');
+
+        var isReviewed = Boolean(localReviewed || flagMemberPriv || hasSubmittedTime || flagMemberShared || flagBoardShared);
+        if (isReviewed) {
+          try {
+            localStorage.setItem('kpi_feedback_submitted_globally', 'true');
+            localStorage.setItem('kpi_has_reviewed', 'true');
+          } catch (e) {}
+        }
+        return isReviewed;
+      });
+    }
+
     TrelloPowerUp.initialize({
 
       // ── Instalação / Boas-vindas (on-enable) ─────────────────────────────
       'on-enable': function (t) {
         return t.modal({
           title: 'Bem-vindo ao KPI Master',
-          url: POWERUP_URL + '/welcome.html?v=3',
-          height: 540
+          accentColor: '#090d16',
+          url: POWERUP_URL + '/welcome.html?v=16',
+          height: 700
         });
       },
 
@@ -62,8 +97,9 @@
                 if (!hasSeenWelcome) {
                   return t.modal({
                     title: isPt ? 'Bem-vindo ao KPI Master' : 'Welcome to KPI Master',
-                    url: POWERUP_URL + '/welcome.html?v=3',
-                    height: 600
+                    accentColor: '#090d16',
+                    url: POWERUP_URL + '/welcome.html?v=16',
+                    height: 700
                   });
                 }
 
@@ -71,15 +107,17 @@
                   if (!isAuth) {
                     return t.modal({
                       title: isPt ? 'Ligar ao KPI Master' : 'Connect KPI Master',
+                      accentColor: '#090d16',
                       url: POWERUP_URL + '/auth.html?v=3',
                       height: 420
                     });
                   }
                   return t.modal({
-                    title: isPt ? 'Micro Dashboard & Velocidade das Leads' : 'Micro Dashboard & Lead Speed',
-                    url: POWERUP_URL + '/dashboard.html?v=3',
+                    title: ' ',
+                    url: POWERUP_URL + '/dashboard.html?v=4',
                     height: 690,
-                    fullscreen: false
+                    fullscreen: false,
+                    accentColor: '#090d16'
                   });
                 });
               });
@@ -99,6 +137,7 @@
       'show-authorization': function (t) {
         return t.modal({
           title: 'Ligar ao KPI Master',
+          accentColor: '#090d16',
           url: POWERUP_URL + '/auth.html?v=3',
           height: 420
         });
@@ -108,6 +147,7 @@
       'show-settings': function (t) {
         return t.modal({
           title: 'Definições — KPI Master',
+          accentColor: '#090d16',
           url: POWERUP_URL + '/settings.html?v=3',
           height: 420
         });
@@ -235,26 +275,22 @@
       'card-buttons': function (t) {
         return Promise.all([
           getUserIsPt(t),
-          t.get('member', 'private', 'kpi_has_reviewed').catch(function () { return false; }),
-          t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; })
+          isFeedbackUnlocked(t)
         ]).then(function (res) {
           var isPt = res[0];
-          var flagReviewed = (res[1] === true || res[1] === 'true');
-          var rawState = res[2];
-          var stateObj = (rawState && typeof rawState === 'string') ? JSON.parse(rawState) : rawState;
-          var hasSubmittedFeedback = stateObj && (stateObj.lastSubmittedTime > 0);
-          var hasReviewed = flagReviewed || hasSubmittedFeedback;
+          var hasReviewed = Boolean(res[1]);
 
           function addTouchpoint(tCard, type) {
             if (!hasReviewed) {
               Analytics.track('locked_card_button_clicked', {
                 type: type,
-                description: 'Utilizador tentou usar botão de ação rápida sem ter dado review'
+                description: 'Utilizador tentou usar botão de ação rápida bloqueado'
               });
-              return tCard.modal({
-                title: isPt ? '⭐ Dá Review & Desbloqueia Ações Rápidas' : '⭐ Leave a Review & Unlock Quick Actions',
-                url: POWERUP_URL + '/feedback.html?v=3',
-                height: 520
+              return tCard.alert({
+                message: isPt
+                  ? '🔒 Funcionalidade bloqueada. Deixa feedback no verso do cartão para desbloquear!'
+                  : '🔒 Feature locked. Leave your feedback on the card back to unlock!',
+                duration: 4
               });
             }
 
@@ -319,6 +355,7 @@
                       if (!isAuth) {
                         return t.modal({
                           title: isPt ? 'Ligar ao KPI Master' : 'Connect KPI Master',
+                          accentColor: '#090d16',
                           url: POWERUP_URL + '/auth.html?v=3',
                           height: 420
                         });
@@ -367,9 +404,7 @@
             hasSubmitted = true;
           }
 
-          var baseTitle = isPt ? 'Estado da lead' : 'Lead Stage';
-          var tagSuffix = isPt ? '  ⭐ [Dá Feedback & Desbloqueia]' : '  ⭐ [Give Feedback & Unlock]';
-          var displayTitle = hasSubmitted ? baseTitle : (baseTitle + tagSuffix);
+          var displayTitle = isPt ? 'KPI Master — Velocidade & Histórico do cartão' : 'KPI Master — Card Speed & History';
 
           return {
             title: displayTitle,
@@ -382,10 +417,9 @@
           };
         }).catch(function () {
           return getUserIsPt(t).then(function (isPt) {
-            var baseTitle = isPt ? 'Estado da Lead' : 'Lead Stage';
-            var tagSuffix = isPt ? '  ⭐ [Dá Feedback & Desbloqueia]' : '  ⭐ [Give Feedback & Unlock]';
+            var displayTitle = isPt ? 'KPI Master — Velocidade & Histórico do cartão ' : 'KPI Master — Card Speed & History';
             return {
-              title: baseTitle + tagSuffix,
+              title: displayTitle,
               icon: POWERUP_URL + '/icon.png',
               content: {
                 type: 'iframe',

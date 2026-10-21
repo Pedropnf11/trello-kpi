@@ -34,7 +34,8 @@ export default defineConfig({
                 'trello/card-back': 'trello/card-back.html',
                 'trello/contact-log': 'trello/contact-log.html',
                 'trello/updates': 'trello/updates.html',
-                'trello/feedback': 'trello/feedback.html'
+                'trello/feedback': 'trello/feedback.html',
+                'trello/templates': 'trello/templates.html'
             },
             output: {
 
@@ -54,11 +55,13 @@ export default defineConfig({
         port: 3000,
         host: '0.0.0.0',
         cors: true,
+        allowedHosts: true,
         headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-            'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
-            'X-Content-Type-Options': 'nosniff'
+            'Access-Control-Allow-Headers': '*',
+            'Content-Security-Policy': "frame-ancestors 'self' https://trello.com https://*.trello.com;",
+            'ngrok-skip-browser-warning': 'true'
         }
     }
 })

@@ -28,3 +28,14 @@ js/docs/
 # Temporários / Testes
 trello/tutorial-pointer.html
 *.md
+
+
+
+pipedrive-kpi/
+/pipedrive-kpi
+pipedrive-kpi/*
+pipedrive-kpi/src/app/layout.tsx
+pipedrive-kpi/src/app/page.tsx
+pipedrive-kpi/src/app/dashboard/manager/page.tsx
+pipedrive-kpi/src/app/dashboard/manager/charts/page.tsx
+pipedrive-kpi/src/lib/pipedrive.ts

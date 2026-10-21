@@ -4,212 +4,363 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Updates — KPI Master</title>
+  <title>New Features & Updates — KPI Master</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
   <style>
     :root {
-      --bg-color: #0b0f19;
-      --card-bg: #131b2e;
+      --bg-color: #090d16;
+      --card-bg: linear-gradient(180deg, rgba(18, 26, 43, 0.72) 0%, rgba(13, 19, 32, 0.88) 100%);
       --card-border: rgba(255, 255, 255, 0.08);
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
       --accent-blue: #3b82f6;
       --accent-purple: #8b5cf6;
-    }
-
-    body.light-theme {
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --card-border: #e2e8f0;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    html,
+    body {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    html::-webkit-scrollbar-track,
+    body::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    html::-webkit-scrollbar-thumb,
+    body::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 9999px;
+    }
+
+    html::-webkit-scrollbar-thumb:hover,
+    body::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.28);
     }
 
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
-      padding: 24px 20px;
+      padding: 16px 20px 22px 20px;
       line-height: 1.5;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
     .container {
-      max-width: 580px;
+      max-width: 540px;
       margin: 0 auto;
+    }
+
+    /* Barra do Topo Estilo KPI Master */
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 18px;
     }
 
     .header-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      position: relative;
+      padding: 2px 0;
+      min-height: 36px;
     }
 
-    .badge-new {
+    .header-actions-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 2;
+    }
+
+    .brand-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .brand-center img {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    }
+
+    .brand-center h1 {
+      font-size: 16px;
+      font-weight: 800;
+      margin: 0;
+      color: #ffffff;
+      letter-spacing: -0.025em;
+    }
+
+    .header-actions-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 2;
+    }
+
+    .badge-version {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 12px;
+      padding: 4px 10px;
       border-radius: 9999px;
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
-      border: 1px solid rgba(59, 130, 246, 0.4);
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
       color: #60a5fa;
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
     }
 
     .translate-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
-      border-radius: 10px;
+      gap: 5px;
+      padding: 4px 11px;
+      border-radius: 9999px;
       background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--card-border);
-      color: #3b82f6;
-      font-size: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+      font-size: 11px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s ease;
+      font-family: inherit;
     }
 
     .translate-btn:hover {
-      background: rgba(59, 130, 246, 0.15);
-      border-color: rgba(59, 130, 246, 0.4);
-      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.25);
     }
 
-    .header {
-      text-align: left;
-      margin-bottom: 24px;
+    .hero-intro {
+      text-align: center;
+      margin-bottom: 20px;
     }
 
-    h1 {
-      font-size: 22px;
-      font-weight: 900;
-      letter-spacing: -0.02em;
-      margin-bottom: 4px;
+    h1.main-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff !important;
+      margin-bottom: 6px;
+      letter-spacing: -0.015em;
     }
 
     p.subtitle {
-      font-size: 13px;
+      font-size: 12.5px;
       color: var(--text-muted);
+      max-width: 440px;
+      margin: 0 auto;
+      line-height: 1.45;
     }
 
-    .updates-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .update-card {
-      background-color: var(--card-bg);
+    /* Release Card */
+    .release-card {
+      background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 16px;
       padding: 18px 20px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
       position: relative;
+      margin-bottom: 22px;
       overflow: hidden;
     }
 
-    .update-card.latest {
-      border-color: rgba(59, 130, 246, 0.4);
-    }
-
-    .update-card.latest::before {
+    .release-card::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       width: 4px;
       height: 100%;
-      background: linear-gradient(to bottom, var(--accent-blue), var(--accent-purple));
+      background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
     }
 
-    .update-header {
+    .release-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    .update-title {
-      font-size: 15px;
-      font-weight: 800;
+    .release-title-row {
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .update-date {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
+    .release-chip {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #60a5fa;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
+    .release-name {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+
+    .release-date {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    /* Items List */
     .update-items {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 14px;
     }
 
     .update-item {
-      font-size: 13px;
-      line-height: 1.45;
-      color: var(--text-main);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
     }
 
-    .update-item strong {
+    .item-icon-box {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .item-icon-box.blue {
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.25);
       color: #60a5fa;
     }
 
-    .update-item p {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 2px;
-      padding-left: 0px;
+    .item-icon-box.amber {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      color: #fbbf24;
     }
 
+    .item-icon-box.emerald {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #34d399;
+    }
+
+    .item-icon-box.purple {
+      background: rgba(139, 92, 246, 0.12);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      color: #a78bfa;
+    }
+
+    .item-icon-box.rose {
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid rgba(244, 63, 94, 0.25);
+      color: #fb7185;
+    }
+
+    .item-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 2px;
+      line-height: 1.35;
+    }
+
+    .item-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* Sticky Bottom Action */
     .btn-close-container {
-      text-align: center;
       position: sticky;
       bottom: 0;
-      background: linear-gradient(to top, var(--bg-color) 80%, transparent);
-      padding-top: 12px;
+      background: linear-gradient(to top, rgba(9, 13, 22, 0.98) 75%, transparent);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 12px 0 4px 0;
+      margin-top: 10px;
     }
 
     .btn-got-it {
       width: 100%;
-      padding: 12px 20px;
-      border-radius: 12px;
+      padding: 10px 20px;
+      border-radius: 10px;
       border: none;
-      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
       color: #ffffff;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
-      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+      transition: all 0.18s ease;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
     .btn-got-it:hover {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
     }
 
     .btn-got-it:active {
-      transform: translateY(0);
+      transform: scale(0.98);
     }
   </style>
 </head>
@@ -217,57 +368,214 @@
 <body>
 
   <div class="container">
-    <div class="header-top">
-      <div class="badge-new" id="badge-text">✨ What's New</div>
-      <button id="btn-translate" class="translate-btn">
-        <span>🇵🇹 Traduzir para Português</span>
-      </button>
-    </div>
-
+    <!-- Barra do Topo Estilo KPI Master -->
     <div class="header">
-      <h1 id="title">What's New in KPI Master</h1>
-      <p class="subtitle" id="subtitle">Explore the latest features and performance updates.</p>
-    </div>
-
-    <div class="updates-list">
-      <!-- Update 1.7 -->
-      <div class="update-card latest">
-        <div class="update-header">
-          <div class="update-title">🚀 Update 1.7</div>
-          <div class="update-date" id="u17-date">Oct 15, 2026</div>
+      <div class="header-top">
+        <div class="header-actions-left">
+          <div class="badge-version">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+              </polygon>
+            </svg>
+            <span id="badge-text">Version 1.8</span>
+          </div>
         </div>
-        <ul class="update-items">
-          <li class="update-item">
-            <strong id="u17-t1">✨ Brand New Micro Dashboard Interface</strong>
-            <p id="u17-d1">A completely redesigned popup interface with modern stat cards, refined typography, and quick
-              insights right inside your Trello board.</p>
-          </li>
-          <li class="update-item">
-            <strong id="u17-t2">📋 Contact Activity Logs & Quick Actions</strong>
-            <p id="u17-d2">One-click +1 Call and +1 Email buttons on card backs with a full dedicated modal showing
-              timestamped interaction history by author.</p>
-          </li>
-          <li class="update-item">
-            <strong id="u17-t3">⚙️ Modular Plug & Play Feature Toggles</strong>
-            <p id="u17-d3">Easily enable or disable Quick Actions, Card Age Badges, and Team Time Tracking with
-              auto-saving controls in Settings.</p>
-          </li>o
-          <li class="update-item">
-            <strong id="u17-t4">⏳ Smart List Sorters by Lead Age</strong>
-            <p id="u17-d4">Sort any list by oldest leads first to prevent lead loss, or newest first for rapid contact
-              triage.</p>
-          </li>
-          <li class="update-item">
-            <strong id="u17-t5">🔒 One-Click Account Disconnect</strong>
-            <p id="u17-d5">Full control over your data with an instant disconnect button directly inside Power-Up
-              settings.</p>
-          </li>
-        </ul>
+        <div class="brand-center">
+          <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
+          <h1>KPI Master</h1>
+        </div>
+        <div class="header-actions-right">
+          <button id="btn-translate" class="translate-btn" type="button" title="Switch Language / Alternar Idioma">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+              </path>
+            </svg>
+            <span id="txt-translate">Português</span>
+          </button>
+        </div>
       </div>
     </div>
 
+    <div class="hero-intro">
+      <h1 class="main-title" id="title">New Features & Updates</h1>
+      <p class="subtitle" id="subtitle">Explore the latest features and performance updates.</p>
+    </div>
+
+    <!-- UPDATE 1.8 (LATEST) -->
+    <div class="release-card">
+      <div class="release-header">
+        <div class="release-title-row">
+          <span class="release-chip" id="lbl-latest">Latest</span>
+          <span class="release-name" id="u20-title">Update 1.8</span>
+        </div>
+        <div class="release-date" id="u20-date">Oct 21, 2026</div>
+      </div>
+
+      <ul class="update-items">
+        <!-- Item 1: Message Templates (WhatsApp & Email) -->
+        <li class="update-item">
+          <div class="item-icon-box emerald">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+            </svg>
+          </div>
+          <div class="item-content">
+            <div class="item-title" id="u20-t1">WhatsApp & Email Follow-up Templates</div>
+            <p class="item-desc" id="u20-d1">Send tailored messages in 1 click directly from card backs with dynamic
+              smart variables ({{nome}}, {{negocio}}, {{responsavel}}).</p>
+          </div>
+        </li>
+
+        <!-- Item 2: Pre-Send Contact Editing -->
+        <li class="update-item">
+          <div class="item-icon-box blue">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+          </div>
+          <div class="item-content">
+            <div class="item-title" id="u20-t2">Live Pre-Send Contact Editing</div>
+            <p class="item-desc" id="u20-d2">Quickly review and adjust lead name, phone number, or email right before
+              sending, with live message preview updates.</p>
+          </div>
+        </li>
+
+        <!-- Item 3: Multi-Country Phone & Name Parser -->
+        <li class="update-item">
+          <div class="item-icon-box purple">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+              </path>
+            </svg>
+          </div>
+          <div class="item-content">
+            <div class="item-title" id="u20-t3">Multi-Country Phone & Name Intelligence</div>
+            <p class="item-desc" id="u20-d3">Smart automatic country detection in some country and native Trello Custom
+              Fields prioritization.</p>
+          </div>
+        </li>
+
+        <!-- Item 4: Custom Tabs & Library -->
+        <li class="update-item">
+          <div class="item-icon-box amber">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              <line x1="12" y1="11" x2="12" y2="17"></line>
+              <line x1="9" y1="14" x2="15" y2="14"></line>
+            </svg>
+          </div>
+          <div class="item-content">
+            <div class="item-title" id="u20-t4">Custom Category Tabs & Template Manager</div>
+            <p class="item-desc" id="u20-d4">Create custom trigger tabs, add your own models, and organize follow-ups
+              with our modular library manager.</p>
+          </div>
+        </li>
+
+        <!-- Item 5: Obsidian Dark Glass SaaS UI -->
+        <li class="update-item">
+          <div class="item-icon-box rose">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+              </polygon>
+            </svg>
+          </div>
+          <div class="item-content">
+            <div class="item-title" id="u20-t5">New layout in the Power-Up</div>
+            <p class="item-desc" id="u20-d5">Interface redesigned with a cleaner, more intuitive and modern experience.
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- UPDATE 1.7 (PREVIOUS) -->
+    <div class="release-card" style="opacity: 0.82; margin-top: 14px;">
+      <div class="release-header">
+        <div class="release-title-row">
+          <span class="release-chip"
+            style="background: rgba(148, 163, 184, 0.12); color: #94a3b8; border-color: rgba(148, 163, 184, 0.25);">v1.7</span>
+          <span class="release-name" id="u17-title">Update 1.7</span>
+        </div>
+        <div class="release-date" id="u17-date">Oct 15, 2026</div>
+      </div>
+
+      <ul class="update-items">
+        <!-- Item 1: Micro Dashboard Interface -->
+        <li class="update-item">
+          <div class="item-icon-box blue">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+          </div>
+          <div class="item-content">
+            <div class="item-title" id="u17-t1">Brand New Micro Dashboard Interface</div>
+            <p class="item-desc" id="u17-d1">A completely redesigned popup interface with modern stat cards, refined
+              typography, and quick insights right inside your Trello board.</p>
+          </div>
+        </li>
+
+        <!-- Item 2: Contact Activity Logs & Quick Actions -->
+        <li class="update-item">
+          <div class="item-icon-box emerald">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+              </path>
+            </svg>
+          </div>
+          <div class="item-content">
+            <div class="item-title" id="u17-t2">Contact Activity Logs & Quick Actions</div>
+            <p class="item-desc" id="u17-d2">One-click +1 Call and +1 Email buttons on card backs with a full dedicated
+              modal showing timestamped interaction history by author.</p>
+          </div>
+        </li>
+
+        <!-- Item 3: Modular Plug & Play Feature Toggles -->
+        <li class="update-item">
+          <div class="item-icon-box purple">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="21" x2="4" y2="14"></line>
+              <line x1="4" y1="10" x2="4" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12" y2="3"></line>
+              <line x1="20" y1="21" x2="20" y2="16"></line>
+              <line x1="20" y1="12" x2="20" y2="3"></line>
+              <line x1="1" y1="14" x2="7" y2="14"></line>
+              <line x1="9" y1="8" x2="15" y2="8"></line>
+              <line x1="17" y1="16" x2="23" y2="16"></line>
+            </svg>
+          </div>
+          <div class="item-content">
+            <div class="item-title" id="u17-t3">Modular Plug & Play Feature Toggles</div>
+            <p class="item-desc" id="u17-d3">Easily enable or disable Quick Actions, Card Age Badges, and Team Time
+              Tracking with auto-saving controls in Settings.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
     <div class="btn-close-container">
-      <button id="btn-close" class="btn-got-it">Got it!! Continue in Trello</button>
+      <button id="btn-close" class="btn-got-it">Got it! Continue in Trello</button>
     </div>
   </div>
 
@@ -276,7 +584,7 @@
     Analytics.init();
 
     Analytics.track('updates_modal_opened', {
-      version: '1.7',
+      version: '1.8',
       description: 'Modal de Novidades & Atualizações aberto no Trello'
     });
 
@@ -285,55 +593,98 @@
       if (!hasTrackedScroll && (window.scrollY || document.documentElement.scrollTop) > 40) {
         hasTrackedScroll = true;
         Analytics.track('updates_modal_scrolled', {
-          version: '1.7',
+          version: '1.8',
           description: 'Utilizador fez scroll para ler as novidades no modal de atualizações'
         });
       }
     }, { passive: true });
 
-    var CURRENT_VERSION = '1.7';
+    var CURRENT_VERSION = '1.8';
     var t = TrelloPowerUp.iframe();
+
+    // Garantir que a barra nativa do Trello aplica accentColor #090d16 (título e botão X a branco puro)
+    if (typeof t.updateModal === 'function') {
+      t.updateModal({
+        accentColor: '#090d16'
+      }).catch(function () { });
+    }
+
+    try {
+      if (window.parent && window.parent !== window) {
+        var pDoc = window.parent.document;
+        var modalHeader = pDoc.querySelector('.window-header, .mod-trello-modal-header, .dialog-header');
+        if (modalHeader) modalHeader.style.backgroundColor = '#090d16';
+        var titleEls = pDoc.querySelectorAll('.window-header-title, .mod-trello-modal-header .window-header-title, .dialog-header-title');
+        titleEls.forEach(function (el) { el.style.color = '#ffffff'; });
+        var closeBtns = pDoc.querySelectorAll('.dialog-close-button, .pop-over-header-close-btn, [data-testid="popover-close-btn"]');
+        closeBtns.forEach(function (btn) {
+          btn.style.color = '#ffffff';
+          var svg = btn.querySelector('svg');
+          if (svg) svg.style.color = '#ffffff';
+        });
+      }
+    } catch (e) { }
 
     var currentLang = 'en';
 
     var dictionary = {
       en: {
-        badge: "✨ What's New",
-        translateBtn: "🇵🇹 Traduzir para Português",
-        title: "What's New in KPI Master",
+        badge: "Version 1.8",
+        translateBtn: "Português",
+        title: "New Features & Updates",
         subtitle: "Explore the latest features and performance updates.",
-        btnClose: "Got it! Continue in Trello",
+        latest: "Latest",
+        u20Title: "Update 1.8",
+        u20Date: "Oct 21, 2026",
+        u20t1: "WhatsApp & Email Follow-up Templates",
+        u20d1: "Send tailored messages in 1 click directly from card backs with dynamic smart variables ({{nome}}, {{negocio}}, {{responsavel}}).",
+        u20t2: "Live Pre-Send Contact Editing",
+        u20d2: "Quickly review and adjust lead name, phone number, or email right before sending, with live message preview updates.",
+        u20t3: "Multi-Country Phone & Name Intelligence",
+        u20d3: "Smart automatic country detection in some countries and native Trello Custom Fields prioritization.",
+        u20t4: "Custom Category Tabs & Template Manager",
+        u20d4: "Create custom trigger tabs, add your own models, and organize follow-ups with our modular library manager.",
+        u20t5: "New layout in the Power-Up",
+        u20d5: "Interface redesigned with a cleaner, more intuitive and modern experience.",
 
+        u17Title: "Update 1.7",
         u17Date: "Oct 15, 2026",
-        u17t1: "✨ Brand New Micro Dashboard Interface",
+        u17t1: "Brand New Micro Dashboard Interface",
         u17d1: "A completely redesigned popup interface with modern stat cards, refined typography, and quick insights right inside your Trello board.",
-        u17t2: "📋 Contact Activity Logs & Quick Actions",
+        u17t2: "Contact Activity Logs & Quick Actions",
         u17d2: "One-click +1 Call and +1 Email buttons on card backs with a full dedicated modal showing timestamped interaction history by author.",
-        u17t3: "⚙️ Modular Plug & Play Feature Toggles",
+        u17t3: "Modular Plug & Play Feature Toggles",
         u17d3: "Easily enable or disable Quick Actions, Card Age Badges, and Team Time Tracking with auto-saving controls in Settings.",
-        u17t4: "⏳ Smart List Sorters by Lead Age",
-        u17d4: "Sort any list by oldest leads first to prevent lead loss, or newest first for rapid contact triage directly from list menus.",
-        u17t5: "🔒 One-Click Account Disconnect",
-        u17d5: "Full control over your data with an instant disconnect button directly inside Power-Up settings."
+        btnClose: "Got it! Continue in Trello"
       },
       pt: {
-        badge: "✨ Novidades & Atualizações",
-        translateBtn: "🇬🇧 Translate to English",
-        title: "O que há de novo no KPI Master",
+        badge: "Versão 1.8",
+        translateBtn: "English",
+        title: "Novidades & Atualizações",
         subtitle: "Explora as últimas melhorias e novas funcionalidades.",
-        btnClose: "Entendido! Continuar no Trello",
+        latest: "Recente",
+        u20Title: "Atualização 1.8",
+        u20Date: "21 de Out. de 2026",
+        u20t1: "Modelos de Mensagem para WhatsApp e Email",
+        u20d1: "Dispara mensagens personalizadas em 1 clique direto do verso do cartão com variáveis automáticas ({{nome}}, {{negocio}}, {{responsavel}}).",
+        u20t2: "Edição de Contactos Pré-Envio em Tempo Real",
+        u20d2: "Revê e ajusta o nome, telefone ou email da lead diretamente no modal antes de enviar, com pré-visualização em tempo real.",
+        u20t3: "Deteção Inteligente Internacional de Telefones e Nomes",
+        u20d3: "Deteção automática de indicativos em alguns países e priorização nativa de Custom Fields do Trello.",
+        u20t4: "Abas Personalizadas & Biblioteca de Modelos",
+        u20d4: "Cria novas abas de categorias (ex: Proposta Enviada, Reativação) e adiciona, edita e personaliza todos os teus modelos livremente.",
+        u20t5: "Novo layout no Power-Up",
+        u20d5: "Interface renovada com uma experiência mais limpa, intuitiva e moderna.",
 
+        u17Title: "Atualização 1.7",
         u17Date: "15 de Out. de 2026",
-        u17t1: "✨ Novo Visual do Micro Dashboard",
+        u17t1: "Novo Visual do Micro Dashboard",
         u17d1: "Interface do popup completamente renovada com cartões de estatísticas modernos, tipografia elegante e métricas rápidas no próprio Trello.",
-        u17t2: "📋 Histórico de Contactos & Ações Rápidas",
+        u17t2: "Histórico de Contactos & Ações Rápidas",
         u17d2: "Botões de +1 Chamada e +1 Email no verso do cartão com modal dedicado para consultar o histórico cronológico de contactos por autor.",
-        u17t3: "⚙️ Configurações Modulares Plug & Play",
+        u17t3: "Configurações Modulares Plug & Play",
         u17d3: "Ativa ou desativa Ações Rápidas, Idade do Cartão e Contador de Tempo com gravação automática no menu de Configurações.",
-        u17t4: "⏳ Ordenação Inteligente por Idade da Lead",
-        u17d4: "Ordena qualquer lista por leads mais antigas primeiro (evitar perdas) ou mais recentes primeiro para triagem rápida no menu da lista.",
-        u17t5: "🔒 Desconexão de Conta com 1 Clique",
-        u17d5: "Controlo total da tua conta e permissões com botão de desconexão instantânea nas configurações da Power-Up."
+        btnClose: "Entendido! Continuar no Trello"
       }
     };
 
@@ -342,11 +693,29 @@
       var d = dictionary[lang];
 
       document.getElementById('badge-text').textContent = d.badge;
-      document.getElementById('btn-translate').innerHTML = '<span>' + d.translateBtn + '</span>';
+      var txtTrans = document.getElementById('txt-translate');
+      if (txtTrans) txtTrans.textContent = d.translateBtn;
       document.getElementById('title').textContent = d.title;
       document.getElementById('subtitle').textContent = d.subtitle;
+      document.getElementById('lbl-latest').textContent = d.latest;
       document.getElementById('btn-close').textContent = d.btnClose;
 
+      // Update 1.8
+      document.getElementById('u20-title').textContent = d.u20Title;
+      document.getElementById('u20-date').textContent = d.u20Date;
+      document.getElementById('u20-t1').textContent = d.u20t1;
+      document.getElementById('u20-d1').textContent = d.u20d1;
+      document.getElementById('u20-t2').textContent = d.u20t2;
+      document.getElementById('u20-d2').textContent = d.u20d2;
+      document.getElementById('u20-t3').textContent = d.u20t3;
+      document.getElementById('u20-d3').textContent = d.u20d3;
+      document.getElementById('u20-t4').textContent = d.u20t4;
+      document.getElementById('u20-d4').textContent = d.u20d4;
+      document.getElementById('u20-t5').textContent = d.u20t5;
+      document.getElementById('u20-d5').textContent = d.u20d5;
+
+      // Update 1.7
+      document.getElementById('u17-title').textContent = d.u17Title;
       document.getElementById('u17-date').textContent = d.u17Date;
       document.getElementById('u17-t1').textContent = d.u17t1;
       document.getElementById('u17-d1').textContent = d.u17d1;
@@ -354,13 +723,9 @@
       document.getElementById('u17-d2').textContent = d.u17d2;
       document.getElementById('u17-t3').textContent = d.u17t3;
       document.getElementById('u17-d3').textContent = d.u17d3;
-      document.getElementById('u17-t4').textContent = d.u17t4;
-      document.getElementById('u17-d4').textContent = d.u17d4;
-      document.getElementById('u17-t5').textContent = d.u17t5;
-      document.getElementById('u17-d5').textContent = d.u17d5;
     }
 
-    // Default: English, but check if user explicitly toggled PT
+    // Default: English, but toggleable to PT
     applyLanguage('en');
 
     document.getElementById('btn-translate').addEventListener('click', function () {

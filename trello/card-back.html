@@ -11,37 +11,37 @@
   <style>
     :root {
       --bg-body: transparent;
-      --bg-box: #ffffff;
-      --border-box: rgba(0, 0, 0, 0.08);
-      --title-color: #0f172a;
-      --desc-color: #64748b;
-      --accent-blue: #0284c7;
+      --bg-box: #0b0f19;
+      --border-box: rgba(255, 255, 255, 0.08);
+      --title-color: #f8fafc;
+      --desc-color: #94a3b8;
+      --accent-blue: #38bdf8;
       --accent-green: #10b981;
-      --accent-purple: #8b5cf6;
-      --btn-bg: #f8fafc;
-      --btn-text: #0f172a;
-      --btn-hover: #f1f5f9;
-      --item-bg: #f8fafc;
-      --timeline-line: #cbd5e1;
-      --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+      --accent-purple: #818cf8;
+      --btn-bg: rgba(255, 255, 255, 0.05);
+      --btn-text: #f8fafc;
+      --btn-hover: rgba(255, 255, 255, 0.09);
+      --item-bg: rgba(18, 25, 42, 0.75);
+      --timeline-line: rgba(255, 255, 255, 0.1);
+      --card-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.5);
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
         --bg-body: transparent;
-        --bg-box: #181d24;
-        --border-box: rgba(255, 255, 255, 0.07);
-        --title-color: #f1f5f9;
+        --bg-box: #0b0f19;
+        --border-box: rgba(255, 255, 255, 0.08);
+        --title-color: #f8fafc;
         --desc-color: #94a3b8;
         --accent-blue: #38bdf8;
-        --accent-green: #34d399;
-        --accent-purple: #a78bfa;
-        --btn-bg: #202630;
-        --btn-text: #f1f5f9;
-        --btn-hover: #29313d;
-        --item-bg: #1e242c;
-        --timeline-line: #334155;
-        --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        --accent-green: #10b981;
+        --accent-purple: #818cf8;
+        --btn-bg: rgba(255, 255, 255, 0.05);
+        --btn-text: #f8fafc;
+        --btn-hover: rgba(255, 255, 255, 0.09);
+        --item-bg: rgba(18, 25, 42, 0.75);
+        --timeline-line: rgba(255, 255, 255, 0.1);
+        --card-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.5);
       }
     }
 
@@ -58,14 +58,14 @@
     }
 
     .card-history-container {
-      background: var(--bg-box);
-      border: 1px solid var(--border-box);
-      border-radius: 12px;
-      padding: 12px 14px;
+      background: linear-gradient(180deg, #0d1322 0%, #090d16 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 14px 16px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      box-shadow: var(--card-shadow);
+      gap: 12px;
+      box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.5);
     }
 
     .header-row {
@@ -87,34 +87,38 @@
     }
 
     .btn-toggle-touchpoints {
-      background: var(--btn-bg);
-      border: 1px solid var(--border-box);
-      color: #ffffff;
-      font-size: 11px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      font-size: 11.5px;
       font-weight: 600;
-      border-radius: 20px;
+      border-radius: 9999px;
       padding: 5px 12px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      gap: 6px;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .btn-toggle-touchpoints span {
-      color: #ffffff;
+      color: #e2e8f0;
     }
 
     .btn-toggle-touchpoints:hover {
       color: #ffffff;
-      border-color: rgba(56, 189, 248, 0.7);
-      background: var(--btn-hover);
+      border-color: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.09);
       transform: translateY(-1px);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-toggle-touchpoints:hover span {
+      color: #ffffff;
     }
 
     .btn-toggle-touchpoints.is-off {
-      opacity: 0.55;
+      opacity: 0.5;
       border-style: dashed;
     }
 
@@ -168,52 +172,94 @@
     }
 
     .touchpoint-badge {
-      font-size: 11.5px;
-      font-weight: 800;
-      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
       border-radius: 999px;
-      min-width: 22px;
+      min-width: 20px;
       text-align: center;
       letter-spacing: 0.01em;
     }
 
     .touchpoint-badge.calls-badge {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--accent-green);
-      border: 1px solid rgba(16, 185, 129, 0.3);
+      background: rgba(56, 189, 248, 0.14);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
     }
 
     .touchpoint-badge.emails-badge {
-      background: rgba(139, 92, 246, 0.15);
-      color: var(--accent-purple);
-      border: 1px solid rgba(139, 92, 246, 0.3);
+      background: rgba(129, 140, 248, 0.14);
+      color: #a5b4fc;
+      border: 1px solid rgba(129, 140, 248, 0.3);
     }
 
-    .btn-touchpoint-add {
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(56, 189, 248, 0.06));
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: var(--accent-blue);
-      border-radius: 7px;
-      padding: 5px 12px;
-      font-size: 11.5px;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
+    /* Quick Actions 4-Button Grid (estilo Modern SaaS) */
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 2px;
+      transition: all 0.25s ease;
+    }
+
+    .quick-actions-grid.is-disabled {
+      display: none;
+    }
+
+    .action-box {
+      background: linear-gradient(180deg, rgba(18, 25, 42, 0.75) 0%, rgba(13, 18, 30, 0.9) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
       gap: 4px;
-      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
-    .btn-touchpoint-add:hover {
-      background: var(--accent-blue);
-      color: #ffffff;
-      border-color: var(--accent-blue);
+    .action-box:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      background: linear-gradient(180deg, rgba(24, 34, 58, 0.85) 0%, rgba(17, 24, 40, 0.95) 100%);
       transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(56, 189, 248, 0.35);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
     }
 
-    .btn-touchpoint-add:active {
-      transform: scale(0.95);
+    .action-box.wpp:hover {
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .action-box.mail:hover {
+      border-color: rgba(129, 140, 248, 0.4);
+    }
+
+    .action-box:active {
+      transform: scale(0.98);
+    }
+
+    .action-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .action-box-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .action-box-sub {
+      font-size: 10px;
+      font-weight: 500;
+      color: #94a3b8;
     }
 
     /* Key Indicators Timeline Bar */
@@ -225,19 +271,20 @@
 
     .timeline-step {
       flex: 1;
-      background: var(--btn-bg);
-      border: 1px solid var(--border-box);
-      border-radius: 8px;
-      padding: 7px 10px;
+      background: linear-gradient(180deg, rgba(18, 25, 42, 0.75) 0%, rgba(13, 18, 30, 0.9) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 8px 12px;
       display: flex;
       flex-direction: column;
       gap: 3px;
       transition: all 0.15s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
     .timeline-step.active {
-      border: 1px solid rgba(56, 189, 248, 0.5);
-      background: rgba(56, 189, 248, 0.06);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      background: linear-gradient(180deg, rgba(20, 30, 52, 0.8) 0%, rgba(14, 21, 36, 0.95) 100%);
     }
 
     .step-label {
@@ -245,13 +292,13 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--desc-color);
+      color: #94a3b8;
     }
 
     .step-val {
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 700;
-      color: var(--title-color);
+      color: #f8fafc;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -259,24 +306,26 @@
 
     /* Streamed Timeline History Section */
     .stream-section {
-      border-top: 1px solid var(--border-box);
-      padding-top: 10px;
+      background: rgba(11, 15, 25, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      max-height: 160px;
+      gap: 10px;
+      max-height: 175px;
       overflow-y: auto;
       scrollbar-width: thin;
-      scrollbar-color: var(--desc-color) transparent;
-      padding-right: 5px;
+      scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+      padding-right: 6px;
     }
 
     .stream-section::-webkit-scrollbar {
-      width: 6px;
+      width: 5px;
     }
 
     .stream-section::-webkit-scrollbar-thumb {
-      background: var(--desc-color);
+      background: rgba(255, 255, 255, 0.15);
       border-radius: 6px;
     }
 
@@ -285,11 +334,11 @@
     }
 
     .stream-title {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--desc-color);
+      letter-spacing: 0.06em;
+      color: #94a3b8;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -305,11 +354,11 @@
     .stream-timeline::before {
       content: '';
       position: absolute;
-      left: 6px;
-      top: 8px;
-      bottom: 8px;
+      left: 4px;
+      top: 6px;
+      bottom: 6px;
       width: 2px;
-      background: var(--timeline-line);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 2px;
     }
 
@@ -332,18 +381,19 @@
       width: 9px;
       height: 9px;
       border-radius: 50%;
-      background: var(--desc-color);
-      border: 2px solid var(--bg-box);
+      background: #64748b;
+      border: 2px solid #0b0f19;
       transition: all 0.2s ease;
     }
 
     .stream-node.latest .stream-dot {
-      background: var(--accent-blue);
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+      background: #38bdf8;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
     }
 
     .stream-node.first .stream-dot {
-      background: var(--accent-green);
+      background: #10b981;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
     }
 
     .stream-header {
@@ -356,7 +406,7 @@
     .stream-list-name {
       font-size: 12px;
       font-weight: 700;
-      color: var(--title-color);
+      color: #f8fafc;
       display: flex;
       align-items: center;
       gap: 5px;
@@ -365,18 +415,18 @@
     .stream-date {
       font-size: 11px;
       font-weight: 500;
-      color: var(--desc-color);
+      color: #64748b;
     }
 
     .stream-stay {
       font-size: 11.5px;
-      color: var(--desc-color);
+      color: #94a3b8;
       line-height: 1.45;
     }
 
     .stream-stay-highlight {
       font-weight: 700;
-      color: var(--accent-blue);
+      color: #38bdf8;
     }
 
     .auth-banner {
@@ -412,9 +462,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 4px;
-      padding-top: 8px;
-      border-top: 1px solid var(--border-box);
+      margin-top: 2px;
+      padding-top: 2px;
+      border-top: none;
     }
 
     .btn-link {
@@ -558,59 +608,416 @@
         box-shadow: 0 6px 16px rgba(245, 158, 11, 0.5);
       }
     }
+
+    /* Modal de Perguntar Resultado da Chamada (Estilo Moderno & Clean SaaS) */
+    .call-outcome-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 7, 14, 0.72);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeInOutcome 0.16s ease-out;
+    }
+
+    @keyframes fadeInOutcome {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .call-outcome-box {
+      background: #0d1424;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 20px 22px;
+      max-width: 380px;
+      width: 100%;
+      box-shadow: 0 24px 48px -8px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+
+    .call-outcome-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .call-outcome-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .call-outcome-title .phone-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: #38bdf8;
+    }
+
+    .call-outcome-close {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      width: 26px;
+      height: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 7px;
+      transition: all 0.15s ease;
+    }
+    .call-outcome-close:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+
+    .call-outcome-desc {
+      font-size: 12.5px;
+      color: #94a3b8;
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    .call-outcome-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn-outcome-card {
+      background: #090e18;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px 14px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-align: center;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+
+    .btn-outcome-card:active {
+      transform: scale(0.97);
+    }
+
+    .btn-outcome-card .outcome-status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      margin-bottom: 3px;
+    }
+
+    .btn-outcome-card .outcome-main-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f1f5f9;
+      letter-spacing: -0.01em;
+    }
+
+    .btn-outcome-card .outcome-sub-label {
+      font-size: 10.5px;
+      color: #64748b;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    /* Variação Atendida */
+    .btn-outcome-card.is-answered .outcome-status-dot {
+      background: #10b981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.7);
+    }
+    .btn-outcome-card.is-answered:hover {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.45);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px -4px rgba(16, 185, 129, 0.25);
+    }
+    .btn-outcome-card.is-answered:hover .outcome-main-label {
+      color: #34d399;
+    }
+
+    /* Variação Não Atendida */
+    .btn-outcome-card.is-no-answer .outcome-status-dot {
+      background: #f87171;
+      box-shadow: 0 0 10px rgba(248, 113, 113, 0.7);
+    }
+    .btn-outcome-card.is-no-answer:hover {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: rgba(239, 68, 68, 0.45);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px -4px rgba(239, 68, 68, 0.25);
+    }
+    .btn-outcome-card.is-no-answer:hover .outcome-main-label {
+      color: #f87171;
+    }
+
+    /* Botão Chamativo Prominente para Abrir a Dashboard */
+    .btn-dashboard-prominent {
+      width: 100%;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(37, 99, 235, 0.35);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      text-decoration: none;
+      box-sizing: border-box;
+    }
+    .btn-dashboard-prominent:hover {
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+      border-color: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 6px 24px rgba(37, 99, 235, 0.55);
+      transform: translateY(-1.5px);
+    }
+    .btn-dashboard-icon-wrap {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .btn-dashboard-arrow {
+      color: #bfdbfe;
+      transition: transform 0.18s ease;
+      flex-shrink: 0;
+    }
+    .btn-dashboard-prominent:hover .btn-dashboard-arrow {
+      transform: translateX(3px);
+      color: #ffffff;
+    }
+
+    /* Flash Modal Motivacional (2 segundos) */
+    .call-flash-modal {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1100;
+      min-width: 320px;
+      max-width: 92%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideDownFlash 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideDownFlash {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -14px);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+
+    .call-flash-modal.success {
+      background: #09261e;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #ecfdf5;
+    }
+
+    .call-flash-modal.warning {
+      background: #231809;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fef3c7;
+    }
+
+    .call-flash-icon {
+      font-size: 20px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .call-flash-content {
+      text-align: left;
+    }
+
+    .call-flash-title {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 2px;
+      color: #fff;
+    }
+
+    .call-flash-desc {
+      font-size: 11px;
+      opacity: 0.9;
+      line-height: 1.35;
+    }
   </style>
 </head>
 
 <body>
 
   <div class="gate-wrapper">
+    <!-- Modal de Resultado da Chamada (Atendida ou Não Atendida) -->
+    <div id="call-outcome-modal" class="call-outcome-modal-backdrop" style="display: none;">
+      <div class="call-outcome-box">
+        <div class="call-outcome-header">
+          <div class="call-outcome-title">
+            <span class="phone-badge">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </span>
+            <span id="txt-outcome-modal-title">Registar Chamada</span>
+          </div>
+          <button id="btn-call-outcome-cancel" class="call-outcome-close" title="Fechar" type="button">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <p class="call-outcome-desc" id="txt-outcome-modal-desc">
+          Como correu o telefonema com este contacto?
+        </p>
+
+        <div class="call-outcome-buttons">
+          <div id="btn-call-answered" class="btn-outcome-card is-answered" role="button" tabindex="0">
+            <div class="outcome-status-dot"></div>
+            <div class="outcome-main-label" id="lbl-outcome-answered">Atendida</div>
+            <div class="outcome-sub-label" id="lbl-outcome-answered-sub">Contacto com sucesso</div>
+          </div>
+
+          <div id="btn-call-no-answer" class="btn-outcome-card is-no-answer" role="button" tabindex="0">
+            <div class="outcome-status-dot"></div>
+            <div class="outcome-main-label" id="lbl-outcome-no-answer">Não Atendida</div>
+            <div class="outcome-sub-label" id="lbl-outcome-no-answer-sub">Reagendar / tentar depois</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Container do Flash Modal Temporário (2s) -->
+    <div id="call-flash-container"></div>
+
     <!-- Feedback Gate Overlay -->
     <div id="gate-overlay" class="gate-overlay" style="display: none;">
       <div class="locked-card">
-        <div style="font-size: 36px; margin-bottom: 4px; filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.5));">🔒
+        <div class="locked-icon-wrap" style="width: 44px; height: 44px; border-radius: 12px; background: rgba(245, 158, 11, 0.14); border: 1px solid rgba(245, 158, 11, 0.35); display: inline-flex; align-items: center; justify-content: center; color: #f59e0b; margin-bottom: 4px; box-shadow: 0 0 20px rgba(245, 158, 11, 0.25);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
         </div>
-        <div class="locked-header" id="gate-title">Funcionalidade Bloqueada</div>
-        <div class="locked-desc" id="gate-desc">Desbloqueia grátis em 10 segundos sem pagar nada!</div>
-        <button id="btn-unlock-feedback" class="btn-unlock" style="margin-top: 4px;">🔓 Desbloquear Agora — É
-          Grátis!</button>
+        <div class="locked-header" id="gate-title">Desbloqueio Grátis com Feedback</div>
+        <div class="locked-desc" id="gate-desc">Esta funcionalidade é 100% gratuita! Basta deixares uma avaliação rápida de 10 segundos para desbloquear permanentemente.</div>
+        <button id="btn-unlock-feedback" class="btn-unlock" style="margin-top: 4px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+          <span id="lbl-unlock-text">Dar Feedback Grátis (Desbloquear)</span>
+        </button>
       </div>
     </div>
     <div class="card-history-container" id="main-content">
-      <div class="header-row">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;">
+      <div class="header-row" style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+          <button id="btn-quick-templates" class="btn-toggle-touchpoints" title="Personalizar e gerir modelos de mensagem e email">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span id="txt-quick-templates">Message Templates</span>
+          </button>
+          <button id="btn-copy-card-summary" class="btn-toggle-touchpoints" title="Copiar resumo completo deste cartão para a área de transferência">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span id="txt-copy-card-summary">Copiar Resumo</span>
+          </button>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <button id="btn-view-logs" class="btn-toggle-touchpoints" title="Ver histórico detalhado de contactos">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span id="txt-view-logs">Histórico</span>
+          </button>
           <button id="btn-toggle-touchpoints" class="btn-toggle-touchpoints"
             title="Ativar ou ocultar registo de chamadas e emails">
-            <span id="txt-toggle-touchpoints">⚡ Ações: ON</span>
-          </button>
-          <button id="btn-view-logs" class="btn-toggle-touchpoints" title="Ver histórico detalhado de contactos">
-            <span id="txt-view-logs">📋 Ver Histórico</span>
+            <span class="status-indicator-dot" style="width: 6px; height: 6px; border-radius: 50%; background: #38bdf8; display: inline-block;"></span>
+            <span id="txt-toggle-touchpoints">Ações: ON</span>
           </button>
         </div>
       </div>
 
-      <!-- Quick Touchpoints (Calls & Emails) — Agora no topo e com maior destaque -->
-      <div id="touchpoints-row" class="touchpoints-row">
-        <div class="touchpoint-card">
-          <div class="touchpoint-info">
-            <span class="touchpoint-icon">📞</span>
-            <span class="touchpoint-label" id="lbl-touch-calls">Telefonemas:</span>
+      <!-- 4 Quick Action Boxes (Estilo SaaS Premium) -->
+      <div id="touchpoints-row" class="quick-actions-grid">
+        <!-- 1. Registar Chamada -->
+        <button id="btn-add-call" class="action-box" title="Registar telefonema efetuado">
+          <div class="action-box-header">
+            <span class="action-box-title">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <span id="lbl-add-call-text">+1 Chamada</span>
+            </span>
             <span class="touchpoint-badge calls-badge" id="val-touch-calls">0</span>
           </div>
-          <button id="btn-add-call" class="btn-touchpoint-add" title="Registar telefonema">
-            + Chamada
-          </button>
-        </div>
+          <span class="action-box-sub" id="lbl-calls-sub">feitas nesta lead</span>
+        </button>
 
-        <div class="touchpoint-card">
-          <div class="touchpoint-info">
-            <span class="touchpoint-icon">✉️</span>
-            <span class="touchpoint-label" id="lbl-touch-emails">E-mails:</span>
+        <!-- 2. Registar Email Enviado -->
+        <button id="btn-add-email" class="action-box" title="Registar email já enviado">
+          <div class="action-box-header">
+            <span class="action-box-title">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <span id="lbl-add-email-text">+1 Email</span>
+            </span>
             <span class="touchpoint-badge emails-badge" id="val-touch-emails">0</span>
           </div>
-          <button id="btn-add-email" class="btn-touchpoint-add" title="Registar e-mail">
-            + Email
-          </button>
-        </div>
+          <span class="action-box-sub" id="lbl-emails-sub">enviados</span>
+        </button>
+
+        <!-- 3. Enviar Email (Abrir Modelos) -->
+        <button id="btn-send-email-direct" class="action-box mail" title="Escolher modelo e enviar email">
+          <div class="action-box-header">
+            <span class="action-box-title">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <span id="lbl-send-email-text">Enviar Email</span>
+            </span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <span class="action-box-sub" id="lbl-send-email-sub">Seleciona o modelo</span>
+        </button>
+
+        <!-- 4. Enviar Mensagem (WhatsApp) -->
+        <button id="btn-send-wpp-direct" class="action-box wpp" title="Escolher modelo e abrir WhatsApp">
+          <div class="action-box-header">
+            <span class="action-box-title">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              <span id="lbl-send-wpp-text">Enviar Mensagem</span>
+            </span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <span class="action-box-sub" id="lbl-send-wpp-sub">Abrir WhatsApp</span>
+        </button>
       </div>
 
       <div class="timeline-bar">
@@ -627,17 +1034,23 @@
       <!-- Sequential Stream Timeline Section -->
       <div id="stream-section" class="stream-section">
         <div class="stream-title">
-          <span id="lbl-stream-title">📜 Histórico Corrente de Passagens:</span>
+          <span id="lbl-stream-title">Histórico Corrente de Passagens:</span>
         </div>
         <div id="stream-container" class="stream-timeline">
           <!-- Filled via JS -->
         </div>
       </div>
 
-      <div class="footer-row" style="display: flex; justify-content: flex-start; align-items: center; margin-top: 6px;">
-        <button id="btn-dashboard" class="btn-link" style="background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600; color: #38bdf8; text-decoration: underline;">
-          📈 Ver KPIs Completos do Quadro →
-        </button>
+      <div class="footer-row" style="margin-top: 10px; width: 100%;">
+        <a id="btn-dashboard" class="btn-dashboard-prominent" href="https://kpismaster.vercel.app" target="_blank" rel="noopener noreferrer" title="Ver mais dados na Dashboard Web">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="btn-dashboard-icon-wrap">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </span>
+            <span id="txt-dashboard-btn">Ver mais dados na Dashboard Web</span>
+          </div>
+          <svg class="btn-dashboard-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </div>
     </div>
   </div>
@@ -669,7 +1082,7 @@
         yesterday: 'Ontem',
         daysAgo: '{days} dias atrás',
         cycleText: 'Ciclo Total: {days} dias',
-        btnText: '📈 Ver KPIs Completos do Quadro →',
+        btnText: 'Ver mais dados na Dashboard Web',
         entryText: 'Entrou no dia {date} na lista ',
         movedText: 'Passou para ',
         stayedText: 'passado ',
@@ -678,15 +1091,15 @@
         hoursUnit: 'horas',
         authNotice: 'Autorizar Trello para ver histórico detalhado de datas',
         authBtn: 'Autorizar',
-        lockedTitle: '🔒 Funcionalidade Bloqueada',
-        lockedDesc: 'Desbloqueia grátis em 10 segundos sem pagar nada!',
-        lockedBtn: '🔓 Desbloquear Agora — É Grátis!',
+        lockedTitle: 'Desbloqueio Grátis com Feedback',
+        lockedDesc: 'Esta funcionalidade é 100% gratuita! Basta deixares uma avaliação rápida de 10 segundos para desbloquear permanentemente.',
+        lockedBtn: 'Dar Feedback Grátis (Desbloquear)',
         callsLabel: 'Telefonemas:',
         emailsLabel: 'E-mails:',
-        streamTitle: '📜 Histórico de Listas:',
-        viewLogBtn: '📋 Ver Histórico contactos Feitos',
-        addCallBtn: '+ 1 call Feita',
-        addEmailBtn: '+ 1 Email enviado'
+        streamTitle: 'Histórico de Listas:',
+        viewLogBtn: 'Ver Histórico de Contactos',
+        addCallBtn: '+1 Chamada',
+        addEmailBtn: '+1 Email'
       },
       en: {
         title: 'Lead Stage & Speed History',
@@ -697,7 +1110,7 @@
         yesterday: 'Yesterday',
         daysAgo: '{days} days ago',
         cycleText: 'Total Cycle: {days} days',
-        btnText: '📈 View Full Board KPIs →',
+        btnText: 'View more data on Web Dashboard',
         entryText: 'Entered on {date} in list ',
         movedText: 'Moved to ',
         stayedText: 'after ',
@@ -706,15 +1119,15 @@
         hoursUnit: 'hours',
         authNotice: 'Authorize Trello API to view detailed stage history',
         authBtn: 'Authorize',
-        lockedTitle: '🔒 Feature Locked',
-        lockedDesc: 'Unlock for free in just 10 seconds — no payment needed!',
-        lockedBtn: '🔓 Unlock Now — It\'s Free!',
+        lockedTitle: 'Free Unlock with Feedback',
+        lockedDesc: 'This feature is 100% free! Simply leave a quick 10-second review to unlock permanent access.',
+        lockedBtn: 'Give Free Feedback (Unlock Now)',
         callsLabel: 'Calls:',
         emailsLabel: 'Emails:',
-        streamTitle: '📜 Current Stage History:',
-        viewLogBtn: '📋 View History',
-        addCallBtn: '+ 1 Call Made',
-        addEmailBtn: '+ 1 Email Sent'
+        streamTitle: 'Current Stage History:',
+        viewLogBtn: 'View History',
+        addCallBtn: '+1 Call',
+        addEmailBtn: '+1 Email'
       }
     };
 
@@ -738,39 +1151,83 @@
       if (elEmails) elEmails.textContent = tDict.emailsLabel;
       var elStream = document.getElementById('lbl-stream-title');
       if (elStream) elStream.textContent = tDict.streamTitle;
-      var elDashboard = document.getElementById('btn-dashboard');
-      if (elDashboard) elDashboard.textContent = tDict.btnText;
+
+      var txtDashboard = document.getElementById('txt-dashboard-btn');
+      if (txtDashboard) txtDashboard.textContent = isPt ? 'Ver mais dados na Dashboard Web' : 'View more data on Web Dashboard';
+
       var elGateTitle = document.getElementById('gate-title');
       if (elGateTitle) elGateTitle.textContent = tDict.lockedTitle;
       var elGateDesc = document.getElementById('gate-desc');
       if (elGateDesc) elGateDesc.textContent = tDict.lockedDesc;
-      var elUnlock = document.getElementById('btn-unlock-feedback');
-      if (elUnlock) elUnlock.textContent = tDict.lockedBtn;
+      var elUnlockText = document.getElementById('lbl-unlock-text');
+      if (elUnlockText) {
+        elUnlockText.textContent = tDict.lockedBtn;
+      } else {
+        var elUnlock = document.getElementById('btn-unlock-feedback');
+        if (elUnlock) elUnlock.textContent = tDict.lockedBtn;
+      }
 
-      var btnAddCallEl = document.getElementById('btn-add-call');
-      if (btnAddCallEl) btnAddCallEl.textContent = tDict.addCallBtn;
-      var btnAddEmailEl = document.getElementById('btn-add-email');
-      if (btnAddEmailEl) btnAddEmailEl.textContent = tDict.addEmailBtn;
+      var lblCall = document.getElementById('lbl-add-call-text');
+      if (lblCall) lblCall.textContent = isPt ? '+1 Chamada' : '+1 Call';
+      var lblCallsSub = document.getElementById('lbl-calls-sub');
+      if (lblCallsSub) lblCallsSub.textContent = isPt ? 'feitas nesta lead' : 'logged on lead';
+
+      var lblEmail = document.getElementById('lbl-add-email-text');
+      if (lblEmail) lblEmail.textContent = isPt ? '+1 Email' : '+1 Email';
+      var lblEmailsSub = document.getElementById('lbl-emails-sub');
+      if (lblEmailsSub) lblEmailsSub.textContent = isPt ? 'enviados' : 'sent';
+
+      var lblSendEmail = document.getElementById('lbl-send-email-text');
+      if (lblSendEmail) lblSendEmail.textContent = isPt ? 'Enviar Email' : 'Send Email';
+      var lblSendEmailSub = document.getElementById('lbl-send-email-sub');
+      if (lblSendEmailSub) lblSendEmailSub.textContent = isPt ? 'Seleciona o modelo' : 'Select template';
+
+      var lblSendWpp = document.getElementById('lbl-send-wpp-text');
+      if (lblSendWpp) lblSendWpp.textContent = isPt ? 'Enviar Mensagem' : 'Send Message';
+      var lblSendWppSub = document.getElementById('lbl-send-wpp-sub');
+      if (lblSendWppSub) lblSendWppSub.textContent = isPt ? 'Abrir WhatsApp' : 'Open WhatsApp';
 
       var txtViewLogs = document.getElementById('txt-view-logs');
-      if (txtViewLogs) txtViewLogs.textContent = tDict.viewLogBtn;
+      if (txtViewLogs) txtViewLogs.textContent = isPt ? 'Histórico' : 'History';
+
+      var txtQuickTemplates = document.getElementById('txt-quick-templates');
+      if (txtQuickTemplates) txtQuickTemplates.textContent = isPt ? 'Modelos' : 'Message Templates';
+
+      var txtCopySummaryEl = document.getElementById('txt-copy-card-summary');
+      if (txtCopySummaryEl) txtCopySummaryEl.textContent = isPt ? 'Copiar Resumo' : 'Copy Summary';
 
       var txtToggle = document.getElementById('txt-toggle-touchpoints');
       if (txtToggle) {
         var isOff = document.getElementById('btn-toggle-touchpoints')?.classList.contains('is-off');
-        txtToggle.textContent = isOff ? (isPt ? '⚡ Ações: OFF' : '⚡ Actions: OFF') : (isPt ? '⚡ Ações: ON' : '⚡ Actions: ON');
+        txtToggle.textContent = isOff ? (isPt ? 'Ações: OFF' : 'Actions: OFF') : (isPt ? 'Actions: OFF' : 'Actions: ON');
       }
+
+      // Traduções do Modal de Chamadas (Atendida ou Não Atendida)
+      var txtModalTitle = document.getElementById('txt-outcome-modal-title');
+      if (txtModalTitle) txtModalTitle.textContent = isPt ? 'Registar Chamada' : 'Log Call';
+      var txtModalDesc = document.getElementById('txt-outcome-modal-desc');
+      if (txtModalDesc) txtModalDesc.textContent = isPt ? 'Como correu o telefonema com este contacto?' : 'How did the phone call with this contact go?';
+      var lblAnswered = document.getElementById('lbl-outcome-answered');
+      if (lblAnswered) lblAnswered.textContent = isPt ? 'Atendida' : 'Answered';
+      var lblAnsweredSub = document.getElementById('lbl-outcome-answered-sub');
+      if (lblAnsweredSub) lblAnsweredSub.textContent = isPt ? 'Contacto com sucesso' : 'Successful contact';
+      var lblNoAnswer = document.getElementById('lbl-outcome-no-answer');
+      if (lblNoAnswer) lblNoAnswer.textContent = isPt ? 'Não Atendida' : 'No Answer';
+      var lblNoAnswerSub = document.getElementById('lbl-outcome-no-answer-sub');
+      if (lblNoAnswerSub) lblNoAnswerSub.textContent = isPt ? 'Reagendar / tentar depois' : 'Reschedule / try later';
     }
 
     // Default to EN immediately
     applyCardBackLanguage('en');
 
-    // Check user preference
+    // Check user preference or Trello locale
     t.get('member', 'private', 'kpi_user_lang').then(function (savedLang) {
-      if (savedLang === 'pt') {
-        applyCardBackLanguage('pt');
-      }
-    }).catch(function () { });
+      var lang = savedLang || ((t.locale && t.locale.toLowerCase().startsWith('pt')) ? 'pt' : 'en');
+      applyCardBackLanguage(lang);
+    }).catch(function () {
+      var lang = (t.locale && t.locale.toLowerCase().startsWith('pt')) ? 'pt' : 'en';
+      applyCardBackLanguage(lang);
+    });
 
     // ── Toggle Ativar/Desativar Touchpoints ──
     var btnToggleTouchpoints = document.getElementById('btn-toggle-touchpoints');
@@ -818,79 +1275,137 @@
       });
     }
 
-    function checkFeedbackStatus() {
-      return Promise.all([
-        t.get('member', 'private', 'kpi_feedback_state').catch(function(){ return null; }),
-        t.get('member', 'private', 'kpi_has_reviewed').catch(function(){ return false; })
-      ]).then(function (results) {
-          var rawState = results[0];
-          var hasReviewedFlag = (results[1] === true || results[1] === 'true');
+    var cardLockShownTime = null;
+    var cardUnlockClicked = false;
+    var cardLockDismissedTracked = false;
 
-          var state = null;
-          if (rawState) {
-            state = typeof rawState === 'string' ? JSON.parse(rawState) : rawState;
-          }
-          var hasSubmitted = false;
-          if ((state && state.lastSubmittedTime) || hasReviewedFlag) {
-            hasSubmitted = true;
-          }
-          try {
-            if (localStorage.getItem('kpi_feedback_submitted_globally') === 'true' || localStorage.getItem('kpi_has_reviewed') === 'true') {
-              hasSubmitted = true;
-            }
-          } catch (e) { }
-
-          var overlay = document.getElementById('gate-overlay');
-          var mainContent = document.getElementById('main-content');
-          var titleIcon = document.querySelector('.title-icon');
-          var btnHeader = document.getElementById('btn-header-unlock');
-
-          if (hasSubmitted) {
-            overlay.style.display = 'none';
-            mainContent.classList.remove('is-locked');
-            if (titleIcon) titleIcon.textContent = '⏱️';
-            if (btnHeader) btnHeader.style.display = 'none';
-          } else {
-            overlay.style.display = 'flex';
-            mainContent.classList.add('is-locked');
-            if (titleIcon) titleIcon.textContent = '🔒';
-            if (btnHeader) btnHeader.style.display = 'inline-flex';
-          }
-          t.sizeTo(document.body).catch(function () { });
-        })
-        .catch(function (err) {
-          console.warn('[KPI Master] Could not check feedback state:', err);
-        });
+    function trackCardLockDismissed() {
+      if (cardLockShownTime && !cardUnlockClicked && !cardLockDismissedTracked) {
+        cardLockDismissedTracked = true;
+        var timeViewed = Math.max(0, Math.round((Date.now() - cardLockShownTime) / 1000));
+        if (timeViewed >= 1) {
+          Analytics.track('locked_feature_dismissed', {
+            feature: 'lead_stage_and_speed_history',
+            time_viewed: timeViewed
+          });
+        }
+      }
     }
 
-    document.getElementById('btn-unlock-feedback').addEventListener('click', function (e) {
-      e.preventDefault();
-      Analytics.track('feature_unlock_intent', {
-        feature: 'lead_stage_and_speed_history',
-        source: 'card_back_gate',
-        description: 'Utilizador clicou para desbloquear Lead Stage & Speed History'
+    function checkFeedbackStatus() {
+      var localReviewed = false;
+      try {
+        localReviewed = (
+          localStorage.getItem('kpi_feedback_submitted_globally') === 'true' ||
+          localStorage.getItem('kpi_has_reviewed') === 'true'
+        );
+      } catch (e) { }
+
+      var overlay = document.getElementById('gate-overlay');
+      var mainContent = document.getElementById('main-content');
+      var titleIcon = document.querySelector('.title-icon');
+      var btnHeader = document.getElementById('btn-header-unlock');
+
+      function applyLockUI(unlocked) {
+        if (unlocked) {
+          if (overlay) overlay.style.display = 'none';
+          if (mainContent) mainContent.classList.remove('is-locked');
+          if (titleIcon) titleIcon.textContent = '⏱️';
+          if (btnHeader) btnHeader.style.display = 'none';
+        } else {
+          if (overlay) overlay.style.display = 'flex';
+          if (mainContent) mainContent.classList.add('is-locked');
+          if (titleIcon) titleIcon.textContent = '🔒';
+          if (btnHeader) btnHeader.style.display = 'inline-flex';
+          if (!cardLockShownTime) cardLockShownTime = Date.now();
+        }
+        t.sizeTo(document.body).catch(function () { });
+      }
+
+      if (localReviewed) {
+        applyLockUI(true);
+        return Promise.resolve(true);
+      }
+
+      return Promise.all([
+        t.get('member', 'private', 'kpi_feedback_state').catch(function(){ return null; }),
+        t.get('member', 'private', 'kpi_has_reviewed').catch(function(){ return false; }),
+        t.get('member', 'shared', 'kpi_has_reviewed').catch(function(){ return false; }),
+        t.get('board', 'shared', 'kpi_feedback_submitted_globally').catch(function(){ return false; })
+      ]).then(function (results) {
+        var rawState = results[0];
+        var state = (rawState && typeof rawState === 'string') ? JSON.parse(rawState) : rawState;
+        var hasSubmittedTime = state && (state.lastSubmittedTime > 0);
+        var flagMemberPriv = (results[1] === true || results[1] === 'true');
+        var flagMemberShared = (results[2] === true || results[2] === 'true');
+        var flagBoardShared = (results[3] === true || results[3] === 'true');
+
+        var isUnlocked = Boolean(localReviewed || flagMemberPriv || hasSubmittedTime || flagMemberShared || flagBoardShared);
+        if (isUnlocked) {
+          try {
+            localStorage.setItem('kpi_feedback_submitted_globally', 'true');
+            localStorage.setItem('kpi_has_reviewed', 'true');
+          } catch (e) {}
+        }
+        applyLockUI(isUnlocked);
+        return isUnlocked;
+      }).catch(function (err) {
+        console.warn('[KPI Master] Could not check feedback state:', err);
+        applyLockUI(localReviewed);
+        return localReviewed;
       });
-      t.modal({
-        title: isPt ? '⭐ A Tua Opinião — KPI Master' : '⭐ Your Feedback — KPI Master',
-        url: POWERUP_URL + '/feedback.html?v=3',
-        height: 520
+    }
+
+    var btnUnlockFeedback = document.getElementById('btn-unlock-feedback');
+    if (btnUnlockFeedback) {
+      btnUnlockFeedback.addEventListener('click', function (e) {
+        e.preventDefault();
+        cardUnlockClicked = true;
+        Analytics.track('feature_unlock_intent', {
+          feature: 'lead_stage_and_speed_history',
+          source: 'card_back_gate'
+        });
+        t.modal({
+          title: isPt ? 'O Teu Feedback Importa' : 'Your Feedback Matters',
+          accentColor: '#090d16',
+          url: POWERUP_URL + '/feedback.html?v=3',
+          height: 520
+        });
       });
-    });
+    }
 
+    var btnHeaderUnlock = document.getElementById('btn-header-unlock');
+    if (btnHeaderUnlock) {
+      btnHeaderUnlock.addEventListener('click', function (e) {
+        e.preventDefault();
+        cardUnlockClicked = true;
+        Analytics.track('feature_unlock_intent', {
+          feature: 'lead_stage_and_speed_history',
+          source: 'card_back_header'
+        });
+        t.modal({
+          title: isPt ? 'O Teu Feedback Importa' : 'Your Feedback Matters',
+          accentColor: '#090d16',
+          url: POWERUP_URL + '/feedback.html?v=3',
+          height: 520
+        });
+      });
+    }
 
+    window.addEventListener('pagehide', trackCardLockDismissed);
 
-    t.render(function () {
+    function initCardBackSection() {
       checkFeedbackStatus();
       t.sizeTo(document.body).catch(function () { });
 
       Promise.all([
-        t.card('id', 'name', 'idList', 'dateLastActivity', 'badges'),
-        t.list('id', 'name'),
-        t.board('id')
+        t.card('id', 'name', 'idList', 'dateLastActivity', 'badges').catch(function() { return {}; }),
+        t.list('id', 'name').catch(function() { return {}; }),
+        t.board('id').catch(function() { return {}; })
       ]).then(function (res) {
-        var card = res[0];
-        var currentList = res[1];
-        var board = res[2];
+        var card = res[0] || {};
+        var currentList = res[1] || {};
+        var board = res[2] || {};
 
         if (card && card.id) {
           var timestamp = parseInt(card.id.substring(0, 8), 16);
@@ -941,7 +1456,7 @@
               updateTouchpointsUI(saved);
             });
 
-          function handleAddTouchpoint(type) {
+          function handleAddTouchpoint(type, callOutcome) {
             return Promise.all([
               t.get('card', 'shared', 'kpi_touchpoints').catch(function () { return null; }),
               t.get('card', 'shared', 'kpi_touchpoints_history').catch(function () { return []; }),
@@ -976,6 +1491,7 @@
 
               var logEntry = {
                 type: type,
+                outcome: callOutcome || null,
                 author: memberName,
                 timestamp: Date.now(),
                 formattedDate: `${dateFormatted} - ${timeFormatted}`
@@ -987,13 +1503,126 @@
                 t.set('card', 'shared', 'kpi_touchpoints', updated),
                 t.set('card', 'shared', 'kpi_touchpoints_history', newHistory)
               ]).then(function () {
-                return t.alert({
-                  message: type === 'call'
-                    ? (isPt ? '📞 Chamada registada no histórico!' : '📞 Call logged to history!')
-                    : (isPt ? '✉️ E-mail registado no histórico!' : '✉️ Email logged to history!'),
-                  duration: 3
-                });
+                if (type === 'call') {
+                  showMotivationalFlash(callOutcome);
+                } else {
+                  return t.alert({
+                    message: isPt ? '✉️ E-mail registado no histórico!' : '✉️ Email logged to history!',
+                    duration: 3
+                  });
+                }
               });
+            });
+          }
+
+          // Mensagens motivacionais aleatórias para chamadas (Profissional & Elegante - PT & EN)
+          var motivationalDict = {
+            pt: {
+              noAnswer: [
+                { title: 'Tentativa registada com sucesso', desc: 'A persistência faz a diferença: continua a tentar noutro horário e define um lembrete.' },
+                { title: 'Persistência é a chave', desc: 'A maior parte dos contactos converte após múltiplas tentativas. Agenda um novo horário!' },
+                { title: 'Excelente iniciativa', desc: 'Contacto registado. Podes também enviar uma mensagem breve para quebrar o gelo.' },
+                { title: 'Registo efetuado', desc: 'As melhores horas de contacto costumam ser ao fim da manhã ou fim da tarde. Marca o próximo toque!' },
+                { title: 'Bom acompanhamento', desc: 'Telefonema registado no histórico. Dá seguimento por email ou volta a tentar mais tarde.' }
+              ],
+              answered: [
+                { title: 'Chamada atendida registada', desc: 'Excelente conversa! Adiciona um comentário com o resumo para manter a equipa alinhada.' },
+                { title: 'Contacto com sucesso', desc: 'Aproveita o momento de interesse: regista os pontos acordados e define o próximo passo da lead.' },
+                { title: 'Excelente avanço no negócio', desc: 'Telefonema concluído. Não te esqueças de deixar um comentário com o que combinaram.' },
+                { title: 'Conversa realizada', desc: 'Mais uma oportunidade qualificada. Atualiza o estado da oportunidade e define a data seguinte.' }
+              ]
+            },
+            en: {
+              noAnswer: [
+                { title: 'Call attempt logged', desc: 'Persistence is key: try calling again at a different time and set a reminder.' },
+                { title: 'Keep the momentum going', desc: 'Most deals close after multiple touchpoints. Schedule your next follow-up!' },
+                { title: 'Proactive follow-up', desc: 'Call logged. You can also send a quick WhatsApp or email to break the ice.' },
+                { title: 'Attempt registered', desc: 'Late morning and late afternoon are great times to reconnect. Keep going!' },
+                { title: 'Good tracking habit', desc: 'Call logged in history. Follow up via email or try calling back later.' }
+              ],
+              answered: [
+                { title: 'Call answered & logged', desc: 'Great conversation! Add a quick comment with the key points to keep everyone aligned.' },
+                { title: 'Successful contact', desc: 'Strike while the lead is warm: note down agreed next steps and move the deal forward.' },
+                { title: 'Great sales progress', desc: 'Call completed. Keep the momentum going by following up on what you discussed.' },
+                { title: 'Qualified conversation', desc: 'Another productive touchpoint. Update the deal status and set your next reminder.' }
+              ]
+            }
+          };
+
+          function showMotivationalFlash(outcome) {
+            var container = document.getElementById('call-flash-container');
+            if (!container) return;
+
+            var isAnswered = outcome === 'answered';
+            var currentMessages = isPt ? motivationalDict.pt : motivationalDict.en;
+            var pool = isAnswered ? currentMessages.answered : currentMessages.noAnswer;
+            var chosen = pool[Math.floor(Math.random() * pool.length)];
+
+            var iconSvg = isAnswered
+              ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'
+              : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+
+            var themeClass = isAnswered ? 'success' : 'warning';
+
+            var flashHtml = `
+              <div class="call-flash-modal ${themeClass}">
+                <div class="call-flash-icon">${iconSvg}</div>
+                <div class="call-flash-content">
+                  <div class="call-flash-title">${chosen.title}</div>
+                  <div class="call-flash-desc">${chosen.desc}</div>
+                </div>
+              </div>
+            `;
+
+            container.innerHTML = flashHtml;
+
+            // Fecha automaticamente ao fim de 2 segundos
+            setTimeout(function () {
+              container.innerHTML = '';
+            }, 2000);
+          }
+
+          // Modal de Pergunta: Chamada Atendida ou Não Atendida
+          var callModal = document.getElementById('call-outcome-modal');
+          var btnCallAnswered = document.getElementById('btn-call-answered');
+          var btnCallNoAnswer = document.getElementById('btn-call-no-answer');
+          var btnCallCancel = document.getElementById('btn-call-outcome-cancel');
+
+          function openCallOutcomePrompt() {
+            if (callModal) {
+              callModal.style.display = 'flex';
+            } else {
+              handleAddTouchpoint('call', 'answered');
+            }
+          }
+
+          function closeCallOutcomePrompt() {
+            if (callModal) callModal.style.display = 'none';
+          }
+
+          if (btnCallCancel && !btnCallCancel._bound) {
+            btnCallCancel._bound = true;
+            btnCallCancel.addEventListener('click', function(e) {
+              e.preventDefault();
+              closeCallOutcomePrompt();
+            });
+          }
+
+          if (btnCallAnswered && !btnCallAnswered._bound) {
+            btnCallAnswered._bound = true;
+            btnCallAnswered.addEventListener('click', function(e) {
+              e.preventDefault();
+              closeCallOutcomePrompt();
+              handleAddTouchpoint('call', 'answered');
+            });
+          }
+
+          if (btnCallNoAnswer && !btnCallNoAnswer._bound) {
+            btnCallNoAnswer._bound = true;
+            btnCallNoAnswer.addEventListener('click', function(e) {
+              e.preventDefault();
+              closeCallOutcomePrompt();
+              handleAddTouchpoint('call', 'no-answer');
             });
           }
 
@@ -1009,8 +1638,9 @@
                 description: 'Utilizador abriu o modal de histórico de contactos'
               });
               t.modal({
-                title: isPt ? '📋 Histórico de Contactos' : '📋 Contact History',
-                url: POWERUP_URL + '/contact-log.html?v=3',
+                title: isPt ? 'Histórico de Contactos' : 'Contact History',
+                accentColor: '#090d16',
+                url: POWERUP_URL + '/contact-log.html?v=5',
                 height: 480
               });
             });
@@ -1024,7 +1654,7 @@
                 action_type: 'call',
                 description: 'Utilizador clicou em +1 Chamada no verso do cartão'
               });
-              handleAddTouchpoint('call');
+              openCallOutcomePrompt();
             });
           }
           if (btnAddEmail && !btnAddEmail._bound) {
@@ -1144,7 +1774,7 @@
                         <div class="${nodeClass}">
                           <div class="stream-dot"></div>
                           <div class="stream-header">
-                            <span class="stream-list-name">${isFirst ? '📍' : (isLatest ? '🎯' : '➡️')} ${listName}</span>
+                            <span class="stream-list-name">${listName}</span>
                             <span class="stream-date">${formattedDate}</span>
                           </div>
                           <div class="stream-stay">${nodeText}</div>
@@ -1184,35 +1814,200 @@
         console.error('[KPI Master] Could not load card details:', err);
         t.sizeTo(document.body).catch(function () { });
       });
-    });
+    }
 
-    // ── Botão para Abrir a Dashboard (Ligado no escopo global para nunca falhar) ──
-    var btnDashboard = document.getElementById('btn-dashboard');
-    if (btnDashboard) {
-      btnDashboard.addEventListener('click', function (e) {
-        e.preventDefault();
-        Analytics.track('card_open_dashboard_clicked', {
-          source: 'card_back_footer',
-          description: 'Utilizador clicou em Ver KPIs do Quadro a partir do verso do cartão'
+    t.render(initCardBackSection);
+    setTimeout(initCardBackSection, 150);
+
+    function isFeedbackUnlockedCardBack() {
+      var localReviewed = false;
+      try {
+        localReviewed = (localStorage.getItem('kpi_feedback_submitted_globally') === 'true' || localStorage.getItem('kpi_has_reviewed') === 'true');
+      } catch (e) { }
+
+      if (localReviewed) return Promise.resolve(true);
+
+      return Promise.all([
+        t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; }),
+        t.get('member', 'private', 'kpi_has_reviewed').catch(function () { return false; })
+      ]).then(function (results) {
+        var rawState = results[0];
+        var hasReviewedFlag = (results[1] === true || results[1] === 'true');
+        var state = null;
+        if (rawState) {
+          state = typeof rawState === 'string' ? JSON.parse(rawState) : rawState;
+        }
+        return Boolean((state && state.lastSubmittedTime) || hasReviewedFlag || localReviewed);
+      });
+    }
+
+    // ── Botão de Modelos / WhatsApp / Email ──
+    function openTemplatesModal(entryMode) {
+      checkFeedbackStatus().then(function(unlocked) {
+        if (!unlocked) {
+          return t.alert({
+            message: isPt ? '🔒 Funcionalidade bloqueada. Deixa feedback para desbloquear!' : '🔒 Feature locked. Leave feedback to unlock!',
+            duration: 3
+          });
+        }
+
+        Analytics.track('card_templates_modal_opened', {
+          source: 'card_back_action',
+          mode: entryMode || 'whatsapp'
         });
 
-        // 1. Abre a Micro Dashboard em modal nativo no Trello
+        var url = POWERUP_URL + '/templates.html?v=5' + (entryMode ? '&mode=' + entryMode : '') + '&from=card&lang=' + (isPt ? 'pt' : 'en');
+
         t.modal({
-          title: isPt ? 'Micro Dashboard & Velocidade das Leads' : 'Micro Dashboard & Lead Speed',
-          url: POWERUP_URL + '/dashboard.html?v=3',
-          height: 690,
-          fullscreen: false
-        }).catch(function () {
-          // Se modal não abrir, abre o site web como fallback
-          t.board('id').then(function (b) {
-            var bId = b && b.id ? b.id : '';
-            window.open(SITE + (bId ? '#board=' + bId : ''), '_blank');
-          }).catch(function () {
-            window.open(SITE, '_blank');
+          title: ' ',
+          url: url,
+          height: 620,
+          fullscreen: false,
+          accentColor: '#090d16'
+        });
+      });
+    }
+
+    var btnQuickTemplates = document.getElementById('btn-quick-templates');
+    if (btnQuickTemplates) {
+      btnQuickTemplates.addEventListener('click', function(e) {
+        e.preventDefault();
+        openTemplatesModal('settings');
+      });
+    }
+
+    var btnSendEmailDirect = document.getElementById('btn-send-email-direct');
+    if (btnSendEmailDirect) {
+      btnSendEmailDirect.addEventListener('click', function(e) {
+        e.preventDefault();
+        openTemplatesModal('email');
+      });
+    }
+
+    var btnSendWppDirect = document.getElementById('btn-send-wpp-direct');
+    if (btnSendWppDirect) {
+      btnSendWppDirect.addEventListener('click', function(e) {
+        e.preventDefault();
+        openTemplatesModal('whatsapp');
+      });
+    }
+
+    // ── Função Auxiliar de Cópia Fiável para Iframes / Trello ──
+    function copyTextSafely(text) {
+      return new Promise(function (resolve, reject) {
+        try {
+          var textArea = document.createElement('textarea');
+          textArea.value = text;
+          textArea.style.position = 'fixed';
+          textArea.style.top = '0';
+          textArea.style.left = '0';
+          textArea.style.width = '2em';
+          textArea.style.height = '2em';
+          textArea.style.padding = '0';
+          textArea.style.border = 'none';
+          textArea.style.outline = 'none';
+          textArea.style.boxShadow = 'none';
+          textArea.style.background = 'transparent';
+          textArea.style.opacity = '0';
+          textArea.setAttribute('readonly', '');
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          textArea.setSelectionRange(0, textArea.value.length);
+          var success = document.execCommand('copy');
+          document.body.removeChild(textArea);
+          if (success) {
+            return resolve();
+          }
+        } catch (e) {}
+
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(resolve).catch(function () {
+            reject(new Error('Clipboard copy rejected'));
+          });
+          return;
+        }
+
+        reject(new Error('Copy not supported'));
+      });
+    }
+
+    // ── Botão de Copiar Resumo do Cartão ──
+    var btnCopySummary = document.getElementById('btn-copy-card-summary');
+    if (btnCopySummary) {
+      btnCopySummary.addEventListener('click', function(e) {
+        e.preventDefault();
+        Promise.all([
+          t.card('name', 'desc', 'members'),
+          t.list('name'),
+          t.member('fullName', 'username')
+        ]).then(function(res) {
+          var card = res[0] || {};
+          var list = res[1] || {};
+          var loggedMember = res[2] || {};
+
+          var owner = (card.members && card.members.length > 0)
+            ? (card.members[0].fullName || card.members[0].username)
+            : (loggedMember ? (loggedMember.fullName || loggedMember.username) : '—');
+
+          var ageEl = document.getElementById('lbl-age-val');
+          var ageStr = ageEl ? ageEl.textContent : '—';
+          var dateStr = new Date().toLocaleDateString(isPt ? 'pt-PT' : 'en-US');
+
+          var summaryText = isPt ? [
+            'Lead: ' + (card.name || 'Sem título'),
+            'Etapa: ' + (list ? list.name : '—'),
+            'Responsável: ' + owner,
+            'Idade da Lead: ' + ageStr,
+            'Data: ' + dateStr
+          ].join('\n') : [
+            'Lead: ' + (card.name || 'Untitled'),
+            'Stage: ' + (list ? list.name : '—'),
+            'Assignee: ' + owner,
+            'Lead Age: ' + ageStr,
+            'Date: ' + dateStr
+          ].join('\n');
+
+          copyTextSafely(summaryText).then(function() {
+            var txt = document.getElementById('txt-copy-card-summary');
+            if (txt) {
+              var original = txt.textContent;
+              txt.textContent = isPt ? '✓ Resumo Copiado!' : '✓ Summary Copied!';
+              setTimeout(function() { txt.textContent = original; }, 2000);
+            }
+          }).catch(function() {
+            window.prompt(isPt ? 'Copia o resumo (Ctrl+C):' : 'Copy summary (Ctrl+C):', summaryText);
           });
         });
       });
     }
+
+    // ── Botão para Abrir a Dashboard Web ──
+    var btnDashboard = document.getElementById('btn-dashboard');
+    if (btnDashboard) {
+      function syncDashboardHref(boardId) {
+        if (!boardId) return;
+        btnDashboard.href = SITE + '#board=' + encodeURIComponent(boardId);
+      }
+
+      try {
+        var ctx = (t && typeof t.getContext === 'function') ? t.getContext() : null;
+        if (ctx && ctx.board) syncDashboardHref(ctx.board);
+      } catch (err) {}
+
+      t.board('id').then(function (b) {
+        if (b && b.id) syncDashboardHref(b.id);
+      }).catch(function () {});
+
+      btnDashboard.addEventListener('click', function () {
+        Analytics.track('card_open_dashboard_clicked', {
+          source: 'card_back_footer',
+          target_url: btnDashboard.href,
+          description: 'Utilizador clicou em Ver mais dados na Dashboard Web'
+        });
+      });
+    }
+
   </script>
 
 </body>
