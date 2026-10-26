@@ -1470,10 +1470,7 @@
     import { Analytics } from '../js/analytics.js';
     Analytics.init();
 
-    var t = TrelloPowerUp.iframe();
-    var BASE_DOMAIN = (window.location.origin && window.location.origin !== 'null' && !window.location.origin.includes('trello.com'))
-      ? window.location.origin
-      : 'https://kpismaster.vercel.app';
+    var BASE_DOMAIN = 'https://kpismaster.vercel.app';
     var POWERUP_URL = BASE_DOMAIN + '/trello';
 
     var STORAGE_KEY = 'pipedrive-kpi-followup-templates-v3';
@@ -2371,6 +2368,7 @@
     function selectTemplate(item) {
       selectedTemplateId = item.id;
       selectedTemplateObj = item;
+      Analytics.track('message_template_selected');
       document.getElementById('dropdown-selected-title').textContent = item.title;
 
       var previewBox = document.getElementById('preview-container');
@@ -2493,8 +2491,16 @@
 
     // Ir para Configuração de Modelos
     document.getElementById('btn-open-settings').addEventListener('click', function() {
-      openedFromDeliveryView = true;
-      showSettingsView();
+      hasSubmittedFeedback().then(function (unlocked) {
+        if (unlocked) {
+          openedFromDeliveryView = true;
+          showSettingsView();
+          hideTemplatesFeedbackGate();
+        } else {
+          openedFromDeliveryView = false;
+          showTemplatesFeedbackGate('delivery_view_settings');
+        }
+      });
     });
 
     var btnBackSettings = document.getElementById('btn-back-from-settings');
@@ -2896,6 +2902,7 @@
       }
 
       saveTemplates(templates);
+      Analytics.track('message_template_saved');
       closeEditModal();
       currentGroupFilter = grp;
       renderSettingsGrid();
@@ -2938,8 +2945,45 @@
       });
     });
 
-    // ── Verificação de Bloqueio por Feedback em Templates ──
-    function checkTemplatesFeedbackStatus() {
+    // ── Feedback is required only to customize message templates ──
+    function hasSubmittedFeedback() {
+      var localReviewed = false;
+      try {
+        localReviewed = localStorage.getItem('kpi_feedback_submitted_globally') === 'true' ||
+          localStorage.getItem('kpi_has_reviewed') === 'true';
+      } catch (e) { }
+      if (localReviewed) return Promise.resolve(true);
+
+      return Promise.all([
+        t.get('member', 'private', 'kpi_has_reviewed').catch(function () { return false; }),
+        t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; }),
+        t.get('member', 'shared', 'kpi_has_reviewed').catch(function () { return false; }),
+        t.get('board', 'shared', 'kpi_feedback_submitted_globally').catch(function () { return false; })
+      ]).then(function (results) {
+        var rawState = results[1];
+        var stateObj = (rawState && typeof rawState === 'string') ? JSON.parse(rawState) : rawState;
+        var unlocked = (results[0] === true || results[0] === 'true') ||
+          Boolean(stateObj && stateObj.lastSubmittedTime > 0) ||
+          (results[2] === true || results[2] === 'true') ||
+          (results[3] === true || results[3] === 'true');
+        if (unlocked) {
+          try {
+            localStorage.setItem('kpi_feedback_submitted_globally', 'true');
+            localStorage.setItem('kpi_has_reviewed', 'true');
+          } catch (e) { }
+        }
+        return unlocked;
+      }).catch(function () { return false; });
+    }
+
+    function hideTemplatesFeedbackGate() {
+      var overlay = document.getElementById('gate-overlay');
+      var container = document.querySelector('.container');
+      if (overlay) overlay.style.display = 'none';
+      if (container) container.classList.remove('is-locked');
+    }
+
+    function showTemplatesFeedbackGate(source) {
       var elGateTitle = document.getElementById('gate-title');
       if (elGateTitle) elGateTitle.textContent = (currentLang === 'pt') ? 'Desbloqueio Grátis com Feedback' : 'Free Unlock with Feedback';
       var elGateDesc = document.getElementById('gate-desc');
@@ -2948,49 +2992,19 @@
         : 'Message Templates are 100% free! Simply leave a quick 10-second review to unlock them permanently.';
       var elGateBtn = document.getElementById('lbl-gate-unlock-text');
       if (elGateBtn) elGateBtn.textContent = (currentLang === 'pt') ? 'Dar Feedback Grátis (Desbloquear)' : 'Give Free Feedback (Unlock Now)';
-
-      var localReviewed = false;
-      try {
-        localReviewed = (localStorage.getItem('kpi_feedback_submitted_globally') === 'true' || localStorage.getItem('kpi_has_reviewed') === 'true');
-      } catch (e) { }
-
-      if (localReviewed) return;
-
-      Promise.all([
-        t.get('member', 'private', 'kpi_has_reviewed').catch(function () { return false; }),
-        t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; }),
-        t.get('member', 'shared', 'kpi_has_reviewed').catch(function () { return false; }),
-        t.get('board', 'shared', 'kpi_feedback_submitted_globally').catch(function () { return false; })
-      ]).then(function (results) {
-        var flagRev = (results[0] === true || results[0] === 'true');
-        var rawState = results[1];
-        var stateObj = (rawState && typeof rawState === 'string') ? JSON.parse(rawState) : rawState;
-        var hasSubmitted = stateObj && (stateObj.lastSubmittedTime > 0);
-        var flagMemShared = (results[2] === true || results[2] === 'true');
-        var flagBoardShared = (results[3] === true || results[3] === 'true');
-
-        var isUnlocked = Boolean(localReviewed || flagRev || hasSubmitted || flagMemShared || flagBoardShared);
-        if (isUnlocked) {
-          try {
-            localStorage.setItem('kpi_feedback_submitted_globally', 'true');
-            localStorage.setItem('kpi_has_reviewed', 'true');
-          } catch (e) {}
-          var overlay = document.getElementById('gate-overlay');
-          var container = document.querySelector('.container');
-          if (overlay) overlay.style.display = 'none';
-          if (container) container.classList.remove('is-locked');
-        } else {
-          var overlay = document.getElementById('gate-overlay');
-          var container = document.querySelector('.container');
-          if (overlay) overlay.style.display = 'flex';
-          if (container) container.classList.add('is-locked');
-          gateShownTime = Date.now();
-          Analytics.track('locked_feature_gate_shown', {
-            feature: 'message_templates',
-            source: 'templates_page_direct'
-          });
-        }
+      var overlay = document.getElementById('gate-overlay');
+      var container = document.querySelector('.container');
+      if (overlay) overlay.style.display = 'flex';
+      if (container) container.classList.add('is-locked');
+      gateShownTime = Date.now();
+      Analytics.track('locked_feature_gate_shown', {
+        feature: 'message_template_settings',
+        source: source || 'templates_settings'
       });
+    }
+
+    function checkTemplatesFeedbackStatus() {
+      hideTemplatesFeedbackGate();
     }
 
     var gateShownTime = null;

@@ -562,44 +562,315 @@
       margin: 0 auto 16px;
       box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
     }
+
+    /* Golden Intro Screen */
+    .unlock-intro-screen {
+      text-align: center;
+      padding: 4px 10px 14px 10px;
+      animation: fadeInIntro 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeInIntro {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .gift-hero-wrapper {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 4px auto 10px auto;
+    }
+
+    .gift-aura {
+      position: absolute;
+      width: 105px;
+      height: 105px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.45) 0%, rgba(217, 119, 6, 0.2) 45%, rgba(245, 158, 11, 0) 75%);
+      filter: blur(14px);
+      animation: pulse-aura 2.6s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    .gift-box-icon {
+      position: relative;
+      font-size: 52px;
+      line-height: 1;
+      display: inline-block;
+      animation: float-gift 3.2s ease-in-out infinite alternate;
+      filter: drop-shadow(0 10px 22px rgba(245, 158, 11, 0.5));
+      cursor: default;
+      user-select: none;
+    }
+
+    @keyframes float-gift {
+      0% {
+        transform: translateY(0px) rotate(0deg) scale(1);
+      }
+      50% {
+        transform: translateY(-7px) rotate(-3deg) scale(1.04);
+      }
+      100% {
+        transform: translateY(3px) rotate(3deg) scale(0.98);
+      }
+    }
+
+    @keyframes pulse-aura {
+      0% {
+        transform: scale(0.85);
+        opacity: 0.55;
+      }
+      100% {
+        transform: scale(1.25);
+        opacity: 1;
+      }
+    }
+
+    .gift-badge-container {
+      margin-bottom: 12px;
+    }
+
+    .golden-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.18) 0%, rgba(217, 119, 6, 0.24) 100%);
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      color: #fbbf24;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.15);
+    }
+
+    .golden-gift-title {
+      font-size: 21px;
+      font-weight: 800;
+      line-height: 1.34;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fffbeb 0%, #fde68a 25%, #fbbf24 60%, #f59e0b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0 auto 10px auto;
+      max-width: 450px;
+      text-shadow: 0 4px 24px rgba(245, 158, 11, 0.25);
+    }
+
+    .golden-gift-subtitle {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin: 0 auto 16px auto;
+      max-width: 420px;
+      line-height: 1.45;
+    }
+
+    .unlock-perks-box {
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.75) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin: 0 auto 20px auto;
+      max-width: 440px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      gap: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    .perk-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .perk-icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .perk-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .perk-strong {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fbbf24;
+      line-height: 1.3;
+    }
+
+    .perk-desc {
+      font-size: 11px;
+      font-weight: 500;
+      color: #94a3b8;
+      line-height: 1.3;
+    }
+
+    .perk-divider {
+      width: 1px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .intro-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .btn-golden-action {
+      width: 100%;
+      padding: 13px 24px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 55%, #d97706 100%);
+      color: #0b0f19;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.45);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-golden-action:hover {
+      background: linear-gradient(135deg, #fef08a 0%, #fbbf24 50%, #f59e0b 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 26px rgba(245, 158, 11, 0.6);
+      color: #000000;
+    }
+
+    .btn-golden-action:active {
+      transform: translateY(0);
+      box-shadow: 0 3px 12px rgba(245, 158, 11, 0.35);
+    }
+
+    .intro-skip-btn {
+      background: none;
+      border: none;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 6px 12px;
+      transition: color 0.15s ease;
+      font-family: inherit;
+    }
+
+    .intro-skip-btn:hover {
+      color: #cbd5e1;
+    }
   </style>
 </head>
 
 <body>
 
   <div class="container">
-    <div id="wizard-screen">
-      <!-- Barra do Topo Estilo KPI Master -->
-      <div class="header">
-        <div class="header-top">
-          <div class="header-actions-left">
-            <div class="badge-feedback">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-              </svg>
-              <span id="badge-text">30-Second Feedback</span>
-            </div>
+    <!-- Barra do Topo Estilo KPI Master -->
+    <div class="header" id="header-bar">
+      <div class="header-top">
+        <div class="header-actions-left">
+          <div class="badge-feedback">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <span id="badge-text">30-Second Feedback</span>
           </div>
-          <div class="brand-center">
-            <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
-            <h1>KPI Master</h1>
+        </div>
+        <div class="brand-center">
+          <img src="./icon.png" alt="KPI Master" onerror="this.style.display='none'">
+          <h1>KPI Master</h1>
+        </div>
+        <div class="header-actions-right">
+          <button id="btn-translate" class="translate-btn" type="button" title="Switch Language / Alternar Idioma">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+              </path>
+            </svg>
+            <span id="txt-translate">Português</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Golden Intro Screen (mostrado quando o utilizador nunca deu feedback) -->
+    <div id="unlock-intro-screen" class="unlock-intro-screen" style="display: none;">
+      <div class="gift-hero-wrapper">
+        <div class="gift-aura"></div>
+        <div class="gift-box-icon">🎁</div>
+      </div>
+
+      <div class="gift-badge-container">
+        <span class="golden-badge" id="intro-badge">✨ OFERTA EXCLUSIVA</span>
+      </div>
+
+      <h1 class="golden-gift-title" id="intro-title">
+        Desbloqueia uma feature nova em 30 segundos de forma grátis!
+      </h1>
+
+      <p class="golden-gift-subtitle" id="intro-subtitle">
+        Basta dar o teu feedback em troca!
+      </p>
+
+      <div class="unlock-perks-box">
+        <div class="perk-item">
+          <div class="perk-icon">⚡</div>
+          <div class="perk-text">
+            <span class="perk-strong" id="intro-perk-1-strong">30 Segundos</span>
+            <span class="perk-desc" id="intro-perk-1-desc">Super rápido e 100% anónimo</span>
           </div>
-          <div class="header-actions-right">
-            <button id="btn-translate" class="translate-btn" type="button" title="Switch Language / Alternar Idioma">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="2" y1="12" x2="22" y2="12"></line>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                </path>
-              </svg>
-              <span id="txt-translate">Português</span>
-            </button>
+        </div>
+        <div class="perk-divider"></div>
+        <div class="perk-item">
+          <div class="perk-icon">🔓</div>
+          <div class="perk-text">
+            <span class="perk-strong" id="intro-perk-2-strong">Nova Feature</span>
+            <span class="perk-desc" id="intro-perk-2-desc">Desbloqueio imediato na app</span>
           </div>
         </div>
       </div>
 
+      <div class="intro-actions">
+        <button type="button" id="btn-start-intro" class="btn-golden-action">
+          <span id="intro-btn-text">Vamos a isto!!</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+        <button type="button" id="btn-skip-intro" class="intro-skip-btn">
+          <span id="intro-skip-text">Agora não</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="wizard-screen">
       <div class="hero-intro">
         <h1 class="main-title" id="title">Help Us Improve our App</h1>
         <p class="subtitle" id="subtitle">Share your experience in 30 seconds to help us build a better tool.</p>
@@ -923,6 +1194,16 @@
         successSubtitle: "Your insights directly guide our product roadmap.",
         btnDone: "Back to Trello",
 
+        introBadge: "✨ EXCLUSIVE OFFER",
+        introTitle: "Unlock a new feature in 30 seconds for free!",
+        introSubtitle: "Just give your feedback in exchange!",
+        introPerk1Strong: "30 Seconds",
+        introPerk1Desc: "Super fast & 100% anonymous",
+        introPerk2Strong: "New Feature",
+        introPerk2Desc: "Instant unlock in the app",
+        introBtn: "Let's do this!! 🚀",
+        introSkip: "Not now",
+
         s1Title: "How would you rate your overall experience?",
         s1Desc: "Select a rating from 1 to 5 stars.",
         ratings: ["1/5 Poor", "2/5 Fair", "3/5 Good", "4/5 Very Good!", "5/5 Excellent!"],
@@ -970,6 +1251,16 @@
         successTitle: "Obrigado pelo teu feedback!",
         successSubtitle: "A tua opinião ajuda-nos a evoluir a ferramenta.",
         btnDone: "Voltar ao Trello",
+
+        introBadge: "✨ OFERTA EXCLUSIVA",
+        introTitle: "Desbloqueia uma feature nova em 30 segundos de forma grátis!",
+        introSubtitle: "Basta dar o teu feedback em troca!",
+        introPerk1Strong: "30 Segundos",
+        introPerk1Desc: "Super rápido e 100% anónimo",
+        introPerk2Strong: "Nova Feature",
+        introPerk2Desc: "Desbloqueio imediato na app",
+        introBtn: "Vamos a isto!! 🚀",
+        introSkip: "Agora não",
 
         s1Title: "Como avalias a tua experiência com o KPI Master?",
         s1Desc: "Seleciona uma pontuação de 1 a 5 estrelas.",
@@ -1180,6 +1471,31 @@
       var badgeEl = document.getElementById('badge-text');
       if (badgeEl) badgeEl.textContent = d.badge;
 
+      var introBadge = document.getElementById('intro-badge');
+      if (introBadge) introBadge.textContent = d.introBadge;
+
+      var introTitle = document.getElementById('intro-title');
+      if (introTitle) introTitle.textContent = d.introTitle;
+
+      var introSub = document.getElementById('intro-subtitle');
+      if (introSub) introSub.textContent = d.introSubtitle;
+
+      var introP1S = document.getElementById('intro-perk-1-strong');
+      if (introP1S) introP1S.textContent = d.introPerk1Strong;
+      var introP1D = document.getElementById('intro-perk-1-desc');
+      if (introP1D) introP1D.textContent = d.introPerk1Desc;
+
+      var introP2S = document.getElementById('intro-perk-2-strong');
+      if (introP2S) introP2S.textContent = d.introPerk2Strong;
+      var introP2D = document.getElementById('intro-perk-2-desc');
+      if (introP2D) introP2D.textContent = d.introPerk2Desc;
+
+      var introBtnText = document.getElementById('intro-btn-text');
+      if (introBtnText) introBtnText.textContent = d.introBtn;
+
+      var introSkipText = document.getElementById('intro-skip-text');
+      if (introSkipText) introSkipText.textContent = d.introSkip;
+
       var titleEl = document.getElementById('title');
       if (titleEl) titleEl.textContent = d.title;
 
@@ -1351,8 +1667,77 @@
       });
     }
 
-    // Initialize in English by default
-    applyLanguage('en');
+    // Detect language from URL parameter or default to 'pt' ("em PT como padrao")
+    var urlParams = new URLSearchParams(window.location.search);
+    var paramLang = urlParams.get('lang');
+    var initialLang = (paramLang === 'en') ? 'en' : 'pt';
+    applyLanguage(initialLang);
+
+    // Verificar se o utilizador já deu feedback alguma vez
+    function checkFeedbackReviewStatus() {
+      var localReviewed = (
+        localStorage.getItem('kpi_has_reviewed') === 'true' ||
+        localStorage.getItem('kpi_feedback_submitted_globally') === 'true'
+      );
+
+      var introEl = document.getElementById('unlock-intro-screen');
+      var wizEl = document.getElementById('wizard-screen');
+
+      if (localReviewed) {
+        // Já deu feedback anteriormente: vai direto para o formulário
+        if (introEl) introEl.style.display = 'none';
+        if (wizEl) wizEl.style.display = 'block';
+        return Promise.resolve(true);
+      }
+
+      // Se nunca deu feedback: mostra o ecrã de introdução dourado com o presente
+      if (wizEl) wizEl.style.display = 'none';
+      if (introEl) introEl.style.display = 'block';
+
+      return Promise.all([
+        t.get('member', 'private', 'kpi_has_reviewed'),
+        t.get('board', 'shared', 'kpi_feedback_submitted_globally')
+      ]).then(function (res) {
+        var reviewed = (res[0] === true || res[1] === true || localStorage.getItem('kpi_has_reviewed') === 'true');
+        if (reviewed) {
+          if (introEl) introEl.style.display = 'none';
+          if (wizEl) wizEl.style.display = 'block';
+        } else {
+          if (wizEl) wizEl.style.display = 'none';
+          if (introEl) introEl.style.display = 'block';
+        }
+        return reviewed;
+      }).catch(function () {
+        if (wizEl) wizEl.style.display = 'none';
+        if (introEl) introEl.style.display = 'block';
+        return false;
+      });
+    }
+
+    checkFeedbackReviewStatus();
+
+    // Botão Vamos a isto!! -> Avança para a primeira pergunta do feedback
+    var btnStartIntro = document.getElementById('btn-start-intro');
+    if (btnStartIntro) {
+      btnStartIntro.addEventListener('click', function () {
+        Analytics.track('feedback_intro_started', {
+          lang: currentLang,
+          description: 'Utilizador clicou em Vamos a isto no intro dourado de desbloqueio'
+        });
+        var introEl = document.getElementById('unlock-intro-screen');
+        var wizEl = document.getElementById('wizard-screen');
+        if (introEl) introEl.style.display = 'none';
+        if (wizEl) {
+          wizEl.style.display = 'block';
+          goToStep(1);
+        }
+      });
+    }
+
+    var btnSkipIntro = document.getElementById('btn-skip-intro');
+    if (btnSkipIntro) {
+      btnSkipIntro.addEventListener('click', handleDismissFeedback);
+    }
 
     // Immediately record prompt time on load so closing via Trello's X button stores cooldown
     t.get('member', 'private', 'kpi_feedback_state').then(function (rawState) {
@@ -1458,6 +1843,7 @@
           localStorage.setItem('kpi_has_reviewed', 'true');
         } catch (e) { }
 
+        Analytics.track('feedback_feature_unlocked');
         document.getElementById('wizard-screen').style.display = 'none';
         document.getElementById('success-screen').style.display = 'block';
       });

@@ -122,6 +122,59 @@
       border-style: dashed;
     }
 
+    .btn-reset-test {
+      color: #fbbf24;
+      border-color: rgba(245, 158, 11, 0.25);
+    }
+
+    .btn-reset-test:hover {
+      border-color: rgba(245, 158, 11, 0.5);
+      background: rgba(245, 158, 11, 0.12);
+      color: #fde68a;
+    }
+
+    .btn-unlock-magic {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.16) 0%, rgba(217, 119, 6, 0.28) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      color: #fbbf24;
+      font-weight: 700;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+      animation: pulse-magic 2.5s infinite;
+      cursor: pointer;
+    }
+
+    .btn-unlock-magic:hover {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.28) 0%, rgba(217, 119, 6, 0.42) 100%);
+      border-color: rgba(245, 158, 11, 0.7);
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+    }
+
+    @keyframes pulse-magic {
+      0%, 100% {
+        box-shadow: 0 0 10px rgba(245, 158, 11, 0.15);
+      }
+      50% {
+        box-shadow: 0 0 18px rgba(245, 158, 11, 0.35);
+      }
+    }
+
+    .lock-tag {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: 999px;
+      padding: 1px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-left: 2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
     /* Touchpoints Quick Actions Header */
     .touchpoints-row {
       display: flex;
@@ -490,23 +543,6 @@
       transform: translateY(-1px);
     }
 
-    .locked-btn {
-      position: relative;
-      background: rgba(245, 158, 11, 0.06);
-      border: 1px dashed rgba(245, 158, 11, 0.45);
-      color: var(--title-color);
-      display: flex;
-      justify-content: space-between;
-      padding: 6px 12px;
-      cursor: pointer;
-    }
-
-    .locked-btn:hover {
-      background: rgba(245, 158, 11, 0.15);
-      border-color: #f59e0b;
-      color: var(--title-color);
-    }
-
     .lock-tag {
       font-size: 10px;
       font-weight: 700;
@@ -516,97 +552,6 @@
       padding: 2px 7px;
       border-radius: 9999px;
       letter-spacing: 0.02em;
-    }
-
-    /* Feedback Wall (Bloqueado) */
-    .locked-card {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(59, 130, 246, 0.06));
-      border: 1px solid rgba(245, 158, 11, 0.3);
-      border-radius: 8px;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      text-align: center;
-      align-items: center;
-    }
-
-    .locked-header {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12.5px;
-      font-weight: 800;
-      color: #f59e0b;
-    }
-
-    .locked-desc {
-      font-size: 11.5px;
-      color: var(--desc-color);
-      max-width: 380px;
-      line-height: 1.4;
-    }
-
-    .btn-unlock {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      color: #ffffff;
-      border: none;
-      border-radius: 6px;
-      padding: 7px 16px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: opacity 0.2s ease, transform 0.1s ease;
-      box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3);
-    }
-
-    .btn-unlock:hover {
-      opacity: 0.95;
-      transform: translateY(-1px);
-    }
-
-    /* Feedback Gate */
-    .gate-wrapper {
-      position: relative;
-    }
-
-    .card-history-container.is-locked {
-      filter: blur(5px);
-      user-select: none;
-      transition: filter 0.4s ease;
-    }
-
-    .gate-overlay {
-      position: absolute;
-      inset: 0;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      border-radius: 10px;
-      background: rgba(11, 15, 25, 0.35);
-    }
-
-    .gate-overlay .btn-unlock {
-      animation: gatePulse 2.5s ease-in-out infinite;
-    }
-
-    @keyframes gatePulse {
-
-      0%,
-      100% {
-        transform: translateY(0);
-        box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3);
-      }
-
-      50% {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(245, 158, 11, 0.5);
-      }
     }
 
     /* Modal de Perguntar Resultado da Chamada (Estilo Moderno & Clean SaaS) */
@@ -888,7 +833,6 @@
 
 <body>
 
-  <div class="gate-wrapper">
     <!-- Modal de Resultado da Chamada (Atendida ou Não Atendida) -->
     <div id="call-outcome-modal" class="call-outcome-modal-backdrop" style="display: none;">
       <div class="call-outcome-box">
@@ -927,23 +871,6 @@
     <!-- Container do Flash Modal Temporário (2s) -->
     <div id="call-flash-container"></div>
 
-    <!-- Feedback Gate Overlay -->
-    <div id="gate-overlay" class="gate-overlay" style="display: none;">
-      <div class="locked-card">
-        <div class="locked-icon-wrap" style="width: 44px; height: 44px; border-radius: 12px; background: rgba(245, 158, 11, 0.14); border: 1px solid rgba(245, 158, 11, 0.35); display: inline-flex; align-items: center; justify-content: center; color: #f59e0b; margin-bottom: 4px; box-shadow: 0 0 20px rgba(245, 158, 11, 0.25);">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-          </svg>
-        </div>
-        <div class="locked-header" id="gate-title">Desbloqueio Grátis com Feedback</div>
-        <div class="locked-desc" id="gate-desc">Esta funcionalidade é 100% gratuita! Basta deixares uma avaliação rápida de 10 segundos para desbloquear permanentemente.</div>
-        <button id="btn-unlock-feedback" class="btn-unlock" style="margin-top: 4px;">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
-          <span id="lbl-unlock-text">Dar Feedback Grátis (Desbloquear)</span>
-        </button>
-      </div>
-    </div>
     <div class="card-history-container" id="main-content">
       <div class="header-row" style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
         <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
@@ -951,7 +878,15 @@
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
             <span id="txt-quick-templates">Message Templates</span>
           </button>
-          <button id="btn-copy-card-summary" class="btn-toggle-touchpoints" title="Copiar resumo completo deste cartão para a área de transferência">
+          <!-- Botão para desbloquear nova feature (visível só para quem ainda não deu feedback) -->
+          <button id="btn-unlock-feature" class="btn-toggle-touchpoints btn-unlock-magic" style="display: none;" title="Clica aqui para desbloquear uma nova funcionalidade!">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            <span id="txt-unlock-feature">🎁 Clica aqui e recebe uma feature nova!</span>
+          </button>
+          <!-- A feature nova: Copiar Resumo (escondido se não deu feedback) -->
+          <button id="btn-copy-card-summary" class="btn-toggle-touchpoints" style="display: none;" title="Copiar resumo completo deste cartão para a área de transferência">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             <span id="txt-copy-card-summary">Copiar Resumo</span>
           </button>
@@ -1053,7 +988,6 @@
         </a>
       </div>
     </div>
-  </div>
 
   <script type="module">
     import { Analytics } from '../js/analytics.js';
@@ -1062,9 +996,7 @@
     var KEY = import.meta.env.VITE_TRELLO_API_KEY || '45146ad13364b1e1336607f96081214b';
     var NAME = 'KPI Master';
     var SITE = 'https://kpismaster.vercel.app';
-    var BASE_DOMAIN = (window.location.origin && window.location.origin !== 'null' && !window.location.origin.includes('trello.com'))
-      ? window.location.origin
-      : 'https://kpismaster.vercel.app';
+    var BASE_DOMAIN = 'https://kpismaster.vercel.app';
     var POWERUP_URL = BASE_DOMAIN + '/trello';
 
     var t = TrelloPowerUp.iframe({ appKey: KEY, appName: NAME });
@@ -1091,9 +1023,6 @@
         hoursUnit: 'horas',
         authNotice: 'Autorizar Trello para ver histórico detalhado de datas',
         authBtn: 'Autorizar',
-        lockedTitle: 'Desbloqueio Grátis com Feedback',
-        lockedDesc: 'Esta funcionalidade é 100% gratuita! Basta deixares uma avaliação rápida de 10 segundos para desbloquear permanentemente.',
-        lockedBtn: 'Dar Feedback Grátis (Desbloquear)',
         callsLabel: 'Telefonemas:',
         emailsLabel: 'E-mails:',
         streamTitle: 'Histórico de Listas:',
@@ -1119,9 +1048,6 @@
         hoursUnit: 'hours',
         authNotice: 'Authorize Trello API to view detailed stage history',
         authBtn: 'Authorize',
-        lockedTitle: 'Free Unlock with Feedback',
-        lockedDesc: 'This feature is 100% free! Simply leave a quick 10-second review to unlock permanent access.',
-        lockedBtn: 'Give Free Feedback (Unlock Now)',
         callsLabel: 'Calls:',
         emailsLabel: 'Emails:',
         streamTitle: 'Current Stage History:',
@@ -1155,18 +1081,6 @@
       var txtDashboard = document.getElementById('txt-dashboard-btn');
       if (txtDashboard) txtDashboard.textContent = isPt ? 'Ver mais dados na Dashboard Web' : 'View more data on Web Dashboard';
 
-      var elGateTitle = document.getElementById('gate-title');
-      if (elGateTitle) elGateTitle.textContent = tDict.lockedTitle;
-      var elGateDesc = document.getElementById('gate-desc');
-      if (elGateDesc) elGateDesc.textContent = tDict.lockedDesc;
-      var elUnlockText = document.getElementById('lbl-unlock-text');
-      if (elUnlockText) {
-        elUnlockText.textContent = tDict.lockedBtn;
-      } else {
-        var elUnlock = document.getElementById('btn-unlock-feedback');
-        if (elUnlock) elUnlock.textContent = tDict.lockedBtn;
-      }
-
       var lblCall = document.getElementById('lbl-add-call-text');
       if (lblCall) lblCall.textContent = isPt ? '+1 Chamada' : '+1 Call';
       var lblCallsSub = document.getElementById('lbl-calls-sub');
@@ -1195,6 +1109,9 @@
 
       var txtCopySummaryEl = document.getElementById('txt-copy-card-summary');
       if (txtCopySummaryEl) txtCopySummaryEl.textContent = isPt ? 'Copiar Resumo' : 'Copy Summary';
+
+      var txtUnlockFeature = document.getElementById('txt-unlock-feature');
+      if (txtUnlockFeature) txtUnlockFeature.textContent = isPt ? '🎁 Clica aqui e recebe uma feature nova!' : '🎁 Click here to get a new feature!';
 
       var txtToggle = document.getElementById('txt-toggle-touchpoints');
       if (txtToggle) {
@@ -1275,24 +1192,7 @@
       });
     }
 
-    var cardLockShownTime = null;
-    var cardUnlockClicked = false;
-    var cardLockDismissedTracked = false;
-
-    function trackCardLockDismissed() {
-      if (cardLockShownTime && !cardUnlockClicked && !cardLockDismissedTracked) {
-        cardLockDismissedTracked = true;
-        var timeViewed = Math.max(0, Math.round((Date.now() - cardLockShownTime) / 1000));
-        if (timeViewed >= 1) {
-          Analytics.track('locked_feature_dismissed', {
-            feature: 'lead_stage_and_speed_history',
-            time_viewed: timeViewed
-          });
-        }
-      }
-    }
-
-    function checkFeedbackStatus() {
+    function hasSubmittedFeedback() {
       var localReviewed = false;
       try {
         localReviewed = (
@@ -1301,29 +1201,7 @@
         );
       } catch (e) { }
 
-      var overlay = document.getElementById('gate-overlay');
-      var mainContent = document.getElementById('main-content');
-      var titleIcon = document.querySelector('.title-icon');
-      var btnHeader = document.getElementById('btn-header-unlock');
-
-      function applyLockUI(unlocked) {
-        if (unlocked) {
-          if (overlay) overlay.style.display = 'none';
-          if (mainContent) mainContent.classList.remove('is-locked');
-          if (titleIcon) titleIcon.textContent = '⏱️';
-          if (btnHeader) btnHeader.style.display = 'none';
-        } else {
-          if (overlay) overlay.style.display = 'flex';
-          if (mainContent) mainContent.classList.add('is-locked');
-          if (titleIcon) titleIcon.textContent = '🔒';
-          if (btnHeader) btnHeader.style.display = 'inline-flex';
-          if (!cardLockShownTime) cardLockShownTime = Date.now();
-        }
-        t.sizeTo(document.body).catch(function () { });
-      }
-
       if (localReviewed) {
-        applyLockUI(true);
         return Promise.resolve(true);
       }
 
@@ -1340,63 +1218,29 @@
         var flagMemberShared = (results[2] === true || results[2] === 'true');
         var flagBoardShared = (results[3] === true || results[3] === 'true');
 
-        var isUnlocked = Boolean(localReviewed || flagMemberPriv || hasSubmittedTime || flagMemberShared || flagBoardShared);
-        if (isUnlocked) {
+        var hasSubmitted = Boolean(localReviewed || flagMemberPriv || hasSubmittedTime || flagMemberShared || flagBoardShared);
+        if (hasSubmitted) {
           try {
             localStorage.setItem('kpi_feedback_submitted_globally', 'true');
             localStorage.setItem('kpi_has_reviewed', 'true');
           } catch (e) {}
         }
-        applyLockUI(isUnlocked);
-        return isUnlocked;
+        return hasSubmitted;
       }).catch(function (err) {
         console.warn('[KPI Master] Could not check feedback state:', err);
-        applyLockUI(localReviewed);
         return localReviewed;
       });
     }
 
-    var btnUnlockFeedback = document.getElementById('btn-unlock-feedback');
-    if (btnUnlockFeedback) {
-      btnUnlockFeedback.addEventListener('click', function (e) {
-        e.preventDefault();
-        cardUnlockClicked = true;
-        Analytics.track('feature_unlock_intent', {
-          feature: 'lead_stage_and_speed_history',
-          source: 'card_back_gate'
-        });
-        t.modal({
-          title: isPt ? 'O Teu Feedback Importa' : 'Your Feedback Matters',
-          accentColor: '#090d16',
-          url: POWERUP_URL + '/feedback.html?v=3',
-          height: 520
-        });
-      });
-    }
-
-    var btnHeaderUnlock = document.getElementById('btn-header-unlock');
-    if (btnHeaderUnlock) {
-      btnHeaderUnlock.addEventListener('click', function (e) {
-        e.preventDefault();
-        cardUnlockClicked = true;
-        Analytics.track('feature_unlock_intent', {
-          feature: 'lead_stage_and_speed_history',
-          source: 'card_back_header'
-        });
-        t.modal({
-          title: isPt ? 'O Teu Feedback Importa' : 'Your Feedback Matters',
-          accentColor: '#090d16',
-          url: POWERUP_URL + '/feedback.html?v=3',
-          height: 520
-        });
-      });
-    }
-
-    window.addEventListener('pagehide', trackCardLockDismissed);
-
     function initCardBackSection() {
-      checkFeedbackStatus();
+      if (!window._kpiCardBackOpenedTracked) {
+        window._kpiCardBackOpenedTracked = true;
+        Analytics.track('card_back_opened');
+      }
       t.sizeTo(document.body).catch(function () { });
+      hasSubmittedFeedback().then(function (unlocked) {
+        applyFeatureUnlockStatus(Boolean(unlocked));
+      });
 
       Promise.all([
         t.card('id', 'name', 'idList', 'dateLastActivity', 'badges').catch(function() { return {}; }),
@@ -1503,6 +1347,7 @@
                 t.set('card', 'shared', 'kpi_touchpoints', updated),
                 t.set('card', 'shared', 'kpi_touchpoints_history', newHistory)
               ]).then(function () {
+                Analytics.track('touchpoint_logged');
                 if (type === 'call') {
                   showMotivationalFlash(callOutcome);
                 } else {
@@ -1819,52 +1664,21 @@
     t.render(initCardBackSection);
     setTimeout(initCardBackSection, 150);
 
-    function isFeedbackUnlockedCardBack() {
-      var localReviewed = false;
-      try {
-        localReviewed = (localStorage.getItem('kpi_feedback_submitted_globally') === 'true' || localStorage.getItem('kpi_has_reviewed') === 'true');
-      } catch (e) { }
-
-      if (localReviewed) return Promise.resolve(true);
-
-      return Promise.all([
-        t.get('member', 'private', 'kpi_feedback_state').catch(function () { return null; }),
-        t.get('member', 'private', 'kpi_has_reviewed').catch(function () { return false; })
-      ]).then(function (results) {
-        var rawState = results[0];
-        var hasReviewedFlag = (results[1] === true || results[1] === 'true');
-        var state = null;
-        if (rawState) {
-          state = typeof rawState === 'string' ? JSON.parse(rawState) : rawState;
-        }
-        return Boolean((state && state.lastSubmittedTime) || hasReviewedFlag || localReviewed);
-      });
-    }
-
-    // ── Botão de Modelos / WhatsApp / Email ──
+    // ── Modelos: 100% disponíveis para todos os utilizadores ──
     function openTemplatesModal(entryMode) {
-      checkFeedbackStatus().then(function(unlocked) {
-        if (!unlocked) {
-          return t.alert({
-            message: isPt ? '🔒 Funcionalidade bloqueada. Deixa feedback para desbloquear!' : '🔒 Feature locked. Leave feedback to unlock!',
-            duration: 3
-          });
-        }
+      Analytics.track('card_templates_modal_opened', {
+        source: 'card_back_action',
+        mode: entryMode || 'whatsapp'
+      });
 
-        Analytics.track('card_templates_modal_opened', {
-          source: 'card_back_action',
-          mode: entryMode || 'whatsapp'
-        });
+      var url = POWERUP_URL + '/templates.html?v=7' + (entryMode ? '&mode=' + entryMode : '') + '&from=card&lang=' + (isPt ? 'pt' : 'en');
 
-        var url = POWERUP_URL + '/templates.html?v=5' + (entryMode ? '&mode=' + entryMode : '') + '&from=card&lang=' + (isPt ? 'pt' : 'en');
-
-        t.modal({
-          title: ' ',
-          url: url,
-          height: 620,
-          fullscreen: false,
-          accentColor: '#090d16'
-        });
+      t.modal({
+        title: ' ',
+        url: url,
+        height: 620,
+        fullscreen: false,
+        accentColor: '#090d16'
       });
     }
 
@@ -1875,6 +1689,77 @@
         openTemplatesModal('settings');
       });
     }
+
+    // ── Lógica da Feature Desbloqueável (Copiar Resumo desbloqueado com Feedback) ──
+    var btnUnlockFeature = document.getElementById('btn-unlock-feature');
+    var btnCopySummary = document.getElementById('btn-copy-card-summary');
+    var feedbackUnlockCtaShownTracked = false;
+
+    function applyFeatureUnlockStatus(unlocked) {
+      if (btnUnlockFeature) {
+        btnUnlockFeature.style.display = unlocked ? 'none' : 'inline-flex';
+      }
+      if (btnCopySummary) {
+        btnCopySummary.style.display = unlocked ? 'inline-flex' : 'none';
+      }
+      if (!unlocked && btnUnlockFeature && !feedbackUnlockCtaShownTracked) {
+        feedbackUnlockCtaShownTracked = true;
+        Analytics.track('feedback_unlock_cta_shown');
+      }
+      t.sizeTo(document.body).catch(function () {});
+    }
+
+    // Verificar se já deu feedback
+    hasSubmittedFeedback().then(function (unlocked) {
+      applyFeatureUnlockStatus(Boolean(unlocked));
+    });
+
+    if (btnUnlockFeature) {
+      btnUnlockFeature.addEventListener('click', function (e) {
+        e.preventDefault();
+        Analytics.track('unlock_feature_banner_clicked', {
+          source: 'card_back_header',
+          description: 'Utilizador clicou em Clica aqui e recebe uma feature nova'
+        });
+
+        t.modal({
+          title: isPt ? 'O Teu Feedback Importa — Desbloqueia uma Nova Feature!' : 'Your Feedback Matters — Unlock a New Feature!',
+          accentColor: '#090d16',
+          url: POWERUP_URL + '/feedback.html?v=6&from=feature_unlock&lang=' + (isPt ? 'pt' : 'en'),
+          height: 520
+        });
+      });
+    }
+
+    // Reset de Feedback para Consola de Desenvolvimento
+    function resetFeedbackState() {
+      try {
+        localStorage.removeItem('kpi_feedback_submitted_globally');
+        localStorage.removeItem('kpi_has_reviewed');
+        localStorage.removeItem('kpi_feedback_onboarding_seen_manager');
+        localStorage.removeItem('kpi_feedback_onboarding_seen_sales');
+        sessionStorage.removeItem('kpi_feedback_submitted_globally');
+        sessionStorage.removeItem('kpi_has_reviewed');
+      } catch (e) {}
+
+      return Promise.all([
+        t.set('member', 'private', 'kpi_feedback_state', null).catch(function () {}),
+        t.set('member', 'private', 'kpi_has_reviewed', false).catch(function () {}),
+        t.set('member', 'shared', 'kpi_has_reviewed', false).catch(function () {}),
+        t.set('board', 'shared', 'kpi_feedback_submitted_globally', false).catch(function () {})
+      ]).then(function () {
+        applyFeatureUnlockStatus(false);
+        return t.alert({
+          message: isPt
+            ? '🔄 Feedback resetado com sucesso!'
+            : '🔄 Feedback reset successfully!',
+          duration: 3
+        });
+      });
+    }
+
+    window.resetKpiFeedback = resetFeedbackState;
+    window.resetFeedback = resetFeedbackState;
 
     var btnSendEmailDirect = document.getElementById('btn-send-email-direct');
     if (btnSendEmailDirect) {

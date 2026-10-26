@@ -65,12 +65,10 @@
     import { Analytics } from '../js/analytics.js';
     Analytics.init();
     var KEY = import.meta.env.VITE_TRELLO_API_KEY;
-    var WEBHOOK_URL = 'https://hook.eu1.make.com/nnhynw1t9cabqrpedjnvp1m9t9h3pfv4';
     var t = TrelloPowerUp.iframe({ appKey: KEY, appName: 'KPI Master' });
-    function trackEvent(eventName, extra) {
+    function trackEvent(eventName) {
       try {
-        Analytics.track(eventName, extra || {});
-        fetch(WEBHOOK_URL + '?event=' + encodeURIComponent(eventName), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event: eventName, timestamp: new Date().toISOString(), source: 'trello_welcome_modal', ...(extra || {}) }) }).catch(function () {});
+        Analytics.track(eventName);
       } catch (e) {}
     }
     var slides = {

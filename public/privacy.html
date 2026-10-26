@@ -88,64 +88,98 @@
   </div>
   <main>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: October 14, 2026</p>
+    <p class="updated">Last updated: October 24, 2026</p>
 
     <p>
       KPI Master ("we", "our", or "us") helps teams visualize key performance indicators and workflow efficiency
       directly from Trello boards and on our web application.
-      This Privacy Policy explains what data is accessed, processed, and stored when you use the KPI Master Power-Up or
-      our web dashboard, in strict compliance with the Atlassian Developer Terms, Public Power-Up Guidelines, and the
-      General Data Protection Regulation (GDPR).
+      This Privacy Policy explains what data is accessed, processed, stored, and shared when you use the KPI Master
+      Power-Up or web dashboard. Please read it together with the privacy notices of the third-party services listed
+      below.
     </p>
 
     <h2>1. Data Minimization & How We Access Data</h2>
     <p>
-      When you authorize KPI Master via Trello's client authorization, we dynamically retrieve only the board-related
-      data necessary to compute metrics in real time through the official Trello API. This includes board names, lists,
-      cards, assigned member IDs, activity dates, and comments.
+      When you authorize KPI Master, it accesses Trello data needed for the features you use through Trello's API and
+      Power-Up interface. Depending on the feature, this can include board and list names and IDs, card names and IDs,
+      assigned member IDs and names, activity dates, comments, and contact history. The app uses this information to
+      display dashboards, calculate metrics, and perform actions you request in Trello.
     </p>
     <p>
-      We operate on a <strong>client-side processing architecture</strong>: calculations (such as lead speeds,
-      conversion funnels, and card age badges) are performed dynamically in your browser session.
+      KPI calculations are performed in your browser. Trello data is requested from Trello when a feature needs it;
+      KPI Master does not operate a database for storing Trello board or card contents.
     </p>
 
-    <h2>2. Personal Data Storage & GDPR Compliance</h2>
+    <h2>2. Personal Data Storage</h2>
     <p>
-      <strong>We do not store Trello user personal data on our servers.</strong>
+      KPI Master does not operate a database for Trello board or card contents. Some information is stored in your
+      browser or in Trello Power-Up storage so the features you choose can work.
     </p>
     <ul>
-      <li><strong>No External Server Databases:</strong> We do not operate external databases storing confidential card
-        details, card descriptions, or member personal identifying information outside of Trello.</li>
-      <li><strong>Local Browser Storage:</strong> Some non-sensitive user preferences (such as selected language, board
-        IDs, and feature toggles) may be stored locally in your browser's <code>localStorage</code> or directly inside
-        Trello's secure storage via the Power-Up Plugin API (<code>t.set()</code>).</li>
-      <li><strong>Right to Erasure & Deletion:</strong> Because no personal data is retained on external servers,
-        disconnecting the Power-Up immediately removes access to your board data. Users can request total deletion of
-        any support correspondence or local data records at any time by contacting us.</li>
+      <li><strong>Browser storage:</strong> The web dashboard stores its Trello access token, selected board, role,
+        preferences, and locally calculated activity-time information in your browser. The activity-time information
+        can include a Trello member ID, display name, and time totals. Logging out clears the dashboard's
+        <code>localStorage</code> for this site. You can also clear this site's browser data in your browser settings.
+      </li>
+      <li><strong>Trello Power-Up storage:</strong> The Power-Up stores settings and message templates, and can store
+        contact counts and history on cards. Contact history includes the action type, date/time, outcome, and the
+        acting member's display name. Card and board data saved with <code>shared</code> visibility can be seen by
+        people who can view that card or board. Member-private data is stored in Trello for that member.</li>
+      <li><strong>Disconnecting and deletion:</strong> Logging out clears the dashboard's local browser storage.
+        Revoking authorization stops future API access, but does not necessarily remove data already saved in Trello
+        Power-Up storage or data previously sent to third-party services. Contact us to request help locating or
+        deleting data that KPI Master controls; browser and Trello storage may also need to be cleared separately.</li>
     </ul>
 
-    <h2>3. Telemetry & Analytics (PostHog)</h2>
+    <h2>3. Product Analytics (PostHog and Vercel)</h2>
     <p>
-      To improve application performance and understand feature adoption, KPI Master collects aggregated, anonymized
-      usage telemetry using <strong>PostHog Inc.</strong> (hosted in the European Union - EU Cloud).
+      We use product analytics to understand feature adoption and improve the service. The Trello Power-Up and web
+      dashboard send explicitly defined interaction event names to <strong>PostHog Cloud EU</strong>. The dashboard
+      web app also uses <strong>Vercel Web Analytics</strong> for page-view and visitor statistics. These are separate
+      analytics services and are not used to send Trello card contents as event properties.
     </p>
     <ul>
-      <li><strong>Strictly Defined Events:</strong> We only track explicitly defined user interaction events (such as
-        opening the dashboard popup, switching languages, or clicking the web dashboard button).</li>
-      <li><strong>No Session Recording:</strong> Screen and session recording is strictly disabled
-        (<code>disable_session_recording: true</code>) to prevent any accidental capture of board contents.</li>
-      <li><strong>No Autocapture:</strong> Automatic click scraping and text input capturing are disabled
-        (<code>autocapture: false</code>). Card titles, card descriptions, confidential comments, and API tokens are
-        never tracked or sent to analytics.</li>
+      <li><strong>PostHog events:</strong> We send fixed event names for selected interactions, such as opening a
+        feature or changing a setting. Before sending, the app removes event properties, so properties passed by
+        feature code (including board, card, or member IDs, names, text, and contact details) are not included in
+        these custom PostHog events. Automatic page views, automatic click/input capture, and session recording are
+        disabled.</li>
+      <li><strong>Cookieless PostHog measurement:</strong> PostHog is configured with cookieless mode and does not use
+        browser cookies or local/session storage for its analytics identity. When the required “Cookieless server hash
+        mode” is enabled in the PostHog project settings, PostHog's servers calculate a privacy-preserving daily hash
+        using request information such as IP address, browser user agent, and hostname. The hash changes daily; this
+        configuration does not use it to identify a person across days. See <a href="https://posthog.com/tutorials/cookieless-tracking" target="_blank" rel="noopener noreferrer">PostHog's cookieless tracking documentation</a>.</li>
+      <li><strong>Vercel Web Analytics:</strong> On the web application, Vercel records page views and provides
+        aggregated information such as page/route, referrer, country, browser, operating system, and device category.
+        Vercel states that it uses an anonymized daily visitor hash and does not use cookies for Web Analytics. This
+        analytics is not the PostHog feature-event tracker. See <a href="https://vercel.com/docs/analytics" target="_blank" rel="noopener noreferrer">Vercel Web Analytics documentation</a>.</li>
+      <li><strong>No direct Trello identity in PostHog:</strong> KPI Master does not call PostHog's
+        user-identification API or attach Trello member, board, or card identifiers to the custom PostHog events.
+        Analytics providers still
+        receive the network request needed to deliver their services and may process technical request information
+        as described in their own notices.</li>
       <li><strong>Graceful Degradation:</strong> If telemetry is blocked by ad-blockers or privacy extensions, the
-        Power-Up continues to operate with 100% of its functionality unaffected.</li>
+        Power-Up continues to operate; analytics are not required for its core features.</li>
     </ul>
 
     <h2>4. Third-Party Integrations</h2>
     <p>
-      KPI Master allows users to optionally export reports to external workflow tools like Make.com or Zapier when
-      configured by the user. We only transmit the aggregated summary data specified by you when you trigger an export
-      action.
+      <strong>Feedback:</strong> When you submit the Trello feedback wizard, its rating, selected answers, free-text
+      suggestions, timestamp, and locale are sent to a Make.com webhook so we can review the feedback. The web
+      dashboard feedback form sends the text you submit to a Make.com webhook. Neither form automatically attaches
+      your Trello account identity, but free text can identify you if you include your name, email, customer details,
+      or other identifying information. Do not include confidential card or customer data. Make.com processes this
+      information under its own terms and privacy notice.
+    </p>
+    <p>
+      <strong>User-triggered exports:</strong> If you configure a Make.com or Zapier webhook and choose to export a
+      report, the report information selected or generated for that action is sent to the service configured by you.
+      The receiving service's privacy and retention practices then apply.
+    </p>
+    <p>
+      <strong>Other providers:</strong> The app also makes requests to Trello to provide the integration. The Power-Up
+      and web application load some fonts and libraries from third-party delivery services; those services receive
+      standard connection information when your browser requests those resources.
     </p>
 
     <h2>5. Revoking Access & Disconnecting</h2>
@@ -154,14 +188,16 @@
       time:
     </p>
     <ul>
-      <li>Inside Trello: Open <strong>Power-Up Settings &rarr; Disconnect Account</strong>.</li>
+      <li>Inside Trello: Open <strong>Power-Up Settings &rarr; Disconnect Account</strong> to revoke access.</li>
       <li>Through your Atlassian account: Navigate to your Atlassian Account Settings &rarr; Connected Apps &rarr;
         Revoke KPI Master.</li>
     </ul>
 
     <h2>6. Contact & Data Protection Inquiries</h2>
     <p>
-      If you have questions regarding this Privacy Policy, user rights, or data compliance, please reach out directly:
+      If you have questions about this Privacy Policy or want to request access, correction, or deletion of information
+      handled by KPI Master, please contact us. Requests concerning Trello or analytics-provider data may also require
+      contacting those providers or clearing the relevant Trello/browser storage.
     </p>
     <p>
       <strong>Developer & Data Protection Contact:</strong><br>

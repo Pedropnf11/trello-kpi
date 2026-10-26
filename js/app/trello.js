@@ -127,13 +127,6 @@ App.conectarTrello = async function () {
         }
 
         if (window.Analytics) {
-            window.Analytics.identify(userInfo.id, {
-                name: userInfo.fullName || userInfo.username,
-                username: userInfo.username,
-                role: this.state.userRole,
-                is_admin: isBoardAdmin
-            });
-
             window.Analytics.track(this.state.refreshing ? 'web_data_refreshed' : 'web_board_loaded', {
                 board_id: boardId,
                 role: this.state.userRole,

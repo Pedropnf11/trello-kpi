@@ -16,7 +16,6 @@
     import { Analytics } from '../js/analytics.js';
     Analytics.init();
 
-    // Trello Power-Up iframes must use the deployed app origin, never the local dev server.
     var BASE_DOMAIN = 'https://kpismaster.vercel.app';
     var POWERUP_URL = BASE_DOMAIN + '/trello';
     var SITE_URL = 'https://kpismaster.vercel.app';
@@ -64,6 +63,24 @@
         return isReviewed;
       });
     }
+
+    window.resetKpiFeedback = function (tInstance) {
+      try {
+        localStorage.removeItem('kpi_feedback_submitted_globally');
+        localStorage.removeItem('kpi_has_reviewed');
+        localStorage.removeItem('kpi_feedback_onboarding_seen_manager');
+        localStorage.removeItem('kpi_feedback_onboarding_seen_sales');
+      } catch (e) {}
+      if (tInstance) {
+        return Promise.all([
+          tInstance.set('member', 'private', 'kpi_feedback_state', null).catch(function () {}),
+          tInstance.set('member', 'private', 'kpi_has_reviewed', false).catch(function () {}),
+          tInstance.set('member', 'shared', 'kpi_has_reviewed', false).catch(function () {}),
+          tInstance.set('board', 'shared', 'kpi_feedback_submitted_globally', false).catch(function () {})
+        ]);
+      }
+      return Promise.resolve(true);
+    };
 
     TrelloPowerUp.initialize({
 
@@ -114,7 +131,7 @@
                   }
                   return t.modal({
                     title: ' ',
-                    url: POWERUP_URL + '/dashboard.html?v=4',
+                    url: POWERUP_URL + '/dashboard.html?v=7',
                     height: 690,
                     fullscreen: false,
                     accentColor: '#090d16'
@@ -281,19 +298,6 @@
           var hasReviewed = Boolean(res[1]);
 
           function addTouchpoint(tCard, type) {
-            if (!hasReviewed) {
-              Analytics.track('locked_card_button_clicked', {
-                type: type,
-                description: 'Utilizador tentou usar botão de ação rápida bloqueado'
-              });
-              return tCard.alert({
-                message: isPt
-                  ? '🔒 Funcionalidade bloqueada. Deixa feedback no verso do cartão para desbloquear!'
-                  : '🔒 Feature locked. Leave your feedback on the card back to unlock!',
-                duration: 4
-              });
-            }
-
             return tCard.get('card', 'shared', 'kpi_touchpoints')
               .catch(function () { return null; })
               .then(function (saved) {
@@ -314,17 +318,15 @@
               });
           }
 
-          var lockPrefix = hasReviewed ? '' : '🔒 ';
-
           return [
             {
               icon: POWERUP_URL + '/icon.png',
-              text: lockPrefix + (isPt ? '📞 +1 Telefonema' : '📞 +1 Call'),
+              text: isPt ? '📞 +1 Telefonema' : '📞 +1 Call',
               callback: function (tCard) { return addTouchpoint(tCard, 'call'); }
             },
             {
               icon: POWERUP_URL + '/icon.png',
-              text: lockPrefix + (isPt ? '✉️ +1 E-mail' : '✉️ +1 Email'),
+              text: isPt ? '✉️ +1 E-mail' : '✉️ +1 Email',
               callback: function (tCard) { return addTouchpoint(tCard, 'email'); }
             },
             {
@@ -404,26 +406,26 @@
             hasSubmitted = true;
           }
 
-          var displayTitle = isPt ? 'KPI Master — Velocidade & Histórico do cartão' : 'KPI Master — Card Speed & History';
+          var displayTitle = isPt ? 'KPI Master — Ritmo das Leads' : 'KPI Master — Lead Momentum';
 
           return {
             title: displayTitle,
             icon: POWERUP_URL + '/icon.png',
             content: {
               type: 'iframe',
-              url: t.signUrl(POWERUP_URL + '/card-back.html?v=3'),
+              url: t.signUrl(POWERUP_URL + '/card-back.html?v=9'),
               height: 520
             }
           };
         }).catch(function () {
           return getUserIsPt(t).then(function (isPt) {
-            var displayTitle = isPt ? 'KPI Master — Velocidade & Histórico do cartão ' : 'KPI Master — Card Speed & History';
+            var displayTitle = isPt ? 'KPI Master — Ritmo das Leads' : 'KPI Master — Lead Momentum';
             return {
               title: displayTitle,
               icon: POWERUP_URL + '/icon.png',
               content: {
                 type: 'iframe',
-                url: t.signUrl(POWERUP_URL + '/card-back.html?v=3'),
+                url: t.signUrl(POWERUP_URL + '/card-back.html?v=9'),
                 height: 520
               }
             };

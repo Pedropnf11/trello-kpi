@@ -170,6 +170,33 @@
       color: #cbd5e1;
     }
 
+    .btn-review-pro.btn-unlock-magic {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.16) 0%, rgba(217, 119, 6, 0.28) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      color: #fbbf24;
+      font-weight: 700;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+      animation: pulse-magic 2.5s infinite;
+      cursor: pointer;
+    }
+
+    .btn-review-pro.btn-unlock-magic:hover {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.28) 0%, rgba(217, 119, 6, 0.42) 100%);
+      border-color: rgba(245, 158, 11, 0.7);
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+    }
+
+    @keyframes pulse-magic {
+      0%, 100% {
+        box-shadow: 0 0 10px rgba(245, 158, 11, 0.15);
+      }
+      50% {
+        box-shadow: 0 0 18px rgba(245, 158, 11, 0.35);
+      }
+    }
+
     .btn-bell-updates {
       position: relative;
       width: 32px;
@@ -2121,32 +2148,6 @@
       </div>
 
       <div class="settings-modal-body">
-        <!-- Banner de Desbloqueio com Review Grátis (só aparece se ainda não deu review) -->
-        <div id="settings-review-banner" class="settings-review-banner" style="display:none;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span class="setting-feat-icon" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.3);">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="20 12 20 22 4 22 4 12"></polyline>
-                <rect x="2" y="7" width="20" height="5"></rect>
-                <line x1="12" y1="22" x2="12" y2="7"></line>
-                <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
-                <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
-              </svg>
-            </span>
-            <div>
-              <div style="font-size:12px; font-weight:800; color:#fbbf24;" id="lbl-banner-review-title">Avaliação Grátis
-                = 2 Funcionalidades Desbloqueadas</div>
-              <div style="font-size:11px; color:#cbd5e1;" id="lbl-banner-review-desc">Deixa uma avaliação rápida para
-                desbloquear os botões e usar sem restrições.</div>
-            </div>
-          </div>
-          <button id="btn-banner-unlock" class="btn-review-pro"
-            style="padding:4px 10px; font-size:10.5px; white-space:nowrap; display:inline-flex; align-items:center; gap:5px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span id="lbl-btn-banner-unlock">Avaliar Agora</span>
-          </button>
-        </div>
-
         <!-- Feature 1: Ações Rápidas (Chamadas & Emails) -->
         <div class="setting-feature-card" id="card-feat-actions">
           <div class="setting-feature-info">
@@ -2157,7 +2158,6 @@
                 </svg>
               </span>
               <span id="lbl-feat-actions-name">Ações Rápidas nos Cartões</span>
-              <span id="badge-lock-actions" class="lock-badge" style="display:none;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> <span>Review</span></span>
             </div>
             <div class="setting-feature-desc" id="lbl-feat-actions-desc">Botões de +1 Chamada e +1 Email direto no verso
               do cartão para registar contactos com um clique.</div>
@@ -2181,7 +2181,6 @@
                 </svg>
               </span>
               <span id="lbl-feat-history-name">Histórico de Chamadas & Contactos</span>
-              <span id="badge-lock-history" class="lock-badge" style="display:none;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> <span>Review</span></span>
             </div>
             <div class="setting-feature-desc" id="lbl-feat-history-desc">Permite consultar a lista cronológica de quem
               realizou cada contacto, com data e hora exatas.</div>
@@ -2370,10 +2369,7 @@
 
     var KEY = import.meta.env.VITE_TRELLO_API_KEY || '45146ad13364b1e1336607f96081214b';
     var NAME = 'KPI Master';
-    var SITE = 'https://kpismaster.vercel.app';
-    var BASE_DOMAIN = (window.location.origin && window.location.origin !== 'null' && !window.location.origin.includes('trello.com'))
-      ? window.location.origin
-      : 'https://kpismaster.vercel.app';
+    var BASE_DOMAIN = 'https://kpismaster.vercel.app';
     var POWERUP_URL = BASE_DOMAIN + '/trello';
 
     var t = TrelloPowerUp.iframe({ appKey: KEY, appName: NAME });
@@ -2438,8 +2434,8 @@
         featLeaderboardDesc: 'Exibe o ranking dos 3 membros com mais atividades nos cartões durante a semana atual.',
         settingsSaved: 'Guardado automaticamente',
         btnDoneSettings: 'Concluído',
-        btnReviewPrompt: 'Feedback',
-        btnReviewDone: 'Feedback Enviado',
+        btnReviewPrompt: '🎁 Clica aqui e recebe uma feature nova!',
+        btnReviewDone: 'Feedback',
         bannerReviewTitle: 'Avaliação Grátis = 2 Funcionalidades Desbloqueadas',
         bannerReviewDesc: 'Deixa uma avaliação rápida para desbloquear os botões e usar sem restrições.',
         btnBannerUnlock: 'Avaliar Agora',
@@ -2503,8 +2499,8 @@
         featLeaderboardDesc: 'Displays the ranking of the top 3 members with the most card activities in the current week.',
         settingsSaved: 'Automatically saved',
         btnDoneSettings: 'Done',
-        btnReviewPrompt: 'Feedback',
-        btnReviewDone: 'Feedback Sent',
+        btnReviewPrompt: '🎁 Click here to get a new feature!',
+        btnReviewDone: 'Feedback',
         bannerReviewTitle: 'Free Review = 2 Features Unlocked',
         bannerReviewDesc: 'Leave a quick review to unlock the buttons and use without restrictions.',
         btnBannerUnlock: 'Review Now',
@@ -2803,15 +2799,24 @@
       if (txtToggle) txtToggle.textContent = tDict.toggleBtn;
 
       var lblReview = document.getElementById('lbl-review-incentive');
+      var btnReview = document.getElementById('btn-review-incentive');
       if (lblReview) {
         lblReview.textContent = hasReviewed ? tDict.btnReviewDone : tDict.btnReviewPrompt;
       }
-
-      var btnReview = document.getElementById('btn-review-incentive');
       if (btnReview) {
-        btnReview.title = hasReviewed
-          ? (isPt ? 'Obrigado pelo teu feedback! Clica para sugerir mais melhorias.' : 'Thank you for your feedback! Click to suggest more improvements.')
-          : (isPt ? 'Dá a tua opinião e desbloqueia novas funcionalidades!' : 'Give us feedback and unlock new features!');
+        if (!hasReviewed) {
+          btnReview.classList.add('btn-unlock-magic');
+          btnReview.classList.remove('reviewed');
+          btnReview.title = isPt
+            ? 'Clica aqui para desbloquear uma nova funcionalidade grátis!'
+            : 'Click here to unlock a new feature for free!';
+        } else {
+          btnReview.classList.remove('btn-unlock-magic');
+          btnReview.classList.add('reviewed');
+          btnReview.title = isPt
+            ? 'Obrigado pelo teu feedback! Clica para sugerir mais melhorias.'
+            : 'Thank you for your feedback! Click to suggest more improvements.';
+        }
       }
 
       var lblBtnOpen = document.getElementById('lbl-btn-open-text');
@@ -3121,24 +3126,33 @@
       });
     }
 
-    // Clique no botão de Avaliar / Review
+    // Clique no botão de Avaliar / Desbloquear Feature
     var btnReviewIncentive = document.getElementById('btn-review-incentive');
     if (btnReviewIncentive) {
       btnReviewIncentive.addEventListener('click', function (e) {
         e.preventDefault();
         Analytics.track('review_incentive_button_clicked', {
           already_reviewed: hasReviewed,
-          description: 'Utilizador clicou no botão Review = PRO no cabeçalho'
+          description: hasReviewed ? 'Utilizador clicou no botão Feedback' : 'Utilizador clicou em Clica aqui e recebe uma feature nova no dashboard'
         });
 
         t.modal({
-          title: isPt ? 'O Teu Feedback Importa' : 'Your Feedback Matters',
+          title: isPt
+            ? (hasReviewed ? 'O Teu Feedback Importa' : 'O Teu Feedback Importa — Desbloqueia uma Nova Feature!')
+            : (hasReviewed ? 'Your Feedback Matters' : 'Your Feedback Matters — Unlock a New Feature!'),
           accentColor: '#090d16',
-          url: POWERUP_URL + '/feedback.html?v=3',
+          url: POWERUP_URL + '/feedback.html?v=6&from=' + (hasReviewed ? 'dashboard_feedback' : 'dashboard_unlock_feature') + '&lang=' + (isPt ? 'pt' : 'en'),
           height: 520
         });
       });
     }
+
+    t.render(function () {
+      checkFeedbackUnlocked().then(function (unlocked) {
+        hasReviewed = Boolean(unlocked);
+        applyLanguage(currentLang);
+      });
+    });
 
     // Alternar idioma ao clicar no botão
     var btnLangToggle = document.getElementById('btn-lang-toggle');
@@ -3823,65 +3837,8 @@
         cardLeaderboard.style.display = leaderboardEnabled ? 'flex' : 'none';
       }
 
-      var cardFeatActions = document.getElementById('card-feat-actions');
-      var cardFeatHistory = document.getElementById('card-feat-history');
-      var badgeLockActions = document.getElementById('badge-lock-actions');
-      var badgeLockHistory = document.getElementById('badge-lock-history');
-      var reviewBanner = document.getElementById('settings-review-banner');
-      var btnBannerUnlock = document.getElementById('btn-banner-unlock');
-
-      if (!userHasReviewed) {
-        // Se NÃO deu review: mostra banner com oferta grátis, cartões com cadeado e bloqueia switches
-        if (reviewBanner) reviewBanner.style.display = 'flex';
-        if (cardFeatActions) cardFeatActions.classList.add('is-locked');
-        if (cardFeatHistory) cardFeatHistory.classList.add('is-locked');
-        if (badgeLockActions) badgeLockActions.style.display = 'inline-flex';
-        if (badgeLockHistory) badgeLockHistory.style.display = 'inline-flex';
-        if (toggleFeatActions) toggleFeatActions.disabled = true;
-        if (toggleFeatHistory) toggleFeatHistory.disabled = true;
-
-        function promptReviewUnlock(featureName) {
-          closeSettingsModal();
-          Analytics.track('locked_feature_clicked_in_settings', {
-            feature: featureName,
-            description: 'Utilizador clicou na funcionalidade bloqueada para desbloquear com review'
-          });
-          t.modal({
-            title: isPt ? 'O Teu Feedback Importa' : 'Your Feedback Matters',
-            accentColor: '#090d16',
-            url: POWERUP_URL + '/feedback.html?v=3',
-            height: 520
-          });
-        }
-
-        if (cardFeatActions) {
-          cardFeatActions.addEventListener('click', function (e) {
-            promptReviewUnlock('quick_actions_touchpoints');
-          });
-        }
-
-        if (cardFeatHistory) {
-          cardFeatHistory.addEventListener('click', function (e) {
-            promptReviewUnlock('contact_call_history');
-          });
-        }
-
-        if (btnBannerUnlock) {
-          btnBannerUnlock.addEventListener('click', function (e) {
-            e.stopPropagation();
-            promptReviewUnlock('banner_unlock_both');
-          });
-        }
-      } else {
-        // Se JÁ deu review: esconde cadeados, esconde banner e permite mexer livremente nos switches!
-        if (reviewBanner) reviewBanner.style.display = 'none';
-        if (cardFeatActions) cardFeatActions.classList.remove('is-locked');
-        if (cardFeatHistory) cardFeatHistory.classList.remove('is-locked');
-        if (badgeLockActions) badgeLockActions.style.display = 'none';
-        if (badgeLockHistory) badgeLockHistory.style.display = 'none';
-        if (toggleFeatActions) toggleFeatActions.disabled = false;
-        if (toggleFeatHistory) toggleFeatHistory.disabled = false;
-      }
+      if (toggleFeatActions) toggleFeatActions.disabled = false;
+      if (toggleFeatHistory) toggleFeatHistory.disabled = false;
     });
 
     if (btnOpenSettings) {
