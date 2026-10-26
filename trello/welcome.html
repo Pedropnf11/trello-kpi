@@ -65,6 +65,7 @@
     import { Analytics } from '../js/analytics.js';
     Analytics.init();
     var KEY = import.meta.env.VITE_TRELLO_API_KEY;
+    var SITE = 'https://kpismaster.vercel.app';
     var t = TrelloPowerUp.iframe({ appKey: KEY, appName: 'KPI Master' });
     function trackEvent(eventName) {
       try {
