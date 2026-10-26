@@ -4169,12 +4169,14 @@
       // Atualiza a cada 60s
       var timer = setInterval(tickUserTime, 60000);
 
-      window.addEventListener('beforeunload', function () {
+      var cleanupTimeTracker = function () {
         clearInterval(timer);
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
         } catch (e) { }
-      });
+      };
+      window.addEventListener('pagehide', cleanupTimeTracker);
+      window.addEventListener('beforeunload', cleanupTimeTracker);
     })();
 
   </script>
